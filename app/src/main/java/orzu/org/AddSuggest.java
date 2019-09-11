@@ -35,6 +35,7 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
     String idTask;
     int amout;
     TextView username;
+    ImageView person_logo_sugg2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +74,9 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
 
         username = findViewById(R.id.name_sugg);
         username.setText(nameUser);
+
+        person_logo_sugg2 = findViewById(R.id.person_logo_sugg2);
+        person_logo_sugg2.setImageBitmap(Common.bitmap);
 
     }
 

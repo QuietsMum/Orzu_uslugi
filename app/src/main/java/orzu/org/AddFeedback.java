@@ -33,6 +33,7 @@ public class AddFeedback extends AppCompatActivity implements View.OnClickListen
     ImageView sadImage;
     ImageView natImage;
     ImageView hapImage;
+    ImageView person_logo_sugg2;
     EditText editNarr;
     String idUser;
     String idUserTo;
@@ -78,6 +79,9 @@ public class AddFeedback extends AppCompatActivity implements View.OnClickListen
         editNarr = findViewById(R.id.edit_task_feedback);
         username = findViewById(R.id.name_surname);
         username.setText(getIntent().getExtras().getString("nameUserFeedbackto"));
+
+        person_logo_sugg2 = findViewById(R.id.person_logo2);
+        person_logo_sugg2.setImageBitmap(Common.bitmap);
 
     }
 
