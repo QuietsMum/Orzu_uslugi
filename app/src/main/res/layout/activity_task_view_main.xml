@@ -286,7 +286,7 @@
                                     android:id="@+id/imageViewName"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:scaleType="fitCenter" />
+                                    android:scaleType="fitXY" />
                             </androidx.cardview.widget.CardView>
 
 

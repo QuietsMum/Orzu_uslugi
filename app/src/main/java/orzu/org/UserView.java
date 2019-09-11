@@ -216,7 +216,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
                             userBday.setText(mBday);
                             userSex.setText(mSex);
                             userNarr.setText(mNarr);
-                            Picasso.get().load("https://orzu.org"+image).into(imageViewName);
+                            Picasso.get().load("https://orzu.org"+image).fit().into(imageViewName);
                         }
                     });
                 } catch (JSONException e) {

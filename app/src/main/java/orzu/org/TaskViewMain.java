@@ -633,7 +633,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                             sad.setText(sadnum);
                             nat.setText(natnum);
                             hap.setText(hapnum);
-                            Picasso.get().load("https://orzu.org"+image).into(imageViewName);
+                            Picasso.get().load("https://orzu.org"+image).fit().into(imageViewName);
                         }
                     });
 

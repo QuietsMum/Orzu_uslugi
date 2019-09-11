@@ -82,7 +82,7 @@
                             android:contentDescription="@string/nav_header_desc"
                             android:gravity="center"
                             android:padding="15dp"
-                            android:scaleType="centerCrop"
+                            android:scaleType="fitXY"
                             android:src="@drawable/ic_person_72pt_3x"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
