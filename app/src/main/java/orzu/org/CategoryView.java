@@ -3,15 +3,21 @@ package orzu.org;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.JsonReader;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 
 import java.io.IOException;
@@ -25,10 +31,13 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class CategoryView extends AppCompatActivity {
+import orzu.org.ui.login.model;
+
+public class CategoryView extends AppCompatActivity{
 
     ArrayList<Map<String, Object>> data;
-
+    Dialog dialog;
+    ProgressBar progressBar;
     public static void start(Context context) {
         Intent intent = new Intent(context, CategoryView.class);
         context.startActivity(intent);
@@ -40,7 +49,13 @@ public class CategoryView extends AppCompatActivity {
         setContentView(R.layout.activity_category_view);
 
         ActionBar toolbar = getSupportActionBar();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorAccent)));
         toolbar.setTitle("Фильтры");
+        progressBar = findViewById(R.id.progressBarCat);
+
+
 
         // ArrayList<Map<String, Object>> data = null;
         /*String[] catname1 = { "Холодильники и морозильные камеры",  "Стиральные и сушильные машины", "Посудомоечные машины", "Электрические плиты и панели",
@@ -121,6 +136,23 @@ public class CategoryView extends AppCompatActivity {
                 }catch (MalformedURLException e) {
                     e.printStackTrace();
                 }catch (IOException e) {
+                    CategoryView.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            dialog = new Dialog(CategoryView.this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
+                            dialog.setContentView(R.layout.dialog_no_internet);
+                            Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                            // if button is clicked, close the custom dialog
+                            dialogButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    AsyncOrzuTasks taskBack = new AsyncOrzuTasks();
+                                    taskBack.execute();
+                                    dialog.dismiss();
+                                }
+                            });
+                            dialog.show();
+                        }
+                    });
                     e.printStackTrace();
                 }
 
@@ -143,10 +175,13 @@ public class CategoryView extends AppCompatActivity {
                         Map<String, Object> map;
                         map = data.get(i);
                         intent.putExtra("id", map.get(idList).toString());
+                        intent.putExtra("name", map.get(taskList).toString());
                         startActivity(intent);
                         finish();
                     }
                 });
+
+                progressBar.setVisibility(View.INVISIBLE);
             }
         }
 
@@ -178,4 +213,14 @@ public class CategoryView extends AppCompatActivity {
         reader.endObject();
         return m;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

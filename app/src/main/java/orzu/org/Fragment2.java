@@ -1,8 +1,12 @@
 package orzu.org;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
@@ -15,12 +19,13 @@ import androidx.fragment.app.Fragment;
 
 public class Fragment2 extends Fragment {
 
-    String url = "https://orzu.org/tasks/new/techrepair/techrepairother";
-
+    String url = "https://orzu.org/tasks/new/techrepair/techrepairother?token=";
+    DBHelper dbHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -30,6 +35,12 @@ public class Fragment2 extends Fragment {
 
         ProgressBar progressBar = view.findViewById(R.id.progressBarMain2);
 
+        dbHelper = new DBHelper(getActivity());
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor c = db.query("orzutable", null, null, null, null, null, null);
+        c.moveToFirst();
+        int tokenColIndex = c.getColumnIndex("token");
+        Log.e("TOKENTOKENTOKEN", url + c.getString(tokenColIndex));
 
         WebView mWebView = (WebView) view.findViewById(R.id.web_view_main_fragment_2);
         mWebView.setWebChromeClient(new WebChromeClient());
@@ -45,12 +56,13 @@ public class Fragment2 extends Fragment {
             @Override
             public void onPageFinished(WebView view, final String url) {
                 progressBar.setVisibility(View.INVISIBLE);
+
             }
         });
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setLoadsImagesAutomatically(true);
-        mWebView.loadUrl(url);
+        mWebView.loadUrl(url + c.getString(tokenColIndex));
 
         return view;
     }
@@ -63,6 +75,12 @@ public class Fragment2 extends Fragment {
 
             return true;
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
     }
 }
 

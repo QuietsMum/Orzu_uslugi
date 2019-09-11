@@ -1,0 +1,53 @@
+package orzu.org;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+
+public class CreateTaskPhoto extends AppCompatActivity implements View.OnClickListener {
+
+    Button buttonCreate;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorAccent)));
+        setContentView(R.layout.activity_create_task_photo);
+
+        getSupportActionBar().setTitle("Фотография");
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setElevation(0);
+
+        buttonCreate = findViewById(R.id.createPhoto);
+        buttonCreate.setOnClickListener(this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        finish();
+        CreateTaskDetail.fa.finish();
+        CreateTaskAmout.fa.finish();
+        CreateTaskTerm.fa.finish();
+        CreateTaskPlace.fa.finish();
+        CreateTaskName.fa.finish();
+        CreateTaskCategory.fa.finish();
+        CreateTaskSubCategory.fa.finish();
+
+    }
+}

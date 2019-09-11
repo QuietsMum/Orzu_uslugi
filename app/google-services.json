@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "495965930218",
+    "firebase_url": "https://orzuuslugi.firebaseio.com",
+    "project_id": "orzuuslugi",
+    "storage_bucket": "orzuuslugi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:495965930218:android:5fe8f82e6c67c827",
+        "android_client_info": {
+          "package_name": "orzu.org"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "495965930218-q8be6i76hf8abu1i6t6qdiv88su9d6ok.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAh4Rr1jYcoT64JCZOxSDVP3Tt6jS7aMME"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "495965930218-q8be6i76hf8abu1i6t6qdiv88su9d6ok.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

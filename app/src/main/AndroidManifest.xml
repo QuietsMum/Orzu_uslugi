@@ -2,38 +2,144 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="orzu.org">
 
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:allowBackup="false"
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/ic_logo_01"
         android:label="@string/app_name"
-        android:networkSecurityConfig="@xml/network_security_config"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:largeHeap="true"
+        android:roundIcon="@drawable/ic_logo_01"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".SubCategoryView2"></activity>
-        <activity android:name=".WebViewActivity" />
-        <activity android:name=".PhoneLoginActivity" />
+        <activity android:name=".CategorySubscriptions"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".UserEditProfile"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".AddSuggest"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AddFeedback"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FeedbackTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Congratz"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".UserSettings"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Transparent" />
+        <activity
+            android:name=".Feedback"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".UserView"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MapActivity"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
+        <activity
+            android:name=".CreateTaskSubCategory"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Transparent" />
+        <activity
+            android:name=".CreateTaskCategory"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Transparent" />
+        <activity
+            android:name=".CreateTaskPhoto"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Transparent" />
+        <activity
+            android:name=".CreateTaskDetail"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Transparent" />
+        <activity
+            android:name=".CreateTaskAmout"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Transparent" />
+        <activity
+            android:name=".CreateTaskTerm"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Transparent" />
+        <activity
+            android:name=".CreateTaskPlace"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CreateTaskName"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Transparent" />
+        <activity
+            android:name=".TaskViewMain"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeCard" />
+        <activity
+            android:name=".ViewpagerStart"
+            android:screenOrientation="portrait" />
+
+        <receiver
+            android:name=".MessageReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter android:priority="100">
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".Main2Activity"
+            android:label="@string/title_activity_main2"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".LoginActivity2"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SubCategoryView2"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".WebViewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PhoneLoginActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.login.LoginActivity"
-            android:label="@string/title_activity_login" />
+            android:label="@string/title_activity_login"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".CoreActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SubCategoryView" />
-        <activity android:name=".CategoryView" />
-        <activity android:name=".FiltersActivity" />
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name" />
+            android:name=".SubCategoryView"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CategoryView"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FiltersActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".IntercomActivity" />
     </application>
 
 </manifest>

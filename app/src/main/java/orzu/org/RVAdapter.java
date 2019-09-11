@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,13 +33,39 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MyViewHolder>{
         return new MyViewHolder(v);
     }
 
+
+
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.a.setText(maps.get(position).get("Категория задачи").toString());
-        holder.b.setText(maps.get(position).get("Задание").toString());
-        holder.c.setText(maps.get(position).get("Сроки").toString());
-        holder.d.setText( maps.get(position).get("Цена").toString());
-        holder.e.setText(maps.get(position).get("За услугу").toString());
+
+        if(maps.get(position).get("Категория задачи") == null){
+           holder.a.setText("Категория задачи");
+        }else {
+            holder.a.setText(maps.get(position).get("Категория задачи").toString());
+        }
+        if(maps.get(position).get("Задание") == null)
+            holder.b.setText("Задание");
+        else
+            holder.b.setText(maps.get(position).get("Задание").toString());
+        if(maps.get(position).get("Сроки")==null)
+            holder.c.setText("Сроки не указаны");
+        else
+            holder.c.setText(maps.get(position).get("Сроки").toString());
+        if (maps.get(position).get("Цена") == null)
+            holder.d.setText("Цена");
+        else
+            holder.d.setText( maps.get(position).get("Цена").toString());
+        if (maps.get(position).get("Валюта")==null)
+            holder.e.setText("");
+        else if (maps.get(position).get("Цена").equals("Предложите цену")){
+            holder.e.setText("");
+        } else
+            holder.e.setText( maps.get(position).get("Валюта").toString());
+
+        if (maps.get(position).get("Город") != null)
+            /*//holder.f.setText("Город");
+        else*/
+            holder.f.setText( maps.get(position).get("Город").toString());
     }
 
     @Override
@@ -46,7 +74,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MyViewHolder>{
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView a,b,c,d,e;
+        TextView a,b,c,d,e,f;
 
         MyViewHolder(View itemView) {
             super(itemView);
@@ -55,6 +83,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MyViewHolder>{
             c = itemView.findViewById(R.id.textView8);
             d = itemView.findViewById(R.id.textView3);
             e = itemView.findViewById(R.id.textView4);
+            f = itemView.findViewById(R.id.textView6);
             itemView.setOnClickListener(this);
         }
 

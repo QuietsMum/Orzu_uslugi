@@ -1,8 +1,12 @@
 package orzu.org;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,10 +29,19 @@ public class WebViewActivity extends AppCompatActivity {
     String id = "";
     Handler uiHandler = new Handler();
     WebView webView;
+    DBHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
+        ActionBar toolbar = getSupportActionBar();
+        toolbar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorBackLight)));
+
+        dbHelper = new DBHelper(this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor c = db.query("orzutable", null, null, null, null, null, null);
+        c.moveToFirst();
+        int tokenColIndex = c.getColumnIndex("token");
 
         Intent intent = getIntent();
         //id = new ;
@@ -37,8 +50,8 @@ public class WebViewActivity extends AppCompatActivity {
             id = "" + intent.getStringExtra("id");
             Log.e("newwnewnewnewnwenwe", id);
         }
-
-        url = url + id;
+        toolbar.setTitle("Задание №" + id);
+        url = url + id + "?token=" + c.getString(tokenColIndex);
 
         webView = (WebView)findViewById(R.id.web_view_task);
         webView.setWebViewClient(new MyWebViewClient());

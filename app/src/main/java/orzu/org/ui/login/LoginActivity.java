@@ -23,10 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import orzu.org.MainActivity;
 import orzu.org.R;
-import orzu.org.ui.login.LoginViewModel;
-import orzu.org.ui.login.LoginViewModelFactory;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -125,8 +122,8 @@ public class LoginActivity extends AppCompatActivity {
         String welcome = getString(R.string.welcome);
         // TODO : initiate successful logged in experience
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        //Intent intent = new Intent(this, Main2Activity.class);
+        //startActivity(intent);
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {

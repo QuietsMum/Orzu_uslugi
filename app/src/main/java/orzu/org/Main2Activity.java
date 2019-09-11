@@ -1,0 +1,272 @@
+package orzu.org;
+
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.core.view.GravityCompat;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import android.util.JsonReader;
+import android.util.Log;
+import android.view.MenuItem;
+import com.google.android.material.navigation.NavigationView;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.io.IOException;
+
+import io.intercom.android.sdk.Intercom;
+import io.intercom.android.sdk.UserAttributes;
+import io.intercom.android.sdk.identity.Registration;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+public class Main2Activity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+
+    Fragment fragment = null;
+    Class fragmentClass = null;
+    JsonReader[] jsonReader;
+    JSONObject obj;
+    String mMessage;
+    String mName;
+    String mFiName;
+    String text;
+    String idUser;
+    DBHelper dbHelper;
+    NavigationView navigationView;
+    LinearLayout intercomBtn;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main2);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorAccent)));
+        setSupportActionBar(toolbar);
+
+        try {
+            getUserResponse();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        Intercom.initialize(getApplication(), "android_sdk-805f0d44d62fbc8e72058b9c8eee61c94c43c874", "p479kps8");
+
+        intercomBtn = findViewById(R.id.techsupp);
+        intercomBtn.setOnClickListener(this);
+
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorBackgrndFrg));
+        toggle.syncState();
+
+        navigationView.setNavigationItemSelectedListener(this);
+
+        onNavigationItemSelected(navigationView.getMenu().getItem(0));
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+            if (id == R.id.first) {
+                fragmentClass = Fragment1.class;
+                try {
+                    fragment = (Fragment) fragmentClass.newInstance();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                // Вставляем фрагмент, заменяя текущий фрагмент
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+
+                // Выделяем выбранный пункт меню в шторке
+                item.setChecked(true);
+                // Выводим выбранный пункт в заголовке
+                setTitle(item.getTitle());
+
+            } else if (id == R.id.second) {
+                Intent intent = new Intent(this, CreateTaskCategory.class);
+                startActivity(intent);
+            } else if (id == R.id.third) {
+                fragmentClass = Fragment4.class;
+                try {
+                    fragment = (Fragment) fragmentClass.newInstance();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                // Вставляем фрагмент, заменяя текущий фрагмент
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+
+                // Выделяем выбранный пункт меню в шторке
+                item.setChecked(true);
+                // Выводим выбранный пункт в заголовке
+                setTitle(item.getTitle());
+
+
+            }
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+
+
+        return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data != null) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.container, new Fragment1()).commit();
+        }
+
+
+    }
+
+    public void getUserResponse() throws IOException {
+        // api?appid=&opt=view_user&=user=id
+        dbHelper = new DBHelper(this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor c = db.query("orzutable", null, null, null, null, null, null);
+        c.moveToFirst();
+        int tokenColIndex = c.getColumnIndex("id");
+        idUser = c.getString(tokenColIndex);
+
+        c.close();
+        db.close();
+
+        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + idUser;
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Accept", "application/json")
+                .header("Content-Type", "application/json")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                mMessage = response.body().string();
+
+                try {
+                    JSONObject jsonObject = new JSONObject(mMessage);
+                    mName = jsonObject.getString("name");
+                    mFiName = jsonObject.getString("fname");
+                    if (mFiName.equals("null")){
+                        text = mName;
+                    } else text = mName + "\n" + mFiName;
+
+
+                    final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString(Util.TASK_USERNAME, mName);
+                    editor.apply();
+                    View hView =  navigationView.getHeaderView(0);
+                    TextView nav_user = (TextView)hView.findViewById(R.id.textViewName);
+                    LinearLayout userviewBtn = hView.findViewById(R.id.headerOfdrawer);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            nav_user.setText(text);
+                            userviewBtn.setOnClickListener(Main2Activity.this);
+                        }
+                    });
+
+                } catch (JSONException e) {
+                    e.printStackTrace(); }
+
+            }
+        });
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        switch (view.getId()) {
+            case R.id.techsupp:
+                Registration registration = Registration.create().withUserId(idUser);
+                UserAttributes userAttributes = new UserAttributes.Builder()
+                        .withName(mName)
+                        .withUserId(idUser)
+                        .build();
+                Intercom.client().updateUser(userAttributes);
+                Intercom.client().handlePushMessage();
+                Intercom.client().registerIdentifiedUser(registration);
+                Intercom.client().displayMessenger();
+                Intercom.client().setBottomPadding(20);
+                break;
+
+            case R.id.headerOfdrawer:
+                fragmentClass = Fragment3.class;
+                try {
+                    fragment = (Fragment) fragmentClass.newInstance();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                // Вставляем фрагмент, заменяя текущий фрагмент
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+                setTitle("");
+                DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+                final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString(Util.TASK_USERID, idUser);
+                editor.apply();
+                break;
+
+        }
+    }
+}

@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="colorPrimary">#E2E2E2</color>
-    <color name="colorPrimaryDark">#858585</color>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <color name="colorPrimary">#5AD25F</color>
+    <color name="colorPrimaryGrey">#E2E2E2</color>
+    <color name="colorPrimaryDark">#2196f3</color>
     <color name="colorPrimaryLight">#FFFFFF</color>
-    <color name="colorAccent">#5AD25F</color>
+    <color name="colorAccent">#2196f3</color>
+    <color name="colorAccentLight">#64B5F6</color>
     <color name="colorTextDark">#858585</color>
-    <color name="colorTextLight">#ffffff</color>
-    <color name="colorBackgreen">#5AD25F</color>
-    <color name="colorBackgrnd">#FAFAFA</color>
-    <color name="colorBackgrndFrg">#EEEEEE</color>
+    <color name="colorTextLight">#000000</color>
+    <color name="colorBackLight">#ffffff</color>
+    <color name="colorBackground">#1A237E</color>
+    <color name="colorBackMyTask">#7E57C2</color>
+    <color name="colorBackgrndFrg">#ffffff</color>
+    <color name="colorBackgrndTrnt">#20ffffff</color>
+    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#fff</color>
+
+        <color name="colorPrimaryPix">#2196f3</color>
+        <color name="colorPrimaryLightPix">#80075e54</color>
+
+        <color name="colorPrimaryRed">#FF7A55</color>
+        <color name="colorPrimaryGreen">#00A99D</color>
+        <color name="colorPrimaryBlue">#29ABE2</color>
+
 </resources>
