@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,6 +46,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
     String mSex;
     String mNarr;
     String mStatus;
+    String image;
     TextView nameUser;
     TextView noReviews;
     TextView taskCountReq;
@@ -69,6 +71,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
     TextView feedbackcat2;
     ImageView feedbackimg2;
     ImageView feedbackimgUser2;
+    ImageView imageViewName;
     ShimmerFrameLayout shim;
     View devider;
     View backblue;
@@ -116,7 +119,8 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
         userBday = findViewById(R.id.userview_bday);
         userSex = findViewById(R.id.userview_sex);
         userNarr = findViewById(R.id.viewuser_narrative);
-        statusImg = findViewById(R.id.imageViewStatus);
+        statusImg = findViewById(R.id.imageViewStatusMy);
+        imageViewName = findViewById(R.id.imageViewName);
 
         try {
             getUserResponseView();
@@ -132,7 +136,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
         inflater.inflate(R.menu.user_menu_his, menu);
         Drawable drawable = menu.findItem(R.id.share_item_his).getIcon();
         drawable = DrawableCompat.wrap(drawable);
-        DrawableCompat.setTint(drawable, ContextCompat.getColor(this,R.color.colorBackgrndFrg));
+        DrawableCompat.setTint(drawable, ContextCompat.getColor(this, R.color.colorBackgrndFrg));
         menu.findItem(R.id.share_item_his).setIcon(drawable);
         return true;
     }
@@ -188,16 +192,18 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
                     mSex = jsonObject.getString("sex");
                     mNarr = jsonObject.getString("about");
                     mStatus = jsonObject.getString("status");
-                    if (mSex.equals("male")){
+                    image = jsonObject.getString("avatar");
+                    if (mSex.equals("male")) {
                         mSex = "мужской";
-                    } else  mSex = "женский";
-                    if (mFiName.equals("null")){
+                    } else mSex = "женский";
+                    if (mFiName.equals("null")) {
                         text = mName;
                     } else text = mName + " " + mFiName;
 
-                    if (mStatus.equals("false")){
+                    if (mStatus.equals("false")) {
                         statusImg.setVisibility(View.INVISIBLE);
-                    } else  statusImg.setVisibility(View.VISIBLE);;
+                    } else statusImg.setVisibility(View.VISIBLE);
+                    ;
 
 
                     runOnUiThread(new Runnable() {
@@ -210,10 +216,12 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
                             userBday.setText(mBday);
                             userSex.setText(mSex);
                             userNarr.setText(mNarr);
+                            Picasso.get().load("https://orzu.org"+image).into(imageViewName);
                         }
                     });
                 } catch (JSONException e) {
-                    e.printStackTrace(); }
+                    e.printStackTrace();
+                }
                 requestFeedback();
 
             }
@@ -240,7 +248,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
 
     }
 
-    public void requestFeedback(){
+    public void requestFeedback() {
 
         String url = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=reviews&act=view&userid=" + idUser + "&sort=all";
         OkHttpClient client = new OkHttpClient();
@@ -265,7 +273,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
                 final String mMessage = response.body().string();
                 Log.e("resultArrayFull", mMessage);
 
-                if (mMessage.equals(Character.toString ((char) dchar) + "No reviews yet" + Character.toString ((char) dchar))) {
+                if (mMessage.equals(Character.toString((char) dchar) + "No reviews yet" + Character.toString((char) dchar))) {
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -290,136 +298,137 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
                         }
                     });
 
-                } else{
+                } else {
 
-                try {
-                    JSONArray jsonArray = new JSONArray(mMessage);
-                    int bpSad = R.drawable.ic_sad;
-                    int bpNorm = R.drawable.ic_neutral;
-                    int bpHappy = R.drawable.ic_happy;
+                    try {
+                        JSONArray jsonArray = new JSONArray(mMessage);
+                        int bpSad = R.drawable.ic_sad;
+                        int bpNorm = R.drawable.ic_neutral;
+                        int bpHappy = R.drawable.ic_happy;
 
-                    int lenght = jsonArray.length();
-                    Log.e("lenghtArray", String.valueOf(lenght));
-                    String feedName = "";
-                    if (lenght > 1) {
-                        lenght = 2;
-                    } else if (lenght == 1) {
-                        lenght = 1;
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                feedbackname2.setVisibility(View.GONE);
-                                feedbacknarr2.setVisibility(View.GONE);
-                                feedbackcat2.setVisibility(View.GONE);
-                                feedbackplus2.setVisibility(View.GONE);
-                                feedbackimg2.setVisibility(View.GONE);
-                                feedbackimgUser2.setVisibility(View.GONE);
-                                devider.setVisibility(View.GONE);
-                            }
-                        });
-
-                    } else {
-                        lenght = 0;
-                    }
-                    for (int i = 0; i < lenght; i++) {
-
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-                        if (i == 0) {
-                            long like = jsonObject.getLong("like");
-                            if (like == 0L) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        feedbackplus1.setText("-1");
-                                        feedbackimg1.setImageResource(bpSad);
-                                    }
-                                });
-
-                            } else if (like == 1L) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        feedbackplus1.setText("0");
-                                        feedbackimg1.setImageResource(bpNorm);
-                                    }
-                                });
-
-                            } else if (like == 2L) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        feedbackplus1.setText("+1");
-                                        feedbackimg1.setImageResource(bpHappy);
-                                    }
-                                });
-
-                            }
-                            name[0] = jsonObject.getString("username");
-                            narr[0] = jsonObject.getString("narrative");
-                            date[0] = jsonObject.getString("datein");
-
-
+                        int lenght = jsonArray.length();
+                        Log.e("lenghtArray", String.valueOf(lenght));
+                        String feedName = "";
+                        if (lenght > 1) {
+                            lenght = 2;
+                        } else if (lenght == 1) {
+                            lenght = 1;
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    feedbackname1.setText(name[0]);
-                                    feedbacknarr1.setText(narr[0]);
-                                    feedbackcat1.setText(date[0]);
+                                    feedbackname2.setVisibility(View.GONE);
+                                    feedbacknarr2.setVisibility(View.GONE);
+                                    feedbackcat2.setVisibility(View.GONE);
+                                    feedbackplus2.setVisibility(View.GONE);
+                                    feedbackimg2.setVisibility(View.GONE);
+                                    feedbackimgUser2.setVisibility(View.GONE);
+                                    devider.setVisibility(View.GONE);
                                 }
                             });
-
 
                         } else {
-                            long like = jsonObject.getLong("like");
-                            if (like == 0L) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        feedbackplus2.setText("-1");
-                                        feedbackimg2.setImageResource(bpSad);
-                                    }
-                                });
+                            lenght = 0;
+                        }
+                        for (int i = 0; i < lenght; i++) {
 
-                            } else if (like == 1L) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        feedbackplus2.setText("0");
-                                        feedbackimg2.setImageResource(bpNorm);
-                                    }
-                                });
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                            } else if (like == 2L) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        feedbackplus2.setText("+1");
-                                        feedbackimg2.setImageResource(bpHappy);
-                                    }
-                                });
+                            if (i == 0) {
+                                long like = jsonObject.getLong("like");
+                                if (like == 0L) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            feedbackplus1.setText("-1");
+                                            feedbackimg1.setImageResource(bpSad);
+                                        }
+                                    });
 
-                            }
-                            name[1] = jsonObject.getString("username");
-                            narr[1] = jsonObject.getString("narrative");
-                            date[1] = jsonObject.getString("datein");
+                                } else if (like == 1L) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            feedbackplus1.setText("0");
+                                            feedbackimg1.setImageResource(bpNorm);
+                                        }
+                                    });
 
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    feedbackname2.setText(name[1]);
-                                    feedbacknarr2.setText(narr[1]);
-                                    feedbackcat2.setText(date[1]);
+                                } else if (like == 2L) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            feedbackplus1.setText("+1");
+                                            feedbackimg1.setImageResource(bpHappy);
+                                        }
+                                    });
+
                                 }
-                            });
+                                name[0] = jsonObject.getString("username");
+                                narr[0] = jsonObject.getString("narrative");
+                                date[0] = jsonObject.getString("datein");
+
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        feedbackname1.setText(name[0]);
+                                        feedbacknarr1.setText(narr[0]);
+                                        feedbackcat1.setText(date[0]);
+                                    }
+                                });
+
+
+                            } else {
+                                long like = jsonObject.getLong("like");
+                                if (like == 0L) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            feedbackplus2.setText("-1");
+                                            feedbackimg2.setImageResource(bpSad);
+                                        }
+                                    });
+
+                                } else if (like == 1L) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            feedbackplus2.setText("0");
+                                            feedbackimg2.setImageResource(bpNorm);
+                                        }
+                                    });
+
+                                } else if (like == 2L) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            feedbackplus2.setText("+1");
+                                            feedbackimg2.setImageResource(bpHappy);
+                                        }
+                                    });
+
+                                }
+                                name[1] = jsonObject.getString("username");
+                                narr[1] = jsonObject.getString("narrative");
+                                date[1] = jsonObject.getString("datein");
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        feedbackname2.setText(name[1]);
+                                        feedbacknarr2.setText(narr[1]);
+                                        feedbackcat2.setText(date[1]);
+                                    }
+                                });
+                            }
+
+
                         }
 
 
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace(); }
 
                     shim.setVisibility(View.INVISIBLE);
                     backblue.setVisibility(View.INVISIBLE);

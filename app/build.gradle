@@ -1,14 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        debug {
-            storeFile file('C:\\AndroidStudioProjects\\Key_Store\\Uslugi\\Orzu_Uslugi.jks')
-            keyAlias = 'Orzu'
-            storePassword 'hkk2uxl1988'
-            keyPassword 'hkk2uxl1988'
-        }
-    }
+
     compileSdkVersion 29
     buildToolsVersion "29.0.0"
     defaultConfig {
@@ -79,6 +72,7 @@ dependencies {
     implementation 'fr.avianey.com.viewpagerindicator:library:2.4.1.1@aar'
     implementation 'com.fxn769:pix:1.4.4'
     implementation 'org.jsoup:jsoup:1.12.1'
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
 }
 apply plugin: 'com.google.gms.google-services'

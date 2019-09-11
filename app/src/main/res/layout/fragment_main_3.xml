@@ -10,9 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="280dp"
         android:background="@color/colorAccent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -25,8 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
@@ -45,64 +45,66 @@
                         android:id="@+id/viewuser_task_count_reqmy"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="3"
                         android:layout_gravity="center"
+                        android:layout_weight="3"
                         android:gravity="center_horizontal|bottom"
+                        android:text="0"
                         android:textColor="@color/colorPrimaryLight"
-                        android:textStyle="bold"
                         android:textSize="40sp"
-                        android:text="0"/>
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="2"
                         android:layout_gravity="top"
+                        android:layout_weight="2"
                         android:gravity="center_horizontal"
+                        android:text="заданий\nсоздано"
                         android:textColor="@color/colorPrimaryLight"
-                        android:textSize="12sp"
-                        android:text="заданий\nсоздано"/>
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
+                <androidx.cardview.widget.CardView
+                    android:layout_width="135dp"
+                    android:layout_height="135dp"
+                    app:cardCornerRadius="67.5dp">
 
-                    <ImageView
-                        android:id="@+id/imageViewName"
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="135dp"
-                        android:background="@drawable/circle_shape_whitewrap"
-                        android:contentDescription="@string/nav_header_desc"
-                        android:padding="15dp"
-                        android:gravity="center"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/ic_person_72pt_3x"
-                        android:tint="@color/colorBackLight"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        android:layout_height="match_parent">
 
-                    <ImageView
-                        android:id="@+id/imageViewStatusMy"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_weight="0"
-                        android:gravity="bottom"
-                        android:layout_margin="6dp"
-                        android:background="@drawable/circle_shape_green"
-                        android:tint="@color/colorPrimaryLight"
-                        android:scaleType="centerCrop"
-                        android:contentDescription="@string/nav_header_desc"
-                        app:layout_constraintBottom_toBottomOf="@+id/imageViewName"
-                        app:layout_constraintEnd_toEndOf="@+id/imageViewName"/>
+                        <ImageView
+                            android:id="@+id/imageViewName"
+                            android:layout_width="135dp"
+                            android:layout_height="135dp"
+                            android:background="@drawable/circle_shape_whitewrap"
+                            android:contentDescription="@string/nav_header_desc"
+                            android:gravity="center"
+                            android:padding="15dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_person_72pt_3x"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        <ImageView
+                            android:id="@+id/imageViewStatusMy"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_margin="6dp"
+                            android:layout_weight="0"
+                            android:background="@drawable/circle_shape_green"
+                            android:contentDescription="@string/nav_header_desc"
+                            android:gravity="bottom"
+                            android:scaleType="centerCrop"
+                            android:tint="@color/colorPrimaryLight"
+                            app:layout_constraintBottom_toBottomOf="@+id/imageViewName"
+                            app:layout_constraintEnd_toEndOf="@+id/imageViewName" />
 
-
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -114,23 +116,23 @@
                         android:id="@+id/viewuser_task_countmy"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="3"
                         android:layout_gravity="center"
+                        android:layout_weight="3"
                         android:gravity="center_horizontal|bottom"
+                        android:text="0"
                         android:textColor="@color/colorPrimaryLight"
-                        android:textStyle="bold"
                         android:textSize="40sp"
-                        android:text="0"/>
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="2"
                         android:layout_gravity="top"
+                        android:layout_weight="2"
                         android:gravity="center_horizontal"
+                        android:text="заданий\nисполнено"
                         android:textColor="@color/colorPrimaryLight"
-                        android:textSize="12sp"
-                        android:text="заданий\nисполнено"/>
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 
@@ -145,33 +147,33 @@
                     android:id="@+id/name_fname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimaryLight"
                     android:layout_marginTop="8dp"
                     android:gravity="center"
+                    android:text="Имя Фамилия"
+                    android:textColor="@color/colorPrimaryLight"
                     android:textSize="22sp"
-                    android:textStyle="bold"
-                    android:text="Имя Фамилия"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/viewuser_citymy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimaryLight"
                     android:layout_marginTop="2dp"
                     android:gravity="center"
-                    android:textSize="14sp"
-                    android:text="Душанбе, Таджикистан"/>
+                    android:text="Душанбе, Таджикистан"
+                    android:textColor="@color/colorPrimaryLight"
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="8dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="8dp"
+                app:cardCornerRadius="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -179,9 +181,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="8dp"
                     android:layout_marginTop="8dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="8dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -191,19 +193,19 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextLight"
                             android:layout_margin="8dp"
-                            android:textSize="16sp"
-                            android:text="Дата рождения"/>
+                            android:text="Дата рождения"
+                            android:textColor="@color/colorTextLight"
+                            android:textSize="16sp" />
 
                         <TextView
                             android:id="@+id/userview_bdaymy"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextDark"
-                            android:layout_marginEnd="6dp"
                             android:layout_marginStart="6dp"
-                            android:text="13.06.1988"/>
+                            android:layout_marginEnd="6dp"
+                            android:text="13.06.1988"
+                            android:textColor="@color/colorTextDark" />
 
 
                     </LinearLayout>
@@ -216,19 +218,19 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextLight"
                             android:layout_margin="8dp"
-                            android:textSize="16sp"
-                            android:text="Пол"/>
+                            android:text="Пол"
+                            android:textColor="@color/colorTextLight"
+                            android:textSize="16sp" />
 
                         <TextView
                             android:id="@+id/userview_sexmy"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextDark"
-                            android:layout_marginEnd="6dp"
                             android:layout_marginStart="6dp"
-                            android:text="мужской"/>
+                            android:layout_marginEnd="6dp"
+                            android:text="мужской"
+                            android:textColor="@color/colorTextDark" />
 
 
                     </LinearLayout>
@@ -241,17 +243,17 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextLight"
                             android:layout_margin="8dp"
-                            android:textSize="16sp"
-                            android:text="О себе"/>
+                            android:text="О себе"
+                            android:textColor="@color/colorTextLight"
+                            android:textSize="16sp" />
 
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:layout_marginStart="4dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_pencil_user"/>
+                            android:layout_marginStart="4dp"
+                            android:src="@drawable/ic_pencil_user" />
 
                     </LinearLayout>
 
@@ -259,33 +261,34 @@
                         android:id="@+id/viewuser_narrativemy"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorTextDark"
-                        android:layout_marginEnd="6dp"
                         android:layout_marginStart="6dp"
-                        android:text="Безопасная оплата картой и гарантия возврата денег. Компенсация в случае морального ущерба."/>
+                        android:layout_marginEnd="6dp"
+                        android:text="Безопасная оплата картой и гарантия возврата денег. Компенсация в случае морального ущерба."
+                        android:textColor="@color/colorTextDark" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorTextLight"
                         android:layout_margin="8dp"
+                        android:text="Отзывы"
 
-                        android:textSize="16sp"
-                        android:text="Отзывы"/>
+                        android:textColor="@color/colorTextLight"
+                        android:textSize="16sp" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp">
+
                         <TextView
                             android:id="@+id/no_reviewsmy"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/colorTextDark"
-                            android:gravity="center"
                             android:layout_marginStart="8dp"
-                            android:visibility="invisible"
-                            android:text="Пока нет отзывов."/>
+                            android:gravity="center"
+                            android:text="Пока нет отзывов."
+                            android:textColor="@color/colorTextDark"
+                            android:visibility="invisible" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -293,66 +296,74 @@
                             android:layout_marginEnd="8dp"
                             android:orientation="vertical">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:id="@+id/imageViewOtziv1my"
-                                android:layout_width="45dp"
-                                android:layout_height="45dp"
-                                android:background="@drawable/circle_shape_whitewrap"
-                                android:contentDescription="@string/nav_header_desc"
-                                android:layout_marginStart="8dp"
-                                android:padding="5dp"
-                                android:gravity="center"
-                                android:scaleType="centerCrop"
-                                android:src="@drawable/ic_person_72pt_3x"
-                                android:tint="@color/colorBackLight" />
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginStart="12dp"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:id="@+id/userview_feedbacknamemy"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textColor="@color/colorTextLight"
-                                    android:textStyle="bold"
-                                    android:text="Имя Фамилия"/>
-
-                            </LinearLayout>
-
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="45dp"
-                                android:gravity="end|center_vertical"
-                                android:layout_marginEnd="8dp"
+                                android:layout_height="wrap_content"
                                 android:orientation="horizontal">
 
-                                <TextView
-                                    android:id="@+id/userview_feedbackplusmy"
+                                <androidx.cardview.widget.CardView
+                                    android:layout_width="45dp"
+                                    android:layout_height="45dp"
+                                    android:layout_marginStart="8dp"
+                                    android:background="@android:color/black"
+                                    android:gravity="center"
+                                    android:padding="5dp"
+                                    app:cardCornerRadius="22.5dp">
+
+                                    <ImageView
+                                        android:id="@+id/imageViewOtziv1my"
+                                        android:layout_width="45dp"
+                                        android:layout_height="45dp"
+                                        android:contentDescription="@string/nav_header_desc"
+                                        android:gravity="center"
+                                        android:padding="5dp"
+                                        android:scaleType="centerCrop"
+                                        android:src="@drawable/ic_person_72pt_3x" />
+                                </androidx.cardview.widget.CardView>
+
+
+                                <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="+1"/>
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="12dp"
+                                    android:orientation="vertical">
 
-                                <ImageView
-                                    android:id="@+id/userview_feedbackplus_imagemy"
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
-                                    android:layout_marginStart="8dp"
-                                    android:layout_marginLeft="8dp"
-                                    app:srcCompat="@drawable/ic_happy" />
+                                    <TextView
+                                        android:id="@+id/userview_feedbacknamemy"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Имя Фамилия"
+                                        android:textColor="@color/colorTextLight"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="45dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:gravity="end|center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/userview_feedbackplusmy"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="+1" />
+
+                                    <ImageView
+                                        android:id="@+id/userview_feedbackplus_imagemy"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginLeft="8dp"
+                                        app:srcCompat="@drawable/ic_happy" />
+
+                                </LinearLayout>
+
 
                             </LinearLayout>
-
-
-                        </LinearLayout>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -364,17 +375,18 @@
                                     android:id="@+id/userview_feedbacknarrmy"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:text="Безопасная оплата картой и гарантия возврата денег. Компенсация в случае морального ущерба."
                                     android:textColor="@color/colorTextLight"
-                                    android:textSize="12sp"
-                                    android:text="Безопасная оплата картой и гарантия возврата денег. Компенсация в случае морального ущерба."/>
+                                    android:textSize="12sp" />
+
                                 <TextView
                                     android:id="@+id/userview_feedbackcatmy"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="4dp"
                                     android:layout_marginBottom="4dp"
-                                    android:textSize="12sp"
-                                    android:text="Категория: мастер на час"/>
+                                    android:text="Категория: мастер на час"
+                                    android:textSize="12sp" />
 
                             </LinearLayout>
 
@@ -386,15 +398,15 @@
                         android:id="@+id/divider_viewmy"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/colorPrimaryGrey"
                         android:layout_marginStart="64dp"
-                        android:layout_marginTop="8dp" />
+                        android:layout_marginTop="8dp"
+                        android:background="@color/colorPrimaryGrey" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_height="wrap_content">
+                        android:layout_marginBottom="8dp">
 
 
                         <LinearLayout
@@ -408,18 +420,25 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
 
-                                <ImageView
-                                    android:id="@+id/imageViewOtziv2my"
+                                <androidx.cardview.widget.CardView
                                     android:layout_width="45dp"
                                     android:layout_height="45dp"
-                                    android:background="@drawable/circle_shape_whitewrap"
-                                    android:contentDescription="@string/nav_header_desc"
                                     android:layout_marginStart="8dp"
-                                    android:padding="5dp"
+                                    android:background="@android:color/black"
                                     android:gravity="center"
-                                    android:scaleType="centerCrop"
-                                    android:src="@drawable/ic_person_72pt_3x"
-                                    android:tint="@color/colorBackLight" />
+                                    android:padding="5dp"
+                                    app:cardCornerRadius="22.5dp">
+
+                                    <ImageView
+                                        android:id="@+id/imageViewOtziv2my"
+                                        android:layout_width="45dp"
+                                        android:layout_height="45dp"
+                                        android:contentDescription="@string/nav_header_desc"
+                                        android:gravity="center"
+                                        android:padding="5dp"
+                                        android:scaleType="centerCrop"
+                                        android:src="@drawable/ic_person_72pt_3x" />
+                                </androidx.cardview.widget.CardView>
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
@@ -427,27 +446,29 @@
                                     android:layout_gravity="center"
                                     android:layout_marginStart="12dp"
                                     android:orientation="vertical">
+
                                     <TextView
                                         android:id="@+id/userview_feedbackname2my"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:text="Имя Фамилия"
                                         android:textColor="@color/colorTextLight"
-                                        android:textStyle="bold"
-                                        android:text="Имя Фамилия"/>
+                                        android:textStyle="bold" />
 
                                 </LinearLayout>
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="45dp"
-                                    android:gravity="end|center_vertical"
                                     android:layout_marginEnd="8dp"
+                                    android:gravity="end|center_vertical"
                                     android:orientation="horizontal">
+
                                     <TextView
                                         android:id="@+id/userview_feedbackplus2my"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="-1"/>
+                                        android:text="-1" />
 
                                     <ImageView
                                         android:id="@+id/userview_feedbackplus_image2my"
@@ -472,16 +493,17 @@
                                     android:id="@+id/userview_feedbacknarr2my"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:text="Безопасная оплата картой и гарантия возврата денег. Компенсация в случае морального ущерба."
                                     android:textColor="@color/colorTextLight"
-                                    android:textSize="12sp"
-                                    android:text="Безопасная оплата картой и гарантия возврата денег. Компенсация в случае морального ущерба."/>
+                                    android:textSize="12sp" />
+
                                 <TextView
                                     android:id="@+id/userview_feedbackcat2my"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="4dp"
-                                    android:textSize="12sp"
-                                    android:text="Категория: мастер на час"/>
+                                    android:text="Категория: мастер на час"
+                                    android:textSize="12sp" />
 
                             </LinearLayout>
 
@@ -494,10 +516,10 @@
                         android:id="@+id/linear_feed_click"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
-                        android:layout_marginBottom="8dp"
                         android:layout_margin="8dp"
-                        android:gravity="center"
+                        android:layout_marginBottom="8dp"
                         android:background="@drawable/circle_shape_intro_blue_5corner_stroke"
+                        android:gravity="center"
                         android:orientation="horizontal"
                         android:padding="8dp">
 
@@ -524,29 +546,27 @@
         android:id="@+id/view_back_whitemy"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorBackgrndFrg"/>
+        android:background="@color/colorBackgrndFrg" />
 
     <View
         android:id="@+id/view_back_bluemy"
         android:layout_width="match_parent"
         android:layout_height="280dp"
         android:background="@color/colorAccent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/userviewShimmerLayoutmy"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/userviewShimmerLayoutmy"
-        app:shimmer_duration="1000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:shimmer_duration="1000">
 
 
         <LinearLayout
@@ -554,7 +574,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/user_view_shimmer"/>
+            <include layout="@layout/user_view_shimmer" />
 
         </LinearLayout>
 

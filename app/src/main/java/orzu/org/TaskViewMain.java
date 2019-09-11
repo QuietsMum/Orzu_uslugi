@@ -34,6 +34,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -109,6 +110,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
     View taskMaketView;
     String mMessage;
     String mName;
+    String image;
     String mFiName;
     String text;
     CardView carddis;
@@ -134,6 +136,8 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
     String location = "123";
     String locationVal = "123";
     String date = "";
+
+    ImageView imageViewName;
 
     int datetype;
     int placetype;
@@ -184,6 +188,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         //taskMaket = findViewById(R.id.maket_task);
         taskMaketBack = findViewById(R.id.maket_task_white);
         taskMaketView = findViewById(R.id.maket_view);
+        imageViewName = findViewById(R.id.imageViewName);
         //carddis = findViewById(R.id.carddis);
         Animation animation = new AlphaAnimation(1, 0); //to change visibility from visible to invisible
         animation.setDuration(1000); //1 second duration for each animation cycle
@@ -253,6 +258,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             taskBeg.setText(date);
             taskOpen.setText(outputFormat.format(currentTime));
             nav_user.setText(nameUser);
+            imageViewName.setImageBitmap(Common.bitmap);
             if (taskAmt.equals("Предложите цену")){
                 taskAmtOnce.setVisibility(View.INVISIBLE);
             }
@@ -611,6 +617,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                 try {
                     JSONObject jsonObject = new JSONObject(mMessage);
                     mName = jsonObject.getString("name");
+                    image = jsonObject.getString("avatar");
                     mFiName = jsonObject.getString("fname");
                     String sadnum = String.valueOf(jsonObject.getLong("sad"));
                     String natnum = String.valueOf(jsonObject.getLong("neutral"));
@@ -626,6 +633,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                             sad.setText(sadnum);
                             nat.setText(natnum);
                             hap.setText(hapnum);
+                            Picasso.get().load("https://orzu.org"+image).into(imageViewName);
                         }
                     });
 

@@ -1,38 +1,50 @@
 package orzu.org;
 
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+
+import android.util.Base64;
 import android.util.JsonReader;
 import android.util.Log;
 import android.view.MenuItem;
+
 import com.google.android.material.navigation.NavigationView;
+
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import android.view.Menu;
+
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import org.json.JSONArray;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 
 import io.intercom.android.sdk.Intercom;
 import io.intercom.android.sdk.UserAttributes;
@@ -52,12 +64,14 @@ public class Main2Activity extends AppCompatActivity
     JSONObject obj;
     String mMessage;
     String mName;
+    String image;
     String mFiName;
     String text;
     String idUser;
     DBHelper dbHelper;
     NavigationView navigationView;
     LinearLayout intercomBtn;
+    ImageView img;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +101,13 @@ public class Main2Activity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorBackgrndFrg));
         toggle.syncState();
-
+        View header = navigationView.getHeaderView(0);
+        img = header.findViewById(R.id.textView);
+        try {
+            getUserResponse();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         navigationView.setNavigationItemSelectedListener(this);
 
         onNavigationItemSelected(navigationView.getMenu().getItem(0));
@@ -111,45 +131,45 @@ public class Main2Activity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-            if (id == R.id.first) {
-                fragmentClass = Fragment1.class;
-                try {
-                    fragment = (Fragment) fragmentClass.newInstance();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                // Вставляем фрагмент, заменяя текущий фрагмент
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
-
-                // Выделяем выбранный пункт меню в шторке
-                item.setChecked(true);
-                // Выводим выбранный пункт в заголовке
-                setTitle(item.getTitle());
-
-            } else if (id == R.id.second) {
-                Intent intent = new Intent(this, CreateTaskCategory.class);
-                startActivity(intent);
-            } else if (id == R.id.third) {
-                fragmentClass = Fragment4.class;
-                try {
-                    fragment = (Fragment) fragmentClass.newInstance();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                // Вставляем фрагмент, заменяя текущий фрагмент
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
-
-                // Выделяем выбранный пункт меню в шторке
-                item.setChecked(true);
-                // Выводим выбранный пункт в заголовке
-                setTitle(item.getTitle());
-
-
+        if (id == R.id.first) {
+            fragmentClass = Fragment1.class;
+            try {
+                fragment = (Fragment) fragmentClass.newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
+            // Вставляем фрагмент, заменяя текущий фрагмент
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+
+            // Выделяем выбранный пункт меню в шторке
+            item.setChecked(true);
+            // Выводим выбранный пункт в заголовке
+            setTitle(item.getTitle());
+
+        } else if (id == R.id.second) {
+            Intent intent = new Intent(this, CreateTaskCategory.class);
+            startActivity(intent);
+        } else if (id == R.id.third) {
+            fragmentClass = Fragment4.class;
+            try {
+                fragment = (Fragment) fragmentClass.newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // Вставляем фрагмент, заменяя текущий фрагмент
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+
+            // Выделяем выбранный пункт меню в шторке
+            item.setChecked(true);
+            // Выводим выбранный пункт в заголовке
+            setTitle(item.getTitle());
+
+
+        }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
@@ -204,7 +224,8 @@ public class Main2Activity extends AppCompatActivity
                     JSONObject jsonObject = new JSONObject(mMessage);
                     mName = jsonObject.getString("name");
                     mFiName = jsonObject.getString("fname");
-                    if (mFiName.equals("null")){
+                    image = jsonObject.getString("avatar");
+                    if (mFiName.equals("null")) {
                         text = mName;
                     } else text = mName + "\n" + mFiName;
 
@@ -213,19 +234,22 @@ public class Main2Activity extends AppCompatActivity
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putString(Util.TASK_USERNAME, mName);
                     editor.apply();
-                    View hView =  navigationView.getHeaderView(0);
-                    TextView nav_user = (TextView)hView.findViewById(R.id.textViewName);
+                    View hView = navigationView.getHeaderView(0);
+                    TextView nav_user = (TextView) hView.findViewById(R.id.textViewName);
                     LinearLayout userviewBtn = hView.findViewById(R.id.headerOfdrawer);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             nav_user.setText(text);
                             userviewBtn.setOnClickListener(Main2Activity.this);
+                            Common.fragmentshimmer = true;
+                            new DownloadImage().execute("https://orzu.org" + image);
+
                         }
                     });
-
                 } catch (JSONException e) {
-                    e.printStackTrace(); }
+                    e.printStackTrace();
+                }
 
             }
         });
@@ -267,6 +291,57 @@ public class Main2Activity extends AppCompatActivity
                 editor.apply();
                 break;
 
+        }
+    }
+
+    private class DownloadImage extends AsyncTask<String, Void, Bitmap> {
+        private String TAG = "DownloadImage";
+
+        private Bitmap downloadImageBitmap(String sUrl) {
+            Bitmap bitmap = null;
+            try {
+                InputStream inputStream = new URL(sUrl).openStream();   // Download Image from URL
+                bitmap = BitmapFactory.decodeStream(inputStream);       // Decode Bitmap
+                inputStream.close();
+            } catch (Exception e) {
+                Log.d(TAG, "Exception 1, Something went wrong!");
+                e.printStackTrace();
+            }
+            return bitmap;
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            return downloadImageBitmap(params[0]);
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            saveImage(getApplicationContext(), result, "my_image.jpeg");
+        }
+    }
+
+    public void saveImage(Context context, Bitmap b, String imageName) {
+        FileOutputStream foStream;
+        Log.d("saveImage", "Exception 2,went!");
+        try {
+            foStream = context.openFileOutput(imageName, Context.MODE_PRIVATE);
+            b.compress(Bitmap.CompressFormat.PNG, 100, foStream);
+            foStream.close();
+            File file = getApplicationContext().getFileStreamPath("my_image.jpeg");
+            if (file.exists()) {
+
+                Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+
+                View hView = navigationView.getHeaderView(0);
+                ImageView nav_user = (ImageView) hView.findViewById(R.id.imageViewName);
+                nav_user.setImageBitmap(myBitmap);
+                Common.bitmap = myBitmap;
+                Log.d("saveImage", "Exception 2,went!");
+
+            }
+        } catch (Exception e) {
+            Log.d("saveImage", "Exception 2, Something went wrong!");
+            e.printStackTrace();
         }
     }
 }

@@ -65,42 +65,48 @@
 
                 </LinearLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
 
-                    <ImageView
-                        android:id="@+id/imageViewName"
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="135dp"
+                    android:layout_height="135dp"
+                    app:cardCornerRadius="67.5dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="135dp"
-                        android:background="@drawable/circle_shape_whitewrap"
-                        android:contentDescription="@string/nav_header_desc"
-                        android:padding="15dp"
-                        android:gravity="center"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/ic_person_72pt_3x"
-                        android:tint="@color/colorBackLight"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        android:layout_height="match_parent">
 
-                    <ImageView
-                        android:id="@+id/imageViewStatus"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_weight="0"
-                        android:gravity="bottom"
-                        android:layout_margin="6dp"
-                        android:background="@drawable/circle_shape_green"
-                        android:tint="@color/colorPrimaryLight"
-                        android:scaleType="centerCrop"
-                        android:contentDescription="@string/nav_header_desc"
-                        app:layout_constraintBottom_toBottomOf="@+id/imageViewName"
-                        app:layout_constraintEnd_toEndOf="@+id/imageViewName"/>
+                        <ImageView
+                            android:id="@+id/imageViewName"
+                            android:layout_width="135dp"
+                            android:layout_height="135dp"
+                            android:background="@drawable/circle_shape_whitewrap"
+                            android:contentDescription="@string/nav_header_desc"
+                            android:gravity="center"
+                            android:padding="15dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_person_72pt_3x"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        <ImageView
+                            android:id="@+id/imageViewStatusMy"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_margin="6dp"
+                            android:layout_weight="0"
+                            android:background="@drawable/circle_shape_green"
+                            android:contentDescription="@string/nav_header_desc"
+                            android:gravity="bottom"
+                            android:scaleType="centerCrop"
+                            android:tint="@color/colorPrimaryLight"
+                            app:layout_constraintBottom_toBottomOf="@+id/imageViewName"
+                            app:layout_constraintEnd_toEndOf="@+id/imageViewName" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
 
 
 

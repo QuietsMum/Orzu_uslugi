@@ -9,6 +9,9 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -25,6 +28,7 @@ import com.rilixtech.CountryCodePicker;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.Objects;
 
@@ -55,6 +59,7 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
     DBHelper dbHelper;
     LinearLayout linLay;
     static Boolean firsttime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,11 +70,11 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
         firsttime = false;
         progressBar = findViewById(R.id.progressBarLogin);
         progressBar.setVisibility(View.INVISIBLE);
-        phone = (EditText)findViewById(R.id.editTextPhone);
-        phoneCount = (EditText)findViewById(R.id.editTextPhoneCountry);
-       // phoneCountName = (TextView) findViewById(R.id.ccpText);
-        password = (EditText)findViewById(R.id.editTextPassword);
-        button = (Button)findViewById(R.id.button_phone_login);
+        phone = (EditText) findViewById(R.id.editTextPhone);
+        phoneCount = (EditText) findViewById(R.id.editTextPhoneCountry);
+        // phoneCountName = (TextView) findViewById(R.id.ccpText);
+        password = (EditText) findViewById(R.id.editTextPassword);
+        button = (Button) findViewById(R.id.button_phone_login);
         regist = findViewById(R.id.button_phone_regist);
         ccp = (CountryCodePicker) findViewById(R.id.ccp);
         linLay = findViewById(R.id.linearidccp);
@@ -93,7 +98,7 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
                 /*phone.setCompoundDrawablesWithIntrinsicBounds(new TextDrawable(getApplicationContext(), code), null, null, null);
                 phone.setCompoundDrawablePadding((int) (code.length()*px)); setText(text.toUpperCase()) */
                 phoneCount.setText(code);
-               // phoneCountName.setText(codeName);
+                // phoneCountName.setText(codeName);
             }
         });
 
@@ -102,7 +107,7 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
         /*phone.setCompoundDrawablesWithIntrinsicBounds(new TextDrawable(getApplicationContext(), code), null, null, null);
         phone.setCompoundDrawablePadding((int) (code.length()*px));*/
         phoneCount.setText(code);
-       // phoneCountName.setText(codeName);
+        // phoneCountName.setText(codeName);
 
 
         button.setOnClickListener(this);
@@ -112,15 +117,17 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case (R.id.button_phone_login):
-                progressBar.setVisibility(View.VISIBLE);
-                mMessage = phone.getText().toString();
-                mPassword = password.getText().toString();
-                try {
-                    getHttpResponse();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (phone.getText().length() != 0 && password.getText().length() != 0) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    mMessage = phone.getText().toString();
+                    mPassword = password.getText().toString();
+                    try {
+                        getHttpResponse();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 break;
 
@@ -141,7 +148,7 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
     }
 
     public void getHttpResponse() throws IOException {
-       // Log.e("Country phone", ccp.getFullNumberWithPlus());
+        // Log.e("Country phone", ccp.getFullNumberWithPlus());
         String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_auth&phone=" + ccp.getFullNumberWithPlus() + phone.getText() + "&password=" + mPassword;
 
         OkHttpClient client = new OkHttpClient();
@@ -152,17 +159,19 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
                 .header("Content-Type", "application/json")
                 .build();
 
+
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 mMessage = e.getMessage().toString();
                 Log.w("failure Response", mMessage);
-                if (mMessage.equals("noAuth")){
-                Toast.makeText(getApplicationContext(), "No registered user!", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(getApplicationContext(), LoginActivity2.class);
-                startActivity(intent);
-                }
-
+                PhoneLoginActivity.this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Проверьте интернет-соединение" +
+                                "", Toast.LENGTH_LONG).show();
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+                });
             }
 
             @Override
@@ -172,25 +181,25 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
                 final char dm = (char) 34;
                 Log.e("response", mMessage);
 
-                    if (mMessage.equals(dm + "noAuth" + dm)) {
-
-                        Intent intent = new Intent(getApplicationContext(), LoginActivity2.class);
-                        startActivity(intent);
+                if (mMessage.equals(dm + "noAuth" + dm)) {
+                    PhoneLoginActivity.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(PhoneLoginActivity.this, "Не правильный логин или пароль", Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.INVISIBLE);
-                            finish();
-
-                    } else {
-                        try {
+                        }
+                    });
+                } else {
+                    try {
                         obj = new JSONObject(mMessage);
                         mStatus = obj.getString("auth_status");
                         mToken = obj.getString("_token");
                         mID = obj.getLong("id");
 
-                            SQLiteDatabase db = dbHelper.getWritableDatabase();
-                            ContentValues cv = new ContentValues();
-                            cv.put("token", mToken);
-                            cv.put("id", mID);
-                            db.insert("orzutable", null, cv);
+                        SQLiteDatabase db = dbHelper.getWritableDatabase();
+                        ContentValues cv = new ContentValues();
+                        cv.put("token", mToken);
+                        cv.put("id", mID);
+                        db.insert("orzutable", null, cv);
 
                            /* final SharedPreferences prefs = getSharedPreferences("", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = prefs.edit();
@@ -199,8 +208,8 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
 
 
                         if (obj.getString("auth_status").equals("yes")) {
-                        Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
-                        startActivity(intent);
+                            Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
+                            startActivity(intent);
                             firsttime = true;
                             runOnUiThread(new Runnable() {
                                 @Override
@@ -211,7 +220,8 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
                             finish();
                         }
                     } catch (JSONException e) {
-                      e.printStackTrace(); }
+                        e.printStackTrace();
+                    }
                 }
 
             }

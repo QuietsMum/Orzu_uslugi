@@ -507,8 +507,11 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 }
             });
             noTasks = false;
-            shim.setVisibility(View.INVISIBLE);
-            nestshimmer.setVisibility(View.INVISIBLE);
+            if(Common.fragmentshimmer) {
+                shim.setVisibility(View.INVISIBLE);
+                nestshimmer.setVisibility(View.INVISIBLE);
+            }
+
             if (adapter.getItemCount() == 0){
                 noTasks = true;
                 imagenotask.setVisibility(View.VISIBLE);

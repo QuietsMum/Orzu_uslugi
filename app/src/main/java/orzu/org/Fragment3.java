@@ -28,6 +28,7 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -88,6 +89,8 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
     String mStatus;
     ImageView statusImg;
 
+    ImageView imageViewName;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,7 +98,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstantState){
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstantState) {
         final View view = inflater.inflate(R.layout.fragment_main_3, container, false);
 
         final SharedPreferences prefs = getActivity().getSharedPreferences(" ", Context.MODE_PRIVATE);
@@ -133,6 +136,10 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         userSex = view.findViewById(R.id.userview_sexmy);
         userNarr = view.findViewById(R.id.viewuser_narrativemy);
         statusImg = view.findViewById(R.id.imageViewStatusMy);
+
+        imageViewName = view.findViewById(R.id.imageViewName);
+
+        imageViewName.setImageBitmap(Common.bitmap);
 
         try {
             getUserResponse();
@@ -177,15 +184,16 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                     mSex = jsonObject.getString("sex");
                     mNarr = jsonObject.getString("about");
                     mStatus = jsonObject.getString("status");
-                    if (mSex.equals("male")){
+                    if (mSex.equals("male")) {
                         mSex = "мужской";
-                    } else  mSex = "женский";
-                    if (mFiName.equals("null")){
+                    } else mSex = "женский";
+                    if (mFiName.equals("null")) {
                         text = mName;
                     } else text = mName + " " + mFiName;
-                    if (mStatus.equals("false")){
+                    if (mStatus.equals("false")) {
                         statusImg.setVisibility(View.INVISIBLE);
-                    } else  statusImg.setVisibility(View.VISIBLE);;
+                    } else statusImg.setVisibility(View.VISIBLE);
+                    ;
 
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -200,7 +208,8 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                         }
                     });
                 } catch (JSONException e) {
-                    e.printStackTrace(); }
+                    e.printStackTrace();
+                }
 
             }
         });
@@ -215,13 +224,13 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         drawable = DrawableCompat.wrap(drawable);
         drawable2 = DrawableCompat.wrap(drawable2);
         drawable3 = DrawableCompat.wrap(drawable3);
-        DrawableCompat.setTint(drawable, ContextCompat.getColor(getActivity(),R.color.colorBackgrndFrg));
-        DrawableCompat.setTint(drawable2, ContextCompat.getColor(getActivity(),R.color.colorBackgrndFrg));
-        DrawableCompat.setTint(drawable3, ContextCompat.getColor(getActivity(),R.color.colorBackgrndFrg));
+        DrawableCompat.setTint(drawable, ContextCompat.getColor(getActivity(), R.color.colorBackgrndFrg));
+        DrawableCompat.setTint(drawable2, ContextCompat.getColor(getActivity(), R.color.colorBackgrndFrg));
+        DrawableCompat.setTint(drawable3, ContextCompat.getColor(getActivity(), R.color.colorBackgrndFrg));
         menu.findItem(R.id.share_item).setIcon(drawable);
         menu.findItem(R.id.settings_item).setIcon(drawable2);
         menu.findItem(R.id.item_subscribe).setIcon(drawable3);
-        super.onCreateOptionsMenu(menu,inflater);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -255,7 +264,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         startActivity(intent);
     }
 
-    public void requestFeedbackMy(){
+    public void requestFeedbackMy() {
 
         String url = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=reviews&act=view&userid=" + idUser + "&sort=all";
         OkHttpClient client = new OkHttpClient();
@@ -280,7 +289,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                 final String mMessage = response.body().string();
                 Log.e("resultArrayFull", mMessage);
 
-                if (mMessage.equals(Character.toString ((char) dchar) + "No reviews yet" + Character.toString ((char) dchar))) {
+                if (mMessage.equals(Character.toString((char) dchar) + "No reviews yet" + Character.toString((char) dchar))) {
 
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -305,7 +314,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                         }
                     });
 
-                } else{
+                } else {
 
                     try {
                         JSONArray jsonArray = new JSONArray(mMessage);
@@ -435,7 +444,8 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
 
 
                     } catch (JSONException e) {
-                        e.printStackTrace(); }
+                        e.printStackTrace();
+                    }
 
                     shim.setVisibility(View.INVISIBLE);
                     backblue.setVisibility(View.INVISIBLE);
