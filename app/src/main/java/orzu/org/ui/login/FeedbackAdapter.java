@@ -41,6 +41,12 @@ public class FeedbackAdapter extends BaseAdapter {
         return i;
     }
 
+
+    public void ChangeData( ArrayList<Map<String, Object>> data){
+        this.data = data;
+        notifyDataSetChanged();
+    }
+
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         @SuppressLint("ViewHolder") View v = LayoutInflater.from(context).inflate(R.layout.feedback_item, viewGroup, false);

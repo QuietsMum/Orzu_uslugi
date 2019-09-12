@@ -44,13 +44,19 @@ import okhttp3.Request;
 import okhttp3.Response;
 import orzu.org.ui.login.FeedbackAdapter;
 
-public class Feedback extends AppCompatActivity {
+public class Feedback extends AppCompatActivity implements View.OnClickListener {
 
     ShimmerFrameLayout shim;
     View viewBack;
-    ArrayList<Map<String, Object>> data;
+    ArrayList<Map<String, Object>> all;
+    ArrayList<Map<String, Object>> bad;
+    ArrayList<Map<String, Object>> neutral;
+    ArrayList<Map<String, Object>> happy;
     ListView lvCat;
     String idUser;
+    LinearLayout sort_all, sort_bad, sort_neutral, sort_happy,sort;
+    FeedbackAdapter arrayAdapter1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,9 +67,20 @@ public class Feedback extends AppCompatActivity {
         getSupportActionBar().setElevation(0);
         getSupportActionBar().setTitle("Отзывы");
         idUser = getIntent().getExtras().getString("idUserFeedback");
+        sort = findViewById(R.id.sort);
+        sort.setVisibility(View.INVISIBLE);
         shim = (ShimmerFrameLayout) findViewById(R.id.feedbackshimmer);
         shim.startShimmer();
-        lvCat = (ListView)findViewById(R.id.list_feedback);
+        lvCat = (ListView) findViewById(R.id.list_feedback);
+        sort_all = findViewById(R.id.sort_all);
+
+        sort_bad = findViewById(R.id.sort_bad);
+        sort_neutral = findViewById(R.id.sort_neutral);
+        sort_happy = findViewById(R.id.sort_happy);
+        sort_all.setOnClickListener(this);
+        sort_bad.setOnClickListener(this);
+        sort_neutral.setOnClickListener(this);
+        sort_happy.setOnClickListener(this);
         requestFeedback();
     }
 
@@ -84,7 +101,7 @@ public class Feedback extends AppCompatActivity {
         }
     }
 
-    public void requestFeedback(){
+    public void requestFeedback() {
 
         String url = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=reviews&act=view&userid=" + idUser + "&sort=all";
         OkHttpClient client = new OkHttpClient();
@@ -95,9 +112,12 @@ public class Feedback extends AppCompatActivity {
         String count = "Отзыв";
         String avatar = "Аватар";
 
-        data = new ArrayList<>();
+        all = new ArrayList<>();
+        bad = new ArrayList<>();
+        happy = new ArrayList<>();
+        neutral = new ArrayList<>();
 
-        FeedbackAdapter arrayAdapter1 = new FeedbackAdapter(this, data);
+        arrayAdapter1 = new FeedbackAdapter(this, all);
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -115,67 +135,122 @@ public class Feedback extends AppCompatActivity {
                 try {
                     Map<String, Object> m;
                     JSONArray jsonArray = new JSONArray(mMessage);
-                    int bpSad =  R.drawable.ic_sad;
+                    int bpSad = R.drawable.ic_sad;
                     int bpNorm = R.drawable.ic_neutral;
                     int bpHappy = R.drawable.ic_happy;
                     int lenght = jsonArray.length();
                     String feedName = "";
-                    for (int i = 0; i < lenght; i++){
+                    for (int i = 0; i < lenght; i++) {
                         m = new HashMap<>();
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                        /* if (jsonObject.getString("fname").equals("null")){
                             feedName = jsonObject.getString("username");
                         } else feedName = jsonObject.getString("username") + jsonObject.getString("fname");*/
-                             //feedName = jsonObject.getString("username") + jsonObject.getString("fname");
-                             feedName = jsonObject.getString("username");
+                        //feedName = jsonObject.getString("username") + jsonObject.getString("fname");
+                        feedName = jsonObject.getString("username");
 
-                        String[] splited = jsonObject.getString("avatar").split(Character.toString ((char) 94));
+                        String[] splited = jsonObject.getString("avatar").split(Character.toString((char) 94));
                         String str = Arrays.toString(splited);
-                        Log.wtf("count",str+"");
+                        Log.wtf("count", str + "");
                         try {
-                            Bitmap bitmap = Picasso.get().load("https://orzu.org"+str.substring(1,str.length()-1)).get();
-                            m.put(avatar,bitmap);
-                        }catch (Exception ex){
-                            Bitmap icon = BitmapFactory.decodeResource(Feedback.this.getResources(),Common.drawable);
-                            m.put(avatar,icon);
+                            Bitmap bitmap = Picasso.get().load("https://orzu.org" + str.substring(1, str.length() - 1)).get();
+                            m.put(avatar, bitmap);
+                        } catch (Exception ex) {
+                            Bitmap icon = BitmapFactory.decodeResource(Feedback.this.getResources(), Common.drawable);
+                            m.put(avatar, icon);
                         }
                         m.put(cat, feedName);
                         long countFeed = jsonObject.getLong("like");
-                        if (countFeed == 0){
+                        m.put(nar, jsonObject.getString("narrative"));
+                        if (countFeed == 0) {
                             m.put(count, "-1");
                             m.put(img, bpSad);
-                        } if (countFeed == 1){
+                            bad.add(m);
+                        }
+                        if (countFeed == 1) {
                             m.put(count, "0");
                             m.put(img, bpNorm);
-                        } if (countFeed == 2){
+                            neutral.add(m);
+                        }
+                        if (countFeed == 2) {
                             m.put(count, "+1");
                             m.put(img, bpHappy);
-                        }if(countFeed==3){
+                            happy.add(m);
+                        }
+                        if (countFeed == 3) {
                             m.put(count, "+3");
                             m.put(img, bpHappy);
                         }
-
-                        m.put(nar, jsonObject.getString("narrative"));
-
-                        data.add(m);
+                        all.add(m);
                     }
-
 
 
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-
+                            shim.setVisibility(View.INVISIBLE);
+                            sort.setVisibility(View.VISIBLE);
                             lvCat.setAdapter(arrayAdapter1);
                             arrayAdapter1.notifyDataSetChanged();
                         }
                     });
 
-                    shim.setVisibility(View.INVISIBLE);
+
 
                 } catch (JSONException e) {
-                    e.printStackTrace(); }
+                    e.printStackTrace();
+                }
             }
         });
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.sort_all:
+                sort_all.setBackgroundResource(R.drawable.circle_button_left_solid);
+                sort_bad.setBackgroundResource(R.drawable.circle_button_center);
+                sort_neutral.setBackgroundResource(R.drawable.circle_button_center);
+                sort_happy.setBackgroundResource(R.drawable.circle_button_right);
+                getAll();
+                break;
+            case R.id.sort_bad:
+                sort_all.setBackgroundResource(R.drawable.circle_button_left);
+                sort_bad.setBackgroundResource(R.drawable.circle_button_center_solid);
+                sort_neutral.setBackgroundResource(R.drawable.circle_button_center);
+                sort_happy.setBackgroundResource(R.drawable.circle_button_right);
+                getBad();
+                break;
+            case R.id.sort_neutral:
+                sort_all.setBackgroundResource(R.drawable.circle_button_left);
+                sort_bad.setBackgroundResource(R.drawable.circle_button_center);
+                sort_neutral.setBackgroundResource(R.drawable.circle_button_center_solid);
+                sort_happy.setBackgroundResource(R.drawable.circle_button_right);
+                getNeutral();
+                break;
+            case R.id.sort_happy:
+                sort_all.setBackgroundResource(R.drawable.circle_button_left);
+                sort_bad.setBackgroundResource(R.drawable.circle_button_center);
+                sort_neutral.setBackgroundResource(R.drawable.circle_button_center);
+                sort_happy.setBackgroundResource(R.drawable.circle_button_right_solid);
+                getHappy();
+                break;
+        }
+    }
+
+    private void getHappy() {
+        arrayAdapter1.ChangeData(happy);
+    }
+
+    private void getNeutral() {
+        arrayAdapter1.ChangeData(neutral);
+    }
+
+    private void getBad() {
+        arrayAdapter1.ChangeData(bad);
+    }
+
+    private void getAll() {
+        arrayAdapter1.ChangeData(all);
     }
 }
