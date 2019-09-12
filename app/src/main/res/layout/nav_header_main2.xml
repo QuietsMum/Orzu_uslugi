@@ -5,7 +5,6 @@
     android:id="@+id/headerOfdrawer"
     android:layout_width="match_parent"
     android:layout_height="150dp"
-    android:background="@drawable/gradient_back_180"
     android:gravity="bottom"
     android:orientation="horizontal"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
@@ -53,10 +52,14 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginStart="12dp"
                 android:layout_marginLeft="12dp"
+                android:shadowColor="@color/colorPrimaryDark"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="2"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:paddingTop="8dp"
-                android:text="@string/name_of_user"
+                android:text="Android"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/colorPrimaryLight"/>
 
