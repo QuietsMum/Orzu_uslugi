@@ -58,6 +58,7 @@
 
 
     <androidx.core.widget.NestedScrollView
+        android:clipToPadding="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -139,6 +140,7 @@
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:clipToPadding="false"
         android:id="@+id/nestshimmer"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

@@ -10,6 +10,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/result_city"
         android:layout_width="match_parent"
+        android:clipToPadding="false"
         android:layout_height="wrap_content"
         android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"

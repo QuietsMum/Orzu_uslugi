@@ -14,6 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <androidx.core.widget.NestedScrollView
+        android:clipToPadding="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
@@ -62,6 +63,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.core.widget.NestedScrollView
+                android:clipToPadding="false"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toTopOf="@id/edit_user_btn"
