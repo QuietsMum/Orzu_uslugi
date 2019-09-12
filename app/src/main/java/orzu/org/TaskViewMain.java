@@ -1,6 +1,8 @@
 package orzu.org;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -147,12 +149,15 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorAccent)));
         setContentView(R.layout.activity_task_view_main);
+        ActionBar toolbar = getSupportActionBar();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
+        getSupportActionBar().setElevation(0);
         Intent intent = getIntent();
-        //id = new ;
-        if (intent != null)
-        {
+
+        if (intent != null) {
             id = "" + intent.getStringExtra("id");
             opt = intent.getStringExtra("opt");
             myTask = intent.getStringExtra("mytask");
@@ -633,7 +638,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                             sad.setText(sadnum);
                             nat.setText(natnum);
                             hap.setText(hapnum);
-                            Picasso.get().load("https://orzu.org"+image).fit().into(imageViewName);
+                            Picasso.get().load("https://orzu.org"+image).fit().centerCrop().into(imageViewName);
                         }
                     });
 

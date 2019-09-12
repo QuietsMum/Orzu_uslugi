@@ -19,7 +19,7 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_gravity="bottom"
-        android:background="@color/colorAccent"
+        android:background="@drawable/gradient_back_180"
         android:gravity="center"
         android:orientation="horizontal"
         android:text="@string/choose"

@@ -33,12 +33,11 @@ public class CreateTaskAmout extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setCustomView(R.layout.actionbar);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorAccent)));
         setContentView(R.layout.activity_create_task_amout);
         counter = 1;
         pricetype = 1;
+        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
+        getSupportActionBar().setTitle("Создать задание");
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setElevation(0);

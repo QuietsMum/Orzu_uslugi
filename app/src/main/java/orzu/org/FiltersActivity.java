@@ -62,7 +62,7 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
         ActionBar toolbar = getSupportActionBar();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorAccent)));
+        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
         toolbar.setTitle("Фильтры");
         lvMain1 = (ListView)findViewById(R.id.list_view_filters1);
         lvMain2 = (ListView)findViewById(R.id.list_view_filters2);

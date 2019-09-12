@@ -92,12 +92,10 @@ public class CreateTaskPlace extends AppCompatActivity implements View.OnClickLi
         MapKitFactory.setApiKey("38c4c9bc-766a-4574-8088-18a4e7583a90");
         MapKitFactory.initialize(this);
         SearchFactory.initialize(this);
-        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setCustomView(R.layout.actionbar);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorAccent)));
+        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
         setContentView(R.layout.activity_create_task_place);
         super.onCreate(savedInstanceState);
-
+        getSupportActionBar().setTitle("Создать задание");
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setElevation(0);

@@ -25,7 +25,7 @@ public class UserSettings extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_user_settings);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorAccent)));
+        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
         getSupportActionBar().setTitle("Настройки");
         getSupportActionBar().setElevation(0);
 

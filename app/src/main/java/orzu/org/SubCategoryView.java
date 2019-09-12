@@ -62,7 +62,7 @@ public class SubCategoryView extends AppCompatActivity implements View.OnClickLi
         ActionBar toolbar = getSupportActionBar();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorAccent)));
+        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
         toolbar.setTitle("Фильтры");
 
         String cat = "Категории";

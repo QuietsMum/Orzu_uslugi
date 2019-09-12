@@ -9,7 +9,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="280dp"
-        android:background="@color/colorAccent"
+        android:background="@drawable/gradient_back_180"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -538,7 +538,7 @@
         android:id="@+id/view_back_bluemy"
         android:layout_width="match_parent"
         android:layout_height="280dp"
-        android:background="@color/colorAccent"
+        android:background="@drawable/gradient_back_180"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

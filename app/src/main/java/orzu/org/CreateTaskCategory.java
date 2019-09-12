@@ -48,7 +48,7 @@ public class CreateTaskCategory extends AppCompatActivity {
         ActionBar toolbar = getSupportActionBar();
         toolbar.setDisplayHomeAsUpEnabled(true);
         toolbar.setDisplayShowHomeEnabled(true);
-        toolbar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorAccent)));
+        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
         toolbar.setTitle("Выберите категорию");
         toolbar.setElevation(0);
 

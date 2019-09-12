@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import androidx.fragment.app.FragmentManager;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -49,6 +51,7 @@ import java.net.URL;
 import io.intercom.android.sdk.Intercom;
 import io.intercom.android.sdk.UserAttributes;
 import io.intercom.android.sdk.identity.Registration;
+import jp.wasabeef.blurry.Blurry;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -72,13 +75,15 @@ public class Main2Activity extends AppCompatActivity
     NavigationView navigationView;
     LinearLayout intercomBtn;
     ImageView img;
+    RelativeLayout userviewBtn;
+    ImageView imageBlur;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorAccent)));
+        toolbar.setBackground(getResources().getDrawable(R.drawable.gradient_back));
         setSupportActionBar(toolbar);
 
         try {
@@ -236,7 +241,8 @@ public class Main2Activity extends AppCompatActivity
                     editor.apply();
                     View hView = navigationView.getHeaderView(0);
                     TextView nav_user = (TextView) hView.findViewById(R.id.textViewName);
-                    LinearLayout userviewBtn = hView.findViewById(R.id.headerOfdrawer);
+                    userviewBtn = hView.findViewById(R.id.headerOfdrawer);
+                    imageBlur = userviewBtn.findViewById(R.id.image_blur);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -334,6 +340,12 @@ public class Main2Activity extends AppCompatActivity
 
                 View hView = navigationView.getHeaderView(0);
                 ImageView nav_user = (ImageView) hView.findViewById(R.id.imageViewName);
+                imageBlur.setImageBitmap(myBitmap);
+                Blurry.with(context)
+                        .radius(10)
+                        .sampling(4)
+                        .capture(userviewBtn)
+                        .into(imageBlur);
                 nav_user.setImageBitmap(myBitmap);
                 Common.bitmap = myBitmap;
                 Log.d("saveImage", "Exception 2,went!");

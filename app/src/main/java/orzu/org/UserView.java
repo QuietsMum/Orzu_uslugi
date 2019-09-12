@@ -86,7 +86,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
         setContentView(R.layout.activity_user_view);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorAccent)));
+        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
         getSupportActionBar().setTitle("");
         getSupportActionBar().setElevation(0);
         nameUser = findViewById(R.id.name_fname_his);
@@ -218,7 +218,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
                             userBday.setText(mBday);
                             userSex.setText(mSex);
                             userNarr.setText(mNarr);
-                            Picasso.get().load("https://orzu.org"+image).fit().into(imageViewName);
+                            Picasso.get().load("https://orzu.org"+image).fit().centerCrop().into(imageViewName);
                         }
                     });
                 } catch (JSONException e) {

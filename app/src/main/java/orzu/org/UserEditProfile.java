@@ -3,19 +3,32 @@ package orzu.org;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.ContextWrapper;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.format.DateFormat;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -23,22 +36,40 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
+import com.fxn.pix.Options;
+import com.fxn.pix.Pix;
+import com.fxn.utility.PermUtil;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+import io.intercom.com.bumptech.glide.request.target.SimpleTarget;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+
+import static android.os.Build.ID;
 
 public class UserEditProfile extends AppCompatActivity implements View.OnClickListener {
 
@@ -61,7 +92,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
     SimpleDateFormat sdf;
     DBHelper dbHelper;
     Date date;
-
+    String encodedString;
     String idUser;
     String text;
     String mMessage;
@@ -73,6 +104,9 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
     String mBday;
     String mSex;
     String mNarr;
+    ImageView mAvatar;
+    String mAvatarstr;
+    ArrayList<String> returnValue = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,13 +114,12 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_user_edit_profile);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorAccent)));
+        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
         getSupportActionBar().setTitle("Профиль");
         getSupportActionBar().setElevation(0);
 
-
-
         userName = findViewById(R.id.user_edit_name);
+        mAvatar = findViewById(R.id.userAvatar);
         userFname = findViewById(R.id.user_edit_fname);
         userNarr = findViewById(R.id.useri_edit_about);
         userCity = findViewById(R.id.user_edit_place);
@@ -100,7 +133,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         radioMale.setActivated(true);
         buttonEdit.setOnClickListener(this);
         datePicker.setOnClickListener(this);
-
+        mAvatar.setOnClickListener(this);
 
         dialog = new Dialog (this);
         dialog.setContentView(R.layout.calendar_dialog_spinner);
@@ -149,6 +182,21 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PermUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Pix.start(this, Options.init().setRequestCode(100));
+                } else {
+                    Toast.makeText(this, "Approve permissions to open Pix ImagePicker", Toast.LENGTH_LONG).show();
+                }
+                return;
+            }
+        }
+    }
+
 
     @Override
     public void onClick(View view) {
@@ -163,7 +211,11 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                finish();
+
+                break;
+
+            case R.id.userAvatar:
+                Pix.start(this, Options.init().setRequestCode(100));
                 break;
         }
     }
@@ -193,12 +245,10 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                 "&gender=" + gender +
                 "&bday=" + day +
                 "&bmonth=" + monthNumber +
-                "&byear=" + year;
-
-        Log.e("created response", url);
-
+                "&byear=" + year +
+                "&avatar=" + encodedString;
+        Log.e("userCreatedURL", url);
         OkHttpClient client = new OkHttpClient();
-        Log.e("create url", url);
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -213,10 +263,11 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
             public void onResponse(Call call, Response response) throws IOException {
 
                 String mMessage = response.body().string();
-
+                Log.e("userCreated", mMessage);
                 UserEditProfile.this.runOnUiThread(new Runnable() {
                     public void run() {
                         Toast.makeText(UserEditProfile.this, mMessage, Toast.LENGTH_SHORT).show();
+
                     }
                 });
 
@@ -256,8 +307,6 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
 
                 mMessage = response.body().string();
 
-                Log.e("Full Info User", mMessage);
-
                 try {
                     JSONObject jsonObject = new JSONObject(mMessage);
                     mName = jsonObject.getString("name");
@@ -268,6 +317,19 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                     mBday = jsonObject.getString("birthday");
                     mSex = jsonObject.getString("sex");
                     mNarr = jsonObject.getString("about");
+                    mAvatarstr = jsonObject.getString("avatar");
+
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Glide
+                                    .with(UserEditProfile.this)
+                                    .load("https://orzu.org" + mAvatarstr)
+                                    .centerCrop()
+                                    .into(mAvatar);
+                        }
+                    });
 
 
                     runOnUiThread(new Runnable() {
@@ -297,19 +359,13 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
 
                             try {
                                 datesimple = fmt.parse(mBday);
-                                Log.e("datesimple", String.valueOf(datesimple));
                                 if (datesimple != null) {
                                     calendarnew.setTime(datesimple);
                                 }
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-
                                 calendar.updateDate(calendarnew.get(Calendar.YEAR), calendarnew.get(Calendar.MONTH), calendarnew.get(Calendar.DAY_OF_MONTH));
-                                Log.e("updateDate", String.valueOf(calendarnew.get(Calendar.YEAR)) + " " + String.valueOf(calendarnew.get(Calendar.MONTH)) + " " + String.valueOf(calendarnew.get(Calendar.DAY_OF_MONTH)));
-
-
-
                             if (mSex.equals("male")){
                                 radioGroup.check(R.id.male);
                             } else  radioGroup.check(R.id.female);
@@ -322,5 +378,23 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
             }
         });
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK && requestCode == 100) {
+            returnValue = data.getStringArrayListExtra(Pix.IMAGE_RESULTS);
+            mAvatar.setImageURI(Uri.parse(returnValue.get(0)));
+            Bitmap bitmap = ((BitmapDrawable) mAvatar.getDrawable()).getBitmap();
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+            byte[] byteArray = outputStream.toByteArray();
+
+            //Use your Base64 String as you wish
+            encodedString = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        }
+
+    }
+
 
 }

@@ -8,10 +8,11 @@
     android:orientation="vertical"
     tools:context=".TaskViewMain">
 
+
     <View
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@color/colorAccent"
+        android:background="@drawable/gradient_back_180"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -286,7 +287,7 @@
                                     android:id="@+id/imageViewName"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:scaleType="fitXY" />
+                                    android:scaleType="centerCrop" />
                             </androidx.cardview.widget.CardView>
 
 
@@ -429,7 +430,7 @@
         android:id="@+id/maket_view"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@color/colorAccent"
+        android:background="@drawable/gradient_back_180"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

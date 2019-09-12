@@ -51,7 +51,7 @@ public class CreateTaskSubCategory extends AppCompatActivity {
         ActionBar toolbar = getSupportActionBar();
         toolbar.setDisplayHomeAsUpEnabled(true);
         toolbar.setDisplayShowHomeEnabled(true);
-        toolbar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorAccent)));
+        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
         toolbar.setTitle(nameIntent);
         toolbar.setElevation(0);
         progressBar = findViewById(R.id.progressBarSubCatCreate);
