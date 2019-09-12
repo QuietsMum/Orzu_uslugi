@@ -7,6 +7,7 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -23,13 +24,16 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +42,7 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import orzu.org.ui.login.FeedbackAdapter;
 
 public class Feedback extends AppCompatActivity {
 
@@ -88,11 +93,11 @@ public class Feedback extends AppCompatActivity {
         String nar = "Описание";
         String img = "Картинка";
         String count = "Отзыв";
+        String avatar = "Аватар";
 
         data = new ArrayList<>();
-        String[] from1 = { cat, nar, img, count};
-        int[] to1 = { R.id.feedback_name, R.id.narrFeedback, R.id.imageFeedback, R.id.countFeedback};
-        SimpleAdapter arrayAdapter1 = new SimpleAdapter(this, data, R.layout.feedback_item, from1, to1);
+
+        FeedbackAdapter arrayAdapter1 = new FeedbackAdapter(this, data);
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -124,19 +129,34 @@ public class Feedback extends AppCompatActivity {
                              //feedName = jsonObject.getString("username") + jsonObject.getString("fname");
                              feedName = jsonObject.getString("username");
 
+                        String[] splited = jsonObject.getString("avatar").split(Character.toString ((char) 94));
+                        String str = Arrays.toString(splited);
+                        Log.wtf("count",str+"");
+                        try {
+                            Bitmap bitmap = Picasso.get().load("https://orzu.org"+str.substring(1,str.length()-1)).get();
+                            m.put(avatar,bitmap);
+                        }catch (Exception ex){
+                            Bitmap icon = BitmapFactory.decodeResource(Feedback.this.getResources(),Common.drawable);
+                            m.put(avatar,icon);
+                        }
                         m.put(cat, feedName);
                         long countFeed = jsonObject.getLong("like");
-                        if (countFeed == 0L){
+                        if (countFeed == 0){
                             m.put(count, "-1");
                             m.put(img, bpSad);
-                        } if (countFeed == 1L){
+                        } if (countFeed == 1){
                             m.put(count, "0");
                             m.put(img, bpNorm);
-                        } if (countFeed == 2L){
+                        } if (countFeed == 2){
                             m.put(count, "+1");
                             m.put(img, bpHappy);
+                        }if(countFeed==3){
+                            m.put(count, "+3");
+                            m.put(img, bpHappy);
                         }
+
                         m.put(nar, jsonObject.getString("narrative"));
+
                         data.add(m);
                     }
 
@@ -147,6 +167,7 @@ public class Feedback extends AppCompatActivity {
                         public void run() {
 
                             lvCat.setAdapter(arrayAdapter1);
+                            arrayAdapter1.notifyDataSetChanged();
                         }
                     });
 

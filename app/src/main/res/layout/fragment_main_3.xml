@@ -80,9 +80,7 @@
                             android:layout_height="135dp"
                             android:background="@drawable/circle_shape_whitewrap"
                             android:contentDescription="@string/nav_header_desc"
-                            android:gravity="center"
-                            android:padding="15dp"
-                            android:scaleType="fitXY"
+                            android:scaleType="centerCrop"
                             android:src="@drawable/ic_person_72pt_3x"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -305,8 +303,6 @@
                                     android:layout_width="45dp"
                                     android:layout_height="45dp"
                                     android:layout_marginStart="8dp"
-                                    android:background="@android:color/black"
-                                    android:gravity="center"
                                     android:padding="5dp"
                                     app:cardCornerRadius="22.5dp">
 
@@ -314,11 +310,7 @@
                                         android:id="@+id/imageViewOtziv1my"
                                         android:layout_width="45dp"
                                         android:layout_height="45dp"
-                                        android:contentDescription="@string/nav_header_desc"
-                                        android:gravity="center"
-                                        android:padding="5dp"
-                                        android:scaleType="centerCrop"
-                                        android:src="@drawable/ic_person_72pt_3x" />
+                                        android:scaleType="centerCrop"/>
                                 </androidx.cardview.widget.CardView>
 
 
@@ -424,8 +416,6 @@
                                     android:layout_width="45dp"
                                     android:layout_height="45dp"
                                     android:layout_marginStart="8dp"
-                                    android:background="@android:color/black"
-                                    android:gravity="center"
                                     android:padding="5dp"
                                     app:cardCornerRadius="22.5dp">
 
@@ -433,11 +423,7 @@
                                         android:id="@+id/imageViewOtziv2my"
                                         android:layout_width="45dp"
                                         android:layout_height="45dp"
-                                        android:contentDescription="@string/nav_header_desc"
-                                        android:gravity="center"
-                                        android:padding="5dp"
-                                        android:scaleType="centerCrop"
-                                        android:src="@drawable/ic_person_72pt_3x" />
+                                        android:scaleType="centerCrop" />
                                 </androidx.cardview.widget.CardView>
 
                                 <LinearLayout

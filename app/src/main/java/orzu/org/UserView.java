@@ -47,6 +47,8 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
     String mNarr;
     String mStatus;
     String image;
+    String image1;
+    String image2;
     TextView nameUser;
     TextView noReviews;
     TextView taskCountReq;
@@ -366,7 +368,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
                                 name[0] = jsonObject.getString("username");
                                 narr[0] = jsonObject.getString("narrative");
                                 date[0] = jsonObject.getString("datein");
-
+                                image1 = jsonObject.getString("avatar");
 
                                 runOnUiThread(new Runnable() {
                                     @Override
@@ -374,6 +376,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
                                         feedbackname1.setText(name[0]);
                                         feedbacknarr1.setText(narr[0]);
                                         feedbackcat1.setText(date[0]);
+                                        Picasso.get().load("https://orzu.org"+image1).into(feedbackimgUser1);
                                     }
                                 });
 
@@ -411,13 +414,14 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
                                 name[1] = jsonObject.getString("username");
                                 narr[1] = jsonObject.getString("narrative");
                                 date[1] = jsonObject.getString("datein");
-
+                                image2 = jsonObject.getString("avatar");
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         feedbackname2.setText(name[1]);
                                         feedbacknarr2.setText(narr[1]);
                                         feedbackcat2.setText(date[1]);
+                                        Picasso.get().load("https://orzu.org"+image2).into(feedbackimgUser2);
                                     }
                                 });
                             }
