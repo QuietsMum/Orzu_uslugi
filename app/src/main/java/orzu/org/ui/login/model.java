@@ -7,7 +7,7 @@ import java.util.Map;
 public class model {
 
     public static Long[] array;
-    public static Long[][] arraySubs;
+    public static ArrayList<String> arraySubs;
     public static Map<String, Boolean> mapa = new HashMap<>();
 
 }

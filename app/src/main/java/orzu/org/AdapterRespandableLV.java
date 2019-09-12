@@ -23,16 +23,16 @@ import orzu.org.ui.login.model;
 public class AdapterRespandableLV extends BaseExpandableListAdapter {
 
     public ArrayList<String> groupItem;
-    public ArrayList<SubItem>  tempChild;
+    public ArrayList<SubItem> tempChild;
     public ArrayList<Object> Childtem = new ArrayList<Object>();
     public LayoutInflater minflater;
     public Activity activity;
+    ArrayList<String> subsServer = model.arraySubs;
 
     public AdapterRespandableLV(ArrayList<String> grList, ArrayList<Object> childItem) {
         groupItem = grList;
         this.Childtem = childItem;
     }
-
 
 
     public void setInflater(LayoutInflater mInflater, Activity act) {
@@ -41,18 +41,16 @@ public class AdapterRespandableLV extends BaseExpandableListAdapter {
     }
 
 
-
-
-
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return ((ArrayList<SubItem>)Childtem.get(groupPosition)).get(childPosition);
+        return ((ArrayList<SubItem>) Childtem.get(groupPosition)).get(childPosition);
     }
 
     @Override
     public long getChildId(int groupPosition, int childPosition) {
         return childPosition;
     }
+
     CheckBox text = null;
 
 
@@ -66,6 +64,7 @@ public class AdapterRespandableLV extends BaseExpandableListAdapter {
         }
         text = convertView.findViewById(R.id.radioButnSub);
         text.setText(tempChild.get(childPosition).getName());
+
         text.setChecked(tempChild.get(childPosition).getCheck());
 
         /*text.setOnClickListener(new View.OnClickListener() {

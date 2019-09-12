@@ -7,7 +7,7 @@ public class SubItem {
         this.name = name;
         this.parent_id = parent_id;
         this.id = id;
-        this.check =false;
+        this.check = false;
     }
 
     public String getName() {

@@ -6,6 +6,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,6 +34,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import okhttp3.Call;
@@ -66,6 +69,9 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
     AdapterRespandableLV mNewAdapter;
     ShimmerFrameLayout shim;
     TextView btn;
+    String idUser;
+    DBHelper dbHelper;
+    ArrayList<String> subsServer = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +83,8 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
         getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
         getSupportActionBar().setElevation(0);
         toolbar.setTitle("Подписка на категории");
+        requestSubsServer();
 
-        requestCategoryList();
         // список атрибутов групп для чтения
         String groupFrom[] = new String[]{"Category"};
         // список ID view-элементов, в которые будет помещены атрибуты групп
@@ -259,6 +265,9 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
                         feedID = jsonObject.getString("id");
                         parentId = jsonObject.getString("parent_id");
                         child.add(new SubItem(feedName, parentId, feedID));
+                        if(model.arraySubs.contains(feedID)){
+                            child.get(i).setCheck(true);
+                        }
                     }
                     childItem.add(child);
                     if (por != groupId.size()) {
@@ -286,6 +295,60 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
         });
 
     }
+
+    public void requestSubsServer() {
+        dbHelper = new DBHelper(this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor c = db.query("orzutable", null, null, null, null, null, null);
+        c.moveToFirst();
+        int tokenColIndex = c.getColumnIndex("id");
+        idUser = c.getString(tokenColIndex);
+        c.close();
+        db.close();
+        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_user&user_cat=" + idUser;
+
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String mMessage = response.body().string();
+
+                try {
+                    JSONObject jsonObject = new JSONObject(mMessage);
+                    Iterator<String> iter = jsonObject.keys();
+                    int i = 0;
+                    while (iter.hasNext()) {
+                        String key = iter.next();
+                        try {
+                            Object value = jsonObject.get(key);
+                            subsServer.add(key);
+                        } catch (JSONException e) {
+                            // Something went wrong!
+                        }
+                        i++;
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                model.arraySubs = subsServer;
+                requestCategoryList();
+
+            }
+        });
+
+    }
+
 
     @Override
     public void onClick(View view) {
