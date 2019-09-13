@@ -36,6 +36,7 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import orzu.org.Notification.AdapterDifferentLayout;
 import orzu.org.ui.login.model;
 
 public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener  {
@@ -107,7 +108,7 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
         textnotask.setVisibility(View.INVISIBLE);
         rv = view.findViewById(R.id.rvMy);
 
-       // rv.setHasFixedSize(true);
+        // rv.setHasFixedSize(true);
         rv.setNestedScrollingEnabled(false);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         rv.setLayoutManager(llm);

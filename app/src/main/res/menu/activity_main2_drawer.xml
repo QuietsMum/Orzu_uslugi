@@ -18,6 +18,10 @@
             android:id="@+id/third"
             android:icon="@drawable/ic_cloud_done_48pt_3x"
             android:title="@string/my_tasks" />
+        <item
+            android:id="@+id/fourth"
+            android:icon="@drawable/ic_cloud_done_48pt_3x"
+            android:title="@string/notification" />
 
     </group>
 

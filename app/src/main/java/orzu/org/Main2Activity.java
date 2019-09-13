@@ -174,6 +174,8 @@ public class Main2Activity extends AppCompatActivity
             setTitle(item.getTitle());
 
 
+        }else if(id==R.id.fourth){
+
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

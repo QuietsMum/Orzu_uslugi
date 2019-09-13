@@ -83,6 +83,7 @@
     <string name="share_user">Поделиться</string>
     <string name="setting_user">Редактирование</string>
     <string name="subscribes">подписка на категории</string>
+    <string name="notification">Уведомления</string>
 
     <string-array name="datecreatelist">
         <item>В любое время</item>
