@@ -20,6 +20,7 @@ import android.widget.CheckBox;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
@@ -73,6 +74,7 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
     DBHelper dbHelper;
     ArrayList<String> subsServer = new ArrayList<>();
     int counter;
+    ProgressBar pb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,8 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
         int groupTo[] = new int[]{R.id.textViewCatSub};
         String childFrom[] = new String[]{"SubCategory"};
         int childTo[] = new int[]{R.id.radioButnSub};
+        pb = findViewById(R.id.progresSubscriptions);
+        pb.setVisibility(View.INVISIBLE);
         btn = findViewById(R.id.confirmSubs);
         btn.setOnClickListener(this);
 
@@ -302,12 +306,12 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
     }
 
     public void requestSubsServerAdd() {
-
+        pb.setVisibility(View.VISIBLE);
         String modelString = "";
         for (Map.Entry<String, String> entry : model.mapa.entrySet()) {
             modelString = modelString + "&cat[]=" + entry.getKey();
         }
-
+        final char dm = (char) 34;
 
         String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param" +
                 "&userid=" + idUser +
@@ -329,7 +333,10 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
             public void onResponse(Call call, Response response) throws IOException {
                 final String mMessage = response.body().string();
                 Log.e("result", mMessage);
-                finish();
+                if (mMessage.equals(dm + "Success" + dm)){
+                    pb.setVisibility(View.INVISIBLE);
+                    finish();
+                }
 
             }
         });
