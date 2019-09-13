@@ -4,6 +4,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -45,7 +47,6 @@ public class CreateTaskName extends AppCompatActivity implements View.OnClickLis
     RecyclerView suggestResultView;
     ArrayAdapterMy resultAdapter;
     List<String> suggestResult;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,9 +65,9 @@ public class CreateTaskName extends AppCompatActivity implements View.OnClickLis
         suggestResultView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         suggestResultView.setLayoutManager(layoutManager);
-        suggestResult = new ArrayList<>();
-        resultAdapter = new ArrayAdapterMy(this, suggestResult);
-        suggestResultView.setAdapter(resultAdapter);
+
+
+
 
 
         editName.addTextChangedListener(new TextWatcher() {
@@ -130,9 +131,7 @@ public class CreateTaskName extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String mMessage = response.body().string();
-                Log.e("resultArrayFull", mMessage);
-
-                suggestResult.clear();
+                suggestResult = new ArrayList<>();
 
                 try {
                     JSONArray jsonArray = new JSONArray(mMessage);
@@ -140,15 +139,18 @@ public class CreateTaskName extends AppCompatActivity implements View.OnClickLis
 
                     if (length > 0) {
                         for (int i = 0; i < length; i++) {
+
                             suggestResult.add(jsonArray.getString(i));
-                            Log.e("resultArray", suggestResult.get(i));
                         }
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                resultAdapter = new ArrayAdapterMy(CreateTaskName.this, suggestResult);
+                                suggestResultView.setAdapter(resultAdapter);
                                 suggestResultView.getRecycledViewPool().clear();
                                 resultAdapter.notifyDataSetChanged();
                                 suggestResultView.setVisibility(View.VISIBLE);
+
                             }
                         });
 
@@ -156,9 +158,10 @@ public class CreateTaskName extends AppCompatActivity implements View.OnClickLis
                         ArrayAdapterMy.setSelect(new NameItemSelect() {
                             @Override
                             public void onItemSelectedListener(View view, int position) {
-
-                                editName.setText(suggestResult.get(position));
-                                editName.setSelection(editName.getText().length());
+                                if(suggestResult.size() != 0){
+                                    editName.setText(suggestResult.get(position));
+                                    editName.setSelection(editName.getText().length());
+                                }
 
                             }
 
