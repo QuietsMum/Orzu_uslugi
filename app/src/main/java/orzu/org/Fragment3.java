@@ -243,7 +243,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                 Log.e("userCreatedAvatar", mMessage);
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        Toast.makeText(getContext(), mMessage, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),"Ваш профиль изменен", Toast.LENGTH_SHORT).show();
 
                     }
                 });

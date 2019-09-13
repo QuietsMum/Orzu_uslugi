@@ -251,7 +251,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                 getEditAvatarResponse();
                 UserEditProfile.this.runOnUiThread(new Runnable() {
                     public void run() {
-                        Toast.makeText(UserEditProfile.this, mMessage, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UserEditProfile.this, "Ваш профиль изменен", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -291,7 +291,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                 Log.e("userCreatedAvatar", mMessage);
                 UserEditProfile.this.runOnUiThread(new Runnable() {
                     public void run() {
-                        Toast.makeText(UserEditProfile.this, mMessage, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UserEditProfile.this, "Ваш профиль изменен", Toast.LENGTH_SHORT).show();
 
                     }
                 });
