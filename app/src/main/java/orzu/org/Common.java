@@ -4,9 +4,11 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 
 public class Common {
-    static String taskId = "";
-    static Bitmap bitmap;
-    static Boolean fragmentshimmer=false;
-    static int drawable = R.drawable.ic_person_72pt_3x;
-    static String city = "";
+    public static String userId = "";
+    public static String taskId = "";
+    public static Bitmap bitmap;
+    public static Boolean fragmentshimmer = false;
+    public static int drawable = R.drawable.ic_person_72pt_3x;
+    public static String city = "";
+    public static String utoken = "";
 }

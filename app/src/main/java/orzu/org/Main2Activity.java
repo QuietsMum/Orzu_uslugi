@@ -206,9 +206,11 @@ public class Main2Activity extends AppCompatActivity
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("orzutable", null, null, null, null, null, null);
         c.moveToFirst();
-        int tokenColIndex = c.getColumnIndex("id");
-        idUser = c.getString(tokenColIndex);
-
+        int idColIndex = c.getColumnIndex("id");
+        int tokenColIndex = c.getColumnIndex("token");
+        idUser = c.getString(idColIndex);
+        Common.userId = idUser;
+        Common.utoken = c.getString(tokenColIndex);
         c.close();
         db.close();
 

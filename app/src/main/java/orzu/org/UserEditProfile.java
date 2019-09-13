@@ -268,6 +268,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         String url = "https://projectapi.pw/api/avatar";
         Log.e("userCreatedURL", url);
         OkHttpClient client = new OkHttpClient();
+
         File myFile = new File(Uri.parse(returnValue.get(0)).getPath());
         RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart("file", myFile.getName(),
