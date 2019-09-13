@@ -199,7 +199,7 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
                         price = reader.nextString();
                         if (price.equals("Предложите цену")) {
                             m.put(priceList, price);
-                        } else m.put(priceList, price + " смн.");
+                        } else m.put(priceList, price);
                     } else reader.skipValue();
                     break;
                 case "sub_cat_name":

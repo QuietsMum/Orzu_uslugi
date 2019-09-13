@@ -32,6 +32,7 @@ import com.fxn.utility.PermUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -42,8 +43,12 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 
@@ -69,6 +74,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
     DBHelper dbHelper;
     String encodedString;
     String idUser;
+    String tokenUser;
     String text;
     String mMessage;
     String mName;
@@ -224,8 +230,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                 "&gender=" + gender +
                 "&bday=" + day +
                 "&bmonth=" + monthNumber +
-                "&byear=" + year +
-                "&avatar=" + encodedString;
+                "&byear=" + year;
         Log.e("userCreatedURL", url);
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -243,12 +248,55 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
 
                 String mMessage = response.body().string();
                 Log.e("userCreated", mMessage);
+                getEditAvatarResponse();
+                UserEditProfile.this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(UserEditProfile.this, mMessage, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+        });
+    }
+
+    public void getEditAvatarResponse() throws IOException {
+
+        String url = "https://projectapi.pw/api/avatar";
+        Log.e("userCreatedURL", url);
+        OkHttpClient client = new OkHttpClient();
+        File myFile = new File(Uri.parse(returnValue.get(0)).getPath());
+        RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("file", myFile.getName(),
+                        RequestBody.create(MediaType.parse("text/csv"), myFile))
+                .addFormDataPart("userid", idUser)
+                .addFormDataPart("utoken", tokenUser)
+                .addFormDataPart("appid", "$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS")
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                String mMessage = response.body().string();
+                Log.e("userCreatedAvatar", mMessage);
                 UserEditProfile.this.runOnUiThread(new Runnable() {
                     public void run() {
                         Toast.makeText(UserEditProfile.this, mMessage, Toast.LENGTH_SHORT).show();
 
                     }
                 });
+
+                finish();
 
             }
         });
@@ -260,8 +308,10 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("orzutable", null, null, null, null, null, null);
         c.moveToFirst();
-        int tokenColIndex = c.getColumnIndex("id");
-        idUser = c.getString(tokenColIndex);
+        int idColIndex = c.getColumnIndex("id");
+        int tokenColIndex = c.getColumnIndex("token");
+        idUser = c.getString(idColIndex);
+        tokenUser = c.getString(tokenColIndex);
         c.moveToFirst();
         c.close();
         db.close();
