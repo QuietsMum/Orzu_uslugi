@@ -22,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.squareup.picasso.Picasso;
@@ -54,6 +55,7 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
     ArrayList<Map<String, Object>> happy;
     ListView lvCat;
     String idUser;
+    TextView textFeeds;
     LinearLayout sort_all, sort_bad, sort_neutral, sort_happy,sort;
     FeedbackAdapter arrayAdapter1;
 
@@ -73,7 +75,7 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
         shim.startShimmer();
         lvCat = (ListView) findViewById(R.id.list_feedback);
         sort_all = findViewById(R.id.sort_all);
-
+        textFeeds = findViewById(R.id.textAllFeeds);
         sort_bad = findViewById(R.id.sort_bad);
         sort_neutral = findViewById(R.id.sort_neutral);
         sort_happy = findViewById(R.id.sort_happy);
@@ -212,6 +214,7 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
                 sort_bad.setBackgroundResource(R.drawable.circle_button_center);
                 sort_neutral.setBackgroundResource(R.drawable.circle_button_center);
                 sort_happy.setBackgroundResource(R.drawable.circle_button_right);
+                textFeeds.setTextColor(getResources().getColor(R.color.colorBackgrndFrg));
                 getAll();
                 break;
             case R.id.sort_bad:
@@ -219,6 +222,7 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
                 sort_bad.setBackgroundResource(R.drawable.circle_button_center_solid);
                 sort_neutral.setBackgroundResource(R.drawable.circle_button_center);
                 sort_happy.setBackgroundResource(R.drawable.circle_button_right);
+                textFeeds.setTextColor(getResources().getColor(R.color.colorTextDark));
                 getBad();
                 break;
             case R.id.sort_neutral:
@@ -226,6 +230,7 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
                 sort_bad.setBackgroundResource(R.drawable.circle_button_center);
                 sort_neutral.setBackgroundResource(R.drawable.circle_button_center_solid);
                 sort_happy.setBackgroundResource(R.drawable.circle_button_right);
+                textFeeds.setTextColor(getResources().getColor(R.color.colorTextDark));
                 getNeutral();
                 break;
             case R.id.sort_happy:
@@ -233,6 +238,7 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
                 sort_bad.setBackgroundResource(R.drawable.circle_button_center);
                 sort_neutral.setBackgroundResource(R.drawable.circle_button_center);
                 sort_happy.setBackgroundResource(R.drawable.circle_button_right_solid);
+                textFeeds.setTextColor(getResources().getColor(R.color.colorTextDark));
                 getHappy();
                 break;
         }

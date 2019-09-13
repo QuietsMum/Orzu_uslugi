@@ -48,11 +48,13 @@
                     android:layout_weight="1"
                     android:background="@drawable/circle_button_left_solid">
 
-                    <ImageView
+                    <TextView
+                        android:id="@+id/textAllFeeds"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_sad" />
+                        android:layout_height="match_parent"
+                        android:ravity="center"
+                        android:textColor="@color/colorBackgrndFrg"
+                        android:text="Все"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -145,11 +147,12 @@
                                 android:layout_weight="1"
                                 android:background="@drawable/circle_button_left_solid">
 
-                                <ImageView
+                                <TextView
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:src="@drawable/ic_sad" />
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:textColor="@color/colorBackgrndFrg"
+                                    android:text="Все"/>
                             </LinearLayout>
 
                             <LinearLayout
