@@ -295,7 +295,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                     if (mStatus.equals("false")) {
                         statusImg.setVisibility(View.INVISIBLE);
                     } else statusImg.setVisibility(View.VISIBLE);
-                    ;
+
 
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
