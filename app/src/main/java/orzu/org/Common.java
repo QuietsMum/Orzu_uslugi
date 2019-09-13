@@ -8,4 +8,5 @@ public class Common {
     static Bitmap bitmap;
     static Boolean fragmentshimmer=false;
     static int drawable = R.drawable.ic_person_72pt_3x;
+    static String city = "";
 }

@@ -1,6 +1,7 @@
 package orzu.org;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +17,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MyViewHolder>{
+public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MyViewHolder> {
 
     ArrayList<Map<String, Object>> maps;
     Context context;
     static MainItemSelect select;
-    public RVAdapter(Context context,ArrayList<Map<String, Object>> maps) {
+    ArrayList<Map<String, Object>> filtered = new ArrayList<>();
+
+    public RVAdapter(Context context, ArrayList<Map<String, Object>> maps) {
         this.context = context;
         this.maps = maps;
     }
@@ -29,44 +32,58 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MyViewHolder>{
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.main_item,parent,false);
+        View v = LayoutInflater.from(context).inflate(R.layout.main_item, parent, false);
         return new MyViewHolder(v);
     }
-
 
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        if(maps.get(position).get("Категория задачи") == null){
-           holder.a.setText("Категория задачи");
-        }else {
+        if (maps.get(position).get("Категория задачи") == null) {
+            holder.a.setText("Категория задачи");
+        } else {
             holder.a.setText(maps.get(position).get("Категория задачи").toString());
         }
-        if(maps.get(position).get("Задание") == null)
+        if (maps.get(position).get("Задание") == null)
             holder.b.setText("Задание");
         else
             holder.b.setText(maps.get(position).get("Задание").toString());
-        if(maps.get(position).get("Сроки")==null)
+        if (maps.get(position).get("Сроки") == null)
             holder.c.setText("Сроки не указаны");
         else
             holder.c.setText(maps.get(position).get("Сроки").toString());
         if (maps.get(position).get("Цена") == null)
             holder.d.setText("Цена");
         else
-            holder.d.setText( maps.get(position).get("Цена").toString());
-        if (maps.get(position).get("Валюта")==null)
+            holder.d.setText(maps.get(position).get("Цена").toString());
+        if (maps.get(position).get("Валюта") == null)
             holder.e.setText("");
-        else if (maps.get(position).get("Цена").equals("Предложите цену")){
+        else if (maps.get(position).get("Цена").equals("Предложите цену")) {
             holder.e.setText("");
         } else
-            holder.e.setText( maps.get(position).get("Валюта").toString());
+            holder.e.setText(maps.get(position).get("Валюта").toString());
 
         if (maps.get(position).get("Город") != null)
             /*//holder.f.setText("Город");
         else*/
-            holder.f.setText( maps.get(position).get("Город").toString());
+            holder.f.setText(maps.get(position).get("Город").toString());
     }
+
+
+    void filterByCity(String city) {
+        if (city.length() != 0) {
+            for (int i = 0; i < maps.size(); i++) {
+                if (maps.get(i).get("Город").toString().equals(city)) {
+                    Log.e("ФильтрыФтльтры", maps.get(i).get("Город").toString() + "  " + city);
+                    filtered.add(maps.get(i));
+                }
+            }
+            this.maps = filtered;
+            notifyDataSetChanged();
+        }
+    }
+
 
     @Override
     public int getItemCount() {
@@ -74,7 +91,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MyViewHolder>{
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView a,b,c,d,e,f;
+        TextView a, b, c, d, e, f;
 
         MyViewHolder(View itemView) {
             super(itemView);

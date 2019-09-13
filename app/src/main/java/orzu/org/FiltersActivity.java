@@ -53,6 +53,7 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
     ArrayList<Map<String, Object>> data1;
     ArrayList<Map<String, Object>> data2;
     SimpleAdapter arrayAdapter1;
+    SimpleAdapter arrayAdapter2;
     ListView lvMain1;
     ListView lvMain2;
     @Override
@@ -124,7 +125,7 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
         String[] from2 = { cat,  res, img};
         int[] to2 = { R.id.textView10, R.id.textView11, R.id.imageViewFilt };
 
-       SimpleAdapter arrayAdapter2 = new SimpleAdapter(this, data2, R.layout.filters_item, from2, to2);
+       arrayAdapter2 = new SimpleAdapter(this, data2, R.layout.filters_item, from2, to2);
         lvMain2.setAdapter(arrayAdapter2);
         lvMain2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -146,8 +147,16 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK){
                 String result= data.getStringExtra("result");
-                textCity = lvMain2.getAdapter().getView(elementPos, null, lvMain2).findViewById(R.id.textView11);
-                textCity.setText(result);
+                Common.city = result;
+                Map<String, Object> m2sort = new HashMap<>();
+                m2sort.put(cat,filtname1[1]);
+                m2sort.put(res, result);
+                m2sort.put(img,filtimg1[1]);
+                m2sort.put(res, result);
+                data1.remove(1);
+                data1.add(1,m2sort);
+                arrayAdapter1.notifyDataSetChanged();
+                Log.wtf("city",result);
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result
@@ -178,6 +187,14 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
                 idArray[0] = 0L;
                 model.array = idArray;
                 button.setVisibility(View.VISIBLE);
+                Common.city = "";
+                Map<String, Object> m2sort = new HashMap<>();
+                m2sort.put(cat,filtname1[1]);
+                m2sort.put(res, "Алматы");
+                m2sort.put(img,filtimg1[1]);
+                data1.remove(1);
+                data1.add(1,m2sort);
+                arrayAdapter1.notifyDataSetChanged();
                 return true;
             case android.R.id.home:
 
