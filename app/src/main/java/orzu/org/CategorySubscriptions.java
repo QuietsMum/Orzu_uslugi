@@ -72,6 +72,7 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
     String idUser;
     DBHelper dbHelper;
     ArrayList<String> subsServer = new ArrayList<>();
+    int counter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +85,7 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
         getSupportActionBar().setElevation(0);
         toolbar.setTitle("Подписка на категории");
         requestSubsServer();
-
+        counter = 0;
         // список атрибутов групп для чтения
         String groupFrom[] = new String[]{"Category"};
         // список ID view-элементов, в которые будет помещены атрибуты групп
@@ -109,7 +110,7 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
                         this);
 
         expandableListView = (ExpandableListView) findViewById(R.id.expListView);
-        podstilka =  findViewById(R.id.podstilkaSuibs);
+        podstilka = findViewById(R.id.podstilkaSuibs);
         shim = findViewById(R.id.shimSubs);
         shim.startShimmer();
         expandableListView.setIndicatorBoundsRelative(50, 50);
@@ -118,13 +119,13 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
                 Log.wtf("asdsdq", "asdsad");
-                if(((ArrayList<SubItem>)childItem.get(i)).get(i1).getCheck()){
-                    ((ArrayList<SubItem>)childItem.get(i)).get(i1).setCheck(false);
-                    model.mapa.remove(((ArrayList<SubItem>)childItem.get(i)).get(i1).getId());
-                }else{
-                    ((ArrayList<SubItem>)childItem.get(i)).get(i1).setCheck(true);
-                    model.mapa.put(((ArrayList<SubItem>)childItem.get(i)).get(i1).getId(),true);
-                    for (Map.Entry<String, Boolean> entry : model.mapa.entrySet()) {
+                if (((ArrayList<SubItem>) childItem.get(i)).get(i1).getCheck()) {
+                    ((ArrayList<SubItem>) childItem.get(i)).get(i1).setCheck(false);
+                    model.mapa.remove(((ArrayList<SubItem>) childItem.get(i)).get(i1).getParent_id()+";"+((ArrayList<SubItem>) childItem.get(i)).get(i1).getId());
+                } else {
+                    ((ArrayList<SubItem>) childItem.get(i)).get(i1).setCheck(true);
+                    model.mapa.put(((ArrayList<SubItem>) childItem.get(i)).get(i1).getParent_id()+";"+((ArrayList<SubItem>) childItem.get(i)).get(i1).getId(),((ArrayList<SubItem>) childItem.get(i)).get(i1).getId());
+                    for (Map.Entry<String, String> entry : model.mapa.entrySet()) {
                         Log.wtf("forik", entry.getKey());
                     }
                 }
@@ -192,7 +193,6 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
                         //     requestSubCategoryList(mGroupsArrayID[i]);
                     }
                     requestSubCategoryList();
-
                    /* lvCat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -228,7 +228,6 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
 
     public void requestSubCategoryList() {
 
-        Log.wtf("kakdela",por+"");
         String url = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_subcat&id=" + groupId.get(por);
         por++;
 
@@ -265,15 +264,19 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
                         feedID = jsonObject.getString("id");
                         parentId = jsonObject.getString("parent_id");
                         child.add(new SubItem(feedName, parentId, feedID));
-                        if(model.arraySubs.contains(feedID)){
+                        if (model.arraySubs.contains(feedID)) {
                             child.get(i).setCheck(true);
+                            model.mapa.put(parentId+";"+feedID,parentId+";"+feedID);
                         }
                     }
                     childItem.add(child);
+
                     if (por != groupId.size()) {
+
                         requestSubCategoryList();
-                        Log.wtf("kakdela","horowo");
-                    } else{
+                        Log.wtf("kakdela", "");
+
+                    } else {
                         shim.setVisibility(View.INVISIBLE);
                         podstilka.setVisibility(View.INVISIBLE);
                     }
@@ -349,9 +352,44 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
 
     }
 
+    public void requestSubsServerAdd() {
+
+        String modelString = "";
+        for (Map.Entry<String, String> entry : model.mapa.entrySet()) {
+            modelString = modelString + "&cat[]=" + entry.getKey();
+        }
+
+
+        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param" +
+                "&userid=" + idUser +
+                "&act=subscribe" + modelString;
+        Log.e("stringModelFull", url);
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String mMessage = response.body().string();
+                Log.e("result", mMessage);
+                finish();
+
+            }
+        });
+
+    }
+
 
     @Override
     public void onClick(View view) {
-        finish();
+        requestSubsServerAdd();
     }
 }
