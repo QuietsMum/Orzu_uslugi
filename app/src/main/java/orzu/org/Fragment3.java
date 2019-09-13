@@ -1,12 +1,17 @@
 package orzu.org;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,24 +27,34 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.fxn.pix.Options;
+import com.fxn.pix.Pix;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import orzu.org.ui.login.model;
 
@@ -90,9 +105,12 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
     String image1;
     String image2;
     ImageView statusImg;
-
+    String encodedString;
     ImageView imageViewName;
+    ArrayList<String> returnValue = new ArrayList<>();
 
+    DBHelper dbHelper;
+    String tokenUser;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +124,19 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         final SharedPreferences prefs = getActivity().getSharedPreferences(" ", Context.MODE_PRIVATE);
         idUser = prefs.getString(Util.TASK_USERID, "");
         my = prefs.getString(Util.TASK_USERIDMY, "");
+
+        dbHelper = new DBHelper(getContext());
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor c = db.query("orzutable", null, null, null, null, null, null);
+        c.moveToFirst();
+        int idColIndex = c.getColumnIndex("id");
+        int tokenColIndex = c.getColumnIndex("token");
+        idUser = c.getString(idColIndex);
+        tokenUser = c.getString(tokenColIndex);
+        c.moveToFirst();
+        c.close();
+        db.close();
+
 
         feedbackButtun = view.findViewById(R.id.linear_feed_click);
         feedbackButtun.setOnClickListener(this);
@@ -142,6 +173,12 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         imageViewName = view.findViewById(R.id.imageViewName);
 
         imageViewName.setImageBitmap(Common.bitmap);
+        imageViewName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Pix.start(getActivity(),Options.init().setRequestCode(100));
+            }
+        });
 
         try {
             getUserResponse();
@@ -151,6 +188,69 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         requestFeedbackMy();
         return view;
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK && requestCode == 100) {
+            returnValue = data.getStringArrayListExtra(Pix.IMAGE_RESULTS);
+            imageViewName.setImageURI(Uri.parse(returnValue.get(0)));
+            Log.wtf("asda","activityresult");
+            Bitmap bitmap = ((BitmapDrawable) imageViewName.getDrawable()).getBitmap();
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+            byte[] byteArray = outputStream.toByteArray();
+
+            //Use your Base64 String as you wish
+            encodedString = Base64.encodeToString(byteArray, Base64.DEFAULT);
+            try {
+                getEditAvatarResponse();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void getEditAvatarResponse() throws IOException {
+
+        String url = "https://projectapi.pw/api/avatar";
+        Log.e("userCreatedURL", url);
+        OkHttpClient client = new OkHttpClient();
+        File myFile = new File(Uri.parse(returnValue.get(0)).getPath());
+        RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("file", myFile.getName(),
+                        RequestBody.create(MediaType.parse("text/csv"), myFile))
+                .addFormDataPart("userid", idUser)
+                .addFormDataPart("utoken", tokenUser)
+                .addFormDataPart("appid", "$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS")
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                String mMessage = response.body().string();
+                Log.e("userCreatedAvatar", mMessage);
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getContext(), mMessage, Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+            }
+        });
+    }
+
 
     public void getUserResponse() throws IOException {
         // api?appid=&opt=view_user&=user=id

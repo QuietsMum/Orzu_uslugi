@@ -1,6 +1,7 @@
 package orzu.org;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,7 +10,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -21,6 +24,7 @@ import android.util.JsonReader;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.fxn.pix.Pix;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -174,7 +178,7 @@ public class Main2Activity extends AppCompatActivity
             setTitle(item.getTitle());
 
 
-        }else if(id==R.id.fourth){
+        } else if (id == R.id.fourth) {
 
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -187,12 +191,13 @@ public class Main2Activity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (data != null) {
+        if (resultCode == Activity.RESULT_OK && requestCode == 100) {
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag("fragment3");
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }else if (data != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container, new Fragment1()).commit();
         }
-
-
     }
 
     public void getUserResponse() throws IOException {
@@ -289,7 +294,7 @@ public class Main2Activity extends AppCompatActivity
                 }
                 // Вставляем фрагмент, заменяя текущий фрагмент
                 FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.container, fragment,"fragment3").commit();
                 setTitle("");
                 DrawerLayout drawer = findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);

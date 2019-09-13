@@ -421,9 +421,8 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
 
             //Use your Base64 String as you wish
             encodedString = Base64.encodeToString(byteArray, Base64.DEFAULT);
+            Log.wtf("sad","I am so sad");
         }
 
     }
-
-
 }
