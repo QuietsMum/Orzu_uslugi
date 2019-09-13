@@ -157,15 +157,18 @@ public class CreateTaskDetail extends AppCompatActivity implements View.OnClickL
 
         switch (view.getId()) {
             case R.id.createDetail:
-                final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putString(Util.TASK_ANNAT, String.valueOf(annot.getText()));
-                editor.apply();
-                Intent intent = new Intent(this, TaskViewMain.class);
-                intent.putExtra("opt", "add");
-                intent.putExtra("mytask", "not");
-                startActivity(intent);
-
+                if(annot.getText().length()!=0) {
+                    final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString(Util.TASK_ANNAT, String.valueOf(annot.getText()));
+                    editor.apply();
+                    Intent intent = new Intent(this, TaskViewMain.class);
+                    intent.putExtra("opt", "add");
+                    intent.putExtra("mytask", "not");
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.linear_image_click:
                 multy = true;

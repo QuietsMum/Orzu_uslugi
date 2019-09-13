@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -56,7 +57,7 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
     DatePicker calendar;
     WindowManager.LayoutParams lp;
     GregorianCalendar calendarGeor;
-    Locale myLocale = new Locale("ru","RU");
+    Locale myLocale = new Locale("ru", "RU");
     int dateType;
 
 
@@ -104,7 +105,7 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
         buttonCreate.setOnClickListener(this);
         fa = this;
 
-        dialog = new Dialog (this);
+        dialog = new Dialog(this);
         dialog.setContentView(R.layout.calendar_dialog);
 
         calendar = dialog.findViewById(R.id.calendarView);
@@ -160,31 +161,86 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
         // 3. Договорюсь с исполнителем
 
 
-
         switch (view.getId()) {
             case R.id.createTerm:
-                final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = prefs.edit();
-                if (counterDef == 1) {
-                    dateType = 3;
-                    editor.putString(Util.TASK_WORKWITH, "Дата по договоренности");
-                    editor.putString(Util.TASK_DATETYPE, String.valueOf(dateType));
-                    editor.apply();
-                } else if (counterDef == 2) {
-                    dateType = 2;
-                    editor.putString(Util.TASK_CDATE, String.valueOf(text_date1.getText()));
-                    editor.putString(Util.TASK_EDATE, String.valueOf(text_date1_2.getText()));
-                    editor.putString(Util.TASK_DATETYPE, String.valueOf(dateType));
-                    editor.apply();
-                } else if (counterDef == 3) {
-                    dateType = 1;
-                    editor.putString(Util.TASK_DATETYPE, String.valueOf(dateType));
-                    editor.putString(Util.TASK_CDATEL, String.valueOf(text_date2.getText()));
-                    editor.putString(Util.TASK_LEVEL_L, String.valueOf(spiner.getSelectedItemPosition()));
-                    editor.apply();
+                if (lin_examlpe1_1.getVisibility() == View.VISIBLE) {
+                    if (text_date1.getText().length() > 8 && text_date2.getText().length() > 8) {
+                        final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        if (counterDef == 1) {
+                            dateType = 3;
+                            editor.putString(Util.TASK_WORKWITH, "Дата по договоренности");
+                            editor.putString(Util.TASK_DATETYPE, String.valueOf(dateType));
+                            editor.apply();
+                        } else if (counterDef == 2) {
+                            dateType = 2;
+                            editor.putString(Util.TASK_CDATE, String.valueOf(text_date1.getText()));
+                            editor.putString(Util.TASK_EDATE, String.valueOf(text_date1_2.getText()));
+                            editor.putString(Util.TASK_DATETYPE, String.valueOf(dateType));
+                            editor.apply();
+                        } else if (counterDef == 3) {
+                            dateType = 1;
+                            editor.putString(Util.TASK_DATETYPE, String.valueOf(dateType));
+                            editor.putString(Util.TASK_CDATEL, String.valueOf(text_date2.getText()));
+                            editor.putString(Util.TASK_LEVEL_L, String.valueOf(spiner.getSelectedItemPosition()));
+                            editor.apply();
+                        }
+                        Intent intent = new Intent(this, CreateTaskAmout.class);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show();
+                    }
+                } else if (spiner.getVisibility() == View.VISIBLE) {
+                    if(spiner.getSelectedItem().toString().length()!=0&&text_date2.getText().length()>8) {
+                        final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        if (counterDef == 1) {
+                            dateType = 3;
+                            editor.putString(Util.TASK_WORKWITH, "Дата по договоренности");
+                            editor.putString(Util.TASK_DATETYPE, String.valueOf(dateType));
+                            editor.apply();
+                        } else if (counterDef == 2) {
+                            dateType = 2;
+                            editor.putString(Util.TASK_CDATE, String.valueOf(text_date1.getText()));
+                            editor.putString(Util.TASK_EDATE, String.valueOf(text_date1_2.getText()));
+                            editor.putString(Util.TASK_DATETYPE, String.valueOf(dateType));
+                            editor.apply();
+                        } else if (counterDef == 3) {
+                            dateType = 1;
+                            editor.putString(Util.TASK_DATETYPE, String.valueOf(dateType));
+                            editor.putString(Util.TASK_CDATEL, String.valueOf(text_date2.getText()));
+                            editor.putString(Util.TASK_LEVEL_L, String.valueOf(spiner.getSelectedItemPosition()));
+                            editor.apply();
+                        }
+                        Intent intent = new Intent(this, CreateTaskAmout.class);
+                        startActivity(intent);
+                    }else {
+                        Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    if (counterDef == 1) {
+                        dateType = 3;
+                        editor.putString(Util.TASK_WORKWITH, "Дата по договоренности");
+                        editor.putString(Util.TASK_DATETYPE, String.valueOf(dateType));
+                        editor.apply();
+                    } else if (counterDef == 2) {
+                        dateType = 2;
+                        editor.putString(Util.TASK_CDATE, String.valueOf(text_date1.getText()));
+                        editor.putString(Util.TASK_EDATE, String.valueOf(text_date1_2.getText()));
+                        editor.putString(Util.TASK_DATETYPE, String.valueOf(dateType));
+                        editor.apply();
+                    } else if (counterDef == 3) {
+                        dateType = 1;
+                        editor.putString(Util.TASK_DATETYPE, String.valueOf(dateType));
+                        editor.putString(Util.TASK_CDATEL, String.valueOf(text_date2.getText()));
+                        editor.putString(Util.TASK_LEVEL_L, String.valueOf(spiner.getSelectedItemPosition()));
+                        editor.apply();
+                    }
+                    Intent intent = new Intent(this, CreateTaskAmout.class);
+                    startActivity(intent);
                 }
-                Intent intent = new Intent(this, CreateTaskAmout.class);
-                startActivity(intent);
                 break;
             case R.id.createTerm_buttonleft:
                 counterDef = 1;
@@ -228,15 +284,15 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
                 lin_examlpe1_2.setVisibility(View.INVISIBLE);
                 lin_examlpe2.setVisibility(View.VISIBLE);
                 break;
-            case R.id.layout_term_text_from :
+            case R.id.layout_term_text_from:
                 dialog.show();
                 count = 1;
                 break;
-            case R.id.layout_term_text_to :
+            case R.id.layout_term_text_to:
                 dialog.show();
                 count = 2;
                 break;
-            case R.id.layout_term_onedate :
+            case R.id.layout_term_onedate:
                 dialog.show();
                 count = 3;
                 break;

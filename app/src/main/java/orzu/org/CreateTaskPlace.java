@@ -81,7 +81,7 @@ public class CreateTaskPlace extends AppCompatActivity implements View.OnClickLi
     final BoundingBox BOUNDING_BOX = new BoundingBox(
             new Point(CENTER.getLatitude() - BOX_SIZE, CENTER.getLongitude() - BOX_SIZE),
             new Point(CENTER.getLatitude() + BOX_SIZE, CENTER.getLongitude() + BOX_SIZE));
-    final SearchOptions SEARCH_OPTIONS =  new SearchOptions().setSearchTypes(
+    final SearchOptions SEARCH_OPTIONS = new SearchOptions().setSearchTypes(
             SearchType.GEO.value |
                     SearchType.BIZ.value |
                     SearchType.TRANSIT.value);
@@ -113,7 +113,7 @@ public class CreateTaskPlace extends AppCompatActivity implements View.OnClickLi
         fa = this;
 
         searchManager = SearchFactory.getInstance().createSearchManager(SearchManagerType.COMBINED);
-        queryEdit = (EditText)findViewById(R.id.suggest_query);
+        queryEdit = (EditText) findViewById(R.id.suggest_query);
         suggestResultView = findViewById(R.id.suggest_result);
         suggestResultView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
@@ -123,15 +123,14 @@ public class CreateTaskPlace extends AppCompatActivity implements View.OnClickLi
         suggestResultView.setAdapter(resultAdapter);
 
 
-
-
-
         queryEdit.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
             @Override
             public void afterTextChanged(Editable editable) {
@@ -155,20 +154,41 @@ public class CreateTaskPlace extends AppCompatActivity implements View.OnClickLi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.createPlace:
-                final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = prefs.edit();
-                if (counter == 1) {
-                    placetype = 1;
-                    editor.putString(Util.TASK_PLACE, String.valueOf(queryEdit.getText()));
-                    editor.putString(Util.TASK_PLACETYPE, String.valueOf(placetype));
-                } else if (counter == 2) {
-                    placetype = 2;
-                    editor.putString(Util.TASK_PLACE, "Удаленно");
-                    editor.putString(Util.TASK_PLACETYPE, String.valueOf(placetype));
+                if (queryEdit.getVisibility() == View.VISIBLE) {
+                    if (queryEdit.getText().length() != 0) {
+                        final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        if (counter == 1) {
+                            placetype = 1;
+                            editor.putString(Util.TASK_PLACE, String.valueOf(queryEdit.getText()));
+                            editor.putString(Util.TASK_PLACETYPE, String.valueOf(placetype));
+                        } else if (counter == 2) {
+                            placetype = 2;
+                            editor.putString(Util.TASK_PLACE, "Удаленно");
+                            editor.putString(Util.TASK_PLACETYPE, String.valueOf(placetype));
+                        }
+                        editor.apply();
+                        Intent intent = new Intent(this, CreateTaskTerm.class);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    if (counter == 1) {
+                        placetype = 1;
+                        editor.putString(Util.TASK_PLACE, String.valueOf(queryEdit.getText()));
+                        editor.putString(Util.TASK_PLACETYPE, String.valueOf(placetype));
+                    } else if (counter == 2) {
+                        placetype = 2;
+                        editor.putString(Util.TASK_PLACE, "Удаленно");
+                        editor.putString(Util.TASK_PLACETYPE, String.valueOf(placetype));
+                    }
+                    editor.apply();
+                    Intent intent = new Intent(this, CreateTaskTerm.class);
+                    startActivity(intent);
                 }
-                editor.apply();
-                Intent intent = new Intent(this, CreateTaskTerm.class);
-                startActivity(intent);
                 break;
 
             case R.id.createPlace_buttonleft:

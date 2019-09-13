@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -99,12 +100,16 @@ public class CreateTaskName extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
-        final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(Util.TASK_NAME, String.valueOf(editName.getText()));
-        editor.apply();
-        Intent intent = new Intent(this, CreateTaskPlace.class);
-        startActivity(intent);
+        if(editName.getText().length()!=0) {
+            final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString(Util.TASK_NAME, String.valueOf(editName.getText()));
+            editor.apply();
+            Intent intent = new Intent(this, CreateTaskPlace.class);
+            startActivity(intent);
+        }else{
+            Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void requestSuggest(){

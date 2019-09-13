@@ -89,11 +89,11 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
         //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorBackLight)));
         dbHelper = new DBHelper(this);
 
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS)!= PackageManager.PERMISSION_GRANTED){
-            if(ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.RECEIVE_SMS)){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECEIVE_SMS)) {
 
-            }else{
-                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.RECEIVE_SMS},MY_REQUEST);
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS}, MY_REQUEST);
             }
 
         }
@@ -122,11 +122,11 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
 
         progressBar = findViewById(R.id.progressBarLogin_reg);
         progressBar.setVisibility(View.INVISIBLE);
-        name = (EditText)findViewById(R.id.editTextNameUser);
-        phon = (EditText)findViewById(R.id.editTextPhone_reg);
-        phonCount = (EditText)findViewById(R.id.editTextPhoneCountry);
-        pass = (EditText)findViewById(R.id.editTextPass);
-        button = (Button)findViewById(R.id.button_phone_login);
+        name = (EditText) findViewById(R.id.editTextNameUser);
+        phon = (EditText) findViewById(R.id.editTextPhone_reg);
+        phonCount = (EditText) findViewById(R.id.editTextPhoneCountry);
+        pass = (EditText) findViewById(R.id.editTextPass);
+        button = (Button) findViewById(R.id.button_phone_login);
 
         float dip = 16f;
         Resources r = Resources.getSystem();
@@ -154,16 +154,15 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
         button.setOnClickListener(this);
     }
 
-    private static final int MY_REQUEST=0;
+    private static final int MY_REQUEST = 0;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
-            case MY_REQUEST:
-            {
-                if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
+        switch (requestCode) {
+            case MY_REQUEST: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this, "Ok", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     Toast.makeText(this, "Напишите код вручную", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -173,62 +172,66 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
-        progressBar.setVisibility(View.VISIBLE);
+        if (name.getText().length() != 0&&phon.getText().length()!=0&&pass.getText().length()!=0) {
+            progressBar.setVisibility(View.VISIBLE);
 
         /*Intent intent = new Intent();
         String sms_body = intent.getExtras().getString("sms_body");
         sms = sms_body;*/
 
 
-        mPhone = phon.getText().toString();
-        mName = name.getText().toString();
-        mPassword = pass.getText().toString();
-        try {
-            getHttpResponse();
+            mPhone = phon.getText().toString();
+            mName = name.getText().toString();
+            mPassword = pass.getText().toString();
+            try {
+                getHttpResponse();
 
 
-            final Dialog dialog = new Dialog(this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
-            dialog.setContentView(R.layout.alert_dialog);
+                final Dialog dialog = new Dialog(this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
+                dialog.setContentView(R.layout.alert_dialog);
 
-            // set the custom dialog components - text, image and button
-            input = dialog.findViewById(R.id.editTextSms);
+                // set the custom dialog components - text, image and button
+                input = dialog.findViewById(R.id.editTextSms);
 
 
-            Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
-            // if button is clicked, close the custom dialog
-            dialogButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        getSMSResponse();
-                        SQLiteDatabase db = dbHelper.getWritableDatabase();
-                        ContentValues cv = new ContentValues();
-                        cv.put("id", mID);
-                        cv.put("token", mToken);
-                        cv.put("name", mName);
-                        db.insert("orzutable", null, cv);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            getSMSResponse();
+                            SQLiteDatabase db = dbHelper.getWritableDatabase();
+                            ContentValues cv = new ContentValues();
+                            cv.put("id", mID);
+                            cv.put("token", mToken);
+                            cv.put("name", mName);
+                            db.insert("orzutable", null, cv);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        dialog.dismiss();
                     }
-                    dialog.dismiss();
-                }
-            });
+                });
 
-            dialog.show();
+                dialog.show();
 
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else{
+            Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show();
         }
 
     }
 
     public void getHttpResponse() throws IOException {
-       // api?appid=&opt=register_user&phone=&password=&name=
+        // api?appid=&opt=register_user&phone=&password=&name=
         String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=register_user&phone="
-                      + ccp.getFullNumberWithPlus() + mPhone
-                      + "&password=" + mPassword
-                      + "&name=" + mName;
+                + ccp.getFullNumberWithPlus() + mPhone
+                + "&password=" + mPassword
+                + "&name=" + mName;
         Log.e("failure Response URL", url);
         OkHttpClient client = new OkHttpClient();
 
@@ -243,7 +246,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
             public void onFailure(Call call, IOException e) {
                 mMessage = e.getMessage().toString();
                 Log.w("failure Response", mMessage);
-                if (mMessage.equals("noAuth")){
+                if (mMessage.equals("noAuth")) {
                     Toast.makeText(getApplicationContext(), "No registered user!", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getApplicationContext(), LoginActivity2.class);
                     startActivity(intent);
@@ -259,13 +262,14 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
 
                 Log.e("response", mMessage);
 
-                    try {
-                        obj = new JSONObject(mMessage);
-                        mStatus = obj.getString("auth_status");
-                        mToken = obj.getString("_token");
-                        mID = obj.getLong("id");
-                    } catch (JSONException e) {
-                        e.printStackTrace(); }
+                try {
+                    obj = new JSONObject(mMessage);
+                    mStatus = obj.getString("auth_status");
+                    mToken = obj.getString("_token");
+                    mID = obj.getLong("id");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
             }
         });
@@ -290,7 +294,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
             public void onFailure(Call call, IOException e) {
                 mMessage = e.getMessage().toString();
                 Log.w("failure Response", mMessage);
-                if (mMessage.equals("noAuth")){
+                if (mMessage.equals("noAuth")) {
                     Toast.makeText(getApplicationContext(), "No registered user!", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getApplicationContext(), LoginActivity2.class);
                     startActivity(intent);
@@ -317,7 +321,8 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                         finish();
                     }
                 } catch (JSONException e) {
-                    e.printStackTrace(); }
+                    e.printStackTrace();
+                }
 
             }
         });
@@ -333,6 +338,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
         filter.addAction("android.provider.Telephony.SMS_RECEIVED");
         registerReceiver(otp, filter);
     }
+
     @Override
     protected void onPause() {
         super.onPause();

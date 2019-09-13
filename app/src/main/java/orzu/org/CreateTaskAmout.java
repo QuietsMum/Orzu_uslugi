@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -69,19 +70,39 @@ public class CreateTaskAmout extends AppCompatActivity implements View.OnClickLi
         SharedPreferences.Editor editor = prefs.edit();
         switch (view.getId()) {
             case R.id.createAmout:
-                if (counter == 1) {
-                    pricetype = 1;
-                    editor.putString(Util.TASK_PPRICE, String.valueOf(amoutEditPrice.getText()));
-                    editor.putString(Util.TASK_PPRICE_TYPE, String.valueOf(pricetype));
-                    editor.apply();
-                } else if (counter == 2) {
-                    pricetype = 2;
-                    editor.putString(Util.TASK_PPRICE, "Предложите цену");
-                    editor.putString(Util.TASK_PPRICE_TYPE, String.valueOf(pricetype));
-                    editor.apply();
+                if (amoutEdit.getVisibility() == View.VISIBLE) {
+                    if (amoutEditPrice.getText().length() != 0) {
+                        if (counter == 1) {
+                            pricetype = 1;
+                            editor.putString(Util.TASK_PPRICE, String.valueOf(amoutEditPrice.getText()));
+                            editor.putString(Util.TASK_PPRICE_TYPE, String.valueOf(pricetype));
+                            editor.apply();
+                        } else if (counter == 2) {
+                            pricetype = 2;
+                            editor.putString(Util.TASK_PPRICE, "Предложите цену");
+                            editor.putString(Util.TASK_PPRICE_TYPE, String.valueOf(pricetype));
+                            editor.apply();
+                        }
+                        Intent intent = new Intent(this, CreateTaskDetail.class);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    if (counter == 1) {
+                        pricetype = 1;
+                        editor.putString(Util.TASK_PPRICE, String.valueOf(amoutEditPrice.getText()));
+                        editor.putString(Util.TASK_PPRICE_TYPE, String.valueOf(pricetype));
+                        editor.apply();
+                    } else if (counter == 2) {
+                        pricetype = 2;
+                        editor.putString(Util.TASK_PPRICE, "Предложите цену");
+                        editor.putString(Util.TASK_PPRICE_TYPE, String.valueOf(pricetype));
+                        editor.apply();
+                    }
+                    Intent intent = new Intent(this, CreateTaskDetail.class);
+                    startActivity(intent);
                 }
-                Intent intent = new Intent(this, CreateTaskDetail.class);
-                startActivity(intent);
                 break;
 
             case R.id.createAmout_buttonleft:

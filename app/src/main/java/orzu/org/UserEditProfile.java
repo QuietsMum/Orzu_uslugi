@@ -206,12 +206,16 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                 break;
 
             case R.id.edit_user_btn:
-                try {
-                    getEditResponse();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if(userName.getText().length()!=0&&userFname.getText().length()!=0
+                        &&userCity.getSelectedItem().toString().length()!=0&&userNarr.getText().length()!=0&&userDate.getText().length()!=0) {
+                    try {
+                        getEditResponse();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show();
                 }
-
                 break;
 
             case R.id.userAvatar:
