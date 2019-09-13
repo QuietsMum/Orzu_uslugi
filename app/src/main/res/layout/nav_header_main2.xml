@@ -5,6 +5,7 @@
     android:id="@+id/headerOfdrawer"
     android:layout_width="match_parent"
     android:layout_height="150dp"
+    android:background="@drawable/gradient_back"
     android:gravity="bottom"
     android:orientation="horizontal"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">

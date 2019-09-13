@@ -361,6 +361,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                         m_new.put(createList, m.get(createList));
                         m_new.put(priceList2, m.get(priceList2));
                         m_new.put(needListdfrom, m.get(needListdfrom));
+                        m_new.put(useridList, m.get(useridList));
                         //  m_new.put(catidList, m.get(catidList));
                     }
                     jsonReader[0].endArray();

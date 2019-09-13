@@ -6,6 +6,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +20,7 @@ import android.widget.CheckBox;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
@@ -32,6 +35,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import okhttp3.Call;
@@ -66,6 +70,11 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
     AdapterRespandableLV mNewAdapter;
     ShimmerFrameLayout shim;
     TextView btn;
+    String idUser;
+    DBHelper dbHelper;
+    ArrayList<String> subsServer = new ArrayList<>();
+    int counter;
+    ProgressBar pb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,22 +86,14 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
         getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
         getSupportActionBar().setElevation(0);
         toolbar.setTitle("Подписка на категории");
-
-        requestCategoryList();
-        // список атрибутов групп для чтения
+        requestSubsServer();
+        counter = 0;
         String groupFrom[] = new String[]{"Category"};
-        // список ID view-элементов, в которые будет помещены атрибуты групп
         int groupTo[] = new int[]{R.id.textViewCatSub};
-
-        //   groupDataList = new ArrayList<>();
-
-        // список атрибутов элементов для чтения
         String childFrom[] = new String[]{"SubCategory"};
-
-        // список ID view-элементов, в которые будет помещены атрибуты
-        // элементов
         int childTo[] = new int[]{R.id.radioButnSub};
-
+        pb = findViewById(R.id.progresSubscriptions);
+        pb.setVisibility(View.INVISIBLE);
         btn = findViewById(R.id.confirmSubs);
         btn.setOnClickListener(this);
 
@@ -103,7 +104,7 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
                         this);
 
         expandableListView = (ExpandableListView) findViewById(R.id.expListView);
-        podstilka =  findViewById(R.id.podstilkaSuibs);
+        podstilka = findViewById(R.id.podstilkaSuibs);
         shim = findViewById(R.id.shimSubs);
         shim.startShimmer();
         expandableListView.setIndicatorBoundsRelative(50, 50);
@@ -112,13 +113,13 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
                 Log.wtf("asdsdq", "asdsad");
-                if(((ArrayList<SubItem>)childItem.get(i)).get(i1).getCheck()){
-                    ((ArrayList<SubItem>)childItem.get(i)).get(i1).setCheck(false);
-                    model.mapa.remove(((ArrayList<SubItem>)childItem.get(i)).get(i1).getId());
-                }else{
-                    ((ArrayList<SubItem>)childItem.get(i)).get(i1).setCheck(true);
-                    model.mapa.put(((ArrayList<SubItem>)childItem.get(i)).get(i1).getId(),true);
-                    for (Map.Entry<String, Boolean> entry : model.mapa.entrySet()) {
+                if (((ArrayList<SubItem>) childItem.get(i)).get(i1).getCheck()) {
+                    ((ArrayList<SubItem>) childItem.get(i)).get(i1).setCheck(false);
+                    model.mapa.remove(((ArrayList<SubItem>) childItem.get(i)).get(i1).getParent_id()+";"+((ArrayList<SubItem>) childItem.get(i)).get(i1).getId());
+                } else {
+                    ((ArrayList<SubItem>) childItem.get(i)).get(i1).setCheck(true);
+                    model.mapa.put(((ArrayList<SubItem>) childItem.get(i)).get(i1).getParent_id()+";"+((ArrayList<SubItem>) childItem.get(i)).get(i1).getId(),((ArrayList<SubItem>) childItem.get(i)).get(i1).getId());
+                    for (Map.Entry<String, String> entry : model.mapa.entrySet()) {
                         Log.wtf("forik", entry.getKey());
                     }
                 }
@@ -163,53 +164,14 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
                     int lenght = jsonArray.length();
                     String feedName = "";
                     String[] feedID = new String[lenght];
-                    //    mGroupsArrayName = new String[lenght];
-                    //      mGroupsArrayID = new String[lenght];
-
-                    //     сhildDataList = new ArrayList<>();
                     for (int i = 0; i < lenght; i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         feedName = jsonObject.getString("name");
                         feedID[i] = jsonObject.getString("id");
                         groupId.add(jsonObject.getString("id"));
-//                        mGroupsArrayName[i] = feedName;
-//                        mGroupsArrayID[i] = feedID;
-//                        map = new HashMap<>();
-//                        map.put("Category", feedName); // время года
-//                        groupDataList.add(map);
-
                         groupItem.add(feedName);
-
-                        Log.wtf("forid", feedID[i]);
-
-
-                        //     requestSubCategoryList(mGroupsArrayID[i]);
                     }
                     requestSubCategoryList();
-
-                   /* lvCat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            imageArrow = view.findViewById(R.id.image_arrow_menu);
-                            requestSubCategoryList(mGroupsArrayID[i]);
-                            if (arrowTrue){
-                                arrowTrue = false;
-                                imageArrow.setImageResource(0);
-                                imageArrow.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
-                                imageArrow.setColorFilter(ContextCompat.getColor(CategorySubscriptions.this, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
-                            } else {
-                                arrowTrue = true;
-                                imageArrow.setImageResource(0);
-                                imageArrow.setImageResource(R.drawable.ic_keyboard_arrow_right_black_24dp);
-                                imageArrow.setColorFilter(ContextCompat.getColor(CategorySubscriptions.this, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
-                            }
-
-                        }
-                    });*/
-
-
-                    //shim.setVisibility(View.INVISIBLE);
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -222,7 +184,6 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
 
     public void requestSubCategoryList() {
 
-        Log.wtf("kakdela",por+"");
         String url = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_subcat&id=" + groupId.get(por);
         por++;
 
@@ -250,8 +211,6 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
                     String feedName = "";
                     String feedID = "";
                     String parentId = "";
-                    // mSubCategoryArray = new String[100];
-                    //   сhildDataItemList = new ArrayList<>();
                     ArrayList<SubItem> child = new ArrayList<SubItem>();
                     for (int i = 0; i < lenght; i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -259,12 +218,19 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
                         feedID = jsonObject.getString("id");
                         parentId = jsonObject.getString("parent_id");
                         child.add(new SubItem(feedName, parentId, feedID));
+                        if (model.arraySubs.contains(feedID)) {
+                            child.get(i).setCheck(true);
+                            model.mapa.put(parentId+";"+feedID,parentId+";"+feedID);
+                        }
                     }
                     childItem.add(child);
+
                     if (por != groupId.size()) {
+
                         requestSubCategoryList();
-                        Log.wtf("kakdela","horowo");
-                    } else{
+                        Log.wtf("kakdela", "");
+
+                    } else {
                         shim.setVisibility(View.INVISIBLE);
                         podstilka.setVisibility(View.INVISIBLE);
                     }
@@ -287,8 +253,97 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
 
     }
 
+    public void requestSubsServer() {
+        dbHelper = new DBHelper(this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor c = db.query("orzutable", null, null, null, null, null, null);
+        c.moveToFirst();
+        int tokenColIndex = c.getColumnIndex("id");
+        idUser = c.getString(tokenColIndex);
+        c.close();
+        db.close();
+        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_user&user_cat=" + idUser;
+
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String mMessage = response.body().string();
+
+                try {
+                    JSONObject jsonObject = new JSONObject(mMessage);
+                    Iterator<String> iter = jsonObject.keys();
+                    int i = 0;
+                    while (iter.hasNext()) {
+                        String key = iter.next();
+                        try {
+                            Object value = jsonObject.get(key);
+                            subsServer.add(key);
+                        } catch (JSONException e) {
+                        }
+                        i++;
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                model.arraySubs = subsServer;
+                requestCategoryList();
+
+            }
+        });
+
+    }
+
+    public void requestSubsServerAdd() {
+        pb.setVisibility(View.VISIBLE);
+        String modelString = "";
+        for (Map.Entry<String, String> entry : model.mapa.entrySet()) {
+            modelString = modelString + "&cat[]=" + entry.getKey();
+        }
+        final char dm = (char) 34;
+
+        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param" +
+                "&userid=" + idUser +
+                "&act=subscribe" + modelString;
+        Log.e("stringModelFull", url);
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String mMessage = response.body().string();
+                Log.e("result", mMessage);
+                if (mMessage.equals(dm + "Success" + dm)){
+                    pb.setVisibility(View.INVISIBLE);
+                    finish();
+                }
+
+            }
+        });
+
+    }
     @Override
     public void onClick(View view) {
-        finish();
+        requestSubsServerAdd();
     }
 }

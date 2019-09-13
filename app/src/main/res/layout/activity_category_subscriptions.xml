@@ -31,6 +31,7 @@
                 android:orientation="vertical">
 
 
+
                 <ExpandableListView
                     android:id="@+id/expListView"
                     android:groupIndicator="@drawable/group_indicator"
@@ -350,6 +351,16 @@
 
                 </com.facebook.shimmer.ShimmerFrameLayout>
 
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center">
+                <ProgressBar
+                    android:id="@+id/progresSubscriptions"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"/>
+                </LinearLayout>
                 <TextView
                     android:id="@+id/confirmSubs"
                     android:layout_width="match_parent"
