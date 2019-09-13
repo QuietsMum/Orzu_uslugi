@@ -86,20 +86,10 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
         toolbar.setTitle("Подписка на категории");
         requestSubsServer();
         counter = 0;
-        // список атрибутов групп для чтения
         String groupFrom[] = new String[]{"Category"};
-        // список ID view-элементов, в которые будет помещены атрибуты групп
         int groupTo[] = new int[]{R.id.textViewCatSub};
-
-        //   groupDataList = new ArrayList<>();
-
-        // список атрибутов элементов для чтения
         String childFrom[] = new String[]{"SubCategory"};
-
-        // список ID view-элементов, в которые будет помещены атрибуты
-        // элементов
         int childTo[] = new int[]{R.id.radioButnSub};
-
         btn = findViewById(R.id.confirmSubs);
         btn.setOnClickListener(this);
 
@@ -170,52 +160,14 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
                     int lenght = jsonArray.length();
                     String feedName = "";
                     String[] feedID = new String[lenght];
-                    //    mGroupsArrayName = new String[lenght];
-                    //      mGroupsArrayID = new String[lenght];
-
-                    //     сhildDataList = new ArrayList<>();
                     for (int i = 0; i < lenght; i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         feedName = jsonObject.getString("name");
                         feedID[i] = jsonObject.getString("id");
                         groupId.add(jsonObject.getString("id"));
-//                        mGroupsArrayName[i] = feedName;
-//                        mGroupsArrayID[i] = feedID;
-//                        map = new HashMap<>();
-//                        map.put("Category", feedName); // время года
-//                        groupDataList.add(map);
-
                         groupItem.add(feedName);
-
-                        Log.wtf("forid", feedID[i]);
-
-
-                        //     requestSubCategoryList(mGroupsArrayID[i]);
                     }
                     requestSubCategoryList();
-                   /* lvCat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            imageArrow = view.findViewById(R.id.image_arrow_menu);
-                            requestSubCategoryList(mGroupsArrayID[i]);
-                            if (arrowTrue){
-                                arrowTrue = false;
-                                imageArrow.setImageResource(0);
-                                imageArrow.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
-                                imageArrow.setColorFilter(ContextCompat.getColor(CategorySubscriptions.this, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
-                            } else {
-                                arrowTrue = true;
-                                imageArrow.setImageResource(0);
-                                imageArrow.setImageResource(R.drawable.ic_keyboard_arrow_right_black_24dp);
-                                imageArrow.setColorFilter(ContextCompat.getColor(CategorySubscriptions.this, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
-                            }
-
-                        }
-                    });*/
-
-
-                    //shim.setVisibility(View.INVISIBLE);
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -255,8 +207,6 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
                     String feedName = "";
                     String feedID = "";
                     String parentId = "";
-                    // mSubCategoryArray = new String[100];
-                    //   сhildDataItemList = new ArrayList<>();
                     ArrayList<SubItem> child = new ArrayList<SubItem>();
                     for (int i = 0; i < lenght; i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -336,7 +286,6 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
                             Object value = jsonObject.get(key);
                             subsServer.add(key);
                         } catch (JSONException e) {
-                            // Something went wrong!
                         }
                         i++;
                     }
@@ -386,8 +335,6 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
         });
 
     }
-
-
     @Override
     public void onClick(View view) {
         requestSubsServerAdd();
