@@ -123,6 +123,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
 
     String name = "";
     String idUser = "";
+    String tokenUser = "";
     String nameUser = "";
     String catid = "";
     String amout = "";
@@ -665,8 +666,10 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("orzutable", null, null, null, null, null, null);
         c.moveToFirst();
-        int tokenColIndex = c.getColumnIndex("id");
-        idUser = c.getString(tokenColIndex);
+        int idColIndex = c.getColumnIndex("id");
+        int tokenColIndex = c.getColumnIndex("token");
+        idUser = c.getString(idColIndex);
+        tokenUser = c.getString(tokenColIndex);
         c.moveToFirst();
         c.close();
         db.close();
@@ -717,7 +720,8 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                 "&userid=" + idUser +
                  urlTerm  +
                  urlLocation +
-                 urlPrice;
+                 urlPrice +
+                 "&utoken=" + tokenUser;
         OkHttpClient client = new OkHttpClient();
         Log.e("create url", url);
         Request request = new Request.Builder()

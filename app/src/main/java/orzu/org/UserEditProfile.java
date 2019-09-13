@@ -219,10 +219,11 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         {
             gender = "female";
         }
-        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
+        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
                 "&opt=user_param" +
                 "&act=edit" +
                 "&userid=" + idUser +
+                "&utoken=" + tokenUser +
                 "&name=" + userName.getText() +
                 "&fname=" + userFname.getText() +
                 "&city=" + userCity.getSelectedItem().toString() +
@@ -248,13 +249,16 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
 
                 String mMessage = response.body().string();
                 Log.e("userCreated", mMessage);
-                getEditAvatarResponse();
-                UserEditProfile.this.runOnUiThread(new Runnable() {
-                    public void run() {
-                        Toast.makeText(UserEditProfile.this, "Ваш профиль изменен", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
+                if (returnValue.isEmpty()){
+                    UserEditProfile.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(UserEditProfile.this, mMessage, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    finish();
+                } else {
+                    getEditAvatarResponse();
+                }
             }
         });
     }
