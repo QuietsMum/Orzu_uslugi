@@ -29,6 +29,8 @@ import com.bumptech.glide.Glide;
 import com.fxn.pix.Options;
 import com.fxn.pix.Pix;
 import com.fxn.utility.PermUtil;
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
@@ -357,11 +359,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Glide
-                                    .with(UserEditProfile.this)
-                                    .load("https://orzu.org" + mAvatarstr)
-                                    .centerCrop()
-                                    .into(mAvatar);
+                            Picasso.get().load("https://orzu.org" + mAvatarstr).centerCrop().into(mAvatar);
                         }
                     });
 
