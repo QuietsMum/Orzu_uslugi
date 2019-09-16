@@ -164,8 +164,8 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
         switch (view.getId()) {
             case R.id.createTerm:
                 if (lin_examlpe1_1.getVisibility() == View.VISIBLE) {
-                    Log.wtf("as","asdsad");
-                    if (text_date1.getText().length() > 8 && text_date2.getText().length() > 8) {
+                    Log.wtf("as",text_date1.getText().length()+" "+text_date2.getText().length());
+                    if (text_date1.getText().length() > 8 && text_date1_2.getText().length() > 8) {
                         final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = prefs.edit();
                         Log.wtf("as","asd");
