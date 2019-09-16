@@ -91,7 +91,7 @@
                                     android:layout_height="match_parent"
                                     android:background="@drawable/circle_shape_whitewrap"
                                     android:contentDescription="@string/nav_header_desc"
-                                    android:scaleType="fitXY"
+                                    android:scaleType="centerCrop"
                                     android:src="@drawable/ic_person_72pt_3x"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
