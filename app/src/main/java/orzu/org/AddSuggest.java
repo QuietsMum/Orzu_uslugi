@@ -31,6 +31,7 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
     EditText editNarr;
     EditText editAmout;
     String idUser;
+    String tokenUser;
     String nameUser;
     String idTask;
     int amout;
@@ -51,7 +52,9 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
         Cursor c = db.query("orzutable", null, null, null, null, null, null);
         c.moveToFirst();
         int idColIndex = c.getColumnIndex("id");
+        int tokenColIndex = c.getColumnIndex("token");
         idUser = c.getString(idColIndex);
+        tokenUser = c.getString(tokenColIndex);
         c.close();
         db.close();
         final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
@@ -105,7 +108,8 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
                 "&task_id=" + idTask +
                 "&narrative=" + editNarr.getText() +
                 "&userid=" + idUser +
-                "&amount="  + editAmout.getText();
+                "&amount="  + editAmout.getText() +
+                "&utoken=" + tokenUser;
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()

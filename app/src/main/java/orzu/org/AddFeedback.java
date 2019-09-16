@@ -36,6 +36,7 @@ public class AddFeedback extends AppCompatActivity implements View.OnClickListen
     ImageView person_logo_sugg2;
     EditText editNarr;
     String idUser;
+    String tokenUser;
     String idUserTo;
     int like;
     TextView username;
@@ -54,8 +55,10 @@ public class AddFeedback extends AppCompatActivity implements View.OnClickListen
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("orzutable", null, null, null, null, null, null);
         c.moveToFirst();
-        int tokenColIndex = c.getColumnIndex("id");
-        idUser = c.getString(tokenColIndex);
+        int idColIndex = c.getColumnIndex("id");
+        int tokenColIndex = c.getColumnIndex("token");
+        idUser = c.getString(idColIndex);
+        tokenUser = c.getString(tokenColIndex);
         c.close();
         db.close();
         like = 1;
@@ -110,7 +113,8 @@ public class AddFeedback extends AppCompatActivity implements View.OnClickListen
                 "&userid=" + idUser +
                 "&narrative=" + editNarr.getText() +
                 "&like_user_id=" + idUserTo +
-                "&like=" +like;
+                "&like=" + like +
+                "&utoken=" + tokenUser;
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()

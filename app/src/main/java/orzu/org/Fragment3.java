@@ -213,7 +213,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
 
     public void getEditAvatarResponse() throws IOException {
 
-        String url = "https://projectapi.pw/api/avatar";
+        String url = "https://orzu.org/api/avatar";
         Log.e("userCreatedURL", url);
         OkHttpClient client = new OkHttpClient();
         File myFile = new File(Uri.parse(returnValue.get(0)).getPath());
@@ -241,6 +241,8 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
 
                 String mMessage = response.body().string();
                 Log.e("userCreatedAvatar", mMessage);
+                if(getActivity() == null)
+                    return;
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         Toast.makeText(getContext(),"Ваш профиль изменен", Toast.LENGTH_SHORT).show();

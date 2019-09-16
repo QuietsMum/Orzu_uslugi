@@ -71,6 +71,7 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
     ShimmerFrameLayout shim;
     TextView btn;
     String idUser;
+    String tokenUser;
     DBHelper dbHelper;
     ArrayList<String> subsServer = new ArrayList<>();
     int counter;
@@ -258,8 +259,10 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("orzutable", null, null, null, null, null, null);
         c.moveToFirst();
-        int tokenColIndex = c.getColumnIndex("id");
-        idUser = c.getString(tokenColIndex);
+        int idColIndex = c.getColumnIndex("id");
+        int tokenColIndex = c.getColumnIndex("token");
+        idUser = c.getString(idColIndex);
+        tokenUser = c.getString(tokenColIndex);
         c.close();
         db.close();
         String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_user&user_cat=" + idUser;
@@ -315,6 +318,7 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
 
         String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param" +
                 "&userid=" + idUser +
+                "&utoken=" + tokenUser +
                 "&act=subscribe" + modelString;
         Log.e("stringModelFull", url);
         OkHttpClient client = new OkHttpClient();

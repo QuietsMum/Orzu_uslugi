@@ -110,9 +110,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
                 "&opt=task_requests" +
                 "&act=selected" +
-                "&req_id=" + id+
-                "&userid="+ Common.userId+
-                "utoken="+Common.utoken;
+                "&req_id=" + id +
+                "&userid=" + Common.userId+
+                "&utoken=" + Common.utoken;
         Log.wtf("request",url);
         OkHttpClient client = new OkHttpClient();
 
@@ -129,6 +129,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String mMessage = response.body().string();
+                Log.e("result ADD USER TASK", mMessage);
                 FeedbackTask.fa.finish();
                 Intent intent = new Intent(context2, FeedbackTask.class);
                 context2.startActivity(intent);
