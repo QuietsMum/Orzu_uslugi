@@ -170,7 +170,8 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
 
         shim = (ShimmerFrameLayout) findViewById(R.id.parentShimmerLayoutViewTask);
         shim.startShimmer();
-
+        progressBar = findViewById(R.id.progres_create_task);
+        progressBar.setVisibility(View.INVISIBLE);
         buttonGettask = findViewById(R.id.button_gettask);
         buttonGettaskShim = findViewById(R.id.button_gettask_shim);
         buttonGettask.setOnClickListener(this);
@@ -673,7 +674,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         c.moveToFirst();
         c.close();
         db.close();
-
+        progressBar.setVisibility(View.VISIBLE);
         // DATE TYPE
         // 1. Точная дата 
         // 2. Указать период 
@@ -751,7 +752,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                     CreateTaskCategory.fa.finish();
                     CreateTaskSubCategory.fa.finish();
                 }
-
+                progressBar.setVisibility(View.INVISIBLE);
                 Log.e("created response", mMessage);
 
             }

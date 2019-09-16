@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -90,6 +91,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
     ImageView mAvatar;
     String mAvatarstr;
     ArrayList<String> returnValue = new ArrayList<>();
+    ProgressBar editProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +111,8 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         userDate = findViewById(R.id.birth_textview);
         datePicker = findViewById(R.id.user_edit_birth);
         buttonEdit = findViewById(R.id.edit_user_btn);
+        editProgress = findViewById(R.id.progres_edit_profile);
+        editProgress.setVisibility(View.INVISIBLE);
         radioMale = findViewById(R.id.male);
         radioFemale = findViewById(R.id.female);
         radioGroup = findViewById(R.id.radioGroup);
@@ -211,7 +215,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         int day  = calendar.getDayOfMonth();
         int monthNumber = calendar.getMonth() + 1;
         int year = calendar.getYear();
-
+        editProgress.setVisibility(View.VISIBLE);
         radioButton = findViewById(R.id.male);
         if(radioButton.isChecked())
         {
@@ -296,13 +300,13 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
 
                 String mMessage = response.body().string();
                 Log.e("userCreatedAvatar", mMessage);
+                editProgress.setVisibility(View.INVISIBLE);
                 UserEditProfile.this.runOnUiThread(new Runnable() {
                     public void run() {
                         Toast.makeText(UserEditProfile.this, "Ваш профиль изменен", Toast.LENGTH_SHORT).show();
 
                     }
                 });
-
                 finish();
 
             }
@@ -417,14 +421,6 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         if (resultCode == Activity.RESULT_OK && requestCode == 100) {
             returnValue = data.getStringArrayListExtra(Pix.IMAGE_RESULTS);
             mAvatar.setImageURI(Uri.parse(returnValue.get(0)));
-            Bitmap bitmap = ((BitmapDrawable) mAvatar.getDrawable()).getBitmap();
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-            byte[] byteArray = outputStream.toByteArray();
-
-            //Use your Base64 String as you wish
-            encodedString = Base64.encodeToString(byteArray, Base64.DEFAULT);
-            Log.wtf("sad","I am so sad");
         }
 
     }

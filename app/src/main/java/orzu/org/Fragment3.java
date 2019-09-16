@@ -195,14 +195,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         if (resultCode == Activity.RESULT_OK && requestCode == 100) {
             returnValue = data.getStringArrayListExtra(Pix.IMAGE_RESULTS);
             imageViewName.setImageURI(Uri.parse(returnValue.get(0)));
-            Log.wtf("asda","activityresult");
-            Bitmap bitmap = ((BitmapDrawable) imageViewName.getDrawable()).getBitmap();
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-            byte[] byteArray = outputStream.toByteArray();
-
-            //Use your Base64 String as you wish
-            encodedString = Base64.encodeToString(byteArray, Base64.DEFAULT);
+            Log.wtf("Pix Result", returnValue.get(0));
             try {
                 getEditAvatarResponse();
             } catch (IOException e) {
@@ -214,7 +207,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
     public void getEditAvatarResponse() throws IOException {
 
         String url = "https://orzu.org/api/avatar";
-        Log.e("userCreatedURL", url);
+
         OkHttpClient client = new OkHttpClient();
         File myFile = new File(Uri.parse(returnValue.get(0)).getPath());
         RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
@@ -224,7 +217,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                 .addFormDataPart("utoken", tokenUser)
                 .addFormDataPart("appid", "$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS")
                 .build();
-
+        Log.e("userCreatedURL", String.valueOf(requestBody));
         Request request = new Request.Builder()
                 .url(url)
                 .post(requestBody)
