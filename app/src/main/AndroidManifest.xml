@@ -20,8 +20,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".CategorySubscriptions"
-            android:screenOrientation="portrait"></activity>
+        <activity android:name=".ChangePasswordActivity"></activity>
+        <activity
+            android:name=".CategorySubscriptions"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".UserEditProfile"
             android:screenOrientation="portrait"
