@@ -20,7 +20,7 @@
             android:title="@string/my_tasks" />
         <item
             android:id="@+id/fourth"
-            android:icon="@drawable/ic_cloud_done_48pt_3x"
+            android:icon="@drawable/ic_notifications_none_black_48dp"
             android:title="@string/notification" />
 
     </group>

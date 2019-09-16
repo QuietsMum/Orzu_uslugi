@@ -72,7 +72,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import orzu.org.ui.login.model;
 
-public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
+public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
     ArrayList<Map<String, Object>> data;
     ArrayList<Map<String, Object>> truedata;
@@ -100,7 +100,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
     AsyncOrzuTasksMainRefresh catTaskRef;
     Boolean track = true;
     Boolean noTasks = true;
-    FloatingActionButton floaBtn;
+
     AsyncOrzuTasksFind catTaskFind;
 
     ImageView imagenotask;
@@ -128,11 +128,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
         imagenotask = view.findViewById(R.id.imageNoTask);
         textnotask = view.findViewById(R.id.textViewNoTask);
-        floaBtn = view.findViewById(R.id.floatingActionButtonMain);
 
-        floaBtn.setOnClickListener(this);
-
-        floaBtn.setVisibility(View.INVISIBLE);
 
         editFind = view.findViewById(R.id.editFind);
         editFind.addTextChangedListener(new TextWatcher() {
@@ -323,11 +319,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onClick(View view) {
-        Intent intent = new Intent(getActivity(), CreateTaskCategory.class);
-        startActivity(intent);
-    }
 
 
     class AsyncOrzuTasksMain extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {

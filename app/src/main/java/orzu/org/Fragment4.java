@@ -25,6 +25,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -77,6 +79,7 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
     ImageView imagenotask;
     TextView textnotask;
     boolean countPager = true;
+    FloatingActionButton floaBtn;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,9 +100,8 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
         tokenUser = c.getString(tokenColIndex);
         Log.e("idUSERUSER", idUser);
         Log.e("idTOKENTOKEN", tokenUser);
-        Button button = (Button)view.findViewById(R.id.buttonAddtask);
-        button.setOnClickListener(this);
-
+        floaBtn = view.findViewById(R.id.floatingActionButtonMain);
+        floaBtn.setOnClickListener(this);
         progressBar = view.findViewById(R.id.progressBarMy);
         counter = 1;
         imagenotask = view.findViewById(R.id.imageViewMy);
