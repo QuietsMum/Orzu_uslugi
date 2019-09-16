@@ -267,7 +267,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
 
     public void getEditAvatarResponse() throws IOException {
 
-        String url = "https://projectapi.pw/api/avatar";
+        String url = "https://orzu.org/api/avatar";
         Log.e("userCreatedURL", url);
         OkHttpClient client = new OkHttpClient();
 
@@ -359,7 +359,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Picasso.get().load("https://orzu.org" + mAvatarstr).centerCrop().into(mAvatar);
+                            Picasso.get().load("https://orzu.org" + mAvatarstr).fit().centerCrop().into(mAvatar);
                         }
                     });
 
