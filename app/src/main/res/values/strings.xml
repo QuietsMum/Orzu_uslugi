@@ -84,6 +84,9 @@
     <string name="setting_user">Редактирование</string>
     <string name="subscribes">подписка на категории</string>
     <string name="notification">Уведомления</string>
+    <string name="old_password">Старый пароль</string>
+    <string name="new_password">Новый пароль</string>
+    <string name="new_password_re">Повторите пароль</string>
 
     <string-array name="datecreatelist">
         <item>В любое время</item>

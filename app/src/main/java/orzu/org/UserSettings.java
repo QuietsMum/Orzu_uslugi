@@ -18,6 +18,7 @@ public class UserSettings extends AppCompatActivity implements View.OnClickListe
 
     LinearLayout buttonEdit;
     LinearLayout buttonLogout;
+    LinearLayout button_change_password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +32,10 @@ public class UserSettings extends AppCompatActivity implements View.OnClickListe
 
         buttonEdit = findViewById(R.id.button_edit_profile);
         buttonLogout = findViewById(R.id.button_logout);
+        button_change_password = findViewById(R.id.button_change_password);
         buttonEdit.setOnClickListener(this);
         buttonLogout.setOnClickListener(this);
+        button_change_password.setOnClickListener(this);
     }
 
 
@@ -53,6 +56,10 @@ public class UserSettings extends AppCompatActivity implements View.OnClickListe
             case R.id.button_edit_profile:
                 Intent intent = new Intent(this, UserEditProfile.class);
                 startActivity(intent);
+                break;
+            case R.id.button_change_password:
+                Intent intent2 = new Intent(this, ChangePasswordActivity.class);
+                startActivity(intent2);
                 break;
             case R.id.button_logout:
                 DBHelper dbHelper = new DBHelper(this);
