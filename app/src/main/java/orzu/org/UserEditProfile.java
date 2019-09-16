@@ -17,6 +17,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -26,24 +27,29 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.fxn.pix.Options;
 import com.fxn.pix.Pix;
 import com.fxn.utility.PermUtil;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -72,7 +78,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
     Dialog dialog;
     String selectedDate;
     DatePicker calendar;
-    Locale myLocale = new Locale("ru","RU");
+    Locale myLocale = new Locale("ru", "RU");
     SimpleDateFormat sdf;
     DBHelper dbHelper;
     String encodedString;
@@ -91,7 +97,9 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
     ImageView mAvatar;
     String mAvatarstr;
     ArrayList<String> returnValue = new ArrayList<>();
-    ProgressBar editProgress;
+    String[] cities;
+    ArrayAdapter<String> adapter;
+    ProgressBar bar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,8 +119,6 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         userDate = findViewById(R.id.birth_textview);
         datePicker = findViewById(R.id.user_edit_birth);
         buttonEdit = findViewById(R.id.edit_user_btn);
-        editProgress = findViewById(R.id.progres_edit_profile);
-        editProgress.setVisibility(View.INVISIBLE);
         radioMale = findViewById(R.id.male);
         radioFemale = findViewById(R.id.female);
         radioGroup = findViewById(R.id.radioGroup);
@@ -122,11 +128,17 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         datePicker.setOnClickListener(this);
         mAvatar.setOnClickListener(this);
 
-        dialog = new Dialog (this);
+        dialog = new Dialog(this);
         dialog.setContentView(R.layout.calendar_dialog_spinner);
 
         calendar = dialog.findViewById(R.id.calendarView);
 
+        bar = findViewById(R.id.progres_edit_profile);
+
+        bar.setVisibility(View.INVISIBLE);
+
+
+        requestCity();
         Calendar today = Calendar.getInstance();
         calendar.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
                 today.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
@@ -187,21 +199,23 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
-        switch(view.getId()){
+        switch (view.getId()) {
             case R.id.user_edit_birth:
                 dialog.show();
                 break;
 
             case R.id.edit_user_btn:
-                if(userName.getText().length()!=0&&userFname.getText().length()!=0
-                        &&userCity.getSelectedItem().toString().length()!=0&&userNarr.getText().length()!=0&&userDate.getText().length()!=0) {
+                bar.setVisibility(View.VISIBLE);
+                if (userName.getText().length() != 0 && userFname.getText().length() != 0
+                        && userCity.getSelectedItem().toString().length() != 0 && userNarr.getText().length() != 0 && userDate.getText().length() != 0) {
                     try {
                         getEditResponse();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }else{
+                } else {
                     Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show();
+                    bar.setVisibility(View.INVISIBLE);
                 }
                 break;
 
@@ -211,18 +225,59 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    public void requestCity() {
+
+        String url = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=getOther&get=cities";
+        OkHttpClient client = new OkHttpClient();
+        Log.e("result", "enterFunction");
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String mMessage = response.body().string();
+                Log.e("resultArrayFull", mMessage);
+                int i;
+                try {
+                    JSONArray jsonArray = new JSONArray(mMessage);
+                    int lenght = jsonArray.length();
+                    cities = new String[lenght];
+                    for (i = 0; i < lenght; i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        cities[i] = (jsonObject.getString("name"));
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter = new ArrayAdapter<String>(UserEditProfile.this,
+                                    android.R.layout.simple_spinner_dropdown_item, cities);
+                            userCity.setAdapter(adapter);
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
     public void getEditResponse() throws IOException {
-        int day  = calendar.getDayOfMonth();
+        int day = calendar.getDayOfMonth();
         int monthNumber = calendar.getMonth() + 1;
         int year = calendar.getYear();
-        editProgress.setVisibility(View.VISIBLE);
+
         radioButton = findViewById(R.id.male);
-        if(radioButton.isChecked())
-        {
+        if (radioButton.isChecked()) {
             gender = "male";
-        }
-        else
-        {
+        } else {
             gender = "female";
         }
         String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
@@ -255,12 +310,13 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
 
                 String mMessage = response.body().string();
                 Log.e("userCreated", mMessage);
-                if (returnValue.isEmpty()){
+                if (returnValue.isEmpty()) {
                     UserEditProfile.this.runOnUiThread(new Runnable() {
                         public void run() {
                             Toast.makeText(UserEditProfile.this, mMessage, Toast.LENGTH_SHORT).show();
                         }
                     });
+                    bar.setVisibility(View.INVISIBLE);
                     finish();
                 } else {
                     getEditAvatarResponse();
@@ -292,7 +348,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                bar.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -300,13 +356,13 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
 
                 String mMessage = response.body().string();
                 Log.e("userCreatedAvatar", mMessage);
-                editProgress.setVisibility(View.INVISIBLE);
                 UserEditProfile.this.runOnUiThread(new Runnable() {
                     public void run() {
                         Toast.makeText(UserEditProfile.this, "Ваш профиль изменен", Toast.LENGTH_SHORT).show();
 
                     }
                 });
+                bar.setVisibility(View.INVISIBLE);
                 finish();
 
             }
@@ -373,20 +429,9 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                         public void run() {
                             userName.setText(mName);
                             userFname.setText(mFiName);
-                            switch (mCity) {
-                                case "Алматы":
-                                    userCity.setSelection(3);
-                                    break;
-                                case "Кулоб":
-                                    userCity.setSelection(2);
-                                    break;
-                                case "Худжанд":
-                                    userCity.setSelection(1);
-                                    break;
-                                case "Душанбе":
-                                    userCity.setSelection(0);
-                                    break;
-                            }
+
+                            userCity.setSelection(Arrays.asList(cities).indexOf(mCity));
+
                             userNarr.setText(mNarr);
                             userDate.setText(mBday);
                             SimpleDateFormat fmt = new SimpleDateFormat("dd.MM.yyyy");
@@ -401,15 +446,16 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-                                calendar.updateDate(calendarnew.get(Calendar.YEAR), calendarnew.get(Calendar.MONTH), calendarnew.get(Calendar.DAY_OF_MONTH));
-                            if (mSex.equals("male")){
+                            calendar.updateDate(calendarnew.get(Calendar.YEAR), calendarnew.get(Calendar.MONTH), calendarnew.get(Calendar.DAY_OF_MONTH));
+                            if (mSex.equals("male")) {
                                 radioGroup.check(R.id.male);
-                            } else  radioGroup.check(R.id.female);
+                            } else radioGroup.check(R.id.female);
 
                         }
                     });
                 } catch (JSONException e) {
-                    e.printStackTrace(); }
+                    e.printStackTrace();
+                }
 
             }
         });
@@ -421,6 +467,14 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         if (resultCode == Activity.RESULT_OK && requestCode == 100) {
             returnValue = data.getStringArrayListExtra(Pix.IMAGE_RESULTS);
             mAvatar.setImageURI(Uri.parse(returnValue.get(0)));
+            Bitmap bitmap = ((BitmapDrawable) mAvatar.getDrawable()).getBitmap();
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+            byte[] byteArray = outputStream.toByteArray();
+
+            //Use your Base64 String as you wish
+            encodedString = Base64.encodeToString(byteArray, Base64.DEFAULT);
+            Log.wtf("sad", "I am so sad");
         }
 
     }
