@@ -371,6 +371,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                         }
                     });
                     bar.setVisibility(View.INVISIBLE);
+                    Common.d = mAvatar.getDrawable();
                     finish();
                 } else {
                     getEditAvatarResponse();
@@ -443,8 +444,8 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                     }
                 });
                 bar.setVisibility(View.INVISIBLE);
+                Common.d = mAvatar.getDrawable();
                 finish();
-
             }
         });
     }

@@ -285,6 +285,7 @@ public class Main2Activity extends AppCompatActivity
                             nav_user.setText(text);
                             userviewBtn.setOnClickListener(Main2Activity.this);
                             Common.fragmentshimmer = true;
+                            Common.d = imageBlur.getDrawable();
                             new DownloadImage().execute("https://orzu.org" + image);
 
                         }
@@ -361,7 +362,7 @@ public class Main2Activity extends AppCompatActivity
             saveImage(getApplicationContext(), result, "my_image.jpeg");
         }
     }
-
+    ImageView nav_user;
     public void saveImage(Context context, Bitmap b, String imageName) {
         FileOutputStream foStream;
         Log.d("saveImage", "Exception 2,went!");
@@ -375,7 +376,7 @@ public class Main2Activity extends AppCompatActivity
                 Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
 
                 View hView = navigationView.getHeaderView(0);
-                ImageView nav_user = (ImageView) hView.findViewById(R.id.imageViewName);
+                nav_user = (ImageView) hView.findViewById(R.id.imageViewName);
                 imageBlur.setImageBitmap(myBitmap);
                 Blurry.with(context)
                         .radius(10)
@@ -384,6 +385,7 @@ public class Main2Activity extends AppCompatActivity
                         .into(imageBlur);
                 nav_user.setImageBitmap(myBitmap);
                 Common.bitmap = myBitmap;
+                Common.d = nav_user.getDrawable();
                 Log.d("saveImage", "Exception 2,went!");
 
             }
@@ -391,5 +393,10 @@ public class Main2Activity extends AppCompatActivity
             Log.d("saveImage", "Exception 2, Something went wrong!");
             e.printStackTrace();
         }
+    }
+
+    public void changeImage(){
+        imageBlur.setImageDrawable(Common.d);
+        nav_user.setImageDrawable(Common.d);
     }
 }

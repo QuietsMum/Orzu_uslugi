@@ -199,6 +199,8 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         if (resultCode == Activity.RESULT_OK && requestCode == 100) {
             returnValue = data.getStringArrayListExtra(Pix.IMAGE_RESULTS);
             imageViewName.setImageURI(Uri.parse(returnValue.get(0)));
+            Common.d = imageViewName.getDrawable();
+            ((Main2Activity)getActivity()).changeImage();
             Log.wtf("Pix Result", returnValue.get(0));
             try {
                 getEditAvatarResponse();
@@ -413,6 +415,13 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         startActivity(intent);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        imageViewName.setImageDrawable(Common.d);
+        ((Main2Activity)getActivity()).changeImage();
+    }
+
     public void requestFeedbackMy() {
 
         String url = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=reviews&act=view&userid=" + idUser + "&sort=all";
@@ -624,6 +633,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                 }
             }
         });
+
     }
 }
 
