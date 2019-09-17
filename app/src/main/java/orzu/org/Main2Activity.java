@@ -84,7 +84,7 @@ public class Main2Activity extends AppCompatActivity
     ImageView img;
     RelativeLayout userviewBtn;
     ImageView imageBlur;
-
+    TextView nav_user_name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -276,13 +276,14 @@ public class Main2Activity extends AppCompatActivity
                     editor.putString(Util.TASK_USERNAME, mName);
                     editor.apply();
                     View hView = navigationView.getHeaderView(0);
-                    TextView nav_user = (TextView) hView.findViewById(R.id.textViewName);
+                    nav_user_name = (TextView) hView.findViewById(R.id.textViewName);
                     userviewBtn = hView.findViewById(R.id.headerOfdrawer);
                     imageBlur = userviewBtn.findViewById(R.id.image_blur);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            nav_user.setText(text);
+                            nav_user_name.setText(text);
+                            Common.name = text;
                             userviewBtn.setOnClickListener(Main2Activity.this);
                             Common.fragmentshimmer = true;
                             Common.d = imageBlur.getDrawable();
@@ -398,5 +399,6 @@ public class Main2Activity extends AppCompatActivity
     public void changeImage(){
         imageBlur.setImageDrawable(Common.d);
         nav_user.setImageDrawable(Common.d);
+        nav_user_name.setText(Common.name);
     }
 }

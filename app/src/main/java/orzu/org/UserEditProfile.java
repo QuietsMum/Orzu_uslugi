@@ -372,6 +372,15 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                     });
                     bar.setVisibility(View.INVISIBLE);
                     Common.d = mAvatar.getDrawable();
+                    Common.name = userName.getText()+" "+userFname.getText();
+                    Common.birth = userDate.getText().toString();
+                    Common.city = userCity.getSelectedItem().toString();
+                    Common.about = userNarr.getText().toString();
+                    if(gender.equals("male")){
+                        Common.sex = "мужской";
+                    }else
+                        Common.sex = "женский";
+
                     finish();
                 } else {
                     getEditAvatarResponse();

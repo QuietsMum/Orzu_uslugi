@@ -331,9 +331,13 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                     mCount = jsonObject.getString("tasks");
                     mCountReq = jsonObject.getString("task_requests");
                     mCity = jsonObject.getString("city");
+                    Common.city = mCity;
                     mBday = jsonObject.getString("birthday");
+                    Common.birth = mBday;
                     mSex = jsonObject.getString("sex");
+                    Common.sex = mSex;
                     mNarr = jsonObject.getString("about");
+                    Common.about = mNarr;
                     mStatus = jsonObject.getString("status");
                     if (mSex.equals("male")) {
                         mSex = "мужской";
@@ -420,6 +424,14 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         super.onResume();
         imageViewName.setImageDrawable(Common.d);
         ((Main2Activity)getActivity()).changeImage();
+        Log.wtf("asdasds","asdsad");
+        if(Common.sex!=null){
+            userCity.setText(Common.city);
+            userBday.setText(Common.birth);
+            userNarr.setText(Common.about);
+            userSex.setText(Common.sex);
+            nameUser.setText(Common.name);
+        }
     }
 
     public void requestFeedbackMy() {

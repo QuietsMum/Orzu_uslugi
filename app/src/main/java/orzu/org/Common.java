@@ -12,4 +12,8 @@ public class Common {
     public static Drawable d;
     public static String city = "";
     public static String utoken = "";
+    public static String name;
+    public static String birth;
+    public static String about;
+    public static String sex;
 }
