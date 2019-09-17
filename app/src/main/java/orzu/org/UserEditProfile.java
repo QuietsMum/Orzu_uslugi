@@ -171,11 +171,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
             }
         });
 
-        try {
-            getUserForEdit();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
 
     }
 
@@ -288,6 +284,11 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                                     android.R.layout.simple_spinner_dropdown_item, cities);
                             userCity.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
+                            try {
+                                getUserForEdit();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     });
                 } catch (JSONException e) {
