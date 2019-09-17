@@ -307,7 +307,11 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                try {
+                    getEditResponse();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
 
             @Override
@@ -354,6 +358,11 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onFailure(Call call, IOException e) {
                 bar.setVisibility(View.INVISIBLE);
+                try {
+                    getEditAvatarResponse();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
 
             @Override
@@ -400,7 +409,11 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                try {
+                    getUserForEdit();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
 
             @Override
