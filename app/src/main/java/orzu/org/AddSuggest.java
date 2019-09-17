@@ -3,16 +3,19 @@ package orzu.org;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,6 +40,7 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
     int amout;
     TextView username;
     ImageView person_logo_sugg2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,7 +112,7 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
                 "&task_id=" + idTask +
                 "&narrative=" + editNarr.getText() +
                 "&userid=" + idUser +
-                "&amount="  + editAmout.getText() +
+                "&amount=" + editAmout.getText() +
                 "&utoken=" + tokenUser;
         OkHttpClient client = new OkHttpClient();
 
@@ -121,7 +125,31 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                AddSuggest.this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Dialog dialog = new Dialog(AddSuggest.this, android.R.style.Theme_Material_Light_NoActionBar);
+                        dialog.setContentView(R.layout.dialog_no_internet);
+                        Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                        // if button is clicked, close the custom dialog
+                        dialogButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                try {
+                                    sendSuggest();
+                                } catch (IOException e1) {
+                                    e1.printStackTrace();
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.show();
+                            }
+                        }, 500);
+                    }
+                });
             }
 
             @Override

@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +16,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.transition.Explode;
 import android.util.DisplayMetrics;
 import android.util.JsonReader;
@@ -29,6 +31,7 @@ import android.view.Window;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -71,8 +74,8 @@ import orzu.org.ui.login.model;
 public class TaskViewMain extends AppCompatActivity implements View.OnClickListener {
 
     String id = "";
-    String opt= "";
-    String myTask= "";
+    String opt = "";
+    String myTask = "";
     ArrayList<Map<String, Object>> data;
     Map<String, Object> m = new HashMap<>();
     Map<String, Object> m_new = new HashMap<>();
@@ -84,14 +87,14 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
     String catidList = "CatID";
     String adress = "Adress";
     String param = "Param";
-    final String priceList= "Цена";
-    final String priceList2= "Валюта";
-    final String createList= "Создано";
-    final String servList= "За услугу";
-    final String dateList= "Дата публицации";
-    final String cityList= "Город";
-    final String needList= "Сроки";
-    String needListdfrom= "Сроки";
+    final String priceList = "Цена";
+    final String priceList2 = "Валюта";
+    final String createList = "Создано";
+    final String servList = "За услугу";
+    final String dateList = "Дата публицации";
+    final String cityList = "Город";
+    final String needList = "Сроки";
+    String needListdfrom = "Сроки";
     ProgressBar progressBar;
     AsyncOrzuTask task;
     TextView taskName;
@@ -147,6 +150,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
     int pricetype;
 
     DBHelper dbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -204,7 +208,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         animation.setRepeatMode(Animation.REVERSE); //animation will start from end point once ended.
         //taskMaket.startAnimation(animation); //to start animation
 
-        if(myTask.equals("my")){
+        if (myTask.equals("my")) {
 
             buttonGettask.setText("Посмотреть отклики");
             buttonGettaskShim.setText("Посмотреть отклики");
@@ -212,9 +216,10 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             buttonGettaskShim.setBackgroundColor(getResources().getColor(R.color.colorBackMyTask));
         }
 
-        if (opt.equals("view")){
+        if (opt.equals("view")) {
             task = new AsyncOrzuTask();
             task.execute();
+            Log.wtf("asd", "sad");
         } else {
             // DATE TYPE
             // 1 - в любое время 
@@ -245,17 +250,19 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             catid = prefs.getString(Util.CAT_ID, "");
             narrative = prefs.getString(Util.TASK_ANNAT, "");
 
-            if (datetype == 2){
+            if (datetype == 2) {
                 date = "С: " + cdate + " До: " + edate;
-            } if (datetype == 1) {
+            }
+            if (datetype == 1) {
                 date = cdate_l + " " + level_l;
-            } if (datetype == 3) {
+            }
+            if (datetype == 3) {
                 date = "Дата по договоренности";
             }
 
             Log.e("VALUEs", name + " " + catid + " " + address + " " + cdate + " " + edate + " " + amout + " " + narrative + " " + nameUser);
             String outputPattern = "EEE, d MMMM yyyy HH:mm:ss";
-            Locale myLocale = new Locale("ru","RU");
+            Locale myLocale = new Locale("ru", "RU");
             SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern, myLocale);
             Date currentTime = Calendar.getInstance().getTime();
             taskName.setText(name);
@@ -266,7 +273,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             taskOpen.setText(outputFormat.format(currentTime));
             nav_user.setText(nameUser);
             imageViewName.setImageBitmap(Common.bitmap);
-            if (taskAmt.equals("Предложите цену")){
+            if (taskAmt.equals("Предложите цену")) {
                 taskAmtOnce.setVisibility(View.INVISIBLE);
             }
         }
@@ -279,7 +286,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
 
         switch (view.getId()) {
             case R.id.button_gettask:
-                if (!opt.equals("view")){
+                if (!opt.equals("view")) {
 
                     try {
                         getCreateResponse();
@@ -287,7 +294,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                         e.printStackTrace();
                     }
 
-                } else  if(myTask.equals("my")) {
+                } else if (myTask.equals("my")) {
                     Intent intent = new Intent(this, FeedbackTask.class);
                     Common.taskId = id;
                     startActivity(intent);
@@ -310,7 +317,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    class AsyncOrzuTask extends AsyncTask<String,String, ArrayList<Map<String, Object>>> {
+    class AsyncOrzuTask extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {
         final HttpsURLConnection[] myConnection = new HttpsURLConnection[1];
         final URL[] orzuEndpoint = new URL[1];
 
@@ -322,7 +329,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         }
 
         @Override
-        protected ArrayList<Map<String, Object>> doInBackground(String... strings)  {
+        protected ArrayList<Map<String, Object>> doInBackground(String... strings) {
             m = new HashMap<>();
             m_new = new HashMap<>();
 
@@ -367,15 +374,16 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                         //  m_new.put(catidList, m.get(catidList));
                     }
                     jsonReader[0].endArray();
-                }   jsonReader[0].endArray();
+                }
+                jsonReader[0].endArray();
 
-                    jsonReader[0].close();
-                    myConnection[0].disconnect();
+                jsonReader[0].close();
+                myConnection[0].disconnect();
 
 
-            }catch (MalformedURLException e) {
+            } catch (MalformedURLException e) {
                 e.printStackTrace();
-            }catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
@@ -391,19 +399,43 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         protected void onPostExecute(ArrayList<Map<String, Object>> result) {
             super.onPostExecute(result);
             //progressBar.setVisibility(View.INVISIBLE);
+            try {
+                if (myConnection[0].getResponseCode() == 200) {
+                    taskName.setText(m_new.get(taskList).toString());
+                    taskNarr.setText(m_new.get(narrList).toString());
+                    taskAmt.setText(m_new.get(priceList).toString());
+                    taskAmtOnce.setText(m_new.get(priceList2).toString());
+                    taskAdr.setText(m_new.get(adress).toString());
+                    taskBeg.setText(m_new.get(needListdfrom).toString());
+                    taskOpen.setText(m_new.get(createList).toString());
 
-            taskName.setText(m_new.get(taskList).toString());
-            taskNarr.setText(m_new.get(narrList).toString());
-            taskAmt.setText(m_new.get(priceList).toString());
-            taskAmtOnce.setText(m_new.get(priceList2).toString());
-            taskAdr.setText(m_new.get(adress).toString());
-            taskBeg.setText(m_new.get(needListdfrom).toString());
-            taskOpen.setText(m_new.get(createList).toString());
-
-            if (m_new.get(priceList).toString().equals("Предложите цену")){
-                taskAmtOnce.setVisibility(View.INVISIBLE);
+                    if (m_new.get(priceList).toString().equals("Предложите цену")) {
+                        taskAmtOnce.setVisibility(View.INVISIBLE);
+                    }
+                } else {
+                    Dialog dialog = new Dialog(TaskViewMain.this, android.R.style.Theme_Material_Light_NoActionBar);
+                    dialog.setContentView(R.layout.dialog_no_internet);
+                    Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                    // if button is clicked, close the custom dialog
+                    dialogButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AsyncOrzuTask task = new AsyncOrzuTask();
+                            task.execute();
+                            dialog.dismiss();
+                        }
+                    });
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialog.show();
+                        }
+                    }, 500);
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
         }
     }
 
@@ -425,125 +457,126 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         String price = null;
         reader.beginObject();
         while (reader.hasNext()) {
-                String name = reader.nextName();
-                switch (name) {
-                    case "id":
-                        if (reader.peek() != JsonToken.NULL) {
-                            id = reader.nextLong();
-                            m.put(idList, id);
-                        } else reader.skipValue();
-                        break;
-                    case "task":
-                        if (reader.peek() != JsonToken.NULL) {
-                            text = reader.nextString();
-                            m.put(taskList, text);
-                        } else reader.skipValue();
-                        break;
-                    case "cat_id":
-                        if (reader.peek() != JsonToken.NULL) {
-                            catid = reader.nextLong();
-                            m.put(catidList, catid);
-                        } else reader.skipValue();
-                        break;
-                    case "created_at":
-                        if (reader.peek() != JsonToken.NULL) {
-                            creat = reader.nextString();
-                            m.put(createList, parseDateToddMMyyyy(creat));
-                        } else reader.skipValue();
-                        break;
-                    case "narrative":
-                        if (reader.peek() != JsonToken.NULL) {
-                            narr = reader.nextString();
-                            m.put(narrList, narr);
-                        } else reader.skipValue();
-                        break;
-                    case "user_id":
-                        if (reader.peek() != JsonToken.NULL) {
-                            userid = reader.nextLong();
-                            m.put(useridList, userid);
-                        } else reader.skipValue();
-                        break;
+            String name = reader.nextName();
+            switch (name) {
+                case "id":
+                    if (reader.peek() != JsonToken.NULL) {
+                        id = reader.nextLong();
+                        m.put(idList, id);
+                    } else reader.skipValue();
+                    break;
+                case "task":
+                    if (reader.peek() != JsonToken.NULL) {
+                        text = reader.nextString();
+                        m.put(taskList, text);
+                    } else reader.skipValue();
+                    break;
+                case "cat_id":
+                    if (reader.peek() != JsonToken.NULL) {
+                        catid = reader.nextLong();
+                        m.put(catidList, catid);
+                    } else reader.skipValue();
+                    break;
+                case "created_at":
+                    if (reader.peek() != JsonToken.NULL) {
+                        creat = reader.nextString();
+                        m.put(createList, parseDateToddMMyyyy(creat));
+                    } else reader.skipValue();
+                    break;
+                case "narrative":
+                    if (reader.peek() != JsonToken.NULL) {
+                        narr = reader.nextString();
+                        m.put(narrList, narr);
+                    } else reader.skipValue();
+                    break;
+                case "user_id":
+                    if (reader.peek() != JsonToken.NULL) {
+                        userid = reader.nextLong();
+                        m.put(useridList, userid);
+                    } else reader.skipValue();
+                    break;
 
-                    case "param":
-                        param = reader.nextString();
-                        if (reader.peek() != JsonToken.NULL) {
-                            switch (param) {
-                                case "address":
-                                    reader.nextName();
-                                    adr = reader.nextString();
-                                    m.put(adress, adr);
-                                    break;
-                                case "remote":
-                                    reader.nextName();
-                                    adr = reader.nextString();
-                                    m.put(adress, "Удалённо");
-                                    break;
-                               case "current":
-                                    reader.nextName();
-                                   if (reader.peek() != JsonToken.NULL) {
-                                       adr = " " + reader.nextString();
-                                       m.put(priceList2, adr);
-                                   } else {
-                                       m.put(priceList2, " орзуcoin");
-                                       reader.skipValue();
-                                   }
+                case "param":
+                    param = reader.nextString();
+                    if (reader.peek() != JsonToken.NULL) {
+                        switch (param) {
+                            case "address":
+                                reader.nextName();
+                                adr = reader.nextString();
+                                m.put(adress, adr);
+                                break;
+                            case "remote":
+                                reader.nextName();
+                                adr = reader.nextString();
+                                m.put(adress, "Удалённо");
+                                break;
+                            case "current":
+                                reader.nextName();
+                                if (reader.peek() != JsonToken.NULL) {
+                                    adr = " " + reader.nextString();
+                                    m.put(priceList2, adr);
+                                } else {
+                                    m.put(priceList2, " орзуcoin");
+                                    reader.skipValue();
+                                }
 
-                                    break;
-                                case "amout":
-                                    reader.nextName();
-                                    price = reader.nextString();
-                                    m.put(priceList, price);
-                                    break;
-                                case "no_amount":
-                                    reader.nextName();
-                                    price = reader.nextString();
-                                    m.put(priceList, "Предложите цену");
-                                    break;
-                                case "cdate_l":
-                                    reader.nextName();
+                                break;
+                            case "amout":
+                                reader.nextName();
+                                price = reader.nextString();
+                                m.put(priceList, price);
+                                break;
+                            case "no_amount":
+                                reader.nextName();
+                                price = reader.nextString();
+                                m.put(priceList, "Предложите цену");
+                                break;
+                            case "cdate_l":
+                                reader.nextName();
+                                adr = reader.nextString();
+                                m.put(needListdfrom, adr);
+                                break;
+                            case "cdate":
+                                reader.nextName();
+                                adr = reader.nextString();
+                                m.put(needListdfrom, adr);
+                                break;
+                            case "edate":
+                                reader.nextName();
+                                adr = reader.nextString();
+                                m.put(needListdfrom, "С: " + adr + "  До: " + m.get(needListdfrom));
+                                break;
+                            case "city":
+                                reader.nextName();
+                                if (reader.peek() != JsonToken.NULL) {
                                     adr = reader.nextString();
-                                    m.put(needListdfrom, adr);
-                                    break;
-                                case "cdate":
-                                    reader.nextName();
-                                    adr = reader.nextString();
-                                    m.put(needListdfrom, adr);
-                                    break;
-                                case "edate":
-                                    reader.nextName();
-                                    adr = reader.nextString();
-                                    m.put(needListdfrom, "С: " + adr +  "  До: " + m.get(needListdfrom));
-                                    break;
-                                case "city":
-                                    reader.nextName();
-                                    if (reader.peek() != JsonToken.NULL) {
-                                        adr = reader.nextString();
-                                        m.put(cityList, adr);
-                                    } else {
-                                        m.put(cityList, "Неизвестно");
-                                        reader.skipValue();
-                                    }
+                                    m.put(cityList, adr);
+                                } else {
+                                    m.put(cityList, "Неизвестно");
+                                    reader.skipValue();
+                                }
 
-                                    break;
-                                case "work_with":
-                                    reader.nextName();
-                                    adr = reader.nextString();
-                                    m.put(needListdfrom, "Дата по договоренности");
-                                    break;
-                                case "level_l":
-                                    reader.nextName();
-                                    adr = reader.nextString();
-                                    m.put("level_l", adr);
-                                    break;
-                            }
-                        } else reader.skipValue();
-                        break;
-                    default:
-                        reader.skipValue();
-                        break;
-                }
-            }  reader.endObject();
-            return m;
+                                break;
+                            case "work_with":
+                                reader.nextName();
+                                adr = reader.nextString();
+                                m.put(needListdfrom, "Дата по договоренности");
+                                break;
+                            case "level_l":
+                                reader.nextName();
+                                adr = reader.nextString();
+                                m.put("level_l", adr);
+                                break;
+                        }
+                    } else reader.skipValue();
+                    break;
+                default:
+                    reader.skipValue();
+                    break;
+            }
+        }
+        reader.endObject();
+        return m;
 
     }
 
@@ -574,7 +607,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         String inputPattern = "yyyy-MM-dd HH:mm:ss";
         String outputPattern = "EEE, d MMMM yyyy HH:mm:ss";
         String outputPatternTime = "HH:mm";
-        Locale myLocale = new Locale("ru","RU");
+        Locale myLocale = new Locale("ru", "RU");
         SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern, myLocale);
         SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern, myLocale);
         SimpleDateFormat outputFormatTime = new SimpleDateFormat(outputPatternTime, myLocale);
@@ -591,9 +624,10 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        if (today == day){
-            str = "сегодня в " + outputFormatTime.format(date);;
-        } else if(today == (day+1)){
+        if (today == day) {
+            str = "сегодня в " + outputFormatTime.format(date);
+            ;
+        } else if (today == (day + 1)) {
             str = "вчера в " + outputFormatTime.format(date);
         }
         return str;
@@ -614,7 +648,32 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                TaskViewMain.this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Dialog dialog = new Dialog(TaskViewMain.this, android.R.style.Theme_Material_Light_NoActionBar);
+                        dialog.setContentView(R.layout.dialog_no_internet);
+                        Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                        // if button is clicked, close the custom dialog
+                        dialogButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                try {
+                                    getUserResponse();
+                                } catch (IOException e1) {
+                                    e1.printStackTrace();
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.show();
+                            }
+                        }, 500);
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+                });
             }
 
             @Override
@@ -630,7 +689,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                     String sadnum = String.valueOf(jsonObject.getLong("sad"));
                     String natnum = String.valueOf(jsonObject.getLong("neutral"));
                     String hapnum = String.valueOf(jsonObject.getLong("happy"));
-                    if (mFiName.equals("null")){
+                    if (mFiName.equals("null")) {
                         text = mName;
                     } else text = mName + " " + mFiName;
 
@@ -641,7 +700,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                             sad.setText(sadnum);
                             nat.setText(natnum);
                             hap.setText(hapnum);
-                            Picasso.get().load("https://orzu.org"+image).fit().centerCrop().into(imageViewName);
+                            Picasso.get().load("https://orzu.org" + image).fit().centerCrop().into(imageViewName);
                         }
                     });
 
@@ -655,7 +714,8 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                     shim.setVisibility(View.INVISIBLE);
 
                 } catch (JSONException e) {
-                    e.printStackTrace(); }
+                    e.printStackTrace();
+                }
 
             }
         });
@@ -695,21 +755,25 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         String urlLocation = "";
         String urlTerm = "";
         String urlPrice = "";
-        if (datetype == 2){
+        if (datetype == 2) {
             urlTerm = "&date=period" + "&periodA=" + cdate + "&periodB=" + edate;
-        } if (datetype == 1) {
+        }
+        if (datetype == 1) {
             urlTerm = "&date=exact" + "&exactD=" + cdate_l + "&exactT=" + level_l;
-        } if (datetype == 3) {
+        }
+        if (datetype == 3) {
             urlTerm = "&date=wtasker";
         }
-        if (placetype == 1){
+        if (placetype == 1) {
             urlLocation = "&location=indicate" + "&locationVal=" + address;
-        } if (placetype == 2) {
+        }
+        if (placetype == 2) {
             urlLocation = "&location=remote";
         }
-        if (pricetype == 1){
+        if (pricetype == 1) {
             urlPrice = "&price=indicate&priceVal=" + amout;
-        } if (pricetype == 2) {
+        }
+        if (pricetype == 2) {
             urlPrice = "&price=wtasker";
         }
 
@@ -719,10 +783,10 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                 "&catid=" + catid +
                 "&narrative=" + narrative +
                 "&userid=" + idUser +
-                 urlTerm  +
-                 urlLocation +
-                 urlPrice +
-                 "&utoken=" + tokenUser;
+                urlTerm +
+                urlLocation +
+                urlPrice +
+                "&utoken=" + tokenUser;
         OkHttpClient client = new OkHttpClient();
         Log.e("create url", url);
         Request request = new Request.Builder()
@@ -732,7 +796,32 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                TaskViewMain.this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Dialog dialog = new Dialog(TaskViewMain.this, android.R.style.Theme_Material_Light_NoActionBar);
+                        dialog.setContentView(R.layout.dialog_no_internet);
+                        Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                        // if button is clicked, close the custom dialog
+                        dialogButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                try {
+                                    getCreateResponse();
+                                } catch (IOException e1) {
+                                    e1.printStackTrace();
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.show();
+                            }
+                        }, 500);
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+                });
             }
 
             @Override
@@ -740,7 +829,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
 
                 String mMessage = response.body().string();
                 final char dm = (char) 34;
-                if (mMessage.equals(dm + "Task created" + dm)){
+                if (mMessage.equals(dm + "Task created" + dm)) {
                     Intent intent = new Intent(TaskViewMain.this, Congratz.class);
                     startActivity(intent);
                     finish();

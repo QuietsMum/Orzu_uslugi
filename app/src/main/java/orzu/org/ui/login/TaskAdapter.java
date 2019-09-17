@@ -1,15 +1,18 @@
 package orzu.org.ui.login;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,6 +33,7 @@ import okhttp3.Response;
 import orzu.org.Common;
 import orzu.org.FeedbackTask;
 import orzu.org.R;
+import orzu.org.UserView;
 
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
@@ -80,7 +84,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View view) {
-                Log.wtf("button2","clicked");
+                Log.wtf("button2", "clicked");
                 Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + logos.get(position).get("Phone").toString()));
 
                 if (context2.checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
@@ -88,7 +92,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
                     //    Activity#requestPermissions
                     // here to request the missing permissions, and then overriding
                     //  public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                      //                                     int[] grantResults)
+                    //                                     int[] grantResults)
                     // to handle the case where the user grants the permission. See the documentation
                     // for Activity#requestPermissions for more details.
                     return;
@@ -105,15 +109,15 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         return logos.size();
     }
 
-    private void chooseSuggester(Object id){
+    private void chooseSuggester(Object id) {
 
         String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
                 "&opt=task_requests" +
                 "&act=selected" +
                 "&req_id=" + id +
-                "&userid=" + Common.userId+
+                "&userid=" + Common.userId +
                 "&utoken=" + Common.utoken;
-        Log.wtf("request",url);
+        Log.wtf("request", url);
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
@@ -123,7 +127,23 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                Dialog dialog = new Dialog(context2, android.R.style.Theme_Material_Light_NoActionBar);
+                dialog.setContentView(R.layout.dialog_no_internet);
+                Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        chooseSuggester(id);
+                        dialog.dismiss();
+                    }
+                });
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.show();
+                    }
+                }, 500);
             }
 
             @Override
@@ -141,10 +161,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView name;
-        TextView desc,sad,nat,happy,price;
+        TextView desc, sad, nat, happy, price;
         LinearLayout button;
         LinearLayout button2;
         ImageView image;
+
         ViewHolder(View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.feedback_task_name);
@@ -156,8 +177,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
             button = itemView.findViewById(R.id.button_addsugester);
             button2 = itemView.findViewById(R.id.button_callsugester);
             image = itemView.findViewById(R.id.imageViewOtklik);
-            for(int i = 0;i<logos.size();i++){
-                if(logos.get(i).get("Select").toString().equals("1")){
+            for (int i = 0; i < logos.size(); i++) {
+                if (logos.get(i).get("Select").toString().equals("1")) {
                     button.setVisibility(View.INVISIBLE);
                 }
             }

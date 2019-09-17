@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
@@ -23,6 +24,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.provider.Telephony;
 import android.telephony.SmsMessage;
@@ -43,6 +45,7 @@ import com.rilixtech.CountryCodePicker;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -173,6 +176,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
+        View arv = view;
         if (name.getText().length() != 0&&phon.getText().length()!=0&&pass.getText().length()!=0) {
             progressBar.setVisibility(View.VISIBLE);
 
@@ -197,6 +201,36 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
 
                 Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
                 // if button is clicked, close the custom dialog
+                TextView textView = dialog.findViewById(R.id.count);
+                TextView btn = dialog.findViewById(R.id.btn);
+                CountDownTimer timer = new CountDownTimer(2000, 1000) {
+
+                    @SuppressLint("SetTextI18n")
+                    public void onTick(long millisUntilFinished) {
+                        textView.setText("" + millisUntilFinished / 1000);
+                    }
+
+                    public void onFinish() {
+                        textView.setVisibility(View.INVISIBLE);
+                        btn.setVisibility(View.VISIBLE);
+
+                    }
+                }.start();
+                btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            getHttpResponse();
+                            btn.setVisibility(View.INVISIBLE);
+                            textView.setVisibility(View.VISIBLE);
+                            timer.start();
+                            Log.wtf("sadaasd","asdsadas");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                timer.start();
                 dialogButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -321,6 +355,33 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                     Toast.makeText(getApplicationContext(), "No registered user!", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getApplicationContext(), LoginActivity2.class);
                     startActivity(intent);
+                }else{
+                    LoginActivity2.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            Dialog dialog = new Dialog(LoginActivity2.this, android.R.style.Theme_Material_Light_NoActionBar);
+                            dialog.setContentView(R.layout.dialog_no_internet);
+                            Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                            // if button is clicked, close the custom dialog
+                            dialogButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    try {
+                                        getSMSResponse();
+                                    } catch (IOException e1) {
+                                        e1.printStackTrace();
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialog.show();
+                                }
+                            }, 500);
+                            progressBar.setVisibility(View.INVISIBLE);
+                        }
+                    });
                 }
 
             }

@@ -4,15 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -175,7 +178,31 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                UserView.this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Dialog dialog = new Dialog(UserView.this, android.R.style.Theme_Material_Light_NoActionBar);
+                        dialog.setContentView(R.layout.dialog_no_internet);
+                        Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                        // if button is clicked, close the custom dialog
+                        dialogButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                try {
+                                    getUserResponseView();
+                                } catch (IOException e1) {
+                                    e1.printStackTrace();
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.show();
+                            }
+                        }, 500);
+                    }
+                });
             }
 
             @Override
@@ -218,7 +245,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
                             userBday.setText(mBday);
                             userSex.setText(mSex);
                             userNarr.setText(mNarr);
-                            Picasso.get().load("https://orzu.org"+image).fit().centerCrop().into(imageViewName);
+                            Picasso.get().load("https://orzu.org" + image).fit().centerCrop().into(imageViewName);
                         }
                     });
                 } catch (JSONException e) {
@@ -267,7 +294,27 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                UserView.this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Dialog dialog = new Dialog(UserView.this, android.R.style.Theme_Material_Light_NoActionBar);
+                        dialog.setContentView(R.layout.dialog_no_internet);
+                        Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                        // if button is clicked, close the custom dialog
+                        dialogButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                requestFeedback();
+                                dialog.dismiss();
+                            }
+                        });
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.show();
+                            }
+                        }, 500);
+                    }
+                });
             }
 
             @Override
@@ -376,7 +423,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
                                         feedbackname1.setText(name[0]);
                                         feedbacknarr1.setText(narr[0]);
                                         feedbackcat1.setText(date[0]);
-                                        Picasso.get().load("https://orzu.org"+image1).into(feedbackimgUser1);
+                                        Picasso.get().load("https://orzu.org" + image1).into(feedbackimgUser1);
                                     }
                                 });
 
@@ -421,7 +468,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
                                         feedbackname2.setText(name[1]);
                                         feedbacknarr2.setText(narr[1]);
                                         feedbackcat2.setText(date[1]);
-                                        Picasso.get().load("https://orzu.org"+image2).into(feedbackimgUser2);
+                                        Picasso.get().load("https://orzu.org" + image2).into(feedbackimgUser2);
                                     }
                                 });
                             }
