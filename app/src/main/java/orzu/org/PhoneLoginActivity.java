@@ -2,6 +2,7 @@ package orzu.org;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -167,8 +168,27 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
                 Log.w("failure Response", mMessage);
                 PhoneLoginActivity.this.runOnUiThread(new Runnable() {
                     public void run() {
-                        Toast.makeText(getApplicationContext(), "Проверьте интернет-соединение" +
-                                "", Toast.LENGTH_LONG).show();
+                        Dialog dialog = new Dialog(PhoneLoginActivity.this, android.R.style.Theme_Material_Light_NoActionBar);
+                        dialog.setContentView(R.layout.dialog_no_internet);
+                        Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                        // if button is clicked, close the custom dialog
+                        dialogButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                try {
+                                    getHttpResponse();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.show();
+                            }
+                        }, 500);
                         progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
@@ -176,7 +196,6 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-
                 mMessage = response.body().string();
                 final char dm = (char) 34;
                 Log.e("response", mMessage);

@@ -23,6 +23,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Telephony;
 import android.telephony.SmsMessage;
 import android.util.Log;
@@ -250,6 +251,28 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                     Toast.makeText(getApplicationContext(), "No registered user!", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getApplicationContext(), LoginActivity2.class);
                     startActivity(intent);
+                }else{
+                    Dialog dialog = new Dialog(LoginActivity2.this, android.R.style.Theme_Material_Light_NoActionBar);
+                    dialog.setContentView(R.layout.dialog_no_internet);
+                    Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                    // if button is clicked, close the custom dialog
+                    dialogButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            try {
+                                getHttpResponse();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialog.show();
+                        }
+                    }, 500);
                 }
 
             }
@@ -259,7 +282,6 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
 
                 mMessage = response.body().string();
                 final char dm = (char) 34;
-
                 Log.e("response", mMessage);
 
                 try {
@@ -268,6 +290,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                     mToken = obj.getString("_token");
                     mID = obj.getLong("id");
                 } catch (JSONException e) {
+
                     e.printStackTrace();
                 }
 
