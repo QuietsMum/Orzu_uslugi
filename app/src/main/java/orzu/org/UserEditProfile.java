@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.fxn.pix.Options;
 import com.fxn.pix.Pix;
 import com.fxn.utility.PermUtil;
@@ -100,7 +101,8 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
     String[] cities;
     ArrayAdapter<String> adapter;
     ProgressBar bar;
-
+    ShimmerFrameLayout shim;
+    View view_back_white,view_back_blue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,7 +129,10 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         buttonEdit.setOnClickListener(this);
         datePicker.setOnClickListener(this);
         mAvatar.setOnClickListener(this);
-
+        shim = findViewById(R.id.userviewShimmerLayout);
+        shim.startShimmer();
+        view_back_white = findViewById(R.id.view_back_white);
+        view_back_blue = findViewById(R.id.view_back_blue);
         dialog = new Dialog(this);
         dialog.setContentView(R.layout.calendar_dialog_spinner);
 
@@ -420,6 +425,9 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                         @Override
                         public void run() {
                             Picasso.get().load("https://orzu.org" + mAvatarstr).fit().centerCrop().into(mAvatar);
+                            shim.setVisibility(View.GONE);
+                            view_back_blue.setVisibility(View.GONE);
+                            view_back_white.setVisibility(View.GONE);
                         }
                     });
 
