@@ -13,6 +13,7 @@
     <color name="colorBackMyTask">#7E57C2</color>
     <color name="colorBackgrndFrg">#ffffff</color>
     <color name="colorBackgrndTrnt">#20ffffff</color>
+    <color name="colorOrange">#FF7A55</color>
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#fff</color>
 
         <color name="colorPrimaryPix">#2196f3</color>

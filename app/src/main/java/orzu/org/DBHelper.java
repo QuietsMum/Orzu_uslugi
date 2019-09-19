@@ -14,13 +14,19 @@ class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.d("createDB", "--- onCreate database ---");
+
         // создаем таблицу с полями
         db.execSQL("create table orzutable ("
                 + "id,"
                 + "token,"
                 + "name,"
                 + "pass" + ");");
+
+        db.execSQL("create table orzunotif ("
+                + "id,"
+                + "token,"
+                + "name,"
+                + "message" + ");");
     }
 
     @Override
