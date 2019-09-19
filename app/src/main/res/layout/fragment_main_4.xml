@@ -16,7 +16,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:backgroundTint="@color/colorAccent"
-        android:tint="@color/colorBackgrndFrg"
+        app:tint="@color/colorBackgrndFrg"
         app:srcCompat="@drawable/ic_add_white_48pt_3x" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

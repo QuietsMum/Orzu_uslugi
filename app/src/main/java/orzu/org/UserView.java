@@ -1,10 +1,13 @@
 package orzu.org;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -21,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -98,6 +102,8 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
         feedbackButtunAdd = findViewById(R.id.linear_feedback_addto);
         feedbackButtun.setOnClickListener(this);
         feedbackButtunAdd.setOnClickListener(this);
+
+
 
         feedbackname1 = findViewById(R.id.userview_feedbackname);
         feedbackplus1 = findViewById(R.id.userview_feedbackplus);

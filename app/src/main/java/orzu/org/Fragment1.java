@@ -56,6 +56,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -70,9 +71,14 @@ import java.util.StringTokenizer;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import orzu.org.ui.login.model;
 
-public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
+public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     ArrayList<Map<String, Object>> data;
     ArrayList<Map<String, Object>> truedata;
@@ -319,11 +325,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         return super.onOptionsItemSelected(item);
     }
 
-
-
     class AsyncOrzuTasksMain extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {
-        final HttpsURLConnection[] myConnection = new HttpsURLConnection[1];
-        final URL[] orzuEndpoint = new URL[1];
 
 
         @Override
@@ -337,33 +339,35 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         @Override
         protected ArrayList<Map<String, Object>> doInBackground(String... strings) {
 
-            orzuEndpoint[0] = null;
-            JsonReader[] jsonReader = new JsonReader[1];
-
+            URL orzuEndpoint = null;
+            JsonReader jsonReader = null;
+            HttpsURLConnection myConnection = null;
+            final char dm = (char) 34;
             try {
-                orzuEndpoint[0] = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=all&status=open&page=" + count);
-                Log.e("counterMAIN", String.valueOf(count));
-                myConnection[0] =
-                        (HttpsURLConnection) orzuEndpoint[0].openConnection();
-                if (myConnection[0].getResponseCode() == 200) {
+                orzuEndpoint = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=all&status=open&page=" + count);
+
+                myConnection =
+                        (HttpsURLConnection) orzuEndpoint.openConnection();
+                if (myConnection.getResponseCode() == 200) {
                     // Success
-                    InputStream responseBody = myConnection[0].getInputStream();
+                    InputStream responseBody = myConnection.getInputStream();
                     InputStreamReader responseBodyReader =
                             new InputStreamReader(responseBody, "UTF-8");
+                    jsonReader = new JsonReader(responseBodyReader);
 
-                    jsonReader[0] = new JsonReader(responseBodyReader);
                 }
 
-                status = myConnection[0].getResponseCode();
+                status = myConnection.getResponseCode();
 
 
-                myConnection[0].setInstanceFollowRedirects(true);
+                myConnection.setInstanceFollowRedirects(true);
                 data = new ArrayList<>();
-                if (jsonReader[0] == null) {
+
+                if (jsonReader.equals(dm + "Not tasks yet" + dm)) {
                     track = false;
                 } else {
-                    jsonReader[0].beginArray(); // Start processing the JSON object
-                    while (jsonReader[0].hasNext()) { // Loop through all keys
+                    jsonReader.beginArray(); // Start processing the JSON object
+                    while (jsonReader.hasNext()) { // Loop through all keys
 
                         countItem++;
                         if (countItem == 6) {
@@ -375,7 +379,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                         m = new HashMap<>();
                         m_new = new HashMap<>();
                         m_new_2 = new HashMap<>();
-                        m = readMessage(jsonReader[0]);
+                        m = readMessage(jsonReader);
                         Long[] savedList = model.array;
 
                         Long det = 0L;
@@ -453,12 +457,8 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
                     }
                     truedata.addAll(data);
-                    jsonReader[0].endArray();
-
-
-                    jsonReader[0].close();
-
-
+                    jsonReader.endArray();
+                    jsonReader.close();
                 }
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -496,21 +496,15 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 }
                 e.printStackTrace();
             }
-            myConnection[0].disconnect();
+            myConnection.disconnect();
             return null;
         }
 
         protected void onPostExecute(ArrayList<Map<String, Object>> result) {
             super.onPostExecute(result);
-
-            // sortData();
-
-            // sortData();
             adapter = new RVAdapter(getContext(), truedata);
             rv.setAdapter(adapter);
 
-            //adapter.filterByCity(Common.city);
-            //adapter.notifyDataSetChanged();
             RVAdapter.setSelect(new MainItemSelect() {
                 @Override
                 public void onItemSelectedListener(View view, int position) {
@@ -531,11 +525,8 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 }
             });
             noTasks = false;
-            if (Common.fragmentshimmer) {
-                shim.setVisibility(View.INVISIBLE);
-                nestshimmer.setVisibility(View.INVISIBLE);
-            }
-
+            shim.setVisibility(View.INVISIBLE);
+            nestshimmer.setVisibility(View.INVISIBLE);
             if (adapter.getItemCount() == 0) {
                 noTasks = true;
                 imagenotask.setVisibility(View.VISIBLE);
@@ -545,20 +536,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         }
     }
 
-    ArrayList<Map<String, Object>> filtered = new ArrayList<>();
-
-    private void sortData() {
-        if (Common.city.length() != 0) {
-            for (int i = 0; i < truedata.size(); i++) {
-                if (truedata.get(i).get("Город").toString().equals(Common.city)) {
-                    Log.e("ФильтрыФтльтры", truedata.get(i).get("Город").toString() + "  " + Common.city);
-                    filtered.add(truedata.get(i));
-                }
-            }
-        } else {
-            filtered = truedata;
-        }
-    }
 
     @Override
     public void onRefresh() {
@@ -618,7 +595,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     jsonReader[0].beginObject();
                     jsonReader[0].nextName();
                     Long id = jsonReader[0].nextLong();
-                    Log.e("IDIDNEWNEW", String.valueOf(id));
                     Long[] savedList = model.array;
                     Long det = 0L;
 
@@ -660,7 +636,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                             dialog = new Dialog(Fragment1.this.getActivity(), android.R.style.Theme_Material_Light_NoActionBar);
                             dialog.setContentView(R.layout.dialog_no_internet);
                             Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
-                            // if button is clicked, close the custom dialog
                             dialogButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -738,7 +713,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
             try {
                 orzuEndpoint[0] = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&search=" + edittextFind);
-                Log.e("counterMAIN", String.valueOf(orzuEndpoint[0]));
                 myConnection[0] =
                         (HttpsURLConnection) orzuEndpoint[0].openConnection();
                 if (myConnection[0].getResponseCode() == 200) {
@@ -809,7 +783,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                             dialog = new Dialog(Fragment1.this.getActivity(), android.R.style.Theme_Material_Light_NoActionBar);
                             dialog.setContentView(R.layout.dialog_no_internet);
                             Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
-                            // if button is clicked, close the custom dialog
                             dialogButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -862,9 +835,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
                 }
             });
-//            noTasks = false;
-//            shim.setVisibility(View.INVISIBLE);
-//            nestshimmer.setVisibility(View.INVISIBLE);
+
             if (adapter.getItemCount() == 0) {
                 noTasks = true;
                 imagenotask.setVisibility(View.VISIBLE);

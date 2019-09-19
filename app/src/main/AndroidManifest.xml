@@ -142,6 +142,7 @@
             android:name=".FiltersActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".IntercomActivity" />
+
     </application>
 
 </manifest>

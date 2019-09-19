@@ -44,6 +44,7 @@ allprojects {
 }
 
 dependencies {
+    implementation 'com.pusher:pusher-java-client:2.0.1'
     implementation 'jp.wasabeef:blurry:3.0.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.yandex.android:mapkit:3.4.0'

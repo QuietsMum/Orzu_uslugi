@@ -3,6 +3,10 @@ package orzu.org;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,14 +17,20 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.Base64;
 import android.util.JsonReader;
 import android.util.Log;
@@ -28,6 +38,14 @@ import android.view.MenuItem;
 
 import com.fxn.pix.Pix;
 import com.google.android.material.navigation.NavigationView;
+import com.pusher.client.Pusher;
+import com.pusher.client.PusherOptions;
+import com.pusher.client.channel.Channel;
+import com.pusher.client.channel.PusherEvent;
+import com.pusher.client.channel.SubscriptionEventListener;
+import com.pusher.client.connection.ConnectionEventListener;
+import com.pusher.client.connection.ConnectionState;
+import com.pusher.client.connection.ConnectionStateChange;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
@@ -85,6 +103,8 @@ public class Main2Activity extends AppCompatActivity
     RelativeLayout userviewBtn;
     ImageView imageBlur;
     TextView nav_user_name;
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,12 +112,109 @@ public class Main2Activity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setBackground(getResources().getDrawable(R.drawable.gradient_back));
         setSupportActionBar(toolbar);
-
+        navigationView = findViewById(R.id.nav_view);
         try {
             getUserResponse();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
+        dbHelper = new DBHelper(this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor c = db.query("orzutable", null, null, null, null, null, null);
+        c.moveToFirst();
+        int idColIndex = c.getColumnIndex("id");
+        int tokenColIndex = c.getColumnIndex("token");
+        idUser = c.getString(idColIndex);
+        Common.userId = idUser;
+        Common.utoken = c.getString(tokenColIndex);
+        c.close();
+        db.close();
+        dbHelper.close();
+        PusherOptions options = new PusherOptions();
+        options.setCluster("mt1");
+        Pusher pusher = new Pusher("585acb6bbd7f6860658a", options);
+        Log.e("iduser",idUser);
+
+        pusher.connect(new ConnectionEventListener() {
+            @Override
+            public void onConnectionStateChange(ConnectionStateChange change) {
+                Log.e("StateIsCome","State changed to " + change.getCurrentState() +
+                        " from " + change.getPreviousState());
+            }
+
+            @Override
+            public void onError(String message, String code, Exception e) {
+                Log.e("Error from Pusher","There was a problem connecting!");
+            }
+        }, ConnectionState.ALL);
+
+// Subscribe to a channel
+        Channel channel = pusher.subscribe("user." + idUser);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Log.e("ASDASDASD","Received event with data: " + channel.isSubscribed());
+            }
+        }, 5000);
+
+// Bind to listen for events called "my-event" sent to "my-channel"
+        channel.bind("App\\OrzuPusher", new SubscriptionEventListener() {
+            @Override
+            public void onEvent(PusherEvent event) {
+                try {
+                    JSONObject jobject = new JSONObject(event.getData());
+
+                    NotificationManager mNotificationManager;
+
+                    NotificationCompat.Builder mBuilder =
+                            new NotificationCompat.Builder(Main2Activity.this.getApplicationContext(), "notify_001");
+                    Intent ii = new Intent(Main2Activity.this.getApplicationContext(), Main2Activity.class);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(Main2Activity.this, 0, ii, 0);
+
+                    NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+                    bigText.bigText(jobject.getString("user"));
+                    bigText.setBigContentTitle(jobject.getString("message"));
+                    bigText.setSummaryText("date");
+
+                    mBuilder.setContentIntent(pendingIntent);
+                    mBuilder.setSmallIcon(R.mipmap.ic_launcher);
+                    mBuilder.setContentTitle(jobject.getString("user"));
+                    mBuilder.setContentText(jobject.getString("message"));
+                    mBuilder.setPriority(Notification.PRIORITY_MAX);
+                    mBuilder.setStyle(bigText);
+
+                    mNotificationManager =
+                            (NotificationManager) Main2Activity.this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+// === Removed some obsoletes
+
+                    String channelId = "Your_channel_id";
+                    NotificationChannel channel1 = new NotificationChannel(
+                            channelId,
+                            "Channel human readable title",
+                            NotificationManager.IMPORTANCE_DEFAULT);
+                    mNotificationManager.createNotificationChannel(channel1);
+                    mBuilder.setChannelId(channelId);
+
+
+                    mNotificationManager.notify(0, mBuilder.build());
+
+                    Log.e("message","Received event with data: " + jobject.getString("message"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        });
+
+// Disconnect from the service
+//        pusher.disconnect();
+
+        pusher.connect();
+
 
 
         Intercom.initialize(getApplication(), "android_sdk-805f0d44d62fbc8e72058b9c8eee61c94c43c874", "p479kps8");
@@ -107,7 +224,7 @@ public class Main2Activity extends AppCompatActivity
 
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);

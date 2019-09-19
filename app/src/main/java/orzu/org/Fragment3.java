@@ -201,7 +201,6 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
             imageViewName.setImageURI(Uri.parse(returnValue.get(0)));
             Common.d = imageViewName.getDrawable();
             ((Main2Activity)getActivity()).changeImage();
-            Log.wtf("Pix Result", returnValue.get(0));
             try {
                 getEditAvatarResponse();
             } catch (IOException e) {
@@ -223,7 +222,6 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                 .addFormDataPart("utoken", Common.utoken)
                 .addFormDataPart("appid", "$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS")
                 .build();
-        Log.e("userCreatedURL", String.valueOf(requestBody));
         Request request = new Request.Builder()
                 .url(url)
                 .post(requestBody)
@@ -263,7 +261,6 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
             public void onResponse(Call call, Response response) throws IOException {
 
                 String mMessage = response.body().string();
-                Log.e("userCreatedAvatar", mMessage);
                 if(getActivity() == null)
                     return;
                 getActivity().runOnUiThread(new Runnable() {
@@ -424,7 +421,6 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         super.onResume();
         imageViewName.setImageDrawable(Common.d);
         ((Main2Activity)getActivity()).changeImage();
-        Log.wtf("asdasds","asdsad");
         if(Common.sex!=null){
             userCity.setText(Common.city);
             userBday.setText(Common.birth);
@@ -477,7 +473,6 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String mMessage = response.body().string();
-                Log.e("resultArrayFull", mMessage);
 
                 if (mMessage.equals(Character.toString((char) dchar) + "No reviews yet" + Character.toString((char) dchar))) {
 
@@ -513,7 +508,6 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                         int bpHappy = R.drawable.ic_happy;
 
                         int lenght = jsonArray.length();
-                        Log.e("lenghtArray", String.valueOf(lenght));
                         String feedName = "";
                         if (lenght > 1) {
                             lenght = 2;
