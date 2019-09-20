@@ -16,4 +16,5 @@ public class Common {
     public static String birth;
     public static String about;
     public static String sex;
+    public static String nameOfChat;
 }
