@@ -22,10 +22,12 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".ChatActivity"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait" >
 
         </activity>
-        <activity android:name=".ChangePasswordActivity" />
+        <activity android:name=".ChangePasswordActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".CategorySubscriptions"
             android:screenOrientation="portrait" />

@@ -23,9 +23,16 @@ class DBHelper extends SQLiteOpenHelper {
                 + "pass" + ");");
 
         db.execSQL("create table orzunotif ("
-                + "id,"
-                + "token,"
-                + "name,"
+                + "type,"
+                + "idUser,"
+                + "nameUser,"
+                + "title,"
+                + "narr,"
+                + "amout,"
+                + "date,"
+                + "city,"
+                + "emoji,"
+                + "emojicount,"
                 + "message" + ");");
     }
 
