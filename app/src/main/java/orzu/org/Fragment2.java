@@ -1,35 +1,25 @@
 package orzu.org;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import orzu.org.Notification.AdapterDifferentLayout;
 import orzu.org.Notification.Literature;
 
@@ -44,6 +34,8 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
     AdapterDifferentLayout adapter;
     TextView btnNotif;
     TextView btnMessage;
+    String messageNot;
+    String idUserNot;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,11 +54,21 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
         btnNotif.setOnClickListener(this);
         btnMessage.setOnClickListener(this);
 
-        /*dbHelper = new DBHelper(getActivity());
+        dbHelper = new DBHelper(getActivity());
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("orzunotif", null, null, null, null, null, null);
         c.moveToFirst();
-        int tokenColIndex = c.getColumnIndex("token");*/
+
+        if (c != null) {
+            // Loop through all Results
+            do {
+                int tokenColIndex = c.getColumnIndex("token");
+                int idColIndex = c.getColumnIndex("id");
+                int mesColIndex = c.getColumnIndex("message");
+                /*messageNot = c.getString(mesColIndex);
+                idUserNot = c.getString(idColIndex);*/
+            } while (c.moveToNext());
+        }
 
         rv = view.findViewById(R.id.rv_notif);
         rv.setHasFixedSize(true);

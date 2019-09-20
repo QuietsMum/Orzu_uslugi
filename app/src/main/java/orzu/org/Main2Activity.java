@@ -7,6 +7,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -165,26 +166,21 @@ public class Main2Activity extends AppCompatActivity
             public void onEvent(PusherEvent event) {
                 try {
                     JSONObject jobject = new JSONObject(event.getData());
-
                     NotificationManager mNotificationManager;
-
                     NotificationCompat.Builder mBuilder =
                             new NotificationCompat.Builder(Main2Activity.this.getApplicationContext(), "notify_001");
                     Intent ii = new Intent(Main2Activity.this.getApplicationContext(), Main2Activity.class);
                     PendingIntent pendingIntent = PendingIntent.getActivity(Main2Activity.this, 0, ii, 0);
-
                     NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
                     bigText.bigText(jobject.getString("user"));
                     bigText.setBigContentTitle(jobject.getString("message"));
                     bigText.setSummaryText("date");
-
                     mBuilder.setContentIntent(pendingIntent);
                     mBuilder.setSmallIcon(R.mipmap.ic_launcher);
                     mBuilder.setContentTitle(jobject.getString("user"));
                     mBuilder.setContentText(jobject.getString("message"));
                     mBuilder.setPriority(Notification.PRIORITY_MAX);
                     mBuilder.setStyle(bigText);
-
                     mNotificationManager =
                             (NotificationManager) Main2Activity.this.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -197,11 +193,17 @@ public class Main2Activity extends AppCompatActivity
                             NotificationManager.IMPORTANCE_DEFAULT);
                     mNotificationManager.createNotificationChannel(channel1);
                     mBuilder.setChannelId(channelId);
-
-
                     mNotificationManager.notify(0, mBuilder.build());
 
+                    SQLiteDatabase db = dbHelper.getWritableDatabase();
+                    ContentValues cv = new ContentValues();
+                    cv.put("id", jobject.getString("user"));
+                    cv.put("message", jobject.getString("message"));
+                    db.insert("orzunotif", null, cv);
+                    db.close();
+                    dbHelper.close();
                     Log.e("message","Received event with data: " + jobject.getString("message"));
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

@@ -242,6 +242,9 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                             cv.put("token", mToken);
                             cv.put("name", mName);
                             db.insert("orzutable", null, cv);
+                            db.close();
+                            dbHelper.close();
+
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
