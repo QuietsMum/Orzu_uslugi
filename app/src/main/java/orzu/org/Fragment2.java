@@ -112,7 +112,7 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
         chatItems.add(new chatItems("Sanek", "Kak dela?", "11:06", "1", Common.bitmap));
         chatItems.add(new chatItems("FiraBrat", "Kak dela?", "18:06", "1", Common.bitmap));
         chatAdapter = new ChatAdapter(getContext(), chatItems);
-        //adapter = new AdapterDifferentLayout(getActivity(), lit);
+        adapter = new AdapterDifferentLayout(getActivity(), lit);
         rv.setAdapter(adapter);
         rv_of_chat.setAdapter(chatAdapter);
 
