@@ -87,6 +87,7 @@
     <string name="old_password">Старый пароль</string>
     <string name="new_password">Новый пароль</string>
     <string name="new_password_re">Повторите пароль</string>
+    <string name="something_text">Безопасная оплата картой и гарантия возврата денег. Компенсация в случае морального ущерба.</string>
 
     <string-array name="datecreatelist">
         <item>В любое время</item>

@@ -161,7 +161,7 @@ public class Main2Activity extends AppCompatActivity
         }, 5000);
 
 // Bind to listen for events called "my-event" sent to "my-channel"
-        channel.bind("App\\OrzuPusher", new SubscriptionEventListener() {
+        channel.bind("OrzuPusherEvents", new SubscriptionEventListener() {
             @Override
             public void onEvent(PusherEvent event) {
                 try {
@@ -194,7 +194,6 @@ public class Main2Activity extends AppCompatActivity
                     mNotificationManager.createNotificationChannel(channel1);
                     mBuilder.setChannelId(channelId);
                     mNotificationManager.notify(0, mBuilder.build());
-
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     ContentValues cv = new ContentValues();
                     cv.put("id", jobject.getString("user"));

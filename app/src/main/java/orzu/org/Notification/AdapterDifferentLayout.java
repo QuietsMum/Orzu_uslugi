@@ -35,13 +35,13 @@ public class AdapterDifferentLayout extends RecyclerView.Adapter {
         View view;
         switch (viewType) {
             case Literature.TYPE_BOOK:
-                view = mInflater.inflate(R.layout.main_item, parent, false);
+                view = mInflater.inflate(R.layout.main_item_notif, parent, false);
                 return new ViewHolder(view);
             case Literature.TYPE_MAGAZINE:
-                view = mInflater.inflate(R.layout.feedback_item, parent, false);
+                view = mInflater.inflate(R.layout.feedback_item_notif, parent, false);
                 return new ViewHolder2(view);
             case Literature.TYPE_NEWSPAPER:
-                view = mInflater.inflate(R.layout.thrd, parent, false);
+                view = mInflater.inflate(R.layout.thrd_notif, parent, false);
                 return new ViewHolder3(view);
         }
         return null;

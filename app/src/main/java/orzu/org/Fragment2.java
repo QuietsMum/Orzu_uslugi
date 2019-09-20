@@ -21,7 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import orzu.org.Notification.AdapterDifferentLayout;
+import orzu.org.Notification.ChooseYouItem;
 import orzu.org.Notification.Literature;
+import orzu.org.Notification.OtklikITem;
+import orzu.org.Notification.feedbackItem;
 
 public class Fragment2 extends Fragment implements View.OnClickListener {
 
@@ -58,13 +61,25 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("orzunotif", null, null, null, null, null, null);
         c.moveToFirst();
-
+        lit = new ArrayList<>();
         if (c != null) {
             // Loop through all Results
             do {
                 int tokenColIndex = c.getColumnIndex("token");
                 int idColIndex = c.getColumnIndex("id");
                 int mesColIndex = c.getColumnIndex("message");
+
+                OtklikITem item1 = new OtklikITem("Вся правда о кондиционерах","Максимально упрощайте ежедневные задачи для большей продуктивности рабочего дня");
+                ChooseYouItem item2 = new ChooseYouItem("Nikita","Android develop","10000$","Making apps","13,09,2018 10:20");
+                feedbackItem item3 = new feedbackItem(R.drawable.images_background_4, "Иван Иваныч", "2", "qwe", "Безопасная оплата картой и гарантия возврата денег. Компенсация в случае морального ущерба.");
+                lit.add(item3);
+                lit.add(item2);
+                lit.add(item1);
+                lit.add(item3);
+                lit.add(item2);
+                lit.add(item1);
+                lit.add(item2);
+                lit.add(item3);
                 /*messageNot = c.getString(mesColIndex);
                 idUserNot = c.getString(idColIndex);*/
             } while (c.moveToNext());
@@ -75,7 +90,7 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
         rv.setNestedScrollingEnabled(false);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         rv.setLayoutManager(llm);
-        //adapter = new AdapterDifferentLayout(getActivity(), lit);
+        adapter = new AdapterDifferentLayout(getActivity(), lit);
         rv.setAdapter(adapter);
         return view;
     }
