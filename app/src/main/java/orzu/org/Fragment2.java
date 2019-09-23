@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -52,6 +53,9 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
     ChatAdapter chatAdapter;
     LinearLayout customTabs;
     FrameLayout chat_layout;
+    SQLiteDatabase db;
+    ImageView no_task;
+    TextView no_task_text;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,62 +75,11 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
         btnNotif.setOnClickListener(this);
         btnMessage.setOnClickListener(this);
 
-        dbHelper = new DBHelper(getActivity());
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor c = db.query("orzunotif", null, null, null, null, null, null);
-        c.moveToFirst();
-        lit = new ArrayList<>();
-        if (c != null) {
-            // Loop through all Results
-            do {
-                int tokenColIndex = c.getColumnIndex("token");
-                int idColIndex = c.getColumnIndex("idUser");
-                int mesColIndex = c.getColumnIndex("message");
-                OtklikITem item1 = new OtklikITem("Вся правда о кондиционерах", "Максимально упрощайте ежедневные задачи для большей продуктивности рабочего дня");
-                ChooseYouItem item2 = new ChooseYouItem("Nikita", "Android develop", "10000$", "Making apps", "13,09,2018 10:20");
-                feedbackItem item3 = new feedbackItem(R.drawable.images_background_4, "Иван Иваныч", "2", "qwe", "Безопасная оплата картой и гарантия возврата денег. Компенсация в случае морального ущерба.");
-                lit.add(item3);
-                lit.add(item2);
-                lit.add(item1);
-                lit.add(item3);
-                lit.add(item2);
-                lit.add(item1);
-                lit.add(item2);
-                lit.add(item3);
-                messageNot = c.getString(mesColIndex);
-                idUserNot = c.getString(idColIndex);
-                feedbackItem item4 = new feedbackItem(R.drawable.images_background_4, idUserNot, "2", "qwe", messageNot);
-                lit.add(item4);
-            } while (c.moveToNext());
-        }
-        c.close();
-        Cursor cursor = db.rawQuery("SELECT * FROM orzuchat Group by id", null);
-        while (cursor.moveToNext()) {
-            int name = cursor.getColumnIndex("name");
-            int id = cursor.getColumnIndex("id");
-            chatItems items = new chatItems();
-            items.setName(cursor.getString(name));
-            items.setId(cursor.getString(id));
-            chatItem.add(items);
-        }
-        Log.wtf("asdasdas",chatItem.size()+"");
-        cursor.close();
-        for (int i = 0; i < chatItem.size(); i++) {
-            Cursor date = db.rawQuery("SELECT * FROM orzuchat where id = '" + chatItem.get(i).getId() + "' Order by date", null);
-            date.moveToLast();
-            chatItem.get(i).setTime(date.getString(date.getColumnIndex("date")));
-            if (date.getString(date.getColumnIndex("their_text")) != null) {
-                chatItem.get(i).setChat(date.getString(date.getColumnIndex("their_text")));
-            }else{
-                chatItem.get(i).setChat(date.getString(date.getColumnIndex("my_text")));
-            }
-            chatItem.get(i).setNotification("1");
-            date.close();
-        }
-        db.close();
-        dbHelper.close();
+        no_task = view.findViewById(R.id.imageNoTask);
+        no_task_text = view.findViewById(R.id.textViewNoTask);
         rv_of_chat = view.findViewById(R.id.rv_of_chat);
         rv = view.findViewById(R.id.rv_notif);
+        getNotif();
         rv.setHasFixedSize(true);
         rv.setNestedScrollingEnabled(false);
         rv_of_chat.setHasFixedSize(true);
@@ -151,6 +104,103 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
         });
 
         return view;
+    }
+
+    private void getChat() {
+        chatItem.clear();
+        dbHelper = new DBHelper(getActivity());
+        db = dbHelper.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM orzuchat Group by id", null);
+
+        while (cursor.moveToNext()) {
+            int name = cursor.getColumnIndex("name");
+            int id = cursor.getColumnIndex("id");
+            chatItems items = new chatItems();
+            items.setName(cursor.getString(name));
+            items.setId(cursor.getString(id));
+            chatItem.add(items);
+        }
+        Log.wtf("asdasdas", chatItem.size() + "");
+        if (chatItem.size() == 0) {
+            no_task.setVisibility(View.VISIBLE);
+            no_task_text.setVisibility(View.VISIBLE);
+            rv_of_chat.setVisibility(View.GONE);
+        } else {
+            no_task.setVisibility(View.INVISIBLE);
+            no_task_text.setVisibility(View.INVISIBLE);
+        }
+        cursor.close();
+        for (int i = 0; i < chatItem.size(); i++) {
+            Cursor date = db.rawQuery("SELECT * FROM orzuchat where id = '" + chatItem.get(i).getId() + "' Order by date", null);
+            date.moveToLast();
+            chatItem.get(i).setTime(date.getString(date.getColumnIndex("date")));
+            if (date.getString(date.getColumnIndex("their_text")) != null) {
+                chatItem.get(i).setChat(date.getString(date.getColumnIndex("their_text")));
+            } else {
+                chatItem.get(i).setChat(date.getString(date.getColumnIndex("my_text")));
+            }
+            chatItem.get(i).setNotification("1");
+            date.close();
+        }
+        db.close();
+        dbHelper.close();
+    }
+
+    private void getNotif() {
+        dbHelper = new DBHelper(getActivity());
+        db = dbHelper.getWritableDatabase();
+        Cursor c = db.query("orzunotif", null, null, null, null, null, null);
+        c.moveToFirst();
+        lit = new ArrayList<>();
+        if (c != null) {
+            // Loop through all Results
+            do {
+                try {
+                    int tokenColIndex = c.getColumnIndex("token");
+                    int idColIndex = c.getColumnIndex("idUser");
+                    int mesColIndex = c.getColumnIndex("message");
+                    OtklikITem item1 = new OtklikITem("Вся правда о кондиционерах", "Максимально упрощайте ежедневные задачи для большей продуктивности рабочего дня");
+                    ChooseYouItem item2 = new ChooseYouItem("Nikita", "Android develop", "10000$", "Making apps", "13,09,2018 10:20");
+                    feedbackItem item3 = new feedbackItem(R.drawable.images_background_4, "Иван Иваныч", "2", "qwe", "Безопасная оплата картой и гарантия возврата денег. Компенсация в случае морального ущерба.");
+                    lit.add(item3);
+                    lit.add(item2);
+                    lit.add(item1);
+                    lit.add(item3);
+                    lit.add(item2);
+                    lit.add(item1);
+                    lit.add(item2);
+                    lit.add(item3);
+                    messageNot = c.getString(mesColIndex);
+                    idUserNot = c.getString(idColIndex);
+                    feedbackItem item4 = new feedbackItem(R.drawable.images_background_4, idUserNot, "2", "qwe", messageNot);
+                    lit.add(item4);
+                    customTabs.setVisibility(View.VISIBLE);
+                    no_task.setVisibility(View.INVISIBLE);
+                    no_task_text.setVisibility(View.INVISIBLE);
+                } catch (Exception e) {
+                    Log.wtf("sadas", "asdasddasdas");
+                    customTabs.setVisibility(View.GONE);
+                    no_task.setVisibility(View.VISIBLE);
+                    no_task_text.setVisibility(View.VISIBLE);
+                    rv.setVisibility(View.GONE);
+                }
+            } while (c.moveToNext());
+        }
+        c.close();
+        dbHelper.close();
+        db.close();
+    }
+
+    public boolean isTableExists(String tableName) {
+        boolean isExist = false;
+        Cursor cursor = db.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = '" + tableName + "'", null);
+        if (cursor != null) {
+            if (cursor.getCount() > 0) {
+                isExist = true;
+            }
+            cursor.close();
+        }
+        return isExist;
     }
 
     @Override
@@ -188,7 +238,7 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
                 customTabs.setVisibility(View.VISIBLE);
                 rv.setVisibility(View.VISIBLE);
                 rv_of_chat.setVisibility(View.GONE);
-
+                getNotif();
                 break;
             case R.id.notif_buttonright:
                 btnNotif.setBackgroundResource(R.drawable.circle_button_left);
@@ -199,8 +249,9 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
                 customTabs.setVisibility(View.GONE);
                 rv.setVisibility(View.GONE);
                 rv_of_chat.setVisibility(View.VISIBLE);
-
-
+                no_task.setVisibility(View.INVISIBLE);
+                no_task_text.setVisibility(View.INVISIBLE);
+                getChat();
                 break;
         }
     }
