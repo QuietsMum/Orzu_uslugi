@@ -222,7 +222,7 @@ public class Main2Activity extends AppCompatActivity
                     mNotificationManager.notify(0, mBuilder.build());
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     ContentValues cv = new ContentValues();
-                    cv.put("id", jobject.getString("user"));
+                    cv.put("idUser", jobject.getString("user"));
                     cv.put("message", jobject.getString("message"));
                     db.insert("orzunotif", null, cv);
                     db.close();

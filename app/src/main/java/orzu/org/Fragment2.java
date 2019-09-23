@@ -80,7 +80,7 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
             // Loop through all Results
             do {
                 int tokenColIndex = c.getColumnIndex("token");
-                int idColIndex = c.getColumnIndex("id");
+                int idColIndex = c.getColumnIndex("idUser");
                 int mesColIndex = c.getColumnIndex("message");
                 OtklikITem item1 = new OtklikITem("Вся правда о кондиционерах", "Максимально упрощайте ежедневные задачи для большей продуктивности рабочего дня");
                 ChooseYouItem item2 = new ChooseYouItem("Nikita", "Android develop", "10000$", "Making apps", "13,09,2018 10:20");
@@ -93,8 +93,10 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
                 lit.add(item1);
                 lit.add(item2);
                 lit.add(item3);
-                /*messageNot = c.getString(mesColIndex);
-                idUserNot = c.getString(idColIndex);*/
+                messageNot = c.getString(mesColIndex);
+                idUserNot = c.getString(idColIndex);
+                feedbackItem item4 = new feedbackItem(R.drawable.images_background_4, idUserNot, "2", "qwe", messageNot);
+                lit.add(item4);
             } while (c.moveToNext());
         }
         c.close();
