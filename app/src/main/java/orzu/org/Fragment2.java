@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,7 +42,7 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
     ArrayList<Map<String, Object>> data;
     ArrayList<Map<String, Object>> truedata;
     List<Literature> lit;
-    List<chatItems> chatItems = new ArrayList<>();
+    List<chatItems> chatItem = new ArrayList<>();
     RecyclerView rv, rv_of_chat;
     AdapterDifferentLayout adapter;
     TextView btnNotif;
@@ -81,8 +82,8 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
                 int tokenColIndex = c.getColumnIndex("token");
                 int idColIndex = c.getColumnIndex("id");
                 int mesColIndex = c.getColumnIndex("message");
-                OtklikITem item1 = new OtklikITem("Вся правда о кондиционерах","Максимально упрощайте ежедневные задачи для большей продуктивности рабочего дня");
-                ChooseYouItem item2 = new ChooseYouItem("Nikita","Android develop","10000$","Making apps","13,09,2018 10:20");
+                OtklikITem item1 = new OtklikITem("Вся правда о кондиционерах", "Максимально упрощайте ежедневные задачи для большей продуктивности рабочего дня");
+                ChooseYouItem item2 = new ChooseYouItem("Nikita", "Android develop", "10000$", "Making apps", "13,09,2018 10:20");
                 feedbackItem item3 = new feedbackItem(R.drawable.images_background_4, "Иван Иваныч", "2", "qwe", "Безопасная оплата картой и гарантия возврата денег. Компенсация в случае морального ущерба.");
                 lit.add(item3);
                 lit.add(item2);
@@ -96,6 +97,32 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
                 idUserNot = c.getString(idColIndex);*/
             } while (c.moveToNext());
         }
+        c.close();
+        Cursor cursor = db.rawQuery("SELECT * FROM orzuchat Group by name", null);
+        while (cursor.moveToNext()) {
+            int name = cursor.getColumnIndex("name");
+            int id = cursor.getColumnIndex("id");
+            chatItems items = new chatItems();
+            items.setName(cursor.getString(name));
+            items.setId(cursor.getString(id));
+            chatItem.add(items);
+        }
+        Log.wtf("asdasdas",chatItem.size()+"");
+        cursor.close();
+        for (int i = 0; i < chatItem.size(); i++) {
+            Cursor date = db.rawQuery("SELECT * FROM orzuchat where id = '" + chatItem.get(i).getId() + "' Order by date", null);
+            date.moveToLast();
+            chatItem.get(i).setTime(date.getString(date.getColumnIndex("date")));
+            if (date.getString(date.getColumnIndex("their_text")) != null) {
+                chatItem.get(i).setChat(date.getString(date.getColumnIndex("their_text")));
+            }else{
+                chatItem.get(i).setChat(date.getString(date.getColumnIndex("my_text")));
+            }
+            chatItem.get(i).setNotification("1");
+            date.close();
+        }
+        db.close();
+        dbHelper.close();
         rv_of_chat = view.findViewById(R.id.rv_of_chat);
         rv = view.findViewById(R.id.rv_notif);
         rv.setHasFixedSize(true);
@@ -105,13 +132,8 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         rv.setLayoutManager(llm);
         rv_of_chat.setLayoutManager(new LinearLayoutManager(getContext()));
-        chatItems.add(new chatItems("Johny", "Kak dela?", "10:06", "1", Common.bitmap));
-        chatItems.add(new chatItems("KakOnoEst", "Kak dela?", "10:08", "1", Common.bitmap));
-        chatItems.add(new chatItems("Lol", "Kak dela?", "10:10", "1", Common.bitmap));
-        chatItems.add(new chatItems("Maga", "Kak dela?", "10:53", "1", Common.bitmap));
-        chatItems.add(new chatItems("Sanek", "Kak dela?", "11:06", "1", Common.bitmap));
-        chatItems.add(new chatItems("FiraBrat", "Kak dela?", "18:06", "1", Common.bitmap));
-        chatAdapter = new ChatAdapter(getContext(), chatItems);
+
+        chatAdapter = new ChatAdapter(getContext(), chatItem);
         adapter = new AdapterDifferentLayout(getActivity(), lit);
         rv.setAdapter(adapter);
         rv_of_chat.setAdapter(chatAdapter);
@@ -119,7 +141,8 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
         chatAdapter.setClickListener(new ChatAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Common.nameOfChat = chatItems.get(position).getName();
+                Common.nameOfChat = chatItem.get(position).getName();
+                Common.chatId = chatItem.get(position).getId();
                 Intent intent = new Intent(getActivity(), ChatActivity.class);
                 startActivity(intent);
             }

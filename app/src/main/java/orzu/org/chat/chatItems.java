@@ -3,8 +3,11 @@ package orzu.org.chat;
 import android.graphics.Bitmap;
 
 public class chatItems {
-    String Name,chat,time,notification;
+    String Name,chat,time,notification,id;
     Bitmap img;
+
+    public chatItems() {
+    }
 
     public chatItems(String name, String chat, String time, String notification, Bitmap img) {
         Name = name;
@@ -20,6 +23,14 @@ public class chatItems {
 
     public void setName(String name) {
         Name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getChat() {

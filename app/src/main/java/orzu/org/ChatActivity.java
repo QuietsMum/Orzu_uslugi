@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -19,6 +21,7 @@ import java.util.List;
 import java.util.Locale;
 
 import orzu.org.chat.ChattingAdapter;
+import orzu.org.chat.chatItems;
 import orzu.org.chat.message_interface;
 import orzu.org.chat.my_message;
 import orzu.org.chat.their_message;
@@ -30,6 +33,7 @@ public class ChatActivity extends AppCompatActivity {
     ImageButton send;
     List<message_interface> messages = new ArrayList<>();
     ChattingAdapter adapter;
+    DBHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,22 +48,35 @@ public class ChatActivity extends AppCompatActivity {
         editText = findViewById(R.id.editText);
         send = findViewById(R.id.chat_send_button);
 
+
+
         messages_view.setHasFixedSize(true);
         messages_view.setLayoutManager(new LinearLayoutManager(this));
         messages_view.setNestedScrollingEnabled(false);
 
-        messages.add(new my_message("Hello mazafaka","13:20"));
-        messages.add(new their_message("Hello","13:24"));
-        messages.add(new my_message("how are you doing?","13:30"));
-        messages.add(new their_message("Fine","13:31"));
-        messages.add(new their_message("How are you doing? This is a long message that should probably wrap.","13:31"));
+        dbHelper = new DBHelper(this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM orzuchat where id = '" + Common.chatId + "' Order by date", null);
+        while (cursor.moveToNext()) {
+            int their_text = cursor.getColumnIndex("their_text");
+            int my_text = cursor.getColumnIndex("my_text");
+            int date = cursor.getColumnIndex("date");
 
-        adapter = new ChattingAdapter(this,messages);
+            if(cursor.getString(my_text)!=null){
+                messages.add(new my_message(cursor.getString(my_text), cursor.getString(date)));
+            }else{
+                messages.add(new their_message(cursor.getString(their_text), cursor.getString(date)));
+            }
+        }
+        cursor.close();
+        db.close();
+        dbHelper.close();
+        adapter = new ChattingAdapter(this, messages);
         messages_view.setAdapter(adapter);
         editText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.wtf("asd","sad");
+                Log.wtf("asd", "sad");
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -71,14 +88,16 @@ public class ChatActivity extends AppCompatActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String currentTime = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
-                messages.add(new my_message(editText.getText().toString(),currentTime));
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String currentTimeStamp = dateFormat.format(new Date());
+                messages.add(new my_message(editText.getText().toString(), currentTimeStamp));
                 adapter.notifyDataSetChanged();
                 messages_view.smoothScrollToPosition(messages_view.getAdapter().getItemCount() - 1);
                 editText.setText("");
             }
         });
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {

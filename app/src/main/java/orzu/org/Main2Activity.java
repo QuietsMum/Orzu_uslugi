@@ -72,6 +72,8 @@ import java.io.InputStream;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 import io.intercom.android.sdk.Intercom;
@@ -131,23 +133,47 @@ public class Main2Activity extends AppCompatActivity
         Common.userId = idUser;
         Common.utoken = c.getString(tokenColIndex);
         c.close();
+
+        ContentValues cv = new ContentValues();
+        cv.put("id", "1");
+        cv.put("name", "mako");
+        cv.put("date", getCurrentTimeStamp());
+        cv.put("their_text", "salam kalay");
+        db.insert("orzuchat", null, cv);
+        cv.put("id", "2");
+        cv.put("name", "Nikita");
+        cv.put("date", getCurrentTimeStamp());
+        cv.put("my_text", "salam kalay");
+        db.insert("orzuchat", null, cv);
+        cv.put("id", "1");
+        cv.put("name", "mako");
+        cv.put("date", getCurrentTimeStamp());
+        cv.put("my_text", "salam poidet");
+        db.insert("orzuchat", null, cv);
+        cv.put("id", "2");
+        cv.put("name", "Nikita");
+        cv.put("date", getCurrentTimeStamp());
+        cv.put("their_text", "kalay makalay");
+        db.insert("orzuchat", null, cv);
         db.close();
         dbHelper.close();
+
+
         PusherOptions options = new PusherOptions();
         options.setCluster("mt1");
         Pusher pusher = new Pusher("585acb6bbd7f6860658a", options);
-        Log.e("iduser",idUser);
+        Log.e("iduser", idUser);
 
         pusher.connect(new ConnectionEventListener() {
             @Override
             public void onConnectionStateChange(ConnectionStateChange change) {
-                Log.e("StateIsCome","State changed to " + change.getCurrentState() +
+                Log.e("StateIsCome", "State changed to " + change.getCurrentState() +
                         " from " + change.getPreviousState());
             }
 
             @Override
             public void onError(String message, String code, Exception e) {
-                Log.e("Error from Pusher","There was a problem connecting!");
+                Log.e("Error from Pusher", "There was a problem connecting!");
             }
         }, ConnectionState.ALL);
 
@@ -156,7 +182,7 @@ public class Main2Activity extends AppCompatActivity
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Log.e("ASDASDASD","Received event with data: " + channel.isSubscribed());
+                Log.e("ASDASDASD", "Received event with data: " + channel.isSubscribed());
             }
         }, 5000);
 
@@ -201,7 +227,7 @@ public class Main2Activity extends AppCompatActivity
                     db.insert("orzunotif", null, cv);
                     db.close();
                     dbHelper.close();
-                    Log.e("message","Received event with data: " + jobject.getString("message"));
+                    Log.e("message", "Received event with data: " + jobject.getString("message"));
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -215,7 +241,6 @@ public class Main2Activity extends AppCompatActivity
 //        pusher.disconnect();
 
         pusher.connect();
-
 
 
         Intercom.initialize(getApplication(), "android_sdk-805f0d44d62fbc8e72058b9c8eee61c94c43c874", "p479kps8");
@@ -242,6 +267,20 @@ public class Main2Activity extends AppCompatActivity
 
         onNavigationItemSelected(navigationView.getMenu().getItem(0));
 
+    }
+
+    public String getCurrentTimeStamp() {
+        try {
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String currentTimeStamp = dateFormat.format(new Date()); // Find todays date
+
+            return currentTimeStamp;
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return null;
+        }
     }
 
     @Override
@@ -331,7 +370,7 @@ public class Main2Activity extends AppCompatActivity
         if (resultCode == Activity.RESULT_OK && requestCode == 100) {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag("fragment3");
             fragment.onActivityResult(requestCode, resultCode, data);
-        }else if (data != null) {
+        } else if (data != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container, new Fragment1()).commit();
         }
@@ -459,7 +498,7 @@ public class Main2Activity extends AppCompatActivity
                 }
                 // Вставляем фрагмент, заменяя текущий фрагмент
                 FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.container, fragment,"fragment3").commit();
+                fragmentManager.beginTransaction().replace(R.id.container, fragment, "fragment3").commit();
                 setTitle("");
                 DrawerLayout drawer = findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
@@ -497,7 +536,9 @@ public class Main2Activity extends AppCompatActivity
             saveImage(getApplicationContext(), result, "my_image.jpeg");
         }
     }
+
     ImageView nav_user;
+
     public void saveImage(Context context, Bitmap b, String imageName) {
         FileOutputStream foStream;
         Log.d("saveImage", "Exception 2,went!");
@@ -530,7 +571,7 @@ public class Main2Activity extends AppCompatActivity
         }
     }
 
-    public void changeImage(){
+    public void changeImage() {
         imageBlur.setImageDrawable(Common.d);
         nav_user.setImageDrawable(Common.d);
         nav_user_name.setText(Common.name);

@@ -89,7 +89,6 @@ public class AdapterDifferentLayout extends RecyclerView.Adapter {
 
         void bindView(int position) {
             ChooseYouItem nik = (ChooseYouItem)logos.get(position);
-            Log.wtf("adapterqw",nik.getHeader());
             header.setText(nik.getHeader());
             desc.setText(nik.getDesc());
             price.setText(nik.getPrice());
