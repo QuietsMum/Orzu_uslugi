@@ -100,7 +100,7 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
             } while (c.moveToNext());
         }
         c.close();
-        Cursor cursor = db.rawQuery("SELECT * FROM orzuchat Group by name", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM orzuchat Group by id", null);
         while (cursor.moveToNext()) {
             int name = cursor.getColumnIndex("name");
             int id = cursor.getColumnIndex("id");
