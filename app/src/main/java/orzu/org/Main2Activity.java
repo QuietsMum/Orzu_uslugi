@@ -134,6 +134,8 @@ public class Main2Activity extends AppCompatActivity
         Common.utoken = c.getString(tokenColIndex);
         c.close();
 
+
+
         ContentValues cv = new ContentValues();
         cv.put("id", "1");
         cv.put("name", "mako");
@@ -195,7 +197,12 @@ public class Main2Activity extends AppCompatActivity
                     NotificationManager mNotificationManager;
                     NotificationCompat.Builder mBuilder =
                             new NotificationCompat.Builder(Main2Activity.this.getApplicationContext(), "notify_001");
-                    Intent ii = new Intent(Main2Activity.this.getApplicationContext(), Main2Activity.class);
+                    Intent ii = new Intent(Main2Activity.this, Main2Activity.class);
+                    final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putBoolean("openNotification", true);
+                    editor.apply();
+                    ii.putExtra("openNotification", "asdasdsd");
                     PendingIntent pendingIntent = PendingIntent.getActivity(Main2Activity.this, 0, ii, 0);
                     NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
                     bigText.bigText(jobject.getString("user"));
@@ -280,6 +287,17 @@ public class Main2Activity extends AppCompatActivity
             e.printStackTrace();
 
             return null;
+        }
+    }
+    @Override
+    protected void onNewIntent(Intent intent) {
+        SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
+
+        if(prefs.getBoolean("openNotification",false)){
+            onNavigationItemSelected(navigationView.getMenu().getItem(3));
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("openNotification", false);
+            editor.apply();
         }
     }
 
@@ -367,6 +385,7 @@ public class Main2Activity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (resultCode == Activity.RESULT_OK && requestCode == 100) {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag("fragment3");
             fragment.onActivityResult(requestCode, resultCode, data);

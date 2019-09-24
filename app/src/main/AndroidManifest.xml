@@ -112,6 +112,7 @@
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".LoginActivity2"
