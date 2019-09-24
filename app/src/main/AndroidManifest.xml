@@ -19,14 +19,16 @@
         android:roundIcon="@drawable/ic_logo_01"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:screenOrientation="portrait"
         android:usesCleartextTraffic="true">
+        <activity android:name=".RegistCity"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ChatActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:screenOrientation="portrait" >
-
-        </activity>
-        <activity android:name=".ChangePasswordActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"></activity>
+        <activity
+            android:name=".ChangePasswordActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".CategorySubscriptions"
@@ -111,8 +113,8 @@
         <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
-            android:screenOrientation="portrait"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".LoginActivity2"

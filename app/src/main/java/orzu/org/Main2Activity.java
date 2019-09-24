@@ -234,7 +234,7 @@ public class Main2Activity extends AppCompatActivity
                     db.insert("orzunotif", null, cv);
                     db.close();
                     dbHelper.close();
-                    Log.e("message", "Received event with data: " + jobject.getString("message"));
+                    Log.e("message", "Received event with data: " + event.getData());
 
                 } catch (JSONException e) {
                     e.printStackTrace();

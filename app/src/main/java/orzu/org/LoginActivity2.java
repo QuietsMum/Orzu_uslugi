@@ -402,7 +402,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                     mStatus = obj.getString("check");
 
                     if (obj.getString("check").equals("yes")) {
-                        Intent intent = new Intent(getApplicationContext(), ViewpagerStart.class);
+                        Intent intent = new Intent(getApplicationContext(), RegistCity.class);
                         startActivity(intent);
                         progressBar.setVisibility(View.INVISIBLE);
                         finish();
