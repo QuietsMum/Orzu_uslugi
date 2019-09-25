@@ -79,7 +79,8 @@ public class NotificationSettings extends AppCompatActivity {
             time_of_notif.setVisibility(View.INVISIBLE);
         }
         SharedPreferences.Editor editor = prefs.edit();
-
+        from_time_text.setText(prefs.getString("from_time","07:00"));
+        to_time_text.setText(prefs.getString("to_time","00:00"));
         disable_notif.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
