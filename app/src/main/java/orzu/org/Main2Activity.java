@@ -592,6 +592,11 @@ public class Main2Activity extends AppCompatActivity
 
     public void changeImage() {
         imageBlur.setImageDrawable(Common.d);
+        Blurry.with(this)
+                .radius(10)
+                .sampling(4)
+                .capture(userviewBtn)
+                .into(imageBlur);
         nav_user.setImageDrawable(Common.d);
         nav_user_name.setText(Common.name);
     }
