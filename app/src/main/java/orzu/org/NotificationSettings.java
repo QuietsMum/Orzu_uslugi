@@ -26,7 +26,11 @@ public class NotificationSettings extends AppCompatActivity {
 
         switch_notif = findViewById(R.id.switch_notif);
 
-        switch_notif.setChecked(prefs.getBoolean("enableNotifiaction",false));
+        if(prefs.getBoolean("enableNotifiaction",false)) {
+            switch_notif.setChecked(false);
+        }else{
+            switch_notif.setChecked(true);
+        }
 
         SharedPreferences.Editor editor = prefs.edit();
 
