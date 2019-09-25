@@ -129,8 +129,8 @@ public class NotificationSettings extends AppCompatActivity {
                 dialog.setContentView(R.layout.timepicker_dialog);
                 time = dialog.findViewById(R.id.date_picker);
                 time.setIs24HourView(true);
-                time.setHour(02);
-                time.setMinute(00);
+                time.setHour(7);
+                time.setMinute(0);
                 TextView choose = dialog.findViewById(R.id.button_choose);
 
                 choose.setOnClickListener(new View.OnClickListener() {
@@ -166,6 +166,7 @@ public class NotificationSettings extends AppCompatActivity {
                     public void onClick(View view) {
                         to_time_text.setText(String.format("%02d:%02d", time.getHour(), time.getMinute()));
                         editor.putString("to_time",to_time_text.getText().toString());
+                        editor.putString("from_time",from_time_text.getText().toString());
                         editor.apply();
                         dialog.dismiss();
                     }
