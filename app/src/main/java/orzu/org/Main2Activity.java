@@ -154,7 +154,6 @@ public class Main2Activity extends AppCompatActivity
         db.close();
         dbHelper.close();
 
-
         PusherOptions options = new PusherOptions();
         options.setCluster("mt1");
         Pusher pusher = new Pusher("585acb6bbd7f6860658a", options);
@@ -189,7 +188,7 @@ public class Main2Activity extends AppCompatActivity
                 try {
                     final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
                     JSONObject jobject = new JSONObject(event.getData());
-                    if (prefs.getBoolean("enableNotifiaction", false)) {
+                    if (!prefs.getBoolean("disableNotifiaction", false)) {
                         NotificationManager mNotificationManager;
                         NotificationCompat.Builder mBuilder =
                                 new NotificationCompat.Builder(Main2Activity.this.getApplicationContext(), "notify_001");
@@ -223,6 +222,91 @@ public class Main2Activity extends AppCompatActivity
                         mNotificationManager.createNotificationChannel(channel1);
                         mBuilder.setChannelId(channelId);
                         mNotificationManager.notify(0, mBuilder.build());
+
+                    }else{
+                        if(prefs.getBoolean("enableTime",false)) {
+                            Log.wtf("Notif123","second");
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+                            String [] currentTimeStamp = dateFormat.format(new Date()).split(":");
+                            String[] from = prefs.getString("from_time","02:00").split(":");
+                            String[] to = prefs.getString("to_time","08:00").split(":");
+
+                            if(!(Integer.parseInt(currentTimeStamp[0])>Integer.parseInt(from[0])&&Integer.parseInt(currentTimeStamp[0])<=Integer.parseInt(to[0]))) {
+                                if(Integer.parseInt(currentTimeStamp[0])==Integer.parseInt(to[0])){
+                                    if(Integer.parseInt(currentTimeStamp[1])>Integer.parseInt(to[1])){
+                                        Log.wtf("Notif123","Thrd");
+
+                                        NotificationManager mNotificationManager;
+                                        NotificationCompat.Builder mBuilder =
+                                                new NotificationCompat.Builder(Main2Activity.this.getApplicationContext(), "notify_001");
+                                        Intent ii = new Intent(Main2Activity.this, Main2Activity.class);
+
+                                        SharedPreferences.Editor editor = prefs.edit();
+                                        editor.putBoolean("openNotification", true);
+                                        editor.apply();
+                                        ii.putExtra("openNotification", "asdasdsd");
+                                        PendingIntent pendingIntent = PendingIntent.getActivity(Main2Activity.this, 0, ii, 0);
+                                        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+                                        bigText.bigText(jobject.getString("user"));
+                                        bigText.setBigContentTitle(jobject.getString("message"));
+                                        bigText.setSummaryText("date");
+                                        mBuilder.setContentIntent(pendingIntent);
+                                        mBuilder.setSmallIcon(R.mipmap.ic_launcher);
+                                        mBuilder.setContentTitle(jobject.getString("user"));
+                                        mBuilder.setContentText(jobject.getString("message"));
+                                        mBuilder.setPriority(Notification.PRIORITY_MAX);
+                                        mBuilder.setStyle(bigText);
+                                        mNotificationManager =
+                                                (NotificationManager) Main2Activity.this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+// === Removed some obsoletes
+
+                                        String channelId = "Your_channel_id";
+                                        NotificationChannel channel1 = new NotificationChannel(
+                                                channelId,
+                                                "Channel human readable title",
+                                                NotificationManager.IMPORTANCE_DEFAULT);
+                                        mNotificationManager.createNotificationChannel(channel1);
+                                        mBuilder.setChannelId(channelId);
+                                        mNotificationManager.notify(0, mBuilder.build());
+                                    }
+                                }else{
+                                    NotificationManager mNotificationManager;
+                                    NotificationCompat.Builder mBuilder =
+                                            new NotificationCompat.Builder(Main2Activity.this.getApplicationContext(), "notify_001");
+                                    Intent ii = new Intent(Main2Activity.this, Main2Activity.class);
+
+                                    SharedPreferences.Editor editor = prefs.edit();
+                                    editor.putBoolean("openNotification", true);
+                                    editor.apply();
+                                    ii.putExtra("openNotification", "asdasdsd");
+                                    PendingIntent pendingIntent = PendingIntent.getActivity(Main2Activity.this, 0, ii, 0);
+                                    NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+                                    bigText.bigText(jobject.getString("user"));
+                                    bigText.setBigContentTitle(jobject.getString("message"));
+                                    bigText.setSummaryText("date");
+                                    mBuilder.setContentIntent(pendingIntent);
+                                    mBuilder.setSmallIcon(R.mipmap.ic_launcher);
+                                    mBuilder.setContentTitle(jobject.getString("user"));
+                                    mBuilder.setContentText(jobject.getString("message"));
+                                    mBuilder.setPriority(Notification.PRIORITY_MAX);
+                                    mBuilder.setStyle(bigText);
+                                    mNotificationManager =
+                                            (NotificationManager) Main2Activity.this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+// === Removed some obsoletes
+
+                                    String channelId = "Your_channel_id";
+                                    NotificationChannel channel1 = new NotificationChannel(
+                                            channelId,
+                                            "Channel human readable title",
+                                            NotificationManager.IMPORTANCE_DEFAULT);
+                                    mNotificationManager.createNotificationChannel(channel1);
+                                    mBuilder.setChannelId(channelId);
+                                    mNotificationManager.notify(0, mBuilder.build());
+                                }
+                            }
+                        }
                     }
 
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -591,11 +675,6 @@ public class Main2Activity extends AppCompatActivity
 
     public void changeImage() {
         imageBlur.setImageDrawable(Common.d);
-        Blurry.with(this)
-                .radius(10)
-                .sampling(4)
-                .capture(userviewBtn)
-                .into(imageBlur);
         nav_user.setImageDrawable(Common.d);
         nav_user_name.setText(Common.name);
         Blurry.with(this)
