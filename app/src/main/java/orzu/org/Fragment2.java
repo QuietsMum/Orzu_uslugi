@@ -218,7 +218,8 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.settings_item_notif:
-
+                Intent intent = new Intent(getActivity(),NotificationSettings.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

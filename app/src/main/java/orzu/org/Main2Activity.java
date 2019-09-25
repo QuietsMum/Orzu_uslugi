@@ -15,29 +15,20 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
 import android.os.Handler;
-import android.provider.Settings;
-import android.util.Base64;
 import android.util.JsonReader;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.fxn.pix.Pix;
 import com.google.android.material.navigation.NavigationView;
 import com.pusher.client.Pusher;
 import com.pusher.client.PusherOptions;
@@ -47,6 +38,7 @@ import com.pusher.client.channel.SubscriptionEventListener;
 import com.pusher.client.connection.ConnectionEventListener;
 import com.pusher.client.connection.ConnectionState;
 import com.pusher.client.connection.ConnectionStateChange;
+import com.pusher.pushnotifications.PushNotifications;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
@@ -64,13 +56,11 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -107,6 +97,11 @@ public class Main2Activity extends AppCompatActivity
     ImageView imageBlur;
     TextView nav_user_name;
 
+    private void setupBeams() {
+        PushNotifications.start(this, "id");
+        PushNotifications.subscribe("asd");
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +128,6 @@ public class Main2Activity extends AppCompatActivity
         Common.userId = idUser;
         Common.utoken = c.getString(tokenColIndex);
         c.close();
-
 
 
         ContentValues cv = new ContentValues();
@@ -193,40 +187,44 @@ public class Main2Activity extends AppCompatActivity
             @Override
             public void onEvent(PusherEvent event) {
                 try {
-                    JSONObject jobject = new JSONObject(event.getData());
-                    NotificationManager mNotificationManager;
-                    NotificationCompat.Builder mBuilder =
-                            new NotificationCompat.Builder(Main2Activity.this.getApplicationContext(), "notify_001");
-                    Intent ii = new Intent(Main2Activity.this, Main2Activity.class);
                     final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putBoolean("openNotification", true);
-                    editor.apply();
-                    ii.putExtra("openNotification", "asdasdsd");
-                    PendingIntent pendingIntent = PendingIntent.getActivity(Main2Activity.this, 0, ii, 0);
-                    NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
-                    bigText.bigText(jobject.getString("user"));
-                    bigText.setBigContentTitle(jobject.getString("message"));
-                    bigText.setSummaryText("date");
-                    mBuilder.setContentIntent(pendingIntent);
-                    mBuilder.setSmallIcon(R.mipmap.ic_launcher);
-                    mBuilder.setContentTitle(jobject.getString("user"));
-                    mBuilder.setContentText(jobject.getString("message"));
-                    mBuilder.setPriority(Notification.PRIORITY_MAX);
-                    mBuilder.setStyle(bigText);
-                    mNotificationManager =
-                            (NotificationManager) Main2Activity.this.getSystemService(Context.NOTIFICATION_SERVICE);
+                    JSONObject jobject = new JSONObject(event.getData());
+                    if (prefs.getBoolean("enableNotifiaction", false)) {
+                        NotificationManager mNotificationManager;
+                        NotificationCompat.Builder mBuilder =
+                                new NotificationCompat.Builder(Main2Activity.this.getApplicationContext(), "notify_001");
+                        Intent ii = new Intent(Main2Activity.this, Main2Activity.class);
+
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putBoolean("openNotification", true);
+                        editor.apply();
+                        ii.putExtra("openNotification", "asdasdsd");
+                        PendingIntent pendingIntent = PendingIntent.getActivity(Main2Activity.this, 0, ii, 0);
+                        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+                        bigText.bigText(jobject.getString("user"));
+                        bigText.setBigContentTitle(jobject.getString("message"));
+                        bigText.setSummaryText("date");
+                        mBuilder.setContentIntent(pendingIntent);
+                        mBuilder.setSmallIcon(R.mipmap.ic_launcher);
+                        mBuilder.setContentTitle(jobject.getString("user"));
+                        mBuilder.setContentText(jobject.getString("message"));
+                        mBuilder.setPriority(Notification.PRIORITY_MAX);
+                        mBuilder.setStyle(bigText);
+                        mNotificationManager =
+                                (NotificationManager) Main2Activity.this.getSystemService(Context.NOTIFICATION_SERVICE);
 
 // === Removed some obsoletes
 
-                    String channelId = "Your_channel_id";
-                    NotificationChannel channel1 = new NotificationChannel(
-                            channelId,
-                            "Channel human readable title",
-                            NotificationManager.IMPORTANCE_DEFAULT);
-                    mNotificationManager.createNotificationChannel(channel1);
-                    mBuilder.setChannelId(channelId);
-                    mNotificationManager.notify(0, mBuilder.build());
+                        String channelId = "Your_channel_id";
+                        NotificationChannel channel1 = new NotificationChannel(
+                                channelId,
+                                "Channel human readable title",
+                                NotificationManager.IMPORTANCE_DEFAULT);
+                        mNotificationManager.createNotificationChannel(channel1);
+                        mBuilder.setChannelId(channelId);
+                        mNotificationManager.notify(0, mBuilder.build());
+                    }
+
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     ContentValues cv = new ContentValues();
                     cv.put("idUser", jobject.getString("user"));
@@ -289,11 +287,12 @@ public class Main2Activity extends AppCompatActivity
             return null;
         }
     }
+
     @Override
     protected void onNewIntent(Intent intent) {
         SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
 
-        if(prefs.getBoolean("openNotification",false)){
+        if (prefs.getBoolean("openNotification", false)) {
             onNavigationItemSelected(navigationView.getMenu().getItem(3));
             SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean("openNotification", false);
@@ -599,5 +598,10 @@ public class Main2Activity extends AppCompatActivity
                 .into(imageBlur);
         nav_user.setImageDrawable(Common.d);
         nav_user_name.setText(Common.name);
+        Blurry.with(this)
+                .radius(10)
+                .sampling(4)
+                .capture(userviewBtn)
+                .into(imageBlur);
     }
 }

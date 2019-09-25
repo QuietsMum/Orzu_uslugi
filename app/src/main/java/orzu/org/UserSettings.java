@@ -19,6 +19,7 @@ public class UserSettings extends AppCompatActivity implements View.OnClickListe
     LinearLayout buttonEdit;
     LinearLayout buttonLogout;
     LinearLayout button_change_password;
+    LinearLayout btn_notif_settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +34,11 @@ public class UserSettings extends AppCompatActivity implements View.OnClickListe
         buttonEdit = findViewById(R.id.button_edit_profile);
         buttonLogout = findViewById(R.id.button_logout);
         button_change_password = findViewById(R.id.button_change_password);
+        btn_notif_settings = findViewById(R.id.btn_notif_settings);
         buttonEdit.setOnClickListener(this);
         buttonLogout.setOnClickListener(this);
         button_change_password.setOnClickListener(this);
+        btn_notif_settings.setOnClickListener(this);
     }
 
 
@@ -60,6 +63,10 @@ public class UserSettings extends AppCompatActivity implements View.OnClickListe
             case R.id.button_change_password:
                 Intent intent2 = new Intent(this, ChangePasswordActivity.class);
                 startActivity(intent2);
+                break;
+            case R.id.btn_notif_settings:
+                Intent intent3 = new Intent(this, NotificationSettings.class);
+                startActivity(intent3);
                 break;
             case R.id.button_logout:
                 DBHelper dbHelper = new DBHelper(this);
