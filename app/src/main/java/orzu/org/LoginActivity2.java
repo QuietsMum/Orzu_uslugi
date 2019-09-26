@@ -236,14 +236,6 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                     public void onClick(View v) {
                         try {
                             getSMSResponse();
-                            SQLiteDatabase db = dbHelper.getWritableDatabase();
-                            ContentValues cv = new ContentValues();
-                            cv.put("id", mID);
-                            cv.put("token", mToken);
-                            cv.put("name", mName);
-                            db.insert("orzutable", null, cv);
-                            db.close();
-                            dbHelper.close();
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -402,6 +394,14 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                     mStatus = obj.getString("check");
 
                     if (obj.getString("check").equals("yes")) {
+                        SQLiteDatabase db = dbHelper.getWritableDatabase();
+                        ContentValues cv = new ContentValues();
+                        cv.put("id", mID);
+                        cv.put("token", mToken);
+                        cv.put("name", mName);
+                        db.insert("orzutable", null, cv);
+                        db.close();
+                        dbHelper.close();
                         Intent intent = new Intent(getApplicationContext(), RegistCity.class);
                         startActivity(intent);
                         progressBar.setVisibility(View.INVISIBLE);

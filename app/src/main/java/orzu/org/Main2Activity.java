@@ -158,7 +158,7 @@ public class Main2Activity extends AppCompatActivity
         PusherOptions options = new PusherOptions();
         options.setCluster("mt1");
         Pusher pusher = new Pusher("585acb6bbd7f6860658a", options);
-        Log.e("iduser", idUser);
+        Log.e("iduser", idUser+"");
 
         pusher.connect(new ConnectionEventListener() {
             @Override

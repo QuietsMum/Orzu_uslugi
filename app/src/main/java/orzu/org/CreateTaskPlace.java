@@ -89,11 +89,11 @@ public class CreateTaskPlace extends AppCompatActivity implements View.OnClickLi
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        MapKitFactory.setApiKey("38c4c9bc-766a-4574-8088-18a4e7583a90");
-        MapKitFactory.initialize(this);
-        SearchFactory.initialize(this);
         getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
         setContentView(R.layout.activity_create_task_place);
+        MapKitFactory.setApiKey("38c4c9bc-766a-4574-8088-18a4e7583a90");
+        MapKitFactory.initialize(CreateTaskPlace.this);
+        SearchFactory.initialize(CreateTaskPlace.this);
         super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("Создать задание");
         getSupportActionBar().setHomeButtonEnabled(true);
