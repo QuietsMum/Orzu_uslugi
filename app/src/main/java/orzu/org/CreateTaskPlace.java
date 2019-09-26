@@ -15,6 +15,7 @@ import android.graphics.drawable.ColorDrawable;
 
 import android.os.Bundle;
 
+import android.os.PersistableBundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -89,12 +90,12 @@ public class CreateTaskPlace extends AppCompatActivity implements View.OnClickLi
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        MapKitFactory.setApiKey("38c4c9bc-766a-4574-8088-18a4e7583a90");
+        MapKitFactory.initialize(this);
+        SearchFactory.initialize(this);
+        super.onCreate(savedInstanceState);
         getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
         setContentView(R.layout.activity_create_task_place);
-        MapKitFactory.setApiKey("38c4c9bc-766a-4574-8088-18a4e7583a90");
-        MapKitFactory.initialize(CreateTaskPlace.this);
-        SearchFactory.initialize(CreateTaskPlace.this);
-        super.onCreate(savedInstanceState);
         getSupportActionBar().setTitle("Создать задание");
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -111,7 +112,6 @@ public class CreateTaskPlace extends AppCompatActivity implements View.OnClickLi
         buttonCreateLeft.setOnClickListener(this);
         buttonCreateRight.setOnClickListener(this);
         fa = this;
-
         searchManager = SearchFactory.getInstance().createSearchManager(SearchManagerType.COMBINED);
         queryEdit = (EditText) findViewById(R.id.suggest_query);
         suggestResultView = findViewById(R.id.suggest_result);

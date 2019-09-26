@@ -16,7 +16,6 @@
         android:icon="@drawable/ic_logo_01"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:process=":somenamehere"
         android:roundIcon="@drawable/ic_logo_01"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
