@@ -56,6 +56,7 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
     SQLiteDatabase db;
     ImageView no_task;
     TextView no_task_text;
+    String idUser;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,16 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstantState) {
         final View view = inflater.inflate(R.layout.fragment_main_2, container, false);
+
+        dbHelper = new DBHelper(getActivity());
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor c = db.query("orzutable", null, null, null, null, null, null);
+        c.moveToFirst();
+        int idColIndex = c.getColumnIndex("id");
+        int tokenColIndex = c.getColumnIndex("token");
+        idUser = c.getString(idColIndex);
+        c.close();
+        db.close();
 
         customTabs = view.findViewById(R.id.custom_tabs);
         ProgressBar progressBar = view.findViewById(R.id.progressBarMain2);
@@ -92,6 +103,31 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
         adapter = new AdapterDifferentLayout(getActivity(), lit);
         rv.setAdapter(adapter);
         rv_of_chat.setAdapter(chatAdapter);
+
+        adapter.setClickListener(new AdapterDifferentLayout.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+
+               Log.e("type", String.valueOf(adapter.getItemViewType(position)));
+
+               if (adapter.getItemViewType(position) == 103){
+                   Intent intent = new Intent(getActivity(), ItemSubsNews.class);
+                   startActivity(intent);
+                } else if(adapter.getItemViewType(position) == 101){
+                   Intent intent = new Intent(getActivity(), TaskViewMain.class);
+                   intent.putExtra("id", "13");
+                   intent.putExtra("opt", "view");
+                   intent.putExtra("mytask", "my");
+                   startActivity(intent);
+               } else if(adapter.getItemViewType(position) == 102){
+                   Intent intent = new Intent(getActivity(), Feedback.class);
+                   intent.putExtra("idUserFeedback", idUser);
+                   startActivity(intent);
+               }
+
+
+            }
+        });
 
         chatAdapter.setClickListener(new ChatAdapter.ItemClickListener() {
             @Override
@@ -162,17 +198,17 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
                     OtklikITem item1 = new OtklikITem("Вся правда о кондиционерах", "Максимально упрощайте ежедневные задачи для большей продуктивности рабочего дня");
                     ChooseYouItem item2 = new ChooseYouItem("Nikita", "Android develop", "10000$", "Making apps", "13,09,2018 10:20");
                     feedbackItem item3 = new feedbackItem(R.drawable.images_background_4, "Иван Иваныч", "2", "qwe", "Безопасная оплата картой и гарантия возврата денег. Компенсация в случае морального ущерба.");
-                    lit.add(item3);
-                    lit.add(item2);
-                    lit.add(item1);
-                    lit.add(item3);
-                    lit.add(item2);
-                    lit.add(item1);
-                    lit.add(item2);
-                    lit.add(item3);
                     messageNot = c.getString(mesColIndex);
                     idUserNot = c.getString(idColIndex);
                     feedbackItem item4 = new feedbackItem(R.drawable.images_background_4, idUserNot, "2", "qwe", messageNot);
+                    lit.add(item3);
+                    lit.add(item2);
+                    lit.add(item1);
+                    lit.add(item3);
+                    lit.add(item2);
+                    lit.add(item1);
+                    lit.add(item2);
+                    lit.add(item3);
                     lit.add(item4);
                     customTabs.setVisibility(View.VISIBLE);
                     no_task.setVisibility(View.INVISIBLE);
@@ -186,6 +222,8 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
                 }
             } while (c.moveToNext());
         }
+        adapter = new AdapterDifferentLayout(getActivity(), lit);
+        adapter.notifyDataSetChanged();
         c.close();
         dbHelper.close();
         db.close();

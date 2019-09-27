@@ -67,17 +67,6 @@ public class AdapterRespandableLV extends BaseExpandableListAdapter {
 
         text.setChecked(tempChild.get(childPosition).getCheck());
 
-        /*text.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(text.isChecked()){
-                    text.setChecked(false);
-                }else{
-                    text.setChecked(true);
-                }
-                Log.wtf("adapter",childPosition+" "+groupPosition);
-            }
-        });*/
         return convertView;
     }
 

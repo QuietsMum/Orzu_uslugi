@@ -116,16 +116,12 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
         expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
-                Log.wtf("asdsdq", "asdsad");
                 if (((ArrayList<SubItem>) childItem.get(i)).get(i1).getCheck()) {
                     ((ArrayList<SubItem>) childItem.get(i)).get(i1).setCheck(false);
                     model.mapa.remove(((ArrayList<SubItem>) childItem.get(i)).get(i1).getParent_id()+";"+((ArrayList<SubItem>) childItem.get(i)).get(i1).getId());
                 } else {
                     ((ArrayList<SubItem>) childItem.get(i)).get(i1).setCheck(true);
                     model.mapa.put(((ArrayList<SubItem>) childItem.get(i)).get(i1).getParent_id()+";"+((ArrayList<SubItem>) childItem.get(i)).get(i1).getId(),((ArrayList<SubItem>) childItem.get(i)).get(i1).getId());
-                    for (Map.Entry<String, String> entry : model.mapa.entrySet()) {
-                        Log.wtf("forik", entry.getKey());
-                    }
                 }
                 mNewAdapter.notifyDataSetChanged();
                 return false;
@@ -309,7 +305,7 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
         c.close();
         db.close();
         String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_user&user_cat=" + idUser;
-
+        subsServer =  new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
@@ -355,6 +351,7 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
                         try {
                             Object value = jsonObject.get(key);
                             subsServer.add(key);
+                            Log.e("ininininin123123", subsServer.get(i));
                         } catch (JSONException e) {
                         }
                         i++;
@@ -374,9 +371,15 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
     public void requestSubsServerAdd() {
         pb.setVisibility(View.VISIBLE);
         String modelString = "";
+
+        if (model.mapa.isEmpty()){
+            modelString = "&cat[]=";
+        }
+
         for (Map.Entry<String, String> entry : model.mapa.entrySet()) {
             modelString = modelString + "&cat[]=" + entry.getKey();
         }
+        Log.e("ADDADDADDADDADD", modelString);
         final char dm = (char) 34;
 
         String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param" +

@@ -5,41 +5,25 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 
-import android.content.ComponentName;
-import android.content.ContentValues;
 import android.content.Context;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 
 import android.os.Build;
-import android.os.Handler;
-import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
+
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 
 import com.google.firebase.messaging.RemoteMessage;
-import com.pusher.client.Pusher;
-import com.pusher.client.PusherOptions;
-import com.pusher.client.channel.Channel;
-import com.pusher.client.channel.PusherEvent;
-import com.pusher.client.channel.SubscriptionEventListener;
-import com.pusher.client.connection.ConnectionEventListener;
-import com.pusher.client.connection.ConnectionState;
-import com.pusher.client.connection.ConnectionStateChange;
 import com.pusher.pushnotifications.fcm.MessagingService;
 
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class NotificationsMessagingService extends MessagingService {
     Context context = this;
@@ -49,6 +33,9 @@ public class NotificationsMessagingService extends MessagingService {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onMessageReceived(@NotNull RemoteMessage remoteMessage) {
+
+        Log.e("BEAMS", String.valueOf(remoteMessage));
+/*
         NotificationManager mNotificationManager;
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context.getApplicationContext(), "notify_001");
@@ -80,6 +67,6 @@ public class NotificationsMessagingService extends MessagingService {
                 NotificationManager.IMPORTANCE_DEFAULT);
         mNotificationManager.createNotificationChannel(channel1);
         mBuilder.setChannelId(channelId);
-        mNotificationManager.notify(0, mBuilder.build());
+        mNotificationManager.notify(0, mBuilder.build());*/
     }
 }

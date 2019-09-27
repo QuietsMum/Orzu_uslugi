@@ -1,12 +1,7 @@
 package orzu.org;
 
-
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -18,58 +13,44 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-
 import androidx.annotation.RequiresApi;
-import androidx.core.app.NotificationCompat;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-
 import android.os.Handler;
 import android.util.JsonReader;
 import android.util.Log;
 import android.view.MenuItem;
-
 import com.google.android.material.navigation.NavigationView;
-import com.pusher.client.Pusher;
-import com.pusher.client.PusherOptions;
-import com.pusher.client.channel.Channel;
-import com.pusher.client.channel.PusherEvent;
-import com.pusher.client.channel.SubscriptionEventListener;
-import com.pusher.client.connection.ConnectionEventListener;
-import com.pusher.client.connection.ConnectionState;
-import com.pusher.client.connection.ConnectionStateChange;
+import com.google.firebase.messaging.RemoteMessage;
+import com.pusher.pushnotifications.PushNotificationReceivedListener;
 import com.pusher.pushnotifications.PushNotifications;
-
-
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 
-
-import io.intercom.android.sdk.Intercom;
-import io.intercom.android.sdk.UserAttributes;
-import io.intercom.android.sdk.identity.Registration;
+//
+//import io.intercom.android.sdk.Intercom;
+//import io.intercom.android.sdk.UserAttributes;
+//import io.intercom.android.sdk.identity.Registration;
 import jp.wasabeef.blurry.Blurry;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -79,7 +60,7 @@ import okhttp3.Response;
 
 public class Main2Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
-
+    ArrayList<String> subsServer = new ArrayList<>();
     Fragment fragment = null;
     Class fragmentClass = null;
     JsonReader[] jsonReader;
@@ -97,10 +78,112 @@ public class Main2Activity extends AppCompatActivity
     RelativeLayout userviewBtn;
     ImageView imageBlur;
     TextView nav_user_name;
+    String modelString;
 
     private void setupBeams() {
-        PushNotifications.start(this, "id");
-        PushNotifications.subscribe("asd");
+        PushNotifications.start(getApplicationContext(), "e33cda0a-16d0-41cd-a5c9-8ae60b9b7042");
+        PushNotifications.addDeviceInterest("debug-" + idUser);
+        for (int i = 0; i < subsServer.size(); i++){
+            PushNotifications.addDeviceInterest("debug-" + subsServer.get(i));
+        }
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("idUser", "1231234");
+        cv.put("message", "123123123");
+        db.insert("orzunotif", null, cv);
+        db.close();
+        dbHelper.close();
+       /* for (Map.Entry<String, String> entry : subsServer.entrySet()) {
+            modelString = entry.getValue();
+            PushNotifications.addDeviceInterest("debug-" + modelString.substring(modelString.indexOf(";") + 1));
+            Log.e("ininin123123123", modelString.substring(modelString.indexOf(";") + 1));
+        }*/
+    }
+
+    public void requestSubsServerMain() {
+        dbHelper = new DBHelper(this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor c = db.query("orzutable", null, null, null, null, null, null);
+        c.moveToFirst();
+        int idColIndex = c.getColumnIndex("id");
+        int tokenColIndex = c.getColumnIndex("token");
+        idUser = c.getString(idColIndex);
+        c.close();
+        db.close();
+        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_user&user_cat=" + idUser;
+        subsServer =  new ArrayList<>();
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Main2Activity.this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Dialog dialog = new Dialog(Main2Activity.this, android.R.style.Theme_Material_Light_NoActionBar);
+                        dialog.setContentView(R.layout.dialog_no_internet);
+                        Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                        // if button is clicked, close the custom dialog
+                        dialogButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                requestSubsServerMain();
+                                dialog.dismiss();
+                            }
+                        });
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.show();
+                            }
+                        }, 500);
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String mMessage = response.body().string();
+
+                try {
+                    JSONObject jsonObject = new JSONObject(mMessage);
+                    Iterator<String> iter = jsonObject.keys();
+                    while (iter.hasNext()) {
+                        String key = iter.next();
+                        Object value = jsonObject.get(key);
+                        subsServer.add(key);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                setupBeams();
+            }
+        });
+
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        requestSubsServerMain();
+        PushNotifications.setOnMessageReceivedListenerForVisibleActivity(this, new PushNotificationReceivedListener() {
+            @Override
+            public void onMessageReceived(RemoteMessage remoteMessage) {
+                String messagePayload = remoteMessage.getData().get("inAppNotificationMessage");
+                if (messagePayload == null) {
+                    // Message payload was not set for this notification
+                    Log.i("MyActivity", "Payload was missing");
+                } else {
+                    Log.i("MyActivity", messagePayload);
+                    // Now update the UI based on your message payload!
+                }
+            }
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -119,6 +202,7 @@ public class Main2Activity extends AppCompatActivity
         }
 
 
+
         dbHelper = new DBHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("orzutable", null, null, null, null, null, null);
@@ -130,6 +214,7 @@ public class Main2Activity extends AppCompatActivity
         Common.utoken = c.getString(tokenColIndex);
         c.close();
 
+        requestSubsServerMain();
 
         ContentValues cv = new ContentValues();
         cv.put("id", "1");
@@ -154,7 +239,7 @@ public class Main2Activity extends AppCompatActivity
         db.insert("orzuchat", null, cv);
         db.close();
         dbHelper.close();
-
+/*
         PusherOptions options = new PusherOptions();
         options.setCluster("mt1");
         Pusher pusher = new Pusher("585acb6bbd7f6860658a", options);
@@ -332,8 +417,8 @@ public class Main2Activity extends AppCompatActivity
 
         pusher.connect();
 
-
-        Intercom.initialize(getApplication(), "android_sdk-805f0d44d62fbc8e72058b9c8eee61c94c43c874", "p479kps8");
+*/
+        //Intercom.initialize(getApplication(), "android_sdk-805f0d44d62fbc8e72058b9c8eee61c94c43c874", "p479kps8");
 
         intercomBtn = findViewById(R.id.techsupp);
         intercomBtn.setOnClickListener(this);
@@ -375,6 +460,7 @@ public class Main2Activity extends AppCompatActivity
 
     @Override
     protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
         SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
 
         if (prefs.getBoolean("openNotification", false)) {
@@ -580,7 +666,7 @@ public class Main2Activity extends AppCompatActivity
 
         switch (view.getId()) {
             case R.id.techsupp:
-                Registration registration = Registration.create().withUserId(idUser);
+               /* Registration registration = Registration.create().withUserId(idUser);
                 UserAttributes userAttributes = new UserAttributes.Builder()
                         .withName(mName)
                         .withUserId(idUser)
@@ -589,7 +675,7 @@ public class Main2Activity extends AppCompatActivity
                 Intercom.client().handlePushMessage();
                 Intercom.client().registerIdentifiedUser(registration);
                 Intercom.client().displayMessenger();
-                Intercom.client().setBottomPadding(20);
+                Intercom.client().setBottomPadding(20);*/
                 break;
 
             case R.id.headerOfdrawer:

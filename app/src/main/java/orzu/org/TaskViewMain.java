@@ -63,7 +63,7 @@ import java.util.Objects;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import io.intercom.com.google.gson.JsonArray;
+//import io.intercom.com.google.gson.JsonArray;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;

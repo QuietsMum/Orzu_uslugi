@@ -19,8 +19,11 @@
         android:roundIcon="@drawable/ic_logo_01"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
-        <activity android:name=".NotificationSettings"></activity>
+        android:usesCleartextTraffic="true"
+        android:screenOrientation="portrait">
+        <activity android:name=".ItemSubsNews"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".NotificationSettings" />
 
         <service android:name=".NotificationsMessagingService">
             <intent-filter android:priority="1">
@@ -31,7 +34,7 @@
         <activity
             android:name=".ChatActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ChangePasswordActivity"
             android:screenOrientation="portrait" />
@@ -156,7 +159,6 @@
         <activity
             android:name=".FiltersActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".IntercomActivity" />
     </application>
 
 </manifest>

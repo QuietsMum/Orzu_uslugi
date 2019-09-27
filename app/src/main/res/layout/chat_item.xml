@@ -87,7 +87,7 @@
         android:layout_width="0dp"
         android:layout_height="0.2dp"
         android:layout_marginTop="10dp"
-        android:background="@color/intercom_grey_composer_divider"
+        android:background="@color/colorPrimaryLight"
         app:layout_constraintLeft_toLeftOf="@id/name_of_chat"
         app:layout_constraintRight_toRightOf="@id/time_of_chat"
         app:layout_constraintTop_toBottomOf="@id/card_of_chat_image" />

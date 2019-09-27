@@ -7,8 +7,8 @@ import android.view.Window;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import io.intercom.android.sdk.Intercom;
-import io.intercom.android.sdk.identity.Registration;
+//import io.intercom.android.sdk.Intercom;
+//import io.intercom.android.sdk.identity.Registration;
 
 public class IntercomActivity extends AppCompatActivity {
 

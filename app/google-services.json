@@ -1,34 +1,71 @@
 {
   "project_info": {
-    "project_number": "495965930218",
-    "firebase_url": "https://orzuuslugi.firebaseio.com",
-    "project_id": "orzuuslugi",
-    "storage_bucket": "orzuuslugi.appspot.com"
+    "project_number": "566295266578",
+    "firebase_url": "https://orzu-pusher.firebaseio.com",
+    "project_id": "orzu-pusher",
+    "storage_bucket": "orzu-pusher.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:495965930218:android:5fe8f82e6c67c827",
+        "mobilesdk_app_id": "1:566295266578:android:690ba08a42b92040469fcb",
         "android_client_info": {
           "package_name": "orzu.org"
         }
       },
       "oauth_client": [
         {
-          "client_id": "495965930218-q8be6i76hf8abu1i6t6qdiv88su9d6ok.apps.googleusercontent.com",
+          "client_id": "566295266578-m8pag9eur9qvkjbda9fpku3v3sldepb6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "orzu.org",
+            "certificate_hash": "abccffeb8994fa1034addee8ed70424ff9060e2a"
+          }
+        },
+        {
+          "client_id": "566295266578-en3g27ua3892i3mhihojnidpj3v1ui7r.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAh4Rr1jYcoT64JCZOxSDVP3Tt6jS7aMME"
+          "current_key": "AIzaSyDNQlh0oQJsU_NQa9V2JfWe0NgMDxachzE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "495965930218-q8be6i76hf8abu1i6t6qdiv88su9d6ok.apps.googleusercontent.com",
+              "client_id": "566295266578-en3g27ua3892i3mhihojnidpj3v1ui7r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:566295266578:android:98df20a322bc395a469fcb",
+        "android_client_info": {
+          "package_name": "orzu.pusher"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "566295266578-en3g27ua3892i3mhihojnidpj3v1ui7r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNQlh0oQJsU_NQa9V2JfWe0NgMDxachzE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "566295266578-en3g27ua3892i3mhihojnidpj3v1ui7r.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
