@@ -26,7 +26,7 @@
         android:id="@+id/notif_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Вам пришло сообщение"
+        android:text="+1 отклик"
         android:textColor="@color/colorBackgrndFrg"
         android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"

@@ -151,7 +151,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="Новости"
-                    android:textColor="@color/colorTextDark"
+                    android:textColor="@color/colorTextGrad"
                     android:textSize="12sp" />
 
             </LinearLayout>
