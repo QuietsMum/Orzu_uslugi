@@ -272,7 +272,7 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
                 btnNotif.setBackgroundResource(R.drawable.circle_button_left_solid);
                 btnNotif.setTextColor(getResources().getColor(R.color.colorBackgrndFrg));
                 btnMessage.setBackgroundResource(R.drawable.circle_button_right);
-                btnMessage.setTextColor(getResources().getColor(R.color.colorAccent));
+                btnMessage.setTextColor(getResources().getColor(R.color.colorTextGrad));
 
                 customTabs.setVisibility(View.VISIBLE);
                 rv.setVisibility(View.VISIBLE);
@@ -281,7 +281,7 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
                 break;
             case R.id.notif_buttonright:
                 btnNotif.setBackgroundResource(R.drawable.circle_button_left);
-                btnNotif.setTextColor(getResources().getColor(R.color.colorAccent));
+                btnNotif.setTextColor(getResources().getColor(R.color.colorTextGrad));
                 btnMessage.setBackgroundResource(R.drawable.circle_button_right_solid);
                 btnMessage.setTextColor(getResources().getColor(R.color.colorBackgrndFrg));
 

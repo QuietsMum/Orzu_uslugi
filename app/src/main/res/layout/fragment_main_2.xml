@@ -98,7 +98,7 @@
                         android:background="@drawable/circle_button_right"
                         android:gravity="center"
                         android:text="Сообщения"
-                        android:textColor="@color/colorAccent" />
+                        android:textColor="@color/colorTextGrad" />
 
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -121,7 +121,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="Все уведомления"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="@color/colorTextGrad"
                     android:textSize="12sp" />
 
                 <TextView
@@ -141,7 +141,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="Системные уведомления"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/colorPrimaryLightPix"
                     android:textSize="12sp" />
 
                 <TextView
