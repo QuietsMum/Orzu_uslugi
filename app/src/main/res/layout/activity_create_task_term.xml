@@ -70,7 +70,7 @@
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
                     android:elevation="1dp"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="@color/colorTextGrad"
                     android:text="@string/dogovorus"
                     android:textSize="14sp"
                     android:maxLines="2"
@@ -98,7 +98,7 @@
                     android:layout_gravity="center"
                     android:elevation="1dp"
                     android:paddingEnd="8dp"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="@color/colorTextGrad"
                     android:text="@string/truedate"
                     android:textSize="14sp"
                     android:background="@drawable/circle_button_right"/>
@@ -180,7 +180,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:gravity="center_vertical"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="@color/colorTextGrad"
 
                     android:text="@string/example_term_text_to"/>
 
@@ -189,7 +189,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:gravity="end|center_vertical"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="@color/colorTextGrad"
                     android:text="--.--.--"/>
 
             </LinearLayout>

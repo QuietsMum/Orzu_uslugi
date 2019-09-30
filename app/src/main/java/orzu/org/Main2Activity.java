@@ -91,8 +91,6 @@ public class Main2Activity extends AppCompatActivity
         cv.put("idUser", "1231234");
         cv.put("message", "123123123");
         db.insert("orzunotif", null, cv);
-        db.close();
-        dbHelper.close();
        /* for (Map.Entry<String, String> entry : subsServer.entrySet()) {
             modelString = entry.getValue();
             PushNotifications.addDeviceInterest("debug-" + modelString.substring(modelString.indexOf(";") + 1));

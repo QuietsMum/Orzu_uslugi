@@ -198,7 +198,7 @@ public class CreateTaskPlace extends AppCompatActivity implements View.OnClickLi
                 buttonCreateLeft.setBackgroundResource(R.drawable.circle_button_left_solid);
                 buttonCreateLeft.setTextColor(getResources().getColor(R.color.colorBackgrndFrg));
                 buttonCreateRight.setBackgroundResource(R.drawable.circle_button_right);
-                buttonCreateRight.setTextColor(getResources().getColor(R.color.colorAccent));
+                buttonCreateRight.setTextColor(getResources().getColor(R.color.colorTextGrad));
                 break;
 
             case R.id.createPlace_buttonright:
@@ -206,7 +206,7 @@ public class CreateTaskPlace extends AppCompatActivity implements View.OnClickLi
                 textFar.setVisibility(View.VISIBLE);
                 queryEdit.setVisibility(View.INVISIBLE);
                 buttonCreateLeft.setBackgroundResource(R.drawable.circle_button_left);
-                buttonCreateLeft.setTextColor(getResources().getColor(R.color.colorAccent));
+                buttonCreateLeft.setTextColor(getResources().getColor(R.color.colorTextGrad));
                 buttonCreateRight.setBackgroundResource(R.drawable.circle_button_right_solid);
                 buttonCreateRight.setTextColor(getResources().getColor(R.color.colorBackgrndFrg));
                 break;

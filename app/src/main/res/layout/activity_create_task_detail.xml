@@ -391,7 +391,7 @@
                             android:layout_height="wrap_content"
                             android:padding="8dp"
                             android:text="@string/photo_plus"
-                            android:textColor="@color/colorAccent"
+                            android:textColor="@color/colorTextGrad"
                             android:textSize="18sp" />
 
                     </LinearLayout>

@@ -249,9 +249,9 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
                 switch1.setBackgroundResource(R.drawable.circle_button_left_solid);
                 switch1.setTextColor(getResources().getColor(R.color.colorBackgrndFrg));
                 switch2.setBackgroundResource(R.drawable.circle_button_center);
-                switch2.setTextColor(getResources().getColor(R.color.colorAccent));
+                switch2.setTextColor(getResources().getColor(R.color.colorTextGrad));
                 switch3.setBackgroundResource(R.drawable.circle_button_right);
-                switch3.setTextColor(getResources().getColor(R.color.colorAccent));
+                switch3.setTextColor(getResources().getColor(R.color.colorTextGrad));
                 spiner.setVisibility(View.INVISIBLE);
                 text_examle1.setVisibility(View.VISIBLE);
                 lin_examlpe1_1.setVisibility(View.INVISIBLE);
@@ -261,11 +261,11 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
             case R.id.createTerm_buttoncenter:
                 counterDef = 2;
                 switch1.setBackgroundResource(R.drawable.circle_button_left);
-                switch1.setTextColor(getResources().getColor(R.color.colorAccent));
+                switch1.setTextColor(getResources().getColor(R.color.colorTextGrad));
                 switch2.setBackgroundResource(R.drawable.circle_button_center_solid);
                 switch2.setTextColor(getResources().getColor(R.color.colorBackgrndFrg));
                 switch3.setBackgroundResource(R.drawable.circle_button_right);
-                switch3.setTextColor(getResources().getColor(R.color.colorAccent));
+                switch3.setTextColor(getResources().getColor(R.color.colorTextGrad));
                 spiner.setVisibility(View.INVISIBLE);
                 text_examle1.setVisibility(View.INVISIBLE);
                 lin_examlpe1_1.setVisibility(View.VISIBLE);
@@ -275,9 +275,9 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
             case R.id.createTerm_buttonright:
                 counterDef = 3;
                 switch1.setBackgroundResource(R.drawable.circle_button_left);
-                switch1.setTextColor(getResources().getColor(R.color.colorAccent));
+                switch1.setTextColor(getResources().getColor(R.color.colorTextGrad));
                 switch2.setBackgroundResource(R.drawable.circle_button_center);
-                switch2.setTextColor(getResources().getColor(R.color.colorAccent));
+                switch2.setTextColor(getResources().getColor(R.color.colorTextGrad));
                 switch3.setBackgroundResource(R.drawable.circle_button_right_solid);
                 switch3.setTextColor(getResources().getColor(R.color.colorBackgrndFrg));
                 spiner.setVisibility(View.VISIBLE);

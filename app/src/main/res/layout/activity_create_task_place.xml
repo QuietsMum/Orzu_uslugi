@@ -88,7 +88,7 @@
                     android:gravity="center"
                     android:elevation="1dp"
                     android:paddingEnd="8dp"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="@color/colorTextGrad"
                     android:text="@string/example_athome"
                     android:background="@drawable/circle_button_right"/>
 

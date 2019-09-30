@@ -112,7 +112,7 @@ public class CreateTaskAmout extends AppCompatActivity implements View.OnClickLi
                 buttonCreateLeft.setBackgroundResource(R.drawable.circle_button_left_solid);
                 buttonCreateLeft.setTextColor(getResources().getColor(R.color.colorBackgrndFrg));
                 buttonCreateRight.setBackgroundResource(R.drawable.circle_button_right);
-                buttonCreateRight.setTextColor(getResources().getColor(R.color.colorAccent));
+                buttonCreateRight.setTextColor(getResources().getColor(R.color.colorTextGrad));
                 break;
 
             case R.id.createAmout_buttonright:
@@ -120,7 +120,7 @@ public class CreateTaskAmout extends AppCompatActivity implements View.OnClickLi
                 texthisprice.setVisibility(View.VISIBLE);
                 amoutEdit.setVisibility(View.INVISIBLE);
                 buttonCreateLeft.setBackgroundResource(R.drawable.circle_button_left);
-                buttonCreateLeft.setTextColor(getResources().getColor(R.color.colorAccent));
+                buttonCreateLeft.setTextColor(getResources().getColor(R.color.colorTextGrad));
                 buttonCreateRight.setBackgroundResource(R.drawable.circle_button_right_solid);
                 buttonCreateRight.setTextColor(getResources().getColor(R.color.colorBackgrndFrg));
                 break;

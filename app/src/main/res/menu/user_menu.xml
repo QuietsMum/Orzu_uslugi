@@ -6,7 +6,7 @@
     <item
         android:id="@+id/item_subscribe"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/subs_icon"
+        android:icon="@drawable/sub_to_cat_icon"
         android:iconTint="@color/colorBackgrndFrg"
         android:title="@string/subscribes">
     </item>

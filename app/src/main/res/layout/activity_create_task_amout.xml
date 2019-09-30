@@ -81,7 +81,7 @@
                     android:gravity="center"
                     android:elevation="1dp"
                     android:paddingEnd="10dp"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="@color/colorTextGrad"
                     android:text="@string/his_amout"
                     android:background="@drawable/circle_button_right"/>
 

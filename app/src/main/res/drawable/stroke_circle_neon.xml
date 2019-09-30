@@ -5,7 +5,7 @@
         <shape android:shape="oval" >
             <gradient
                 android:angle="360"
-                android:centerColor="#2196f3"
+                android:centerColor="@color/colorPrimary"
                 android:endColor="#ffffff"
                 android:gradientRadius="180"
                 android:startColor="#000522"
@@ -13,7 +13,7 @@
 
             <stroke
                 android:width="20dp"
-                android:color="#2196f3" />
+                android:color="@color/colorPrimary" />
         </shape>
     </item>
     <item
