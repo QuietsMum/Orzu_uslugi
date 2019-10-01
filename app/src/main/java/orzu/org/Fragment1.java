@@ -163,7 +163,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         rv.setLayoutManager(llm);
         swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.nestedScrollView);
         swipeLayout.setOnRefreshListener(this);
-        swipeLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDark),
+        swipeLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary),
                 getResources().getColor(R.color.colorPrimaryLight),
                 getResources().getColor(R.color.colorAccent),
                 getResources().getColor(R.color.colorPrimary));

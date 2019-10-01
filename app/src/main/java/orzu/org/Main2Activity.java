@@ -47,10 +47,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
-//
-//import io.intercom.android.sdk.Intercom;
-//import io.intercom.android.sdk.UserAttributes;
-//import io.intercom.android.sdk.identity.Registration;
+
+import io.intercom.android.sdk.Intercom;
+import io.intercom.android.sdk.UserAttributes;
+import io.intercom.android.sdk.identity.Registration;
 import jp.wasabeef.blurry.Blurry;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -416,7 +416,7 @@ public class Main2Activity extends AppCompatActivity
         pusher.connect();
 
 */
-        //Intercom.initialize(getApplication(), "android_sdk-805f0d44d62fbc8e72058b9c8eee61c94c43c874", "p479kps8");
+        Intercom.initialize(getApplication(), "android_sdk-805f0d44d62fbc8e72058b9c8eee61c94c43c874", "p479kps8");
 
         intercomBtn = findViewById(R.id.techsupp);
         intercomBtn.setOnClickListener(this);
@@ -664,7 +664,7 @@ public class Main2Activity extends AppCompatActivity
 
         switch (view.getId()) {
             case R.id.techsupp:
-               /* Registration registration = Registration.create().withUserId(idUser);
+                Registration registration = Registration.create().withUserId(idUser);
                 UserAttributes userAttributes = new UserAttributes.Builder()
                         .withName(mName)
                         .withUserId(idUser)
@@ -673,7 +673,7 @@ public class Main2Activity extends AppCompatActivity
                 Intercom.client().handlePushMessage();
                 Intercom.client().registerIdentifiedUser(registration);
                 Intercom.client().displayMessenger();
-                Intercom.client().setBottomPadding(20);*/
+                Intercom.client().setBottomPadding(20);
                 break;
 
             case R.id.headerOfdrawer:

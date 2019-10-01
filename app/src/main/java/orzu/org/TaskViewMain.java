@@ -308,7 +308,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.view_user_info:
                 Intent intent = new Intent(getApplication(), UserView.class);
-                intent.putExtra("idhis", m.get(useridList).toString());
+                intent.putExtra("idhis", m_new.get(useridList).toString());
                 startActivity(intent);
                 break;
 
