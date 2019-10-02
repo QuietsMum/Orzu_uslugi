@@ -82,10 +82,13 @@ public class Main2Activity extends AppCompatActivity
 
     private void setupBeams() {
         PushNotifications.start(getApplicationContext(), "e33cda0a-16d0-41cd-a5c9-8ae60b9b7042");
-        PushNotifications.addDeviceInterest("debug-" + idUser);
+        PushNotifications.clearDeviceInterests();
+        PushNotifications.addDeviceInterest("user_" + idUser);
+        PushNotifications.getDeviceInterests();
         for (int i = 0; i < subsServer.size(); i++){
-            PushNotifications.addDeviceInterest("debug-" + subsServer.get(i));
+            PushNotifications.addDeviceInterest("cat_" + subsServer.get(i));
         }
+        Log.e("QWERTY", String.valueOf(PushNotifications.getDeviceInterests()));
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("idUser", "1231234");
@@ -109,7 +112,6 @@ public class Main2Activity extends AppCompatActivity
         c.close();
         db.close();
         String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_user&user_cat=" + idUser;
-        subsServer =  new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
@@ -145,7 +147,7 @@ public class Main2Activity extends AppCompatActivity
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String mMessage = response.body().string();
-
+                subsServer =  new ArrayList<>();
                 try {
                     JSONObject jsonObject = new JSONObject(mMessage);
                     Iterator<String> iter = jsonObject.keys();
@@ -158,6 +160,7 @@ public class Main2Activity extends AppCompatActivity
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                Log.e("QWERTY", String.valueOf(subsServer));
                 setupBeams();
             }
         });
@@ -168,7 +171,6 @@ public class Main2Activity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        requestSubsServerMain();
         PushNotifications.setOnMessageReceivedListenerForVisibleActivity(this, new PushNotificationReceivedListener() {
             @Override
             public void onMessageReceived(RemoteMessage remoteMessage) {
