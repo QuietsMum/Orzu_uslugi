@@ -85,7 +85,6 @@ public class NotificationsMessagingService extends FirebaseMessagingService {
         notificationManager.notify(new Random().nextInt(), notificationBuilder.build());
     }
 
-
     @Override
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
