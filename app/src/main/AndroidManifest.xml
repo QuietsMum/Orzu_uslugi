@@ -39,6 +39,9 @@
             android:name=".ChangePasswordActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".RegistCity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".CategorySubscriptions"
             android:screenOrientation="portrait" />
         <activity

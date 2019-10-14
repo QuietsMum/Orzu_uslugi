@@ -81,6 +81,7 @@ public class Main2Activity extends AppCompatActivity
     String modelString;
 
     private void setupBeams() {
+
         PushNotifications.start(getApplicationContext(), "e33cda0a-16d0-41cd-a5c9-8ae60b9b7042");
         PushNotifications.clearDeviceInterests();
         PushNotifications.addDeviceInterest("user_" + idUser);
@@ -99,6 +100,7 @@ public class Main2Activity extends AppCompatActivity
             PushNotifications.addDeviceInterest("debug-" + modelString.substring(modelString.indexOf(";") + 1));
             Log.e("ininin123123123", modelString.substring(modelString.indexOf(";") + 1));
         }*/
+
     }
 
     public void requestSubsServerMain() {
@@ -175,6 +177,27 @@ public class Main2Activity extends AppCompatActivity
             @Override
             public void onMessageReceived(RemoteMessage remoteMessage) {
                 String messagePayload = remoteMessage.getData().get("inAppNotificationMessage");
+                Log.wtf("BEams",remoteMessage.getMessageType());
+                if (messagePayload == null) {
+                    // Message payload was not set for this notification
+                    Log.i("MyActivity", "Payload was missing");
+                } else {
+                    Log.i("MyActivity", messagePayload);
+                    // Now update the UI based on your message payload!
+                }
+            }
+        });
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        PushNotifications.setOnMessageReceivedListenerForVisibleActivity(this, new PushNotificationReceivedListener() {
+            @Override
+            public void onMessageReceived(RemoteMessage remoteMessage) {
+                String messagePayload = remoteMessage.getData().get("inAppNotificationMessage");
+                Log.wtf("BEams",remoteMessage.getMessageType());
                 if (messagePayload == null) {
                     // Message payload was not set for this notification
                     Log.i("MyActivity", "Payload was missing");
@@ -201,8 +224,8 @@ public class Main2Activity extends AppCompatActivity
             e.printStackTrace();
         }
 
-
-
+        final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
+        Log.e("Beams123",prefs.getString("New_task","")+" asdasd");
         dbHelper = new DBHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("orzutable", null, null, null, null, null, null);
@@ -239,6 +262,7 @@ public class Main2Activity extends AppCompatActivity
         db.insert("orzuchat", null, cv);
         db.close();
         dbHelper.close();
+
 /*
         PusherOptions options = new PusherOptions();
         options.setCluster("mt1");
@@ -650,7 +674,6 @@ public class Main2Activity extends AppCompatActivity
                             Common.fragmentshimmer = true;
                             Common.d = imageBlur.getDrawable();
                             new DownloadImage().execute("https://orzu.org" + image);
-
                         }
                     });
                 } catch (JSONException e) {

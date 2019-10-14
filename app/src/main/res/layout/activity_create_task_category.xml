@@ -79,7 +79,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="25dp"
                             android:layout_marginTop="8dp"
-                            android:tint="#2196f3"
+                            android:tint="@color/colorPrimary"
                             android:src="@drawable/baseline_keyboard_arrow_right_black_18dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -112,7 +112,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="25dp"
                             android:layout_marginTop="8dp"
-                            android:tint="#2196f3"
+                            android:tint="@color/colorPrimary"
                             android:src="@drawable/baseline_keyboard_arrow_right_black_18dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -145,7 +145,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="25dp"
                             android:layout_marginTop="8dp"
-                            android:tint="#2196f3"
+                            android:tint="@color/colorPrimary"
                             android:src="@drawable/baseline_keyboard_arrow_right_black_18dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -177,7 +177,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="25dp"
                             android:layout_marginTop="8dp"
-                            android:tint="#2196f3"
+                            android:tint="@color/colorPrimary"
                             android:src="@drawable/baseline_keyboard_arrow_right_black_18dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -209,7 +209,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="25dp"
                             android:layout_marginTop="8dp"
-                            android:tint="#2196f3"
+                            android:tint="@color/colorPrimary"
                             android:src="@drawable/baseline_keyboard_arrow_right_black_18dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -241,7 +241,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="25dp"
                             android:layout_marginTop="8dp"
-                            android:tint="#2196f3"
+                            android:tint="@color/colorPrimary"
                             android:src="@drawable/baseline_keyboard_arrow_right_black_18dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -273,7 +273,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="25dp"
                             android:layout_marginTop="8dp"
-                            android:tint="#2196f3"
+                            android:tint="@color/colorPrimary"
                             android:src="@drawable/baseline_keyboard_arrow_right_black_18dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -305,7 +305,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="25dp"
                             android:layout_marginTop="8dp"
-                            android:tint="#2196f3"
+                            android:tint="@color/colorPrimary"
                             android:src="@drawable/baseline_keyboard_arrow_right_black_18dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -337,7 +337,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="25dp"
                             android:layout_marginTop="8dp"
-                            android:tint="#2196f3"
+                            android:tint="@color/colorPrimary"
                             android:src="@drawable/baseline_keyboard_arrow_right_black_18dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
