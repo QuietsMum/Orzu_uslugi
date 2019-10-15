@@ -109,6 +109,7 @@ public class Main2Activity extends AppCompatActivity
         int idColIndex = c.getColumnIndex("id");
         int tokenColIndex = c.getColumnIndex("token");
         idUser = c.getString(idColIndex);
+        Log.e("userCreatedURL",  c.getString(tokenColIndex)+" "+idUser);
         c.close();
         db.close();
         String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_user&user_cat=" + idUser;
@@ -646,6 +647,7 @@ public class Main2Activity extends AppCompatActivity
                         public void run() {
                             nav_user_name.setText(text);
                             Common.name = text;
+                            Common.name_only = mName;
                             userviewBtn.setOnClickListener(Main2Activity.this);
                             Common.fragmentshimmer = true;
                             Common.d = imageBlur.getDrawable();

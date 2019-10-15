@@ -13,6 +13,7 @@ public class Common {
     public static String city = "";
     public static String utoken = "";
     public static String name;
+    public static String name_only;
     public static String birth;
     public static String about;
     public static String sex;
