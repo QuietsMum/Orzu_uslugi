@@ -1,6 +1,7 @@
 package orzu.org;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.app.Dialog;
 import android.content.ContentValues;
@@ -17,6 +18,9 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -24,6 +28,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.rilixtech.Country;
 import com.rilixtech.CountryCodePicker;
 
@@ -46,7 +51,7 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
     TextView phoneCountName;
     EditText password;
     TextView regist;
-    Button button;
+    FloatingActionButton button;
     ProgressBar progressBar;
     String mMessage;
     String mPassword;
@@ -60,11 +65,13 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
     DBHelper dbHelper;
     LinearLayout linLay;
     static Boolean firsttime;
+    CardView cardView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryOrangeTop));
         getSupportActionBar().hide();
         setContentView(R.layout.activity_phone_login);
         dbHelper = new DBHelper(this);
@@ -75,11 +82,30 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
         phoneCount = (EditText) findViewById(R.id.editTextPhoneCountry);
         // phoneCountName = (TextView) findViewById(R.id.ccpText);
         password = (EditText) findViewById(R.id.editTextPassword);
-        button = (Button) findViewById(R.id.button_phone_login);
+        button =  findViewById(R.id.button_change_pwd);
+
+        cardView = findViewById(R.id.constrlog2);
+        cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
+
         regist = findViewById(R.id.button_phone_regist);
         ccp = (CountryCodePicker) findViewById(R.id.ccp);
         linLay = findViewById(R.id.linearidccp);
         //ccp.registerPhoneNumberTextView(phone);
+
+        TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f,
+                1000.0f, 0.0f);
+        animation.setDuration(500);
+        //animation.setFillAfter(true);
+        cardView.startAnimation(animation);
+        button.setVisibility(View.GONE);
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                button.setVisibility(View.VISIBLE);
+                Animation animZoomIn = AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.zoom_in);
+                button.startAnimation(animZoomIn);
+            }
+        }, animation.getDuration());
 
         float dip = 16f;
         Resources r = Resources.getSystem();
@@ -119,7 +145,7 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case (R.id.button_phone_login):
+            case (R.id.button_change_pwd):
                 if (phone.getText().length() != 0 && password.getText().length() != 0) {
                     progressBar.setVisibility(View.VISIBLE);
                     mMessage = phone.getText().toString();
