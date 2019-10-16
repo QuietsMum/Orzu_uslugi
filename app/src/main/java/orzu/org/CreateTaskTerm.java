@@ -2,6 +2,7 @@ package orzu.org;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -11,15 +12,21 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -51,25 +58,26 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
     Spinner spiner;
     int count;
     int counterDef;
-    Dialog dialog;
     SimpleDateFormat sdf;
     String selectedDate;
-    DatePicker calendar;
+    CalendarView calendar;
     WindowManager.LayoutParams lp;
     GregorianCalendar calendarGeor;
     Locale myLocale = new Locale("ru", "RU");
     int dateType;
+    ImageView tri_left, tri_center, tri_right, create_term_back;
+    CardView cardView;
 
+    View view_layout_term_text_from1, view_layout_term_text_from2, view_layout_term_onedate1, view_layout_term_onedate2;
+    BottomSheetDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_create_task_term);
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
-        getSupportActionBar().setTitle("Создать задание");
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setElevation(0);
         counterDef = 2;
         dateType = 2;
         switch1 = findViewById(R.id.createTerm_buttonleft);
@@ -84,6 +92,19 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
         text_date1 = findViewById(R.id.term_text_from_date);
         text_date1_2 = findViewById(R.id.term_text_to_date);
         text_date2 = findViewById(R.id.term_text_one_date);
+
+        tri_center = findViewById(R.id.tri_center);
+        tri_left = findViewById(R.id.tri_left);
+        tri_right = findViewById(R.id.tri_right);
+        create_term_back = findViewById(R.id.create_term_back);
+        create_term_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        cardView = findViewById(R.id.card_of_create_term);
+        cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
 
         lin_examlpe1_1 = findViewById(R.id.layout_term_text_from);
         lin_examlpe1_1.setOnClickListener(this);
@@ -100,32 +121,33 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
         //lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         //lp.height = getResources().getDisplayMetrics().heightPixels/3;
 
+        view_layout_term_onedate1 = findViewById(R.id.view_layout_term_onedate1);
+        view_layout_term_onedate2 = findViewById(R.id.view_layout_term_onedate2);
+        view_layout_term_text_from1 = findViewById(R.id.view_layout_term_text_from1);
+        view_layout_term_text_from2 = findViewById(R.id.view_layout_term_text_from2);
 
         buttonCreate = findViewById(R.id.createTerm);
         buttonCreate.setOnClickListener(this);
         fa = this;
 
-        dialog = new Dialog(this);
-        dialog.setContentView(R.layout.calendar_dialog);
+
+        dialog = new BottomSheetDialog(this);
+
+        View sheetView = this.getLayoutInflater().inflate(R.layout.calendar_dialog, null);
+        dialog.setContentView(sheetView);
 
         calendar = dialog.findViewById(R.id.calendarView);
 
         Calendar today = Calendar.getInstance();
-        calendar.setCalendarViewShown(false);
-        calendar.setSpinnersShown(true);
-        calendar.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
-                today.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
-
-                    @Override
-                    public void onDateChanged(DatePicker view, int year,
-                                              int monthOfYear, int dayOfMonth) {
-
-                        sdf = new SimpleDateFormat("dd.MM.yyyy", myLocale);
-                        selectedDate = sdf.format(new Date(year - 1900, monthOfYear, dayOfMonth));
-
-                    }
-                });
-        TextView dialogButton = dialog.findViewById(R.id.button_choose);
+        calendar.setDate(System.currentTimeMillis(),false,true);
+        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView calendarView, int i, int i1, int i2) {
+                sdf = new SimpleDateFormat("dd.MM.yyyy", myLocale);
+                selectedDate = sdf.format(new Date(i - 1900, i1, i2));
+            }
+        });
+        TextView dialogButton = dialog.findViewById(R.id.ok_calendar);
         // if button is clicked, close the custom dialog
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,6 +164,36 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
                 dialog.dismiss();
             }
         });
+        TextView close = dialog.findViewById(R.id.cancel_calendar);
+        // if button is clicked, close the custom dialog
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+            }
+        });
+
+
+        TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f,
+                1500.0f, 0.0f);
+        animation.setDuration(500);
+        //animation.setFillAfter(true);
+        cardView.startAnimation(animation);
+        tri_center.startAnimation(animation);
+        switch1.startAnimation(animation);
+        switch2.startAnimation(animation);
+        switch3.startAnimation(animation);
+        buttonCreate.setVisibility(View.GONE);
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                buttonCreate.setVisibility(View.VISIBLE);
+                Animation animZoomIn = AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.zoom_in);
+                buttonCreate.startAnimation(animZoomIn);
+            }
+        }, animation.getDuration());
+
     }
 
     @Override
@@ -164,11 +216,11 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
         switch (view.getId()) {
             case R.id.createTerm:
                 if (lin_examlpe1_1.getVisibility() == View.VISIBLE) {
-                    Log.wtf("as",text_date1.getText().length()+" "+text_date2.getText().length());
+                    Log.wtf("as", text_date1.getText().length() + " " + text_date2.getText().length());
                     if (text_date1.getText().length() > 8 && text_date1_2.getText().length() > 8) {
                         final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = prefs.edit();
-                        Log.wtf("as","asd");
+                        Log.wtf("as", "asd");
                         if (counterDef == 1) {
                             dateType = 3;
                             editor.putString(Util.TASK_WORKWITH, "Дата по договоренности");
@@ -193,7 +245,7 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
                         Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show();
                     }
                 } else if (spiner.getVisibility() == View.VISIBLE) {
-                    if(spiner.getSelectedItem().toString().length()!=0&&text_date2.getText().length()>8) {
+                    if (spiner.getSelectedItem().toString().length() != 0 && text_date2.getText().length() > 8) {
                         final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = prefs.edit();
                         if (counterDef == 1) {
@@ -216,10 +268,10 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
                         }
                         Intent intent = new Intent(this, CreateTaskAmout.class);
                         startActivity(intent);
-                    }else {
+                    } else {
                         Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show();
                     }
-                }else{
+                } else {
                     final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = prefs.edit();
                     if (counterDef == 1) {
@@ -246,45 +298,48 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.createTerm_buttonleft:
                 counterDef = 1;
-                switch1.setBackgroundResource(R.drawable.circle_button_left_solid);
-                switch1.setTextColor(getResources().getColor(R.color.colorBackgrndFrg));
-                switch2.setBackgroundResource(R.drawable.circle_button_center);
-                switch2.setTextColor(getResources().getColor(R.color.colorTextGrad));
-                switch3.setBackgroundResource(R.drawable.circle_button_right);
-                switch3.setTextColor(getResources().getColor(R.color.colorTextGrad));
                 spiner.setVisibility(View.INVISIBLE);
                 text_examle1.setVisibility(View.VISIBLE);
+                tri_left.setVisibility(View.VISIBLE);
+                tri_center.setVisibility(View.INVISIBLE);
+                tri_right.setVisibility(View.INVISIBLE);
                 lin_examlpe1_1.setVisibility(View.INVISIBLE);
                 lin_examlpe1_2.setVisibility(View.INVISIBLE);
                 lin_examlpe2.setVisibility(View.INVISIBLE);
+                view_layout_term_onedate1.setVisibility(View.INVISIBLE);
+                view_layout_term_onedate2.setVisibility(View.INVISIBLE);
+                view_layout_term_text_from1.setVisibility(View.INVISIBLE);
+                view_layout_term_text_from2.setVisibility(View.INVISIBLE);
                 break;
             case R.id.createTerm_buttoncenter:
                 counterDef = 2;
-                switch1.setBackgroundResource(R.drawable.circle_button_left);
-                switch1.setTextColor(getResources().getColor(R.color.colorTextGrad));
-                switch2.setBackgroundResource(R.drawable.circle_button_center_solid);
-                switch2.setTextColor(getResources().getColor(R.color.colorBackgrndFrg));
-                switch3.setBackgroundResource(R.drawable.circle_button_right);
-                switch3.setTextColor(getResources().getColor(R.color.colorTextGrad));
+                tri_left.setVisibility(View.INVISIBLE);
+                tri_center.setVisibility(View.VISIBLE);
+                tri_right.setVisibility(View.INVISIBLE);
                 spiner.setVisibility(View.INVISIBLE);
                 text_examle1.setVisibility(View.INVISIBLE);
                 lin_examlpe1_1.setVisibility(View.VISIBLE);
                 lin_examlpe1_2.setVisibility(View.VISIBLE);
                 lin_examlpe2.setVisibility(View.INVISIBLE);
+                view_layout_term_onedate1.setVisibility(View.VISIBLE);
+                view_layout_term_onedate2.setVisibility(View.VISIBLE);
+                view_layout_term_text_from1.setVisibility(View.INVISIBLE);
+                view_layout_term_text_from2.setVisibility(View.INVISIBLE);
                 break;
             case R.id.createTerm_buttonright:
                 counterDef = 3;
-                switch1.setBackgroundResource(R.drawable.circle_button_left);
-                switch1.setTextColor(getResources().getColor(R.color.colorTextGrad));
-                switch2.setBackgroundResource(R.drawable.circle_button_center);
-                switch2.setTextColor(getResources().getColor(R.color.colorTextGrad));
-                switch3.setBackgroundResource(R.drawable.circle_button_right_solid);
-                switch3.setTextColor(getResources().getColor(R.color.colorBackgrndFrg));
+                tri_left.setVisibility(View.INVISIBLE);
+                tri_center.setVisibility(View.INVISIBLE);
+                tri_right.setVisibility(View.VISIBLE);
                 spiner.setVisibility(View.VISIBLE);
                 text_examle1.setVisibility(View.INVISIBLE);
                 lin_examlpe1_1.setVisibility(View.INVISIBLE);
                 lin_examlpe1_2.setVisibility(View.INVISIBLE);
                 lin_examlpe2.setVisibility(View.VISIBLE);
+                view_layout_term_onedate1.setVisibility(View.INVISIBLE);
+                view_layout_term_onedate2.setVisibility(View.INVISIBLE);
+                view_layout_term_text_from1.setVisibility(View.VISIBLE);
+                view_layout_term_text_from2.setVisibility(View.VISIBLE);
                 break;
             case R.id.layout_term_text_from:
                 dialog.show();

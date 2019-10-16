@@ -26,4 +26,7 @@
     <color name="colorPrimaryGreen">#00A99D</color>
     <color name="colorPrimaryBlue">#29ABE2</color>
 
+    <color name="colorOrangeRed">#f83600</color>
+    <color name="colorOrangeOnly">#fe8c00</color>
+
 </resources>

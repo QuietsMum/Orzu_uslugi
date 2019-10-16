@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/create_name_back"
+        android:id="@+id/create_place_back"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_margin="16dp"
@@ -148,6 +148,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
                             android:clipToPadding="false"
+                            android:paddingBottom="40dp"
                             android:visibility="invisible" />
 
 

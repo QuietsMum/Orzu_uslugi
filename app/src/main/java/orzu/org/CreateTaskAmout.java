@@ -2,6 +2,7 @@ package orzu.org;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,10 +10,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,18 +37,31 @@ public class CreateTaskAmout extends AppCompatActivity implements View.OnClickLi
     int counter;
     int pricetype;
     public static Activity fa;
+    ImageView tri_left_amount,tri_right_amount,create_amount_back;
+    CardView cardView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_create_task_amout);
         counter = 1;
         pricetype = 1;
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
-        getSupportActionBar().setTitle("Создать задание");
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setElevation(0);
+
+        tri_right_amount = findViewById(R.id.tri_right_amount);
+        tri_left_amount = findViewById(R.id.tri_left_amount);
+
+        create_amount_back = findViewById(R.id.create_amount_back);
+        create_amount_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        cardView = findViewById(R.id.card_of_create_amount);
+        cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
         amoutEdit = findViewById(R.id.amout_text_input);
         amoutEditPrice = findViewById(R.id.editCreateAmout);
         texthisprice = findViewById(R.id.texthisprice);
@@ -53,6 +73,25 @@ public class CreateTaskAmout extends AppCompatActivity implements View.OnClickLi
         buttonCreateLeft.setOnClickListener(this);
         buttonCreateRight.setOnClickListener(this);
         fa = this;
+
+        TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f,
+                1500.0f, 0.0f);
+        animation.setDuration(500);
+        //animation.setFillAfter(true);
+        cardView.startAnimation(animation);
+        tri_left_amount.startAnimation(animation);
+        buttonCreateLeft.startAnimation(animation);
+        buttonCreateRight.startAnimation(animation);
+        buttonCreate.setVisibility(View.GONE);
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                buttonCreate.setVisibility(View.VISIBLE);
+                Animation animZoomIn = AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.zoom_in);
+                buttonCreate.startAnimation(animZoomIn);
+            }
+        }, animation.getDuration());
+
     }
 
     @Override
@@ -109,20 +148,16 @@ public class CreateTaskAmout extends AppCompatActivity implements View.OnClickLi
                 counter = 1;
                 texthisprice.setVisibility(View.INVISIBLE);
                 amoutEdit.setVisibility(View.VISIBLE);
-                buttonCreateLeft.setBackgroundResource(R.drawable.circle_button_left_solid);
-                buttonCreateLeft.setTextColor(getResources().getColor(R.color.colorBackgrndFrg));
-                buttonCreateRight.setBackgroundResource(R.drawable.circle_button_right);
-                buttonCreateRight.setTextColor(getResources().getColor(R.color.colorTextGrad));
+                tri_right_amount.setVisibility(View.INVISIBLE);
+                tri_left_amount.setVisibility(View.VISIBLE);
                 break;
 
             case R.id.createAmout_buttonright:
                 counter = 2;
                 texthisprice.setVisibility(View.VISIBLE);
                 amoutEdit.setVisibility(View.INVISIBLE);
-                buttonCreateLeft.setBackgroundResource(R.drawable.circle_button_left);
-                buttonCreateLeft.setTextColor(getResources().getColor(R.color.colorTextGrad));
-                buttonCreateRight.setBackgroundResource(R.drawable.circle_button_right_solid);
-                buttonCreateRight.setTextColor(getResources().getColor(R.color.colorBackgrndFrg));
+                tri_right_amount.setVisibility(View.VISIBLE);
+                tri_left_amount.setVisibility(View.INVISIBLE);
                 break;
         }
     }

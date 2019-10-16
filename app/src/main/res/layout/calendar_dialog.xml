@@ -2,11 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
+    android:padding="8dp">
 
-    <DatePicker
+    <CalendarView
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,20 +16,44 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/button_choose"
+    <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_gravity="bottom"
-        android:background="@drawable/gradient_back_180"
-        android:gravity="center"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:text="@string/choose"
-        android:textColor="@color/colorBackgrndFrg"
+        android:weightSum="2"
         app:layout_constraintLeft_toLeftOf="@id/calendarView"
         app:layout_constraintRight_toRightOf="@id/calendarView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calendarView"/>
+        app:layout_constraintTop_toBottomOf="@id/calendarView">
+
+        <TextView
+            android:id="@+id/cancel_calendar"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_weight="0.9"
+            android:gravity="center"
+            android:background="@drawable/circle_button_center"
+            android:text="Отмена"
+            android:textColor="@color/colorOrangeRed"
+            android:textAlignment="center" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_weight="0.2" />
+
+        <TextView
+            android:id="@+id/ok_calendar"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_weight="0.9"
+            android:gravity="center"
+            android:text="Далее"
+            android:background="@drawable/gradient_of_next_button_calendar"
+            android:textAlignment="center" />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

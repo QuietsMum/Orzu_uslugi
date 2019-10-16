@@ -80,6 +80,7 @@ public class CreateTaskPlace extends AppCompatActivity implements View.OnClickLi
     final int RESULT_NUMBER_LIMIT = 5;
     ImageView tri_left;
     ImageView tri_right;
+    ImageView create_place_back;
     CardView card_of_create_place;
 
     SearchManager searchManager;
@@ -121,6 +122,7 @@ public class CreateTaskPlace extends AppCompatActivity implements View.OnClickLi
 
         tri_left = findViewById(R.id.tri_left);
         tri_right = findViewById(R.id.tri_right);
+        create_place_back = findViewById(R.id.create_place_back);
 
         buttonCreate.setOnClickListener(this);
         buttonCreateLeft.setOnClickListener(this);
@@ -169,7 +171,12 @@ public class CreateTaskPlace extends AppCompatActivity implements View.OnClickLi
                 requestSuggest(editable.toString());
             }
         });
-
+        create_place_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
     }
 

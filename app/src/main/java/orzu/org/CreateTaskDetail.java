@@ -2,6 +2,7 @@ package orzu.org;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.app.Activity;
 import android.content.ClipData;
@@ -14,10 +15,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -62,6 +68,7 @@ public class CreateTaskDetail extends AppCompatActivity implements View.OnClickL
     ImageView delete4;
     ImageView delete5;
     ImageView delete6;
+    ImageView back;
     LinearLayout linearImages;
     LinearLayout pluslinearyImages;
     Uri imageUri;
@@ -71,6 +78,7 @@ public class CreateTaskDetail extends AppCompatActivity implements View.OnClickL
     ArrayList<String> returnValue = new ArrayList<>();
     Boolean multy = true;
 
+    CardView cardView;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -90,12 +98,10 @@ public class CreateTaskDetail extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_create_task_detail);
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
-        getSupportActionBar().setTitle("Создать задание");
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setElevation(0);
 
         counter = 0;
         linearImages = findViewById(R.id.linearyimages);
@@ -129,7 +135,7 @@ public class CreateTaskDetail extends AppCompatActivity implements View.OnClickL
         delete5.setVisibility(View.INVISIBLE);
         delete6.setVisibility(View.INVISIBLE);
         linearImg = findViewById(R.id.linear_image_click);
-        buttonCreate = findViewById(R.id.createDetail);
+        buttonCreate = findViewById(R.id.createDetails);
         buttonCreate.setOnClickListener(this);
         image1.setOnClickListener(this);
         image2.setOnClickListener(this);
@@ -138,8 +144,30 @@ public class CreateTaskDetail extends AppCompatActivity implements View.OnClickL
         image5.setOnClickListener(this);
         image6.setOnClickListener(this);
         linearImg.setOnClickListener(this);
+        cardView = findViewById(R.id.card_of_create_details);
+        cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
+        back = findViewById(R.id.create_details_back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         fa = this;
-
+        TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f,
+                1500.0f, 0.0f);
+        animation.setDuration(500);
+        //animation.setFillAfter(true);
+        cardView.startAnimation(animation);
+        buttonCreate.setVisibility(View.GONE);
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                buttonCreate.setVisibility(View.VISIBLE);
+                Animation animZoomIn = AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.zoom_in);
+                buttonCreate.startAnimation(animZoomIn);
+            }
+        }, animation.getDuration());
     }
 
     @Override
@@ -156,8 +184,8 @@ public class CreateTaskDetail extends AppCompatActivity implements View.OnClickL
     public void onClick(View view) {
 
         switch (view.getId()) {
-            case R.id.createDetail:
-                if(annot.getText().length()!=0) {
+            case R.id.createDetails:
+                if (annot.getText().length() != 0) {
                     final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putString(Util.TASK_ANNAT, String.valueOf(annot.getText()));
@@ -166,7 +194,7 @@ public class CreateTaskDetail extends AppCompatActivity implements View.OnClickL
                     intent.putExtra("opt", "add");
                     intent.putExtra("mytask", "not");
                     startActivity(intent);
-                }else{
+                } else {
                     Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -261,83 +289,84 @@ public class CreateTaskDetail extends AppCompatActivity implements View.OnClickL
             Log.e("stringPath", String.valueOf(returnValue));
 
         }
-                String[] filePathColumn = { MediaStore.Images.Media.DATA };
-                if(!multy){
-                    if (counter == 1){
-                        image1.setImageURI(Uri.parse(returnValue.get(0)));
-                        delete1.setVisibility(View.VISIBLE);
-                    } else if(counter == 2){
-                        image2.setImageURI(Uri.parse(returnValue.get(0)));
-                        delete2.setVisibility(View.VISIBLE);
-                    } else if(counter == 3){
-                        image3.setImageURI(Uri.parse(returnValue.get(0)));
-                        delete3.setVisibility(View.VISIBLE);
-                    } if (counter == 4) {
-                        image4.setImageURI(Uri.parse(returnValue.get(0)));
-                        delete4.setVisibility(View.VISIBLE);
-                    } else if (counter == 5) {
-                        image5.setImageURI(Uri.parse(returnValue.get(0)));
-                        delete5.setVisibility(View.VISIBLE);
-                    } else if (counter == 6) {
-                        image6.setImageURI(Uri.parse(returnValue.get(0)));
-                        delete6.setVisibility(View.VISIBLE);
-                    }
+        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+        if (!multy) {
+            if (counter == 1) {
+                image1.setImageURI(Uri.parse(returnValue.get(0)));
+                delete1.setVisibility(View.VISIBLE);
+            } else if (counter == 2) {
+                image2.setImageURI(Uri.parse(returnValue.get(0)));
+                delete2.setVisibility(View.VISIBLE);
+            } else if (counter == 3) {
+                image3.setImageURI(Uri.parse(returnValue.get(0)));
+                delete3.setVisibility(View.VISIBLE);
+            }
+            if (counter == 4) {
+                image4.setImageURI(Uri.parse(returnValue.get(0)));
+                delete4.setVisibility(View.VISIBLE);
+            } else if (counter == 5) {
+                image5.setImageURI(Uri.parse(returnValue.get(0)));
+                delete5.setVisibility(View.VISIBLE);
+            } else if (counter == 6) {
+                image6.setImageURI(Uri.parse(returnValue.get(0)));
+                delete6.setVisibility(View.VISIBLE);
+            }
 
 
-                } else {
+        } else {
 
-                    int size = returnValue.size();
-                            if (size == 1){
-                                    image1.setImageURI(Uri.parse(returnValue.get(0)));
-                                    delete1.setVisibility(View.VISIBLE);
-                                }else if(size == 2){
-                                    image1.setImageURI(Uri.parse(returnValue.get(0)));
-                                    delete1.setVisibility(View.VISIBLE);
-                                    image2.setImageURI(Uri.parse(returnValue.get(1)));
-                                    delete2.setVisibility(View.VISIBLE);
-                                } else if(size == 3){
-                                    image1.setImageURI(Uri.parse(returnValue.get(0)));
-                                    delete1.setVisibility(View.VISIBLE);
-                                    image2.setImageURI(Uri.parse(returnValue.get(1)));
-                                    delete2.setVisibility(View.VISIBLE);
-                                    image3.setImageURI(Uri.parse(returnValue.get(2)));
-                                    delete3.setVisibility(View.VISIBLE);
-                                } else if (size == 4) {
-                                    image1.setImageURI(Uri.parse(returnValue.get(0)));
-                                    delete1.setVisibility(View.VISIBLE);
-                                    image2.setImageURI(Uri.parse(returnValue.get(1)));
-                                    delete2.setVisibility(View.VISIBLE);
-                                    image3.setImageURI(Uri.parse(returnValue.get(2)));
-                                    delete3.setVisibility(View.VISIBLE);
-                                    image4.setImageURI(Uri.parse(returnValue.get(3)));
-                                    delete4.setVisibility(View.VISIBLE);
-                                } else if (size == 5) {
-                                    image1.setImageURI(Uri.parse(returnValue.get(0)));
-                                    delete1.setVisibility(View.VISIBLE);
-                                    image2.setImageURI(Uri.parse(returnValue.get(1)));
-                                    delete2.setVisibility(View.VISIBLE);
-                                    image3.setImageURI(Uri.parse(returnValue.get(2)));
-                                    delete3.setVisibility(View.VISIBLE);
-                                    image4.setImageURI(Uri.parse(returnValue.get(3)));
-                                    delete4.setVisibility(View.VISIBLE);
-                                    image5.setImageURI(Uri.parse(returnValue.get(4)));
-                                    delete5.setVisibility(View.VISIBLE);
-                                } else if (size == 6) {
-                                    image1.setImageURI(Uri.parse(returnValue.get(0)));
-                                    delete1.setVisibility(View.VISIBLE);
-                                    image2.setImageURI(Uri.parse(returnValue.get(1)));
-                                    delete2.setVisibility(View.VISIBLE);
-                                    image3.setImageURI(Uri.parse(returnValue.get(2)));
-                                    delete3.setVisibility(View.VISIBLE);
-                                    image4.setImageURI(Uri.parse(returnValue.get(3)));
-                                    delete4.setVisibility(View.VISIBLE);
-                                    image5.setImageURI(Uri.parse(returnValue.get(4)));
-                                    delete5.setVisibility(View.VISIBLE);
-                                    image6.setImageURI(Uri.parse(returnValue.get(5)));
-                                    delete6.setVisibility(View.VISIBLE);
-                                }
-                     counter = 1;
-                    }
+            int size = returnValue.size();
+            if (size == 1) {
+                image1.setImageURI(Uri.parse(returnValue.get(0)));
+                delete1.setVisibility(View.VISIBLE);
+            } else if (size == 2) {
+                image1.setImageURI(Uri.parse(returnValue.get(0)));
+                delete1.setVisibility(View.VISIBLE);
+                image2.setImageURI(Uri.parse(returnValue.get(1)));
+                delete2.setVisibility(View.VISIBLE);
+            } else if (size == 3) {
+                image1.setImageURI(Uri.parse(returnValue.get(0)));
+                delete1.setVisibility(View.VISIBLE);
+                image2.setImageURI(Uri.parse(returnValue.get(1)));
+                delete2.setVisibility(View.VISIBLE);
+                image3.setImageURI(Uri.parse(returnValue.get(2)));
+                delete3.setVisibility(View.VISIBLE);
+            } else if (size == 4) {
+                image1.setImageURI(Uri.parse(returnValue.get(0)));
+                delete1.setVisibility(View.VISIBLE);
+                image2.setImageURI(Uri.parse(returnValue.get(1)));
+                delete2.setVisibility(View.VISIBLE);
+                image3.setImageURI(Uri.parse(returnValue.get(2)));
+                delete3.setVisibility(View.VISIBLE);
+                image4.setImageURI(Uri.parse(returnValue.get(3)));
+                delete4.setVisibility(View.VISIBLE);
+            } else if (size == 5) {
+                image1.setImageURI(Uri.parse(returnValue.get(0)));
+                delete1.setVisibility(View.VISIBLE);
+                image2.setImageURI(Uri.parse(returnValue.get(1)));
+                delete2.setVisibility(View.VISIBLE);
+                image3.setImageURI(Uri.parse(returnValue.get(2)));
+                delete3.setVisibility(View.VISIBLE);
+                image4.setImageURI(Uri.parse(returnValue.get(3)));
+                delete4.setVisibility(View.VISIBLE);
+                image5.setImageURI(Uri.parse(returnValue.get(4)));
+                delete5.setVisibility(View.VISIBLE);
+            } else if (size == 6) {
+                image1.setImageURI(Uri.parse(returnValue.get(0)));
+                delete1.setVisibility(View.VISIBLE);
+                image2.setImageURI(Uri.parse(returnValue.get(1)));
+                delete2.setVisibility(View.VISIBLE);
+                image3.setImageURI(Uri.parse(returnValue.get(2)));
+                delete3.setVisibility(View.VISIBLE);
+                image4.setImageURI(Uri.parse(returnValue.get(3)));
+                delete4.setVisibility(View.VISIBLE);
+                image5.setImageURI(Uri.parse(returnValue.get(4)));
+                delete5.setVisibility(View.VISIBLE);
+                image6.setImageURI(Uri.parse(returnValue.get(5)));
+                delete6.setVisibility(View.VISIBLE);
+            }
+            counter = 1;
+        }
     }
 
 
