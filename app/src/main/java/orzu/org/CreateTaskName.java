@@ -2,6 +2,7 @@ package orzu.org;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
@@ -19,8 +20,13 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,37 +49,64 @@ import okhttp3.Response;
 public class CreateTaskName extends AppCompatActivity implements View.OnClickListener {
 
     TextView buttonCreate;
+    TextView name_of_subcategory;
     EditText editName;
     public static Activity fa;
     RecyclerView suggestResultView;
     ArrayAdapterMy resultAdapter;
     List<String> suggestResult;
+    CardView cardView;
+    ImageView back;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_create_task_name);
-        getSupportActionBar().setTitle("Создать задание");
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setElevation(0);
         editName = findViewById(R.id.editCreateName);
         buttonCreate = findViewById(R.id.createName);
         buttonCreate.setOnClickListener(this);
         fa = this;
-
+        name_of_subcategory = findViewById(R.id.name_of_subcategory);
+        name_of_subcategory.setText(Common.taskName);
+        cardView = findViewById(R.id.card_of_name_task);
+        cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
+        back = findViewById(R.id.create_name_back);
         suggestResultView = findViewById(R.id.suggest_result_name);
         suggestResultView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         suggestResultView.setLayoutManager(layoutManager);
 
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
 
-
+        TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f,
+                1500.0f, 0.0f);
+        animation.setDuration(500);
+        //animation.setFillAfter(true);
+        cardView.startAnimation(animation);
+        name_of_subcategory.startAnimation(animation);
+        buttonCreate.setVisibility(View.GONE);
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                buttonCreate.setVisibility(View.VISIBLE);
+                Animation animZoomIn = AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.zoom_in);
+                buttonCreate.startAnimation(animZoomIn);
+            }
+        }, animation.getDuration());
 
         editName.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -82,7 +115,7 @@ public class CreateTaskName extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(editName.getText().length()!=0){
+                if (editName.getText().length() != 0) {
                     Log.e("result", "enter");
                     requestSuggest();
                 }
@@ -102,19 +135,19 @@ public class CreateTaskName extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
-        if(editName.getText().length()!=0) {
+        if (editName.getText().length() != 0) {
             final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString(Util.TASK_NAME, String.valueOf(editName.getText()));
             editor.apply();
             Intent intent = new Intent(this, CreateTaskPlace.class);
             startActivity(intent);
-        }else{
+        } else {
             Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void requestSuggest(){
+    public void requestSuggest() {
 
         String url = "https://orzu.org/tasks/taskajaxupload?find=" + editName.getText();
         OkHttpClient client = new OkHttpClient();
@@ -179,7 +212,7 @@ public class CreateTaskName extends AppCompatActivity implements View.OnClickLis
                         ArrayAdapterMy.setSelect(new NameItemSelect() {
                             @Override
                             public void onItemSelectedListener(View view, int position) {
-                                if(suggestResult.size() != 0){
+                                if (suggestResult.size() != 0) {
                                     editName.setText(suggestResult.get(position));
                                     editName.setSelection(editName.getText().length());
                                 }
@@ -194,7 +227,8 @@ public class CreateTaskName extends AppCompatActivity implements View.OnClickLis
 
                     }
                 } catch (JSONException e) {
-                    e.printStackTrace(); }
+                    e.printStackTrace();
+                }
             }
         });
     }

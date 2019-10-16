@@ -3,6 +3,7 @@ package orzu.org;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +16,7 @@ import android.graphics.drawable.ColorDrawable;
 
 import android.os.Bundle;
 
+import android.os.Handler;
 import android.os.PersistableBundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -23,10 +25,15 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 
+import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -71,6 +78,9 @@ public class CreateTaskPlace extends AppCompatActivity implements View.OnClickLi
     int placetype;
     final String MAPKIT_API_KEY = "your_api_key";
     final int RESULT_NUMBER_LIMIT = 5;
+    ImageView tri_left;
+    ImageView tri_right;
+    CardView card_of_create_place;
 
     SearchManager searchManager;
     RecyclerView suggestResultView;
@@ -94,20 +104,24 @@ public class CreateTaskPlace extends AppCompatActivity implements View.OnClickLi
         MapKitFactory.initialize(this);
         SearchFactory.initialize(this);
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_create_task_place);
-        getSupportActionBar().setTitle("Создать задание");
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setElevation(0);
         counter = 1;
         placetype = 1;
         //searchEdit = findViewById(R.id.editCreatePlace);
         textFar = findViewById(R.id.text_far);
         textFar.setVisibility(View.INVISIBLE);
+        card_of_create_place = findViewById(R.id.card_of_create_place);
+        card_of_create_place.setBackgroundResource(R.drawable.shape_card_topcorners);
         buttonCreate = findViewById(R.id.createPlace);
         buttonCreateLeft = findViewById(R.id.createPlace_buttonleft);
         buttonCreateRight = findViewById(R.id.createPlace_buttonright);
+
+        tri_left = findViewById(R.id.tri_left);
+        tri_right = findViewById(R.id.tri_right);
+
         buttonCreate.setOnClickListener(this);
         buttonCreateLeft.setOnClickListener(this);
         buttonCreateRight.setOnClickListener(this);
@@ -122,6 +136,24 @@ public class CreateTaskPlace extends AppCompatActivity implements View.OnClickLi
         resultAdapter = new ArrayAdapterMy(this, suggestResult);
         suggestResultView.setAdapter(resultAdapter);
 
+
+        TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f,
+                1500.0f, 0.0f);
+        animation.setDuration(500);
+        //animation.setFillAfter(true);
+        card_of_create_place.startAnimation(animation);
+        tri_left.startAnimation(animation);
+        buttonCreateLeft.startAnimation(animation);
+        buttonCreateRight.startAnimation(animation);
+        buttonCreate.setVisibility(View.GONE);
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                buttonCreate.setVisibility(View.VISIBLE);
+                Animation animZoomIn = AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.zoom_in);
+                buttonCreate.startAnimation(animZoomIn);
+            }
+        }, animation.getDuration());
 
         queryEdit.addTextChangedListener(new TextWatcher() {
             @Override
@@ -195,20 +227,16 @@ public class CreateTaskPlace extends AppCompatActivity implements View.OnClickLi
                 counter = 1;
                 textFar.setVisibility(View.INVISIBLE);
                 queryEdit.setVisibility(View.VISIBLE);
-                buttonCreateLeft.setBackgroundResource(R.drawable.circle_button_left_solid);
-                buttonCreateLeft.setTextColor(getResources().getColor(R.color.colorBackgrndFrg));
-                buttonCreateRight.setBackgroundResource(R.drawable.circle_button_right);
-                buttonCreateRight.setTextColor(getResources().getColor(R.color.colorTextGrad));
+                tri_left.setVisibility(View.VISIBLE);
+                tri_right.setVisibility(View.INVISIBLE);
                 break;
 
             case R.id.createPlace_buttonright:
                 counter = 2;
                 textFar.setVisibility(View.VISIBLE);
                 queryEdit.setVisibility(View.INVISIBLE);
-                buttonCreateLeft.setBackgroundResource(R.drawable.circle_button_left);
-                buttonCreateLeft.setTextColor(getResources().getColor(R.color.colorTextGrad));
-                buttonCreateRight.setBackgroundResource(R.drawable.circle_button_right_solid);
-                buttonCreateRight.setTextColor(getResources().getColor(R.color.colorBackgrndFrg));
+                tri_left.setVisibility(View.INVISIBLE);
+                tri_right.setVisibility(View.VISIBLE);
                 break;
 
         }

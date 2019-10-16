@@ -172,6 +172,7 @@ public class CreateTaskSubCategory extends AppCompatActivity {
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putString(Util.CAT_ID, String.valueOf(m_id.get("ID")));
                         editor.apply();
+                        Common.taskName = data.get(i).get("Категория").toString();
                         Intent intent = new Intent(getApplication(), CreateTaskName.class);
                         startActivity(intent);
                     }

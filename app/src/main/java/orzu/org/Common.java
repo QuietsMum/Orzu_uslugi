@@ -19,4 +19,5 @@ public class Common {
     public static String sex;
     public static String nameOfChat;
     public static String chatId;
+    public static String taskName;
 }
