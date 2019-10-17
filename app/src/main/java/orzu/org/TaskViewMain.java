@@ -114,7 +114,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
     TextView hap;
     ImageView taskMaket;
     ImageView taskMaketBack;
-    View taskMaketView;
+    ImageView taskMaketView;
     String mMessage;
     String mName;
     String image;
@@ -201,7 +201,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         nav_user = findViewById(R.id.taskCreator);
         //taskMaket = findViewById(R.id.maket_task);
         taskMaketBack = findViewById(R.id.maket_task_white);
-        taskMaketView = findViewById(R.id.maket_view);
+        taskMaketView = findViewById(R.id.imageback_new);
         imageViewName = findViewById(R.id.imageViewName);
         back = findViewById(R.id.task_view_main_back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -213,7 +213,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         card_of_shimmer = findViewById(R.id.card_of_shimmer);
         cardView = findViewById(R.id.card_of_task_view);
         cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
-
+        card_of_shimmer.setBackgroundResource(R.drawable.shape_card_topcorners);
         TranslateAnimation animation_of_shim = new TranslateAnimation(0.0f, 0.0f,
                 1500.0f, 0.0f);
         animation_of_shim.setDuration(300);

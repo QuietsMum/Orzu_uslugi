@@ -447,11 +447,12 @@
         android:layout_height="match_parent"
         android:background="@color/colorBackgrndFrg" />
 
-    <View
-        android:id="@+id/maket_view"
+    <ImageView
+        android:id="@+id/imageback_new"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@drawable/gradient_back_180"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/back_blue"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -486,7 +487,6 @@
                 android:layout_weight="6"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                app:cardCornerRadius="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"

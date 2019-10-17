@@ -105,16 +105,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
         feedbackButtun.setOnClickListener(this);
         feedbackButtunAdd.setOnClickListener(this);
 
-        cardView = findViewById(R.id.card_of_user_view);
-        cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
 
-        back = findViewById(R.id.user_view_back);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
 
 
         feedbackname1 = findViewById(R.id.userview_feedbackname);
