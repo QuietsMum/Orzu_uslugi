@@ -5,9 +5,9 @@
     android:id="@+id/headerOfdrawer"
     android:layout_width="match_parent"
     android:layout_height="150dp"
-    android:background="@drawable/gradient_back"
     android:gravity="bottom"
     android:orientation="horizontal"
+    android:background="@color/back_for_feed"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
 
@@ -15,57 +15,53 @@
         android:id="@+id/image_blur"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:gravity="center" />
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:scaleType="centerCrop" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingTop="40dp"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:orientation="horizontal">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingTop="40dp"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin">
 
-            <androidx.cardview.widget.CardView
+        <androidx.cardview.widget.CardView
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+
+            app:cardCornerRadius="42.5dp">
+
+            <ImageView
+                android:id="@+id/imageViewName"
                 android:layout_width="85dp"
                 android:layout_height="85dp"
-
-                app:cardCornerRadius="42.5dp">
-                <ImageView
-                    android:id="@+id/imageViewName"
-                    android:layout_width="85dp"
-                    android:layout_height="85dp"
-                    android:layout_gravity="center"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/circle_shape"
-                    android:src = "@drawable/ic_person_72pt_3x"
-                    android:scaleType="centerCrop"
-                    android:contentDescription="@string/nav_header_desc"/>
-            </androidx.cardview.widget.CardView>
-
-            <TextView
-                android:id="@+id/textViewName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="12dp"
-                android:layout_marginLeft="12dp"
-                android:shadowColor="@color/colorPrimaryDark"
-                android:shadowDx="1"
-                android:shadowDy="1"
-                android:shadowRadius="2"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:paddingTop="8dp"
-                android:text="Android"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/colorPrimaryLight"/>
+                android:layout_margin="8dp"
+                android:background="@drawable/circle_shape"
+                android:contentDescription="@string/nav_header_desc"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_person_72pt_3x" />
+        </androidx.cardview.widget.CardView>
 
-        </LinearLayout>
+        <TextView
+            android:id="@+id/textViewName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="8dp"
+            android:paddingTop="8dp"
+            android:text="Android"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
+    </LinearLayout>
 
 
 </RelativeLayout>

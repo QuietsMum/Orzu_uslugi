@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -39,17 +40,15 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
     String idTask;
     int amout;
     TextView username;
-    ImageView person_logo_sugg2;
+    ImageView person_logo_sugg2,suggest_back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
+        getWindow().setStatusBarColor(getResources().getColor(R.color.back_for_feed));
         setContentView(R.layout.activity_add_suggest);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setElevation(0);
-        getSupportActionBar().setTitle("Добавить предложение");
 
         DBHelper dbHelper = new DBHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -66,7 +65,13 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
         Log.e("Username", nameUser);
         Log.e("Userid", idUser);
 
-
+        suggest_back = findViewById(R.id.suggest_back);
+        suggest_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         idTask = getIntent().getExtras().getString("idTaskSuggest");
         Log.e("Taskid", idTask);
 

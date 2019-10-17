@@ -21,6 +21,8 @@ import android.util.JsonReader;
 import android.util.Log;
 import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.shape.CornerFamily;
+import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.firebase.messaging.RemoteMessage;
 import com.pusher.pushnotifications.PushNotificationReceivedListener;
 import com.pusher.pushnotifications.PushNotifications;
@@ -76,7 +78,6 @@ public class Main2Activity extends AppCompatActivity
     LinearLayout intercomBtn;
     ImageView img;
     RelativeLayout userviewBtn;
-    ImageView imageBlur;
     TextView nav_user_name;
     String modelString;
 
@@ -196,6 +197,14 @@ public class Main2Activity extends AppCompatActivity
         toolbar.setBackground(getResources().getDrawable(R.drawable.gradient_back));
         setSupportActionBar(toolbar);
         navigationView = findViewById(R.id.nav_view);
+
+        MaterialShapeDrawable navViewBackground = (MaterialShapeDrawable) navigationView.getBackground();
+        navViewBackground.setShapeAppearanceModel(
+                navViewBackground.getShapeAppearanceModel()
+                        .toBuilder()
+                        .setBottomRightCorner(CornerFamily.ROUNDED,160)
+                        .build());
+
         try {
             getUserResponse();
         } catch (IOException e) {
@@ -641,7 +650,6 @@ public class Main2Activity extends AppCompatActivity
                     View hView = navigationView.getHeaderView(0);
                     nav_user_name = (TextView) hView.findViewById(R.id.textViewName);
                     userviewBtn = hView.findViewById(R.id.headerOfdrawer);
-                    imageBlur = userviewBtn.findViewById(R.id.image_blur);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -650,7 +658,6 @@ public class Main2Activity extends AppCompatActivity
                             Common.name_only = mName;
                             userviewBtn.setOnClickListener(Main2Activity.this);
                             Common.fragmentshimmer = true;
-                            Common.d = imageBlur.getDrawable();
                             new DownloadImage().execute("https://orzu.org" + image);
 
                         }
@@ -744,12 +751,6 @@ public class Main2Activity extends AppCompatActivity
 
                 View hView = navigationView.getHeaderView(0);
                 nav_user = (ImageView) hView.findViewById(R.id.imageViewName);
-                imageBlur.setImageBitmap(myBitmap);
-                Blurry.with(context)
-                        .radius(10)
-                        .sampling(4)
-                        .capture(userviewBtn)
-                        .into(imageBlur);
                 nav_user.setImageBitmap(myBitmap);
                 Common.bitmap = myBitmap;
                 Common.d = nav_user.getDrawable();
@@ -763,13 +764,7 @@ public class Main2Activity extends AppCompatActivity
     }
 
     public void changeImage() {
-        imageBlur.setImageDrawable(Common.d);
         nav_user.setImageDrawable(Common.d);
         nav_user_name.setText(Common.name);
-        Blurry.with(this)
-                .radius(10)
-                .sampling(4)
-                .capture(userviewBtn)
-                .into(imageBlur);
     }
 }

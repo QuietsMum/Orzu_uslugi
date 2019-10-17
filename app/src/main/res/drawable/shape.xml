@@ -7,7 +7,7 @@
         android:bottom="2dp">
 
         <shape>
-            <solid android:color="@color/new_color_resource"/>
+            <solid android:color="@color/back_for_feed"/>
 
         </shape>
 

@@ -47,13 +47,13 @@
             android:id="@+id/card_of_task_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="6"
-            android:padding="8dp">
+            android:layout_weight="6">
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="8dp"
+                android:padding="16dp"
                 android:clipToPadding="false"
                 android:overScrollMode="never">
 
@@ -356,7 +356,7 @@
                                             <ImageView
                                                 android:layout_width="20dp"
                                                 android:layout_height="20dp"
-                                                app:srcCompat="@drawable/ic_sad" />
+                                                app:srcCompat="@drawable/ic_bad" />
 
                                             <TextView
                                                 android:id="@+id/textSad"
@@ -373,7 +373,7 @@
                                                 android:layout_height="20dp"
                                                 android:layout_marginStart="8dp"
                                                 android:layout_marginLeft="8dp"
-                                                app:srcCompat="@drawable/ic_neutral" />
+                                                app:srcCompat="@drawable/ic_neutral2" />
 
                                             <TextView
                                                 android:id="@+id/textNatural"
@@ -390,7 +390,7 @@
                                                 android:layout_height="20dp"
                                                 android:layout_marginStart="8dp"
                                                 android:layout_marginLeft="8dp"
-                                                app:srcCompat="@drawable/ic_happy" />
+                                                app:srcCompat="@drawable/ic_happy2" />
 
                                             <TextView
                                                 android:id="@+id/textHappy"
@@ -484,9 +484,9 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_of_shimmer"
-                android:layout_weight="6"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_weight="6"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -734,7 +734,7 @@
                                     <ImageView
                                         android:layout_width="20dp"
                                         android:layout_height="20dp"
-                                        app:srcCompat="@drawable/ic_sad" />
+                                        app:srcCompat="@drawable/ic_bad" />
 
                                     <TextView
                                         android:layout_width="20dp"
@@ -750,7 +750,7 @@
                                         android:layout_height="20dp"
                                         android:layout_marginStart="8dp"
                                         android:layout_marginLeft="8dp"
-                                        app:srcCompat="@drawable/ic_neutral" />
+                                        app:srcCompat="@drawable/ic_neutral2" />
 
                                     <TextView
                                         android:layout_width="20dp"
@@ -766,7 +766,7 @@
                                         android:layout_height="20dp"
                                         android:layout_marginStart="8dp"
                                         android:layout_marginLeft="8dp"
-                                        app:srcCompat="@drawable/ic_happy" />
+                                        app:srcCompat="@drawable/ic_happy2" />
 
                                     <TextView
                                         android:layout_width="20dp"

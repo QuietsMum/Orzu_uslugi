@@ -7,28 +7,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,7 +37,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -60,7 +50,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import orzu.org.ui.login.model;
 
 public class Fragment3 extends Fragment implements View.OnClickListener {
 
@@ -503,9 +492,9 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
 
                     try {
                         JSONArray jsonArray = new JSONArray(mMessage);
-                        int bpSad = R.drawable.ic_sad;
-                        int bpNorm = R.drawable.ic_neutral;
-                        int bpHappy = R.drawable.ic_happy;
+                        int bpSad = R.drawable.ic_bad;
+                        int bpNorm = R.drawable.ic_neutral2;
+                        int bpHappy = R.drawable.ic_happy2;
 
                         int lenght = jsonArray.length();
                         String feedName = "";

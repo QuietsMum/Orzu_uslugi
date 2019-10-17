@@ -1,16 +1,11 @@
 package orzu.org;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 
 import android.app.Dialog;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -88,23 +82,22 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
     View backblue;
     View backwhite;
     ImageView statusImg;
-    CardView cardView;
-    ImageView back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getSupportActionBar().hide();
-        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_user_view);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setElevation(0);
         nameUser = findViewById(R.id.name_fname_his);
         idUser = getIntent().getExtras().getString("idhis");
         feedbackButtun = findViewById(R.id.linear_feedback_click);
         feedbackButtunAdd = findViewById(R.id.linear_feedback_addto);
         feedbackButtun.setOnClickListener(this);
         feedbackButtunAdd.setOnClickListener(this);
-
 
 
 
@@ -272,6 +265,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
             case R.id.linear_feedback_click:
                 Intent intent = new Intent(this, Feedback.class);
                 intent.putExtra("idUserFeedback", idUser);
+                intent.putExtra("nameUserFeedbackto", text);
                 startActivity(intent);
                 break;
             case R.id.linear_feedback_addto:
@@ -360,9 +354,9 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
 
                     try {
                         JSONArray jsonArray = new JSONArray(mMessage);
-                        int bpSad = R.drawable.ic_sad;
-                        int bpNorm = R.drawable.ic_neutral;
-                        int bpHappy = R.drawable.ic_happy;
+                        int bpSad = R.drawable.ic_bad;
+                        int bpNorm = R.drawable.ic_neutral2;
+                        int bpHappy = R.drawable.ic_happy2;
 
                         int lenght = jsonArray.length();
                         Log.e("lenghtArray", String.valueOf(lenght));

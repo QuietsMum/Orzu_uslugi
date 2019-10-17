@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@color/back_for_feed"
     tools:openDrawer="start">
 
     <include
@@ -19,12 +20,13 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:itemBackground="@drawable/shape"
-        app:itemShapeAppearanceOverlay="@color/colorPrimaryGrey"
-        app:itemTextColor="@color/colorTextLight"
-        app:itemIconTint="@color/new_color_resourse_item"
         app:headerLayout="@layout/nav_header_main2"
-        app:menu="@menu/activity_main2_drawer" >
+        app:itemBackground="@drawable/selector"
+        app:itemShapeAppearanceOverlay="@android:color/darker_gray"
+        app:itemTextColor="@android:color/black"
+        android:background="@color/back_for_feed"
+        app:menu="@menu/activity_main2_drawer">
+
 
         <LinearLayout
             android:id="@+id/techsupp"
@@ -41,16 +43,16 @@
                 android:layout_marginLeft="10dp"
                 android:gravity="center_vertical|start"
                 android:src="@drawable/ic_chat_bubble_outline_black_48dp"
-                android:tint="@color/colorAccent"/>
+                android:tint="@color/colorAccent" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:layout_marginLeft="14dp"
-            android:textColor="@color/colorTextLight"
-            android:gravity="center_vertical|start"
-            android:text="@string/tech_sup"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginLeft="14dp"
+                android:gravity="center_vertical|start"
+                android:text="@string/tech_sup"
+                android:textColor="@color/colorTextLight" />
         </LinearLayout>
 
     </com.google.android.material.navigation.NavigationView>

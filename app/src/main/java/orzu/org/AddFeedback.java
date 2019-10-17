@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,16 +43,14 @@ public class AddFeedback extends AppCompatActivity implements View.OnClickListen
     String idUserTo;
     int like;
     TextView username;
-
+    ImageView back;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
+        getWindow().setStatusBarColor(getResources().getColor(R.color.back_for_feed));
         setContentView(R.layout.activity_add_feedback);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setElevation(0);
-        getSupportActionBar().setTitle("Добавить отзыв");
 
         DBHelper dbHelper = new DBHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -65,6 +64,14 @@ public class AddFeedback extends AppCompatActivity implements View.OnClickListen
         db.close();
         like = 1;
         idUserTo = getIntent().getExtras().getString("idUserFeedbackto");
+
+        back = findViewById(R.id.feedback_back_in_feed);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         backButton = findViewById(R.id.button_back_feed);
         backButton.setOnClickListener(this);

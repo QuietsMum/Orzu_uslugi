@@ -1,29 +1,22 @@
 package orzu.org;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -34,7 +27,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -57,20 +49,21 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
     ArrayList<Map<String, Object>> happy;
     ListView lvCat;
     String idUser;
+    String nameUserFeedbackto;
     TextView textFeeds;
     LinearLayout sort_all, sort_bad, sort_neutral, sort_happy,sort;
     FeedbackAdapter arrayAdapter1;
-
+    TextView count_bad,count_neutral,count_happy,button_add_feed_in_feed;
+    ImageView feedback_back;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
+        getWindow().setStatusBarColor(getResources().getColor(R.color.back_for_feed));
         setContentView(R.layout.activity_feedback);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setElevation(0);
-        getSupportActionBar().setTitle("Отзывы");
         idUser = getIntent().getExtras().getString("idUserFeedback");
+        nameUserFeedbackto = getIntent().getExtras().getString("nameUserFeedbackto");
         sort = findViewById(R.id.sort);
         sort.setVisibility(View.INVISIBLE);
         shim = (ShimmerFrameLayout) findViewById(R.id.feedbackshimmer);
@@ -85,6 +78,28 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
         sort_bad.setOnClickListener(this);
         sort_neutral.setOnClickListener(this);
         sort_happy.setOnClickListener(this);
+        feedback_back = findViewById(R.id.feedback_back);
+        count_bad = findViewById(R.id.count_of_sad);
+        count_neutral = findViewById(R.id.count_of_neutral);
+        count_happy = findViewById(R.id.count_of_happy);
+        button_add_feed_in_feed = findViewById(R.id.button_add_feed_in_feed);
+        feedback_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        button_add_feed_in_feed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent2 = new Intent(Feedback.this, AddFeedback.class);
+                intent2.putExtra("idUserFeedbackto", idUser);
+                intent2.putExtra("nameUserFeedbackto", nameUserFeedbackto);
+                startActivity(intent2);
+            }
+        });
+
         requestFeedback();
     }
 
@@ -160,9 +175,9 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
                 try {
                     Map<String, Object> m;
                     JSONArray jsonArray = new JSONArray(mMessage);
-                    int bpSad = R.drawable.ic_sad;
-                    int bpNorm = R.drawable.ic_neutral;
-                    int bpHappy = R.drawable.ic_happy;
+                    int bpSad = R.drawable.ic_bad;
+                    int bpNorm = R.drawable.ic_neutral2;
+                    int bpHappy = R.drawable.ic_happy2;
                     int lenght = jsonArray.length();
                     String feedName = "";
                     for (int i = 0; i < lenght; i++) {
@@ -217,6 +232,9 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
                             sort.setVisibility(View.VISIBLE);
                             lvCat.setAdapter(arrayAdapter1);
                             arrayAdapter1.notifyDataSetChanged();
+                            count_bad.setText(bad.size()+"");
+                            count_neutral.setText(neutral.size()+"");
+                            count_happy.setText(happy.size()+"");
                         }
                     });
 
@@ -231,37 +249,47 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
 
     @Override
     public void onClick(View view) {
+        float scale = getResources().getDisplayMetrics().density;
+        int dpAsPixels = (int) (6*scale + 0.5f);
         switch (view.getId()) {
             case R.id.sort_all:
-                sort_all.setBackgroundResource(R.drawable.circle_button_left_solid);
-                sort_bad.setBackgroundResource(R.drawable.circle_button_center);
-                sort_neutral.setBackgroundResource(R.drawable.circle_button_center);
-                sort_happy.setBackgroundResource(R.drawable.circle_button_right);
-                textFeeds.setTextColor(getResources().getColor(R.color.colorBackgrndFrg));
+                sort_all.setBackgroundResource(R.drawable.shape_for_feedback_gray);
+                sort_bad.setBackgroundResource(R.drawable.shape_for_feedback);
+                sort_neutral.setBackgroundResource(R.drawable.shape_for_feedback);
+                sort_happy.setBackgroundResource(R.drawable.shape_for_feedback);
+                sort_happy.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
+                sort_neutral.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
+                sort_bad.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
                 getAll();
                 break;
             case R.id.sort_bad:
-                sort_all.setBackgroundResource(R.drawable.circle_button_left);
-                sort_bad.setBackgroundResource(R.drawable.circle_button_center_solid);
-                sort_neutral.setBackgroundResource(R.drawable.circle_button_center);
-                sort_happy.setBackgroundResource(R.drawable.circle_button_right);
-                textFeeds.setTextColor(getResources().getColor(R.color.colorTextDark));
+                sort_all.setBackgroundResource(R.drawable.shape_for_feedback);
+                sort_bad.setBackgroundResource(R.drawable.shape_for_feedback_gray);
+                sort_neutral.setBackgroundResource(R.drawable.shape_for_feedback);
+                sort_happy.setBackgroundResource(R.drawable.shape_for_feedback);
+                sort_happy.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
+                sort_neutral.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
+                sort_bad.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
                 getBad();
                 break;
             case R.id.sort_neutral:
-                sort_all.setBackgroundResource(R.drawable.circle_button_left);
-                sort_bad.setBackgroundResource(R.drawable.circle_button_center);
-                sort_neutral.setBackgroundResource(R.drawable.circle_button_center_solid);
-                sort_happy.setBackgroundResource(R.drawable.circle_button_right);
-                textFeeds.setTextColor(getResources().getColor(R.color.colorTextDark));
+                sort_all.setBackgroundResource(R.drawable.shape_for_feedback);
+                sort_bad.setBackgroundResource(R.drawable.shape_for_feedback);
+                sort_neutral.setBackgroundResource(R.drawable.shape_for_feedback_gray);
+                sort_happy.setBackgroundResource(R.drawable.shape_for_feedback);
+                sort_happy.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
+                sort_neutral.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
+                sort_bad.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
                 getNeutral();
                 break;
             case R.id.sort_happy:
-                sort_all.setBackgroundResource(R.drawable.circle_button_left);
-                sort_bad.setBackgroundResource(R.drawable.circle_button_center);
-                sort_neutral.setBackgroundResource(R.drawable.circle_button_center);
-                sort_happy.setBackgroundResource(R.drawable.circle_button_right_solid);
-                textFeeds.setTextColor(getResources().getColor(R.color.colorTextDark));
+                sort_all.setBackgroundResource(R.drawable.shape_for_feedback);
+                sort_bad.setBackgroundResource(R.drawable.shape_for_feedback);
+                sort_neutral.setBackgroundResource(R.drawable.shape_for_feedback);
+                sort_happy.setBackgroundResource(R.drawable.shape_for_feedback_gray);
+                sort_happy.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
+                sort_neutral.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
+                sort_bad.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
                 getHappy();
                 break;
         }

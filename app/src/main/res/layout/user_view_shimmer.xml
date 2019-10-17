@@ -350,7 +350,7 @@
                                         android:layout_height="20dp"
                                         android:layout_marginStart="8dp"
                                         android:layout_marginLeft="8dp"
-                                        app:srcCompat="@drawable/ic_happy" />
+                                        app:srcCompat="@drawable/ic_happy2" />
 
                                 </LinearLayout>
 
@@ -454,7 +454,7 @@
                                         android:layout_height="20dp"
                                         android:layout_marginStart="8dp"
                                         android:layout_marginLeft="8dp"
-                                        app:srcCompat="@drawable/ic_sad" />
+                                        app:srcCompat="@drawable/ic_bad" />
 
                                 </LinearLayout>
 
