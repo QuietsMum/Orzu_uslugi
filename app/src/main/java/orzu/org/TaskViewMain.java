@@ -30,7 +30,9 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -118,7 +120,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
     String image;
     String mFiName;
     String text;
-    CardView carddis;
+    CardView card_of_shimmer;
     ShimmerFrameLayout shim;
     TextView buttonGettask;
     TextView buttonGettaskShim;
@@ -151,15 +153,16 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
 
     DBHelper dbHelper;
 
+    ImageView back;
+    CardView cardView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_task_view_main);
-        ActionBar toolbar = getSupportActionBar();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
-        getSupportActionBar().setElevation(0);
         Intent intent = getIntent();
 
         if (intent != null) {
@@ -200,6 +203,24 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         taskMaketBack = findViewById(R.id.maket_task_white);
         taskMaketView = findViewById(R.id.maket_view);
         imageViewName = findViewById(R.id.imageViewName);
+        back = findViewById(R.id.task_view_main_back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        card_of_shimmer = findViewById(R.id.card_of_shimmer);
+        cardView = findViewById(R.id.card_of_task_view);
+        cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
+
+        TranslateAnimation animation_of_shim = new TranslateAnimation(0.0f, 0.0f,
+                1500.0f, 0.0f);
+        animation_of_shim.setDuration(300);
+        //animation.setFillAfter(true);
+        card_of_shimmer.startAnimation(animation_of_shim);
+
+
         //carddis = findViewById(R.id.carddis);
         Animation animation = new AlphaAnimation(1, 0); //to change visibility from visible to invisible
         animation.setDuration(1000); //1 second duration for each animation cycle
@@ -214,7 +235,22 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             buttonGettaskShim.setText("Посмотреть отклики");
             buttonGettask.setBackgroundColor(getResources().getColor(R.color.colorBackMyTask));
             buttonGettaskShim.setBackgroundColor(getResources().getColor(R.color.colorBackMyTask));
+            TranslateAnimation animationn = new TranslateAnimation(0.0f, 0.0f,
+                    1500.0f, 0.0f);
+            animationn.setDuration(500);
+            //animation.setFillAfter(true);
+            cardView.startAnimation(animationn);
+            buttonGettask.setVisibility(View.GONE);
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
+                    buttonGettask.setVisibility(View.VISIBLE);
+                    Animation animZoomIn = AnimationUtils.loadAnimation(getApplicationContext(),
+                            R.anim.zoom_in);
+                    buttonGettask.startAnimation(animZoomIn);
+                }
+            }, animationn.getDuration());
         }
+
 
         if (opt.equals("view")) {
             task = new AsyncOrzuTask();
@@ -232,7 +268,20 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             taskMaketView.setVisibility(View.INVISIBLE);
             taskMaketBack.setVisibility(View.INVISIBLE);
             shim.setVisibility(View.INVISIBLE);
-
+            TranslateAnimation animationn = new TranslateAnimation(0.0f, 0.0f,
+                    1500.0f, 0.0f);
+            animationn.setDuration(500);
+            //animation.setFillAfter(true);
+            cardView.startAnimation(animationn);
+            buttonGettask.setVisibility(View.GONE);
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
+                    buttonGettask.setVisibility(View.VISIBLE);
+                    Animation animZoomIn = AnimationUtils.loadAnimation(getApplicationContext(),
+                            R.anim.zoom_in);
+                    buttonGettask.startAnimation(animZoomIn);
+                }
+            }, animationn.getDuration());
             final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
 
             datetype = Integer.parseInt(prefs.getString(Util.TASK_DATETYPE, ""));
@@ -701,6 +750,9 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                             nat.setText(natnum);
                             hap.setText(hapnum);
                             Picasso.get().load("https://orzu.org" + image).fit().centerCrop().into(imageViewName);
+                            Animation animZoomIn = AnimationUtils.loadAnimation(getApplicationContext(),
+                                    R.anim.zoom_in);
+                            buttonGettask.startAnimation(animZoomIn);
                         }
                     });
 
@@ -712,6 +764,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                     taskMaketView.setVisibility(View.INVISIBLE);
                     taskMaketBack.setVisibility(View.INVISIBLE);
                     shim.setVisibility(View.INVISIBLE);
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();

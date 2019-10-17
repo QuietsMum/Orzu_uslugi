@@ -2,6 +2,7 @@ package orzu.org;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -14,11 +15,15 @@ import android.os.Bundle;
 import android.util.JsonReader;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
 
@@ -39,26 +44,43 @@ public class CreateTaskSubCategory extends AppCompatActivity {
     Dialog dialog;
     ShimmerFrameLayout progressBar;
 
+    CardView cardView;
+    TextView name_of_subcategory;
+    ImageView back;
     public static Activity fa;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_create_task_sub_category);
 
         String idIntent = getIntent().getExtras().getString("id");
         String nameIntent = getIntent().getExtras().getString("name");
 
-        ActionBar toolbar = getSupportActionBar();
-        toolbar.setDisplayHomeAsUpEnabled(true);
-        toolbar.setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
-        toolbar.setTitle(nameIntent);
-        toolbar.setElevation(0);
         progressBar = findViewById(R.id.progressBarSubCatCreate);
+        progressBar.startShimmer();
         fa = this;
+        cardView = findViewById(R.id.card_of_subcategory);
+        cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
 
+        name_of_subcategory = findViewById(R.id.name_of_subcategory);
+        name_of_subcategory.setText(nameIntent);
 
+        back = findViewById(R.id.subcategory_back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
+        TranslateAnimation animation_of_shim = new TranslateAnimation(0.0f, 0.0f,
+                1500.0f, 0.0f);
+        animation_of_shim.setDuration(300);
+        //animation.setFillAfter(true);
+        progressBar.startAnimation(animation_of_shim);
         String cat = "Категории";
         ListView lvCat = (ListView)findViewById(R.id.list_subcat_create);
         data = new ArrayList<>();

@@ -1,6 +1,7 @@
 package orzu.org;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -18,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -86,16 +88,16 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
     View backblue;
     View backwhite;
     ImageView statusImg;
+    CardView cardView;
+    ImageView back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_user_view);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
-        getSupportActionBar().setTitle("");
-        getSupportActionBar().setElevation(0);
         nameUser = findViewById(R.id.name_fname_his);
         idUser = getIntent().getExtras().getString("idhis");
         feedbackButtun = findViewById(R.id.linear_feedback_click);
@@ -103,6 +105,16 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
         feedbackButtun.setOnClickListener(this);
         feedbackButtunAdd.setOnClickListener(this);
 
+        cardView = findViewById(R.id.card_of_user_view);
+        cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
+
+        back = findViewById(R.id.user_view_back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
 
         feedbackname1 = findViewById(R.id.userview_feedbackname);
