@@ -1,15 +1,7 @@
 package orzu.org;
 
-import android.animation.Animator;
-import android.animation.AnimatorInflater;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ValueAnimator;
-import android.app.ActivityOptions;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,37 +16,34 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.SimpleAdapter;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 
 import com.facebook.shimmer.ShimmerFrameLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
+import com.google.gson.JsonArray;
 
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -64,18 +53,13 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.Objects;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import orzu.org.ui.login.model;
 
 public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -83,6 +67,10 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
     ArrayList<Map<String, Object>> data;
     ArrayList<Map<String, Object>> truedata;
     RecyclerView rv;
+    RecyclerView category_rv;
+    RecyclerView subcategory_rv;
+    MainCategoryAdapter adapter_category;
+    MainSubCategoryAdapter adapter_subcategory;
     RVAdapter adapter;
     Map<String, Object> m = new HashMap<>();
     Map<String, Object> m_new = new HashMap<>();
@@ -111,6 +99,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
     ImageView imagenotask;
     TextView textnotask;
+    TextView create_task_main;
     Dialog dialog;
     int status;
     ShimmerFrameLayout shim;
@@ -118,6 +107,9 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
     CardView cardMain;
     EditText editFind;
     String edittextFind;
+
+    List<category_model> categories = new ArrayList<>();
+    List<category_model> subcategories = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -134,8 +126,16 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
         imagenotask = view.findViewById(R.id.imageNoTask);
         textnotask = view.findViewById(R.id.textViewNoTask);
+        category_rv = view.findViewById(R.id.category_main_rv);
+        subcategory_rv = view.findViewById(R.id.subcategory_main_rv);
+        LinearLayoutManager layoutManager
+                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManager_sub
+                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        category_rv.setLayoutManager(layoutManager);
+        subcategory_rv.setLayoutManager(layoutManager_sub);
 
-
+        create_task_main = view.findViewById(R.id.create_task_main);
         editFind = view.findViewById(R.id.editFind);
         editFind.addTextChangedListener(new TextWatcher() {
             @Override
@@ -173,6 +173,14 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         catTask = new AsyncOrzuTasksMain();
         catTask.execute();
 
+        create_task_main.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(),CreateTaskCategory.class);
+                startActivity(intent);
+            }
+        });
+
         rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -187,7 +195,35 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 }
             }
         });
+        getCategories();
+        getSubCategories("1");
+        adapter_category = new MainCategoryAdapter(getContext(), categories);
+        category_rv.setAdapter(adapter_category);
+        adapter_subcategory = new MainSubCategoryAdapter(getContext(), subcategories);
+        subcategory_rv.setAdapter(adapter_subcategory);
+        MainSubCategoryAdapter.setSelect(new NameItemSelect() {
+            @Override
+            public void onItemSelectedListener(View view, int position) {
+                Log.wtf("wtfisthat", subcategories.get(position).getName());
 
+            }
+
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        MainCategoryAdapter.setSelect(new NameItemSelect() {
+            @Override
+            public void onItemSelectedListener(View view, int position) {
+                getSubCategories(categories.get(position).getId());
+            }
+
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
         return view;
     }
 
@@ -525,8 +561,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 }
             });
             noTasks = false;
-            shim.setVisibility(View.INVISIBLE);
-            nestshimmer.setVisibility(View.INVISIBLE);
+
             if (adapter.getItemCount() == 0) {
                 noTasks = true;
                 imagenotask.setVisibility(View.VISIBLE);
@@ -844,6 +879,78 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
         }
     }
+
+    private void getCategories() {
+
+        String requestUrl = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_parent";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, requestUrl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray j = new JSONArray(response);
+
+                    for (int i = 0; i < j.length(); i++) {
+                        try {
+                            JSONObject object = j.getJSONObject(i);
+                            categories.add(new category_model(object.getString("id"), object.getString("name"), object.getString("parent_id")));
+                            adapter_category = new MainCategoryAdapter(getContext(), categories);
+                            category_rv.setAdapter(adapter_category);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace(); //log the error resulting from the request for diagnosis/debugging
+            }
+        });
+//make the request to your server as indicated in your request url
+        Volley.newRequestQueue(Objects.requireNonNull(getContext())).add(stringRequest);
+    }
+
+    private void getSubCategories(String id) {
+        subcategories.clear();
+        String requestUrl = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_subcat&id=" + id;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, requestUrl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray j = new JSONArray(response);
+
+                    for (int i = 0; i < j.length(); i++) {
+                        try {
+                            JSONObject object = j.getJSONObject(i);
+                            subcategories.add(new category_model(object.getString("id"), object.getString("name"), object.getString("parent_id")));
+                            adapter_subcategory = new MainSubCategoryAdapter(getContext(), subcategories);
+                            subcategory_rv.setAdapter(adapter_subcategory);
+                            Log.wtf("wtfisthat", subcategories.get(i).getName());
+                            adapter_category.notifyDataSetChanged();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    shim.setVisibility(View.INVISIBLE);
+                    nestshimmer.setVisibility(View.INVISIBLE);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace(); //log the error resulting from the request for diagnosis/debugging
+            }
+        });
+//make the request to your server as indicated in your request url
+        Volley.newRequestQueue(Objects.requireNonNull(getContext())).add(stringRequest);
+    }
+
 
 }
 

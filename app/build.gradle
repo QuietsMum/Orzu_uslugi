@@ -77,5 +77,6 @@ dependencies {
     implementation 'fr.avianey.com.viewpagerindicator:library:2.4.1.1@aar'
     implementation 'com.fxn769:pix:1.4.4'
     implementation 'org.jsoup:jsoup:1.12.1'
+    implementation 'com.android.volley:volley:1.1.0'
 }
 apply plugin: 'com.google.gms.google-services'

@@ -20,6 +20,7 @@
             android:elevation="0dp"
             app:elevation="0dp"
             app:titleTextColor="@color/colorBackgrndFrg"
+            android:background="@color/back_for_feed"
             app:popupTheme="@style/Theme.MaterialComponents.Light.DarkActionBar" />
 
     </com.google.android.material.appbar.AppBarLayout>
