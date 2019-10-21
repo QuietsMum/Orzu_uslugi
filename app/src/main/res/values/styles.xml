@@ -57,7 +57,6 @@
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.Spinner.DropDown.ActionBar">
         <item name="spinBars">true</item>
         <item name="color">@color/colorAccent</item>
-
     </style>
 
     <style name="AppThemeCard" parent="Theme.MaterialComponents.Light.DarkActionBar">
