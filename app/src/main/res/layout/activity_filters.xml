@@ -25,6 +25,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="Очистить"
+        android:textColor="@android:color/white"
+        android:focusable="true"
+        android:textSize="17sp"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:id="@+id/linear_for_name_tast"
         android:layout_width="match_parent"
@@ -59,9 +73,11 @@
             android:layout_height="0dp"
             android:layout_gravity="top"
             android:layout_weight="5">
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <ListView
                     android:id="@+id/list_view_filters1"
                     android:layout_width="match_parent"
@@ -98,6 +114,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/list_view_filters2"
                     app:srcCompat="@color/colorPrimaryGrey" />
+
                 <TextView
                     android:id="@+id/buttonDone"
                     android:layout_width="match_parent"

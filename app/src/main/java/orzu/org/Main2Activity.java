@@ -80,7 +80,7 @@ public class Main2Activity extends AppCompatActivity
     RelativeLayout userviewBtn;
     TextView nav_user_name;
     String modelString;
-
+    Toolbar toolbar;
     private void setupBeams() {
         PushNotifications.start(getApplicationContext(), "e33cda0a-16d0-41cd-a5c9-8ae60b9b7042");
         PushNotifications.clearDeviceInterests();
@@ -195,7 +195,7 @@ public class Main2Activity extends AppCompatActivity
         getWindow().setStatusBarColor(getResources().getColor(R.color.colorTextDark));
 
         setContentView(R.layout.activity_main2);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
 //        toolbar.setBackground(getResources().getDrawable(R.drawable.gradient_back));
         setSupportActionBar(toolbar);
         navigationView = findViewById(R.id.nav_view);
@@ -330,7 +330,8 @@ public class Main2Activity extends AppCompatActivity
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
+            toolbar.setBackgroundColor(getResources().getColor(R.color.back_for_feed));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorOrangeOnly));
             // Вставляем фрагмент, заменяя текущий фрагмент
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
@@ -343,7 +344,10 @@ public class Main2Activity extends AppCompatActivity
         } else if (id == R.id.second) {
             Intent intent = new Intent(this, CreateTaskCategory.class);
             startActivity(intent);
+
         } else if (id == R.id.third) {
+            toolbar.setBackgroundColor(getResources().getColor(R.color.back_for_feed));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorOrangeOnly));
             fragmentClass = Fragment4.class;
             try {
                 fragment = (Fragment) fragmentClass.newInstance();
@@ -362,7 +366,8 @@ public class Main2Activity extends AppCompatActivity
 
 
         } else if (id == R.id.fourth) {
-
+            toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
             fragmentClass = Fragment2.class;
             try {
                 fragment = (Fragment) fragmentClass.newInstance();
@@ -519,6 +524,8 @@ public class Main2Activity extends AppCompatActivity
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
+                getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
                 // Вставляем фрагмент, заменяя текущий фрагмент
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.container, fragment, "fragment3").commit();

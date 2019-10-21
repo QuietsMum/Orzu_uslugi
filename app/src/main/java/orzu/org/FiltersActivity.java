@@ -43,11 +43,12 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
         Intent intent = new Intent(context, FiltersActivity.class);
         context.startActivity(intent);
     }
-    String[] filtname1 = { "Категории",  "Город"};
-    String[] filtname2 = { "Оплата картой", "Задания без предложений", "Бизнес-задания"};
-    String[] filtres1 = { "Все категории",  "Алматы"};
-    String[] filtres2 = { "Через сделку без риска", "Успей откликнутся", "Безналичная оплата"};
-    int[] filtimg1 = {R.drawable.all_org,  R.drawable.point_org};
+
+    String[] filtname1 = {"Категории", "Город"};
+    String[] filtname2 = {"Оплата картой", "Задания без предложений", "Бизнес-задания"};
+    String[] filtres1 = {"Все категории", "Алматы"};
+    String[] filtres2 = {"Через сделку без риска", "Успей откликнутся", "Безналичная оплата"};
+    int[] filtimg1 = {R.drawable.all_org, R.drawable.point_org};
     int[] filtimg2 = {R.drawable.card_org, R.drawable.flash_org, R.drawable.work_org};
     int elementPos;
     String cat = "Cat";
@@ -63,6 +64,8 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
     ListView lvMain2;
     CardView cardView;
     ImageView filter_back;
+    TextView clear;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,8 +73,8 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
         getSupportActionBar().hide();
         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_filters);
-        lvMain1 = (ListView)findViewById(R.id.list_view_filters1);
-        lvMain2 = (ListView)findViewById(R.id.list_view_filters2);
+        lvMain1 = (ListView) findViewById(R.id.list_view_filters1);
+        lvMain2 = (ListView) findViewById(R.id.list_view_filters2);
 
         /*ImageView lineColorCode = (ImageView) lvMain1.findViewById(R.id.nexttocatfilt);
         int color = Color.parseColor("#E2E2E2"); //The color u want
@@ -89,27 +92,44 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
         });
         cardView = findViewById(R.id.card_of_filter);
         cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
-        data1= new ArrayList<>();
-        data2= new ArrayList<>();
-        for (int i = 0; i < 2; i++){
+        data1 = new ArrayList<>();
+        data2 = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
             Map<String, Object> m1 = new HashMap<>();
-            m1.put(cat,filtname1[i]);
-            m1.put(res,filtres1[i]);
-            m1.put(img,filtimg1[i]);
+            m1.put(cat, filtname1[i]);
+            m1.put(res, filtres1[i]);
+            m1.put(img, filtimg1[i]);
             data1.add(m1);
         }
 
-        for (int i = 0; i < 3; i++){
+        for (int i = 0; i < 3; i++) {
             Map<String, Object> m2 = new HashMap<>();
-            m2.put(cat,filtname2[i]);
-            m2.put(res,filtres2[i]);
-            m2.put(img,filtimg2[i]);
+            m2.put(cat, filtname2[i]);
+            m2.put(res, filtres2[i]);
+            m2.put(img, filtimg2[i]);
             data2.add(m2);
         }
+        clear = findViewById(R.id.clear);
+        clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Long[] idArray = new Long[1];
+                idArray[0] = 0L;
+                model.array = idArray;
+                button.setVisibility(View.VISIBLE);
+                Common.city = "";
+                Map<String, Object> m2sort = new HashMap<>();
+                m2sort.put(cat, filtname1[1]);
+                m2sort.put(res, "Алматы");
+                m2sort.put(img, filtimg1[1]);
+                data1.remove(1);
+                data1.add(1, m2sort);
+                arrayAdapter1.notifyDataSetChanged();
+            }
+        });
 
-
-        String[] from1 = { cat,  res, img};
-        int[] to1 = { R.id.textView10, R.id.textView11, R.id.imageViewFilt };
+        String[] from1 = {cat, res, img};
+        int[] to1 = {R.id.textView10, R.id.textView11, R.id.imageViewFilt};
 
         arrayAdapter1 = new SimpleAdapter(this, data1, R.layout.filters_item_2, from1, to1);
         lvMain1.setAdapter(arrayAdapter1);
@@ -120,7 +140,8 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
 
                     Intent intent = new Intent(FiltersActivity.this, CategoryView.class);
                     startActivity(intent);
-                } if (i == 1) {
+                }
+                if (i == 1) {
 
                     Intent intent2 = new Intent(FiltersActivity.this, SubCategoryView2.class);
                     startActivityForResult(intent2, 1);
@@ -135,10 +156,10 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
-        String[] from2 = { cat,  res, img};
-        int[] to2 = { R.id.textView10, R.id.textView11, R.id.imageViewFilt };
+        String[] from2 = {cat, res, img};
+        int[] to2 = {R.id.textView10, R.id.textView11, R.id.imageViewFilt};
 
-       arrayAdapter2 = new SimpleAdapter(this, data2, R.layout.filters_item, from2, to2);
+        arrayAdapter2 = new SimpleAdapter(this, data2, R.layout.filters_item, from2, to2);
         lvMain2.setAdapter(arrayAdapter2);
         lvMain2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -148,7 +169,7 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
                     swit.setChecked(true);
                 } else swit.setChecked(false);
 
-               button.setVisibility(View.VISIBLE);
+                button.setVisibility(View.VISIBLE);
 
             }
         });
@@ -197,8 +218,8 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("result","changes");
-        setResult(Activity.RESULT_OK,returnIntent);
+        returnIntent.putExtra("result", "changes");
+        setResult(Activity.RESULT_OK, returnIntent);
         finish();
     }
 
@@ -219,11 +240,11 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
                 button.setVisibility(View.VISIBLE);
                 Common.city = "";
                 Map<String, Object> m2sort = new HashMap<>();
-                m2sort.put(cat,filtname1[1]);
+                m2sort.put(cat, filtname1[1]);
                 m2sort.put(res, "Алматы");
-                m2sort.put(img,filtimg1[1]);
+                m2sort.put(img, filtimg1[1]);
                 data1.remove(1);
-                data1.add(1,m2sort);
+                data1.add(1, m2sort);
                 arrayAdapter1.notifyDataSetChanged();
                 return true;
             case android.R.id.home:

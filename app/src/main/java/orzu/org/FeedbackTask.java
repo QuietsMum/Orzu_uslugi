@@ -1,6 +1,7 @@
 package orzu.org;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,8 +21,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -51,20 +54,28 @@ public class FeedbackTask extends AppCompatActivity implements MainItemSelect {
     View viewBack;
     ArrayList<Map<String, Object>> data;
     RecyclerView lvCat;
-
+    CardView cardView;
     TextView empty;
     MainItemSelect itemSelect;
+    ImageView feedback_task_back;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_feedback_task);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setElevation(0);
-        getSupportActionBar().setTitle("Отклики");
         shim = (ShimmerFrameLayout) findViewById(R.id.feedbackshimmertask);
         shim.startShimmer();
+        cardView = findViewById(R.id.card_of_feedback);
+        cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
+        feedback_task_back = findViewById(R.id.feedback_task_back);
+        feedback_task_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         lvCat = findViewById(R.id.list_feedback_task);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         lvCat.setLayoutManager(layoutManager);
@@ -179,8 +190,15 @@ public class FeedbackTask extends AppCompatActivity implements MainItemSelect {
                 final String mMessage = response.body().string();
                 Log.e("resultArrayFull", mMessage);
 
-                if (mMessage.equals("No request yet")){
-                    empty.setVisibility(View.VISIBLE);
+                if (mMessage.equals("\"No request yet\"")){
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            empty.setVisibility(View.VISIBLE);
+                            shim.setVisibility(View.INVISIBLE);
+                        }
+                    });
+
                 }
 
                 try {

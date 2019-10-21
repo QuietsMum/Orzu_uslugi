@@ -7,7 +7,7 @@
         android:id="@+id/item_subscribe"
         app:showAsAction="ifRoom"
         android:icon="@drawable/sub_to_cat_icon"
-        android:iconTint="@color/colorBackgrndFrg"
+        android:iconTint="@color/colorTextDark"
         android:title="@string/subscribes">
     </item>
 
@@ -15,7 +15,7 @@
         android:id="@+id/share_item"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_share_black_48dp"
-        android:iconTint="@color/colorBackgrndFrg"
+        android:iconTint="@color/colorTextDark"
         android:title="@string/share_user">
     </item>
 
@@ -23,7 +23,7 @@
         android:id="@+id/settings_item"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_settings_48pt_3x"
-        android:iconTint="@color/colorBackgrndFrg"
+        android:iconTint="@color/colorTextDark"
         android:title="@string/setting_user">
     </item>
 

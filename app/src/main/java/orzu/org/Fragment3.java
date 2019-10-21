@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
@@ -101,9 +102,10 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
     String encodedString;
     ImageView imageViewName;
     ArrayList<String> returnValue = new ArrayList<>();
-
+    CardView cardView;
     DBHelper dbHelper;
     String tokenUser;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,7 +156,8 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         backwhite = view.findViewById(R.id.view_back_whitemy);
         shim = (ShimmerFrameLayout) view.findViewById(R.id.userviewShimmerLayoutmy);
         shim.startShimmer();
-
+        cardView = view.findViewById(R.id.card_of_user_view);
+        cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
         taskCountReq = view.findViewById(R.id.viewuser_task_count_reqmy);
         taskCount = view.findViewById(R.id.viewuser_task_countmy);
         userCity = view.findViewById(R.id.viewuser_citymy);
@@ -169,7 +172,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         imageViewName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Pix.start(getActivity(),Options.init().setRequestCode(100));
+                Pix.start(getActivity(), Options.init().setRequestCode(100));
             }
         });
 
@@ -189,7 +192,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
             returnValue = data.getStringArrayListExtra(Pix.IMAGE_RESULTS);
             imageViewName.setImageURI(Uri.parse(returnValue.get(0)));
             Common.d = imageViewName.getDrawable();
-            ((Main2Activity)getActivity()).changeImage();
+            ((Main2Activity) getActivity()).changeImage();
             try {
                 getEditAvatarResponse();
             } catch (IOException e) {
@@ -250,11 +253,11 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
             public void onResponse(Call call, Response response) throws IOException {
 
                 String mMessage = response.body().string();
-                if(getActivity() == null)
+                if (getActivity() == null)
                     return;
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        Toast.makeText(getContext(),"Ваш профиль изменен", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Ваш профиль изменен", Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -365,9 +368,9 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         drawable = DrawableCompat.wrap(drawable);
         drawable2 = DrawableCompat.wrap(drawable2);
         drawable3 = DrawableCompat.wrap(drawable3);
-        DrawableCompat.setTint(drawable, ContextCompat.getColor(getActivity(), R.color.colorBackgrndFrg));
-        DrawableCompat.setTint(drawable2, ContextCompat.getColor(getActivity(), R.color.colorBackgrndFrg));
-        DrawableCompat.setTint(drawable3, ContextCompat.getColor(getActivity(), R.color.colorBackgrndFrg));
+        DrawableCompat.setTint(drawable, ContextCompat.getColor(getActivity(), R.color.colorTextDark));
+        DrawableCompat.setTint(drawable2, ContextCompat.getColor(getActivity(), R.color.colorTextDark));
+        DrawableCompat.setTint(drawable3, ContextCompat.getColor(getActivity(), R.color.colorTextDark));
         menu.findItem(R.id.share_item).setIcon(drawable);
         menu.findItem(R.id.settings_item).setIcon(drawable2);
         menu.findItem(R.id.item_subscribe).setIcon(drawable3);
@@ -409,8 +412,8 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         imageViewName.setImageDrawable(Common.d);
-        ((Main2Activity)getActivity()).changeImage();
-        if(Common.sex!=null){
+        ((Main2Activity) getActivity()).changeImage();
+        if (Common.sex != null) {
             userCity.setText(Common.city);
             userBday.setText(Common.birth);
             userNarr.setText(Common.about);
@@ -563,7 +566,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                                         feedbackname1.setText(name[0]);
                                         feedbacknarr1.setText(narr[0]);
                                         feedbackcat1.setText(date[0]);
-                                        Picasso.get().load("https://orzu.org"+image1).into(feedbackimgUser1);
+                                        Picasso.get().load("https://orzu.org" + image1).into(feedbackimgUser1);
                                     }
                                 });
 
@@ -609,7 +612,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                                         feedbackname2.setText(name[1]);
                                         feedbacknarr2.setText(narr[1]);
                                         feedbackcat2.setText(date[1]);
-                                        Picasso.get().load("https://orzu.org"+image2).into(feedbackimgUser2);
+                                        Picasso.get().load("https://orzu.org" + image2).into(feedbackimgUser2);
                                     }
                                 });
                             }

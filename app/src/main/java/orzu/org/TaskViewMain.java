@@ -233,8 +233,6 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
 
             buttonGettask.setText("Посмотреть отклики");
             buttonGettaskShim.setText("Посмотреть отклики");
-            buttonGettask.setBackgroundColor(getResources().getColor(R.color.colorBackMyTask));
-            buttonGettaskShim.setBackgroundColor(getResources().getColor(R.color.colorBackMyTask));
             TranslateAnimation animationn = new TranslateAnimation(0.0f, 0.0f,
                     1500.0f, 0.0f);
             animationn.setDuration(500);
