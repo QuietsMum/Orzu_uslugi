@@ -3,22 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
 
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButtonMain"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:backgroundTint="@color/colorAccent"
-        app:tint="@color/colorBackgrndFrg"
-        app:srcCompat="@drawable/ic_add_white_48pt_3x" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/nestedScrollViewMy"
@@ -26,10 +14,10 @@
         android:layout_height="match_parent">
 
         <androidx.core.widget.NestedScrollView
-            android:overScrollMode="never"
-            android:clipToPadding="false"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:overScrollMode="never">
 
             <LinearLayout
                 android:id="@+id/linearLayoutMy"
@@ -45,9 +33,13 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvMy"
-                    android:clipToPadding="false"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:clipToPadding="false"
+                    android:paddingLeft="23dp"
+                    android:paddingRight="23dp"
+                    android:paddingBottom="30dp"
                     android:scrollbars="vertical" />
 
             </LinearLayout>
@@ -76,12 +68,12 @@
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:tint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/no_task_image"
-        android:tint="@color/colorPrimary"/>
+        app:srcCompat="@drawable/no_task_image" />
 
     <TextView
         android:id="@+id/textViewMy"
@@ -89,14 +81,24 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="20dp"
         android:text="@string/no_tasks"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageViewMy" />
 
-
-
+    <TextView
+        android:id="@+id/create_task_main"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:layout_margin="32dp"
+        android:background="@drawable/gradient_of_next_button"
+        android:gravity="center"
+        android:text="Создать задачу"
+        android:textColor="@color/colorBackgrndFrg"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

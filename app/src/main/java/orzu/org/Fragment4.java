@@ -79,7 +79,7 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
     ImageView imagenotask;
     TextView textnotask;
     boolean countPager = true;
-    FloatingActionButton floaBtn;
+    TextView floaBtn;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,7 +100,7 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
         tokenUser = c.getString(tokenColIndex);
         Log.e("idUSERUSER", idUser);
         Log.e("idTOKENTOKEN", tokenUser);
-        floaBtn = view.findViewById(R.id.floatingActionButtonMain);
+        floaBtn = view.findViewById(R.id.create_task_main);
         floaBtn.setOnClickListener(this);
         progressBar = view.findViewById(R.id.progressBarMy);
         counter = 1;

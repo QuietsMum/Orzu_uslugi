@@ -110,7 +110,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
     ArrayAdapter<String> adapter;
     ProgressBar bar;
     ShimmerFrameLayout shim;
-    View view_back_white, view_back_blue;
+    ImageView image_back_name_tast3;
     CardView cardView,card_of_shimmer;
 
     @Override
@@ -147,8 +147,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         mAvatar.setOnClickListener(this);
         shim = findViewById(R.id.userviewShimmerLayout);
         shim.startShimmer();
-        view_back_white = findViewById(R.id.view_back_white);
-        view_back_blue = findViewById(R.id.view_back_blue);
+        image_back_name_tast3 = findViewById(R.id.image_back_name_tast3);
         dialog = new Dialog(this);
         dialog.setContentView(R.layout.calendar_dialog_spinner);
 
@@ -569,9 +568,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                                     buttonEdit.startAnimation(animZoomIn);
                                 }
                             }, animationn.getDuration());
-
-                            view_back_blue.setVisibility(View.GONE);
-                            view_back_white.setVisibility(View.GONE);
+                            image_back_name_tast3.setVisibility(View.GONE);
                         }
                     });
 
