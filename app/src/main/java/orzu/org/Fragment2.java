@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
@@ -51,13 +52,14 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
     String messageNot;
     String idUserNot;
     ChatAdapter chatAdapter;
-    LinearLayout customTabs;
     FrameLayout chat_layout;
     SQLiteDatabase db;
     ImageView no_task;
     TextView no_task_text;
     String idUser;
-
+    TextView notif_buttonleft,notif_buttonright;
+    ImageView triangle_left,triangle_right;
+    CardView cardView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,8 +79,12 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
         idUser = c.getString(idColIndex);
         c.close();
         db.close();
-
-        customTabs = view.findViewById(R.id.custom_tabs);
+        cardView =view.findViewById(R.id.card_of_notif);
+        cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
+        notif_buttonleft = view.findViewById(R.id.notif_buttonleft);
+        notif_buttonright = view.findViewById(R.id.notif_buttonright);
+        triangle_left = view.findViewById(R.id.triangle_left);
+        triangle_right = view.findViewById(R.id.triangle_right);
         ProgressBar progressBar = view.findViewById(R.id.progressBarMain2);
         progressBar.setVisibility(View.INVISIBLE);
         btnNotif = view.findViewById(R.id.notif_buttonleft);
@@ -210,12 +216,10 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
                     lit.add(item2);
                     lit.add(item3);
                     lit.add(item4);
-                    customTabs.setVisibility(View.VISIBLE);
                     no_task.setVisibility(View.INVISIBLE);
                     no_task_text.setVisibility(View.INVISIBLE);
                 } catch (Exception e) {
                     Log.wtf("sadas", "asdasddasdas");
-                    customTabs.setVisibility(View.GONE);
                     no_task.setVisibility(View.VISIBLE);
                     no_task_text.setVisibility(View.VISIBLE);
                     rv.setVisibility(View.GONE);
@@ -269,23 +273,17 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.notif_buttonleft:
-                btnNotif.setBackgroundResource(R.drawable.circle_button_left_solid);
-                btnNotif.setTextColor(getResources().getColor(R.color.colorBackgrndFrg));
-                btnMessage.setBackgroundResource(R.drawable.circle_button_right);
-                btnMessage.setTextColor(getResources().getColor(R.color.colorTextGrad));
+                triangle_left.setVisibility(View.VISIBLE);
+                triangle_right.setVisibility(View.INVISIBLE);
 
-                customTabs.setVisibility(View.VISIBLE);
                 rv.setVisibility(View.VISIBLE);
                 rv_of_chat.setVisibility(View.GONE);
                 getNotif();
                 break;
             case R.id.notif_buttonright:
-                btnNotif.setBackgroundResource(R.drawable.circle_button_left);
-                btnNotif.setTextColor(getResources().getColor(R.color.colorTextGrad));
-                btnMessage.setBackgroundResource(R.drawable.circle_button_right_solid);
-                btnMessage.setTextColor(getResources().getColor(R.color.colorBackgrndFrg));
+                triangle_right.setVisibility(View.VISIBLE);
+                triangle_left.setVisibility(View.INVISIBLE);
 
-                customTabs.setVisibility(View.GONE);
                 rv.setVisibility(View.GONE);
                 rv_of_chat.setVisibility(View.VISIBLE);
                 no_task.setVisibility(View.INVISIBLE);

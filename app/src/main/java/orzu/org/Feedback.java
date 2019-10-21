@@ -51,10 +51,14 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
     String idUser;
     String nameUserFeedbackto;
     TextView textFeeds;
-    LinearLayout sort_all, sort_bad, sort_neutral, sort_happy,sort;
+    LinearLayout sort_all, sort_bad, sort_neutral, sort_happy, sort;
     FeedbackAdapter arrayAdapter1;
-    TextView count_bad,count_neutral,count_happy,button_add_feed_in_feed;
+    TextView count_bad, count_neutral, count_happy, button_add_feed_in_feed;
     ImageView feedback_back;
+
+    ImageView imagenotask;
+    TextView textnotask;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +82,8 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
         sort_bad.setOnClickListener(this);
         sort_neutral.setOnClickListener(this);
         sort_happy.setOnClickListener(this);
+        imagenotask = findViewById(R.id.imageNoTask2);
+        textnotask = findViewById(R.id.textViewNoTask2);
         feedback_back = findViewById(R.id.feedback_back);
         count_bad = findViewById(R.id.count_of_sad);
         count_neutral = findViewById(R.id.count_of_neutral);
@@ -172,59 +178,80 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
             public void onResponse(Call call, Response response) throws IOException {
                 final String mMessage = response.body().string();
                 Log.e("resultArrayFull", mMessage);
-                try {
-                    Map<String, Object> m;
-                    JSONArray jsonArray = new JSONArray(mMessage);
-                    int bpSad = R.drawable.ic_bad;
-                    int bpNorm = R.drawable.ic_neutral2;
-                    int bpHappy = R.drawable.ic_happy2;
-                    int lenght = jsonArray.length();
-                    String feedName = "";
-                    for (int i = 0; i < lenght; i++) {
-                        m = new HashMap<>();
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                if (!mMessage.equals("\"No reviews yet\"")) {
+                    try {
+                        Map<String, Object> m;
+                        JSONArray jsonArray = new JSONArray(mMessage);
+                        int bpSad = R.drawable.ic_bad;
+                        int bpNorm = R.drawable.ic_neutral2;
+                        int bpHappy = R.drawable.ic_happy2;
+                        int lenght = jsonArray.length();
+                        String feedName = "";
+                        for (int i = 0; i < lenght; i++) {
+                            m = new HashMap<>();
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
                        /* if (jsonObject.getString("fname").equals("null")){
                             feedName = jsonObject.getString("username");
                         } else feedName = jsonObject.getString("username") + jsonObject.getString("fname");*/
-                        //feedName = jsonObject.getString("username") + jsonObject.getString("fname");
-                        feedName = jsonObject.getString("username");
+                            //feedName = jsonObject.getString("username") + jsonObject.getString("fname");
+                            feedName = jsonObject.getString("username");
 
-                        String[] splited = jsonObject.getString("avatar").split(Character.toString((char) 94));
-                        String str = Arrays.toString(splited);
-                        Log.wtf("count", str + "");
-                        try {
-                            Bitmap bitmap = Picasso.get().load("https://orzu.org" + str.substring(1, str.length() - 1)).get();
-                            m.put(avatar, bitmap);
-                        } catch (Exception ex) {
-                            Bitmap icon = BitmapFactory.decodeResource(Feedback.this.getResources(), Common.drawable);
-                            m.put(avatar, icon);
+                            String[] splited = jsonObject.getString("avatar").split(Character.toString((char) 94));
+                            String str = Arrays.toString(splited);
+                            Log.wtf("count", str + "");
+                            try {
+                                Bitmap bitmap = Picasso.get().load("https://orzu.org" + str.substring(1, str.length() - 1)).get();
+                                m.put(avatar, bitmap);
+                            } catch (Exception ex) {
+                                Bitmap icon = BitmapFactory.decodeResource(Feedback.this.getResources(), Common.drawable);
+                                m.put(avatar, icon);
+                            }
+                            m.put(cat, feedName);
+                            long countFeed = jsonObject.getLong("like");
+                            m.put(nar, jsonObject.getString("narrative"));
+                            if (countFeed == 0) {
+                                m.put(count, "-1");
+                                m.put(img, bpSad);
+                                bad.add(m);
+                            }
+                            if (countFeed == 1) {
+                                m.put(count, "0");
+                                m.put(img, bpNorm);
+                                neutral.add(m);
+                            }
+                            if (countFeed == 2) {
+                                m.put(count, "+1");
+                                m.put(img, bpHappy);
+                                happy.add(m);
+                            }
+                            if (countFeed == 3) {
+                                m.put(count, "+3");
+                                m.put(img, bpHappy);
+                            }
+                            all.add(m);
                         }
-                        m.put(cat, feedName);
-                        long countFeed = jsonObject.getLong("like");
-                        m.put(nar, jsonObject.getString("narrative"));
-                        if (countFeed == 0) {
-                            m.put(count, "-1");
-                            m.put(img, bpSad);
-                            bad.add(m);
-                        }
-                        if (countFeed == 1) {
-                            m.put(count, "0");
-                            m.put(img, bpNorm);
-                            neutral.add(m);
-                        }
-                        if (countFeed == 2) {
-                            m.put(count, "+1");
-                            m.put(img, bpHappy);
-                            happy.add(m);
-                        }
-                        if (countFeed == 3) {
-                            m.put(count, "+3");
-                            m.put(img, bpHappy);
-                        }
-                        all.add(m);
+
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                shim.setVisibility(View.INVISIBLE);
+                                sort.setVisibility(View.VISIBLE);
+                                lvCat.setAdapter(arrayAdapter1);
+                                arrayAdapter1.notifyDataSetChanged();
+                                count_bad.setText(bad.size() + "");
+                                count_neutral.setText(neutral.size() + "");
+                                count_happy.setText(happy.size() + "");
+                                imagenotask.setVisibility(View.INVISIBLE);
+                                textnotask.setVisibility(View.INVISIBLE);
+                            }
+                        });
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-
-
+                }else{
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -232,16 +259,13 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
                             sort.setVisibility(View.VISIBLE);
                             lvCat.setAdapter(arrayAdapter1);
                             arrayAdapter1.notifyDataSetChanged();
-                            count_bad.setText(bad.size()+"");
-                            count_neutral.setText(neutral.size()+"");
-                            count_happy.setText(happy.size()+"");
+                            count_bad.setText(bad.size() + "");
+                            count_neutral.setText(neutral.size() + "");
+                            count_happy.setText(happy.size() + "");
+                            imagenotask.setVisibility(View.VISIBLE);
+                            textnotask.setVisibility(View.VISIBLE);
                         }
                     });
-
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
             }
         });
@@ -250,16 +274,16 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
     @Override
     public void onClick(View view) {
         float scale = getResources().getDisplayMetrics().density;
-        int dpAsPixels = (int) (6*scale + 0.5f);
+        int dpAsPixels = (int) (6 * scale + 0.5f);
         switch (view.getId()) {
             case R.id.sort_all:
                 sort_all.setBackgroundResource(R.drawable.shape_for_feedback_gray);
                 sort_bad.setBackgroundResource(R.drawable.shape_for_feedback);
                 sort_neutral.setBackgroundResource(R.drawable.shape_for_feedback);
                 sort_happy.setBackgroundResource(R.drawable.shape_for_feedback);
-                sort_happy.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
-                sort_neutral.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
-                sort_bad.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
+                sort_happy.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
+                sort_neutral.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
+                sort_bad.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
                 getAll();
                 break;
             case R.id.sort_bad:
@@ -267,9 +291,9 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
                 sort_bad.setBackgroundResource(R.drawable.shape_for_feedback_gray);
                 sort_neutral.setBackgroundResource(R.drawable.shape_for_feedback);
                 sort_happy.setBackgroundResource(R.drawable.shape_for_feedback);
-                sort_happy.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
-                sort_neutral.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
-                sort_bad.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
+                sort_happy.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
+                sort_neutral.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
+                sort_bad.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
                 getBad();
                 break;
             case R.id.sort_neutral:
@@ -277,9 +301,9 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
                 sort_bad.setBackgroundResource(R.drawable.shape_for_feedback);
                 sort_neutral.setBackgroundResource(R.drawable.shape_for_feedback_gray);
                 sort_happy.setBackgroundResource(R.drawable.shape_for_feedback);
-                sort_happy.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
-                sort_neutral.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
-                sort_bad.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
+                sort_happy.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
+                sort_neutral.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
+                sort_bad.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
                 getNeutral();
                 break;
             case R.id.sort_happy:
@@ -287,9 +311,9 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
                 sort_bad.setBackgroundResource(R.drawable.shape_for_feedback);
                 sort_neutral.setBackgroundResource(R.drawable.shape_for_feedback);
                 sort_happy.setBackgroundResource(R.drawable.shape_for_feedback_gray);
-                sort_happy.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
-                sort_neutral.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
-                sort_bad.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
+                sort_happy.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
+                sort_neutral.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
+                sort_bad.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
                 getHappy();
                 break;
         }

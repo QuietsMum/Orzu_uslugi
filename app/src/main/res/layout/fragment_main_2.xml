@@ -5,19 +5,28 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryLight">
 
+    <ImageView
+        android:id="@+id/image_back_name_tast"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/back_blue"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageNoTask"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_gravity="center_horizontal|center_vertical"
+        android:tint="@color/colorPrimary"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/no_task_image"
-        android:tint="@color/colorPrimary"/>
+        app:srcCompat="@drawable/no_task_image" />
 
     <TextView
         android:id="@+id/textViewNoTask"
@@ -35,168 +44,125 @@
         app:layout_constraintTop_toBottomOf="@+id/imageNoTask" />
 
     <LinearLayout
-        android:id="@+id/container_of_notif"
+        android:id="@+id/linear_for_name_tast"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent">
+        android:weightSum="7">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="2dp"
-            android:orientation="vertical"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent">
+
+            <TextView
+                android:id="@+id/notif_buttonleft"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1"
+
+                android:text="Уведомления"
+                android:textColor="@color/colorBackgrndFrg"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+            <TextView
+                android:id="@+id/notif_buttonright"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="40dp"
+                android:text="Сообщения"
+                android:textColor="@color/colorBackgrndFrg"
+                app:layout_constraintBottom_toBottomOf="@id/notif_buttonleft"
+                app:layout_constraintLeft_toRightOf="@id/notif_buttonleft" />
+
+            <ImageView
+                android:id="@+id/triangle_left"
+                android:layout_width="23dp"
+                android:layout_height="10dp"
+                android:background="@drawable/card_corner_triangle"
+                android:outlineSpotShadowColor="@android:color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+
+                app:layout_constraintLeft_toLeftOf="@id/notif_buttonleft"
+                app:layout_constraintRight_toRightOf="@id/notif_buttonleft" />
+
+            <ImageView
+                android:id="@+id/triangle_right"
+                android:layout_width="23dp"
+                android:layout_height="10dp"
+                android:background="@drawable/card_corner_triangle"
+                android:outlineSpotShadowColor="@android:color/white"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="@id/notif_buttonright"
+                app:layout_constraintRight_toRightOf="@id/notif_buttonright" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_of_notif"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="6"
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_height="match_parent">
 
-                <View
-                    android:id="@+id/mainfrviewnot"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_notif"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:background="@drawable/gradient_back_180"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="10dp"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_of_chat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="vertical"
+                    android:visibility="gone"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="10dp"
                     app:layout_constraintTop_toTopOf="parent" />
 
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <ProgressBar
+                    android:id="@+id/progressBarMain2"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:orientation="horizontal"
-                    android:padding="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent">
-
-
-                    <TextView
-                        android:id="@+id/notif_buttonleft"
-                        android:layout_width="0dp"
-                        android:layout_height="45dp"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:background="@drawable/circle_button_left_solid"
-                        android:gravity="center"
-                        android:text="Все уведомления"
-                        android:textColor="@color/colorBackgrndFrg" />
-
-                    <TextView
-                        android:id="@+id/notif_buttonright"
-                        android:layout_width="0dp"
-                        android:layout_height="45dp"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:background="@drawable/circle_button_right"
-                        android:gravity="center"
-                        android:text="Сообщения"
-                        android:textColor="@color/colorTextGrad" />
-
-                </LinearLayout>
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            <LinearLayout
-                android:id="@+id/custom_tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorBackgrndFrg"
-                android:padding="4dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="45dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Все уведомления"
-                    android:textColor="@color/colorTextGrad"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="45dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Отзывы"
-                    android:textColor="@color/colorOrange"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="45dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Системные уведомления"
-                    android:textColor="@color/colorPrimaryLightPix"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="45dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Новости"
-                    android:textColor="@color/colorTextGrad"
-                    android:textSize="12sp" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorPrimaryGrey"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent" />
-
-        </LinearLayout>
+        </androidx.cardview.widget.CardView>
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_notif"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        app:layout_constraintTop_toBottomOf="@id/container_of_notif" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_of_chat"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/container_of_notif" />
-
-
-    <ProgressBar
-        android:id="@+id/progressBarMain2"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_gravity="bottom"
+        android:background="?android:attr/windowBackground"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:menu="@menu/notification_menu" />
 </androidx.constraintlayout.widget.ConstraintLayout>
