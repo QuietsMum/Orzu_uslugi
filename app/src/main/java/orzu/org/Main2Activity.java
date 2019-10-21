@@ -192,9 +192,10 @@ public class Main2Activity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorTextDark));
         setContentView(R.layout.activity_main2);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setBackground(getResources().getDrawable(R.drawable.gradient_back));
+//        toolbar.setBackground(getResources().getDrawable(R.drawable.gradient_back));
         setSupportActionBar(toolbar);
         navigationView = findViewById(R.id.nav_view);
 
@@ -249,185 +250,7 @@ public class Main2Activity extends AppCompatActivity
         db.insert("orzuchat", null, cv);
         db.close();
         dbHelper.close();
-/*
-        PusherOptions options = new PusherOptions();
-        options.setCluster("mt1");
-        Pusher pusher = new Pusher("585acb6bbd7f6860658a", options);
-        Log.e("iduser", idUser+"");
 
-        pusher.connect(new ConnectionEventListener() {
-            @Override
-            public void onConnectionStateChange(ConnectionStateChange change) {
-                Log.e("StateIsCome", "State changed to " + change.getCurrentState() +
-                        " from " + change.getPreviousState());
-            }
-
-            @Override
-            public void onError(String message, String code, Exception e) {
-                Log.e("Error from Pusher", "There was a problem connecting!");
-            }
-        }, ConnectionState.ALL);
-
-// Subscribe to a channel
-        Channel channel = pusher.subscribe("user." + idUser);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Log.e("ASDASDASD", "Received event with data: " + channel.isSubscribed());
-            }
-        }, 5000);
-
-// Bind to listen for events called "my-event" sent to "my-channel"
-        channel.bind("OrzuPusherEvents", new SubscriptionEventListener() {
-            @Override
-            public void onEvent(PusherEvent event) {
-                try {
-                    final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
-                    JSONObject jobject = new JSONObject(event.getData());
-                    if (!prefs.getBoolean("disableNotifiaction", false)) {
-                        NotificationManager mNotificationManager;
-                        NotificationCompat.Builder mBuilder =
-                                new NotificationCompat.Builder(Main2Activity.this.getApplicationContext(), "notify_001");
-                        Intent ii = new Intent(Main2Activity.this, Main2Activity.class);
-
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putBoolean("openNotification", true);
-                        editor.apply();
-                        ii.putExtra("openNotification", "asdasdsd");
-                        PendingIntent pendingIntent = PendingIntent.getActivity(Main2Activity.this, 0, ii, 0);
-                        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
-                        bigText.bigText(jobject.getString("user"));
-                        bigText.setBigContentTitle(jobject.getString("message"));
-                        bigText.setSummaryText("date");
-                        mBuilder.setContentIntent(pendingIntent);
-                        mBuilder.setSmallIcon(R.mipmap.ic_launcher);
-                        mBuilder.setContentTitle(jobject.getString("user"));
-                        mBuilder.setContentText(jobject.getString("message"));
-                        mBuilder.setPriority(Notification.PRIORITY_MAX);
-                        mBuilder.setStyle(bigText);
-                        mNotificationManager =
-                                (NotificationManager) Main2Activity.this.getSystemService(Context.NOTIFICATION_SERVICE);
-
-// === Removed some obsoletes
-
-                        String channelId = "Your_channel_id";
-                        NotificationChannel channel1 = new NotificationChannel(
-                                channelId,
-                                "Channel human readable title",
-                                NotificationManager.IMPORTANCE_DEFAULT);
-                        mNotificationManager.createNotificationChannel(channel1);
-                        mBuilder.setChannelId(channelId);
-                        mNotificationManager.notify(0, mBuilder.build());
-
-                    }else{
-                        if(prefs.getBoolean("enableTime",false)) {
-                            Log.wtf("Notif123","second");
-                            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
-                            String [] currentTimeStamp = dateFormat.format(new Date()).split(":");
-                            String[] from = prefs.getString("from_time","02:00").split(":");
-                            String[] to = prefs.getString("to_time","08:00").split(":");
-
-                            if(!(Integer.parseInt(currentTimeStamp[0])>Integer.parseInt(from[0])&&Integer.parseInt(currentTimeStamp[0])<=Integer.parseInt(to[0]))) {
-                                if(Integer.parseInt(currentTimeStamp[0])==Integer.parseInt(to[0])){
-                                    if(Integer.parseInt(currentTimeStamp[1])>Integer.parseInt(to[1])){
-                                        Log.wtf("Notif123","Thrd");
-
-                                        NotificationManager mNotificationManager;
-                                        NotificationCompat.Builder mBuilder =
-                                                new NotificationCompat.Builder(Main2Activity.this.getApplicationContext(), "notify_001");
-                                        Intent ii = new Intent(Main2Activity.this, Main2Activity.class);
-
-                                        SharedPreferences.Editor editor = prefs.edit();
-                                        editor.putBoolean("openNotification", true);
-                                        editor.apply();
-                                        ii.putExtra("openNotification", "asdasdsd");
-                                        PendingIntent pendingIntent = PendingIntent.getActivity(Main2Activity.this, 0, ii, 0);
-                                        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
-                                        bigText.bigText(jobject.getString("user"));
-                                        bigText.setBigContentTitle(jobject.getString("message"));
-                                        bigText.setSummaryText("date");
-                                        mBuilder.setContentIntent(pendingIntent);
-                                        mBuilder.setSmallIcon(R.mipmap.ic_launcher);
-                                        mBuilder.setContentTitle(jobject.getString("user"));
-                                        mBuilder.setContentText(jobject.getString("message"));
-                                        mBuilder.setPriority(Notification.PRIORITY_MAX);
-                                        mBuilder.setStyle(bigText);
-                                        mNotificationManager =
-                                                (NotificationManager) Main2Activity.this.getSystemService(Context.NOTIFICATION_SERVICE);
-
-// === Removed some obsoletes
-
-                                        String channelId = "Your_channel_id";
-                                        NotificationChannel channel1 = new NotificationChannel(
-                                                channelId,
-                                                "Channel human readable title",
-                                                NotificationManager.IMPORTANCE_DEFAULT);
-                                        mNotificationManager.createNotificationChannel(channel1);
-                                        mBuilder.setChannelId(channelId);
-                                        mNotificationManager.notify(0, mBuilder.build());
-                                    }
-                                }else{
-                                    NotificationManager mNotificationManager;
-                                    NotificationCompat.Builder mBuilder =
-                                            new NotificationCompat.Builder(Main2Activity.this.getApplicationContext(), "notify_001");
-                                    Intent ii = new Intent(Main2Activity.this, Main2Activity.class);
-
-                                    SharedPreferences.Editor editor = prefs.edit();
-                                    editor.putBoolean("openNotification", true);
-                                    editor.apply();
-                                    ii.putExtra("openNotification", "asdasdsd");
-                                    PendingIntent pendingIntent = PendingIntent.getActivity(Main2Activity.this, 0, ii, 0);
-                                    NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
-                                    bigText.bigText(jobject.getString("user"));
-                                    bigText.setBigContentTitle(jobject.getString("message"));
-                                    bigText.setSummaryText("date");
-                                    mBuilder.setContentIntent(pendingIntent);
-                                    mBuilder.setSmallIcon(R.mipmap.ic_launcher);
-                                    mBuilder.setContentTitle(jobject.getString("user"));
-                                    mBuilder.setContentText(jobject.getString("message"));
-                                    mBuilder.setPriority(Notification.PRIORITY_MAX);
-                                    mBuilder.setStyle(bigText);
-                                    mNotificationManager =
-                                            (NotificationManager) Main2Activity.this.getSystemService(Context.NOTIFICATION_SERVICE);
-
-// === Removed some obsoletes
-
-                                    String channelId = "Your_channel_id";
-                                    NotificationChannel channel1 = new NotificationChannel(
-                                            channelId,
-                                            "Channel human readable title",
-                                            NotificationManager.IMPORTANCE_DEFAULT);
-                                    mNotificationManager.createNotificationChannel(channel1);
-                                    mBuilder.setChannelId(channelId);
-                                    mNotificationManager.notify(0, mBuilder.build());
-                                }
-                            }
-                        }
-                    }
-
-                    SQLiteDatabase db = dbHelper.getWritableDatabase();
-                    ContentValues cv = new ContentValues();
-                    cv.put("idUser", jobject.getString("user"));
-                    cv.put("message", jobject.getString("message"));
-                    db.insert("orzunotif", null, cv);
-                    db.close();
-                    dbHelper.close();
-                    Log.e("message", "Received event with data: " + event.getData());
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-
-            }
-        });
-
-// Disconnect from the service
-//        pusher.disconnect();
-
-        pusher.connect();
-
-*/
         Intercom.initialize(getApplication(), "android_sdk-805f0d44d62fbc8e72058b9c8eee61c94c43c874", "p479kps8");
 
         intercomBtn = findViewById(R.id.techsupp);
@@ -439,7 +262,8 @@ public class Main2Activity extends AppCompatActivity
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
-        toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorBackgrndFrg));
+        toggle.setHomeAsUpIndicator(R.drawable.filter);
+        toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorTextDark));
         toggle.syncState();
         View header = navigationView.getHeaderView(0);
         img = header.findViewById(R.id.textView);

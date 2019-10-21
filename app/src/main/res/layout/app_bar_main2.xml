@@ -19,7 +19,7 @@
             android:layout_height="?attr/actionBarSize"
             android:elevation="0dp"
             app:elevation="0dp"
-            app:titleTextColor="@color/colorBackgrndFrg"
+            app:titleTextColor="@color/colorTextDark"
             android:background="@color/back_for_feed"
             app:popupTheme="@style/Theme.MaterialComponents.Light.DarkActionBar" />
 

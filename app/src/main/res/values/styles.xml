@@ -47,15 +47,16 @@
         <item name="android:textColor">@color/colorTextLight</item>
     </style>
 
-    <style name="AppTheme.NoActionBar" parent="Theme.MaterialComponents.Light.DarkActionBar">
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <style name="AppTheme.NoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorBackgrndFrg</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.Spinner.DropDown.ActionBar">
-        <item name="color">@color/colorBackgrndFrg</item>
+        <item name="spinBars">true</item>
+        <item name="color">@color/colorAccent</item>
 
     </style>
 

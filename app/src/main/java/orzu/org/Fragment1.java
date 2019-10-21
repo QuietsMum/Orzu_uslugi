@@ -371,7 +371,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
         Drawable drawable = menu.findItem(R.id.new_game).getIcon();
         drawable = DrawableCompat.wrap(drawable);
-        DrawableCompat.setTint(drawable, ContextCompat.getColor(getActivity(), R.color.colorBackgrndFrg));
+        DrawableCompat.setTint(drawable, ContextCompat.getColor(getActivity(), R.color.colorTextDark));
         menu.findItem(R.id.new_game).setIcon(drawable);
 
         super.onCreateOptionsMenu(menu, inflater);
