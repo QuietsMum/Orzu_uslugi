@@ -2,6 +2,7 @@ package orzu.org;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ public class MainCategoryAdapter extends RecyclerView.Adapter<MainCategoryAdapte
     private static NameItemSelect sw;
     private List<category_model> maps;
     Context context;
+    int index;
 
     public MainCategoryAdapter(Context context, List<category_model> maps) {
         this.context = context;
@@ -38,7 +40,16 @@ public class MainCategoryAdapter extends RecyclerView.Adapter<MainCategoryAdapte
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         holder.a.setText(maps.get(position).getName());
+        if(index==position){
+            holder.a.setTextColor(Color.parseColor("#FF9100"));
+        }else{
+            holder.a.setTextColor(Color.parseColor("#000000"));
+        }
+    }
 
+    public void changeColor(int position){
+        index = position;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -61,9 +72,7 @@ public class MainCategoryAdapter extends RecyclerView.Adapter<MainCategoryAdapte
         public void onClick(View view) {
             sw.onItemSelectedListener(view, getAdapterPosition());
         }
-        void colors(int pos){
 
-        }
     }
 
     public static void setSelect(NameItemSelect select) {

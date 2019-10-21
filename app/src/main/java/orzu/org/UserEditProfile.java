@@ -1,6 +1,7 @@
 package orzu.org;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.Activity;
@@ -18,6 +19,10 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -40,6 +45,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -72,7 +78,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
     TextView userDate;
     Spinner userCity;
     ConstraintLayout datePicker;
-    ConstraintLayout buttonEdit;
+    TextView buttonEdit;
     RadioButton radioMale;
     RadioButton radioFemale;
     RadioButton radioButton;
@@ -97,24 +103,32 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
     String mBday;
     String mSex;
     String mNarr;
-    ImageView mAvatar;
+    ImageView mAvatar, create_user_edit_back;
     String mAvatarstr;
     ArrayList<String> returnValue = new ArrayList<>();
     String[] cities;
     ArrayAdapter<String> adapter;
     ProgressBar bar;
     ShimmerFrameLayout shim;
-    View view_back_white,view_back_blue;
+    View view_back_white, view_back_blue;
+    CardView cardView,card_of_shimmer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryOrangeTop));
         setContentView(R.layout.activity_user_edit_profile);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
-        getSupportActionBar().setTitle("Профиль");
-        getSupportActionBar().setElevation(0);
-
+        create_user_edit_back = findViewById(R.id.create_user_edit_back);
+        create_user_edit_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        cardView = findViewById(R.id.card_of_user_edit);
+        cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
         userName = findViewById(R.id.user_edit_name);
         mAvatar = findViewById(R.id.userAvatar);
         userFname = findViewById(R.id.user_edit_fname);
@@ -172,7 +186,13 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         });
 
 
-
+        card_of_shimmer = findViewById(R.id.card_of_user_edit2);
+        card_of_shimmer.setBackgroundResource(R.drawable.shape_card_topcorners);
+        TranslateAnimation animation_of_shim = new TranslateAnimation(0.0f, 0.0f,
+                1500.0f, 0.0f);
+        animation_of_shim.setDuration(300);
+        //animation.setFillAfter(true);
+        card_of_shimmer.startAnimation(animation_of_shim);
     }
 
     @Override
@@ -372,13 +392,13 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                     });
                     bar.setVisibility(View.INVISIBLE);
                     Common.d = mAvatar.getDrawable();
-                    Common.name = userName.getText()+" "+userFname.getText();
+                    Common.name = userName.getText() + " " + userFname.getText();
                     Common.birth = userDate.getText().toString();
                     Common.city = userCity.getSelectedItem().toString();
                     Common.about = userNarr.getText().toString();
-                    if(gender.equals("male")){
+                    if (gender.equals("male")) {
                         Common.sex = "мужской";
-                    }else
+                    } else
                         Common.sex = "женский";
 
                     finish();
@@ -535,7 +555,21 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                         @Override
                         public void run() {
                             Picasso.get().load("https://orzu.org" + mAvatarstr).fit().centerCrop().into(mAvatar);
+                            TranslateAnimation animationn = new TranslateAnimation(0.0f, 0.0f,
+                                    1500.0f, 0.0f);
+                            animationn.setDuration(200);
+                            //animation.setFillAfter(true);
                             shim.setVisibility(View.GONE);
+                            buttonEdit.setVisibility(View.GONE);
+                            new Handler().postDelayed(new Runnable() {
+                                public void run() {
+                                    buttonEdit.setVisibility(View.VISIBLE);
+                                    Animation animZoomIn = AnimationUtils.loadAnimation(getApplicationContext(),
+                                            R.anim.zoom_in);
+                                    buttonEdit.startAnimation(animZoomIn);
+                                }
+                            }, animationn.getDuration());
+
                             view_back_blue.setVisibility(View.GONE);
                             view_back_white.setVisibility(View.GONE);
                         }

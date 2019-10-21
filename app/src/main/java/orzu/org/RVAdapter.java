@@ -71,11 +71,11 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MyViewHolder> {
     }
 
 
-    void filterByCity(String city) {
-        if (city.length() != 0) {
+    void filterByCategory(String category) {
+        if (category.length() != 0) {
             for (int i = 0; i < maps.size(); i++) {
-                if (maps.get(i).get("Город").toString().equals(city)) {
-                    Log.e("ФильтрыФтльтры", maps.get(i).get("Город").toString() + "  " + city);
+                if (maps.get(i).get("Категория задачи").toString().equals(category)) {
+                    Log.e("ФильтрыФтльтры", maps.get(i).get("Категория задачи").toString() + "  " + category);
                     filtered.add(maps.get(i));
                 }
             }

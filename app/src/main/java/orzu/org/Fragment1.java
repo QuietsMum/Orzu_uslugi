@@ -76,6 +76,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
     Map<String, Object> m_new = new HashMap<>();
     Map<String, Object> m_new_2 = new HashMap<>();
     Map<String, Object> m_ref = new HashMap<>();
+    ArrayList<Map<String, Object>> filtered = new ArrayList<>();
     final String categoryList = "Категория задачи";
     final String taskList = "Задание";
     String idList = "ID";
@@ -195,6 +196,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 }
             }
         });
+        categories.add(new category_model("0", "Все категорий", "0"));
         getCategories();
         getSubCategories("1");
         adapter_category = new MainCategoryAdapter(getContext(), categories);
@@ -204,7 +206,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         MainSubCategoryAdapter.setSelect(new NameItemSelect() {
             @Override
             public void onItemSelectedListener(View view, int position) {
-                Log.wtf("wtfisthat", subcategories.get(position).getName());
+                filterByCategory(subcategories.get(position).getName());
 
             }
 
@@ -216,7 +218,15 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         MainCategoryAdapter.setSelect(new NameItemSelect() {
             @Override
             public void onItemSelectedListener(View view, int position) {
-                getSubCategories(categories.get(position).getId());
+                if(position==0){
+                    adapter = new RVAdapter(getContext(), truedata);
+                    rv.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+
+                }else{
+                    getSubCategories(categories.get(position).getId());
+                }
+                adapter_category.changeColor(position);
             }
 
             @Override
@@ -227,6 +237,23 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         return view;
     }
 
+
+    void filterByCategory(String category) {
+        filtered.clear();
+        if (category.length() != 0) {
+            if(truedata.size()!=0) {
+                for (int i = 0; i < truedata.size(); i++) {
+                    if (truedata.get(i).get("Категория задачи").toString().equals(category)) {
+                        Log.e("ФильтрыФтльтры", truedata.get(i).get("Категория задачи").toString() + "  " + category);
+                        filtered.add(truedata.get(i));
+                    }
+                }
+                adapter = new RVAdapter(getContext(), filtered);
+                rv.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
+        }
+    }
 
     private Map<String, Object> readMessage(JsonReader reader) throws IOException {
         long id = 1;

@@ -2,6 +2,7 @@ package orzu.org;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -12,6 +13,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 public class UserSettings extends AppCompatActivity implements View.OnClickListener {
@@ -20,17 +23,25 @@ public class UserSettings extends AppCompatActivity implements View.OnClickListe
     LinearLayout buttonLogout;
     LinearLayout button_change_password;
     LinearLayout btn_notif_settings;
+    ImageView user_settings_back;
+    CardView card_of_user_settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_user_settings);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
-        getSupportActionBar().setTitle("Настройки");
-        getSupportActionBar().setElevation(0);
-
+        user_settings_back = findViewById(R.id.user_settings_back);
+        user_settings_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        card_of_user_settings = findViewById(R.id.card_of_user_settings);
+        card_of_user_settings.setBackgroundResource(R.drawable.shape_card_topcorners);
         buttonEdit = findViewById(R.id.button_edit_profile);
         buttonLogout = findViewById(R.id.button_logout);
         button_change_password = findViewById(R.id.button_change_password);
@@ -71,11 +82,11 @@ public class UserSettings extends AppCompatActivity implements View.OnClickListe
             case R.id.button_logout:
                 DBHelper dbHelper = new DBHelper(this);
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
-                db.execSQL("delete from "+ "orzutable");
+                db.execSQL("delete from " + "orzutable");
                 Intent mStartActivity = new Intent(this, CoreActivity.class);
                 int mPendingIntentId = 123456;
-                PendingIntent mPendingIntent = PendingIntent.getActivity(this, mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-                AlarmManager mgr = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
+                PendingIntent mPendingIntent = PendingIntent.getActivity(this, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                AlarmManager mgr = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
                 mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
                 System.exit(0);
                 break;
