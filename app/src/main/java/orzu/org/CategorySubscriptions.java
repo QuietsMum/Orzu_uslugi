@@ -2,6 +2,7 @@ package orzu.org;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,11 +18,16 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
@@ -79,17 +85,17 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
     ArrayList<String> subsServer = new ArrayList<>();
     int counter;
     ProgressBar pb;
+    CardView cardView;
+    ImageView followed_view_back;
+    LinearLayout linear_of_subs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_category_subscriptions);
-        ActionBar toolbar = getSupportActionBar();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
-        getSupportActionBar().setElevation(0);
-        toolbar.setTitle("Подписка на категории");
         requestSubsServer();
         counter = 0;
         String groupFrom[] = new String[]{"Category"};
@@ -100,7 +106,30 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
         pb.setVisibility(View.INVISIBLE);
         btn = findViewById(R.id.confirmSubs);
         btn.setOnClickListener(this);
-
+        followed_view_back = findViewById(R.id.followed_view_back);
+        followed_view_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        linear_of_subs = findViewById(R.id.linear_of_subs);
+        linear_of_subs.setBackgroundResource(R.drawable.shape_card_topcorners);
+        cardView = findViewById(R.id.card_of_followed_view);
+        cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
+        TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f,
+                1500.0f, 0.0f);
+        animation.setDuration(500);
+        cardView.setAnimation(animation);
+        btn.setVisibility(View.GONE);
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                btn.setVisibility(View.VISIBLE);
+                Animation animZoomIn = AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.zoom_in);
+                btn.startAnimation(animZoomIn);
+            }
+        }, animation.getDuration());
         mNewAdapter = new AdapterRespandableLV(groupItem, childItem);
         mNewAdapter
                 .setInflater(
@@ -118,10 +147,10 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
                 if (((ArrayList<SubItem>) childItem.get(i)).get(i1).getCheck()) {
                     ((ArrayList<SubItem>) childItem.get(i)).get(i1).setCheck(false);
-                    model.mapa.remove(((ArrayList<SubItem>) childItem.get(i)).get(i1).getParent_id()+";"+((ArrayList<SubItem>) childItem.get(i)).get(i1).getId());
+                    model.mapa.remove(((ArrayList<SubItem>) childItem.get(i)).get(i1).getParent_id() + ";" + ((ArrayList<SubItem>) childItem.get(i)).get(i1).getId());
                 } else {
                     ((ArrayList<SubItem>) childItem.get(i)).get(i1).setCheck(true);
-                    model.mapa.put(((ArrayList<SubItem>) childItem.get(i)).get(i1).getParent_id()+";"+((ArrayList<SubItem>) childItem.get(i)).get(i1).getId(),((ArrayList<SubItem>) childItem.get(i)).get(i1).getId());
+                    model.mapa.put(((ArrayList<SubItem>) childItem.get(i)).get(i1).getParent_id() + ";" + ((ArrayList<SubItem>) childItem.get(i)).get(i1).getId(), ((ArrayList<SubItem>) childItem.get(i)).get(i1).getId());
                 }
                 mNewAdapter.notifyDataSetChanged();
                 return false;
@@ -260,7 +289,7 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
                         child.add(new SubItem(feedName, parentId, feedID));
                         if (model.arraySubs.contains(feedID)) {
                             child.get(i).setCheck(true);
-                            model.mapa.put(parentId+";"+feedID,parentId+";"+feedID);
+                            model.mapa.put(parentId + ";" + feedID, parentId + ";" + feedID);
                         }
                     }
                     childItem.add(child);
@@ -305,7 +334,7 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
         c.close();
         db.close();
         String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_user&user_cat=" + idUser;
-        subsServer =  new ArrayList<>();
+        subsServer = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
@@ -372,7 +401,7 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
         pb.setVisibility(View.VISIBLE);
         String modelString = "";
 
-        if (model.mapa.isEmpty()){
+        if (model.mapa.isEmpty()) {
             modelString = "&cat[]=";
         }
 
@@ -423,7 +452,7 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
             public void onResponse(Call call, Response response) throws IOException {
                 final String mMessage = response.body().string();
                 Log.e("result", mMessage);
-                if (mMessage.equals(dm + "Success" + dm)){
+                if (mMessage.equals(dm + "Success" + dm)) {
                     pb.setVisibility(View.INVISIBLE);
                     finish();
                 }
@@ -432,6 +461,7 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
         });
 
     }
+
     @Override
     public void onClick(View view) {
         requestSubsServerAdd();

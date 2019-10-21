@@ -2,6 +2,7 @@ package orzu.org;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,6 +17,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -49,22 +54,22 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
     String res = "Res";
     String img = "Img";
     TextView textCity;
-    Button button;
+    TextView button;
     ArrayList<Map<String, Object>> data1;
     ArrayList<Map<String, Object>> data2;
     SimpleAdapter arrayAdapter1;
     SimpleAdapter arrayAdapter2;
     ListView lvMain1;
     ListView lvMain2;
+    CardView cardView;
+    ImageView filter_back;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_filters);
-        ActionBar toolbar = getSupportActionBar();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
-        toolbar.setTitle("Фильтры");
         lvMain1 = (ListView)findViewById(R.id.list_view_filters1);
         lvMain2 = (ListView)findViewById(R.id.list_view_filters2);
 
@@ -72,10 +77,18 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
         int color = Color.parseColor("#E2E2E2"); //The color u want
         lineColorCode.setColorFilter(color);*/
 
-        button = (Button)findViewById(R.id.buttonDone);
+        button = findViewById(R.id.buttonDone);
         button.setOnClickListener(this);
         button.setVisibility(View.INVISIBLE);
-
+        filter_back = findViewById(R.id.filter_back);
+        filter_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        cardView = findViewById(R.id.card_of_filter);
+        cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
         data1= new ArrayList<>();
         data2= new ArrayList<>();
         for (int i = 0; i < 2; i++){
@@ -139,24 +152,41 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
 
             }
         });
+
+        TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f,
+                1500.0f, 0.0f);
+        animation.setDuration(500);
+        //animation.setFillAfter(true);
+        cardView.startAnimation(animation);
+        button.setVisibility(View.GONE);
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                button.setVisibility(View.VISIBLE);
+                Animation animZoomIn = AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.zoom_in);
+                button.startAnimation(animZoomIn);
+            }
+        }, animation.getDuration());
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
-            if(resultCode == Activity.RESULT_OK){
-                String result= data.getStringExtra("result");
+            if (resultCode == Activity.RESULT_OK) {
+                String result = data.getStringExtra("result");
                 Common.city = result;
                 Map<String, Object> m2sort = new HashMap<>();
-                m2sort.put(cat,filtname1[1]);
+                m2sort.put(cat, filtname1[1]);
                 m2sort.put(res, result);
-                m2sort.put(img,filtimg1[1]);
+                m2sort.put(img, filtimg1[1]);
                 m2sort.put(res, result);
                 data1.remove(1);
-                data1.add(1,m2sort);
+                data1.add(1, m2sort);
                 arrayAdapter1.notifyDataSetChanged();
-                Log.wtf("city",result);
+                Log.wtf("city", result);
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result

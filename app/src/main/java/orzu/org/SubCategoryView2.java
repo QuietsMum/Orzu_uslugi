@@ -2,6 +2,7 @@ package orzu.org;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,8 +21,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
@@ -58,17 +64,16 @@ public class SubCategoryView2 extends AppCompatActivity {
     ArrayAdapterMy resultAdapter;
     List<String> suggestResult;
     ProgressBar pr;
+    ImageView cities_back;
+    CardView cardView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_sub_category_view2);
-
-        ActionBar toolbar = getSupportActionBar();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
-        toolbar.setTitle("Фильтры");
 
         pr = findViewById(R.id.progrescity);
 
@@ -82,12 +87,25 @@ public class SubCategoryView2 extends AppCompatActivity {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(suggestResultView.getContext(),
                 layoutManager.getOrientation());
         suggestResultView.addItemDecoration(dividerItemDecoration);
+        cardView = findViewById(R.id.card_of_city_view);
+        cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
+        cities_back = findViewById(R.id.cities_back);
+        cities_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f,
+                1500.0f, 0.0f);
+        animation.setDuration(500);
+        cardView.startAnimation(animation);
 
         requestCity();
 
     }
 
-    public void requestCity(){
+    public void requestCity() {
 
         String url = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=getOther&get=cities";
         OkHttpClient client = new OkHttpClient();
@@ -132,42 +150,43 @@ public class SubCategoryView2 extends AppCompatActivity {
                     JSONArray jsonArray = new JSONArray(mMessage);
                     int lenght = jsonArray.length();
                     suggestResult.clear();
-                    for (i = 0; i < lenght; i++){
+                    for (i = 0; i < lenght; i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         suggestResult.add(jsonObject.getString("name"));
 
                     }
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                resultAdapter.notifyDataSetChanged();
-                            }
-                        });
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            resultAdapter.notifyDataSetChanged();
+                        }
+                    });
 
-                        pr.setVisibility(View.INVISIBLE);
+                    pr.setVisibility(View.INVISIBLE);
 
 
                     ArrayAdapterMy.setSelect(new NameItemSelect() {
-                            @Override
-                            public void onItemSelectedListener(View view, int position) {
-                                Intent returnIntent = new Intent();
-                                returnIntent.putExtra("result", suggestResult.get(position));
-                                Log.e("resultCity", suggestResult.get(position));
-                                setResult(Activity.RESULT_OK,returnIntent);
-                                finish();
+                        @Override
+                        public void onItemSelectedListener(View view, int position) {
+                            Intent returnIntent = new Intent();
+                            returnIntent.putExtra("result", suggestResult.get(position));
+                            Log.e("resultCity", suggestResult.get(position));
+                            setResult(Activity.RESULT_OK, returnIntent);
+                            finish();
 
-                            }
+                        }
 
-                            @Override
-                            public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
 
-                            }
-                        });
+                        }
+                    });
 
 
                 } catch (JSONException e) {
-                    e.printStackTrace(); }
+                    e.printStackTrace();
+                }
             }
         });
     }

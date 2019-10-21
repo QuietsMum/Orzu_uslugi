@@ -2,6 +2,7 @@ package orzu.org;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -12,6 +13,8 @@ import android.os.Bundle;
 import android.util.JsonReader;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -33,11 +36,14 @@ import javax.net.ssl.HttpsURLConnection;
 
 import orzu.org.ui.login.model;
 
-public class CategoryView extends AppCompatActivity{
+public class CategoryView extends AppCompatActivity {
 
     ArrayList<Map<String, Object>> data;
     Dialog dialog;
+    CardView card_of_category_view;
     ProgressBar progressBar;
+    ImageView category_view_back;
+
     public static void start(Context context) {
         Intent intent = new Intent(context, CategoryView.class);
         context.startActivity(intent);
@@ -46,17 +52,27 @@ public class CategoryView extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_category_view);
 
-        ActionBar toolbar = getSupportActionBar();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
-        toolbar.setTitle("Фильтры");
+
         progressBar = findViewById(R.id.progressBarCat);
-
-
-
+        card_of_category_view = findViewById(R.id.card_of_category_view);
+        card_of_category_view.setBackgroundResource(R.drawable.shape_card_topcorners);
+        category_view_back = findViewById(R.id.category_view_back);
+        category_view_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f,
+                1500.0f, 0.0f);
+        animation.setDuration(500);
+        //animation.setFillAfter(true);
+        card_of_category_view.startAnimation(animation);
         // ArrayList<Map<String, Object>> data = null;
         /*String[] catname1 = { "Холодильники и морозильные камеры",  "Стиральные и сушильные машины", "Посудомоечные машины", "Электрические плиты и панели",
                 "Газовые плиты","Духовые шкафы", "Вытяжки", "Климатическая техника",
@@ -64,7 +80,7 @@ public class CategoryView extends AppCompatActivity{
                 "СВЧ печи", "Мелкая кухонная техника", "Уход за телом и здоровьем", "Строительная и садовая техника", "Что-то другое"};*/
 
         String cat = "Категории";
-        ListView lvCat = (ListView)findViewById(R.id.list_cat);
+        ListView lvCat = (ListView) findViewById(R.id.list_cat);
         data = new ArrayList<>();
         /*for (int i = 0; i < catname1.length; i++){
             Map<String, Object> m1 = new HashMap<>();
@@ -90,8 +106,7 @@ public class CategoryView extends AppCompatActivity{
         final URL[] orzuEndpoint = new URL[1];
 
 
-        class AsyncOrzuTasks extends AsyncTask<String,String,ArrayList<Map<String, Object>>> {
-
+        class AsyncOrzuTasks extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {
 
 
             @Override
@@ -101,7 +116,7 @@ public class CategoryView extends AppCompatActivity{
             }
 
             @Override
-            protected ArrayList<Map<String, Object>> doInBackground(String... strings)  {
+            protected ArrayList<Map<String, Object>> doInBackground(String... strings) {
                 // ArrayList<Map<String, Object>> data = null;
                 orzuEndpoint[0] = null;
                 JsonReader[] jsonReader = new JsonReader[1];
@@ -133,9 +148,9 @@ public class CategoryView extends AppCompatActivity{
 
                     jsonReader[0].close();
                     myConnection[0].disconnect();
-                }catch (MalformedURLException e) {
+                } catch (MalformedURLException e) {
                     e.printStackTrace();
-                }catch (IOException e) {
+                } catch (IOException e) {
                     CategoryView.this.runOnUiThread(new Runnable() {
                         public void run() {
                             dialog = new Dialog(CategoryView.this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
@@ -163,8 +178,8 @@ public class CategoryView extends AppCompatActivity{
                 super.onPostExecute(result);
 
 
-                String[] from = { taskList};
-                int[] to = { R.id.textItemCat};
+                String[] from = {taskList};
+                int[] to = {R.id.textItemCat};
 
                 SimpleAdapter arrayAdapter = new SimpleAdapter(getBaseContext(), data, R.layout.cat_item, from, to);
                 lvCat.setAdapter(arrayAdapter);
@@ -206,7 +221,7 @@ public class CategoryView extends AppCompatActivity{
             } else if (name.equals("name")) {
                 text = reader.nextString();
                 m.put(taskList, text);
-            }  else {
+            } else {
                 reader.skipValue();
             }
         }
