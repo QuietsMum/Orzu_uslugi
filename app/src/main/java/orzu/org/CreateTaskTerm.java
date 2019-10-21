@@ -135,15 +135,17 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
 
         View sheetView = this.getLayoutInflater().inflate(R.layout.calendar_dialog, null);
         dialog.setContentView(sheetView);
-
+        CardView cardView = dialog.findViewById(R.id.card_of_calendar);
+        cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
         calendar = dialog.findViewById(R.id.calendarView);
 
         Calendar today = Calendar.getInstance();
+        sdf = new SimpleDateFormat("dd.MM.yyyy", myLocale);
+        selectedDate = sdf.format(today.getTime());
         calendar.setDate(System.currentTimeMillis(),false,true);
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView calendarView, int i, int i1, int i2) {
-                sdf = new SimpleDateFormat("dd.MM.yyyy", myLocale);
                 selectedDate = sdf.format(new Date(i - 1900, i1, i2));
             }
         });

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/all_notif"
+        android:icon="@drawable/ic_notif"
+        android:iconTint="@android:color/holo_blue_light"
+        android:title="Все уведомления"
+        app:showAsAction="ifRoom"></item>
+    <item
+        android:id="@+id/feedback_notif"
+        android:icon="@drawable/ic_notif"
+        android:iconTint="@android:color/holo_orange_light"
+        android:title="Отзывы"
+        app:showAsAction="ifRoom"></item>
+    <item
+        android:id="@+id/system_notif"
+        android:icon="@drawable/ic_notif"
+        android:iconTint="@android:color/holo_green_light"
+        android:title="Системные уведомления"
+        app:showAsAction="ifRoom"></item>
+    <item
+        android:id="@+id/news_notif"
+        android:icon="@drawable/ic_notif"
+        android:iconTint="@android:color/darker_gray"
+        android:title="Новости"
+        app:showAsAction="ifRoom"></item>
+
+</menu>
