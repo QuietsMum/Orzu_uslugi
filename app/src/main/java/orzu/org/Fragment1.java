@@ -253,6 +253,13 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 adapter.notifyDataSetChanged();
             }
         }
+        if(filtered.size()!=0){
+            imagenotask.setVisibility(View.INVISIBLE);
+            textnotask.setVisibility(View.INVISIBLE);
+        }else{
+            imagenotask.setVisibility(View.VISIBLE);
+            textnotask.setVisibility(View.VISIBLE);
+        }
     }
 
     private Map<String, Object> readMessage(JsonReader reader) throws IOException {
