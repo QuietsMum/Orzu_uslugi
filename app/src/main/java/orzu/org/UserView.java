@@ -81,10 +81,10 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
     ImageView imageViewName;
     ShimmerFrameLayout shim;
     View devider;
-    View backblue;
-    View backwhite;
+    ImageView imageView;
     ImageView statusImg, back;
     CardView cardView;
+    CardView cardView_shim;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +103,8 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
 
         cardView = findViewById(R.id.card_of_user_view_activity);
         cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
+        cardView_shim = findViewById(R.id.card_of_user_view_activity_shim);
+        cardView_shim.setBackgroundResource(R.drawable.shape_card_topcorners);
 
         back = findViewById(R.id.view_activity_back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -111,7 +113,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
                 finish();
             }
         });
-
+        imageView = findViewById(R.id.img);
         feedbackname1 = findViewById(R.id.userview_feedbackname);
         feedbackplus1 = findViewById(R.id.userview_feedbackplus);
         feedbacknarr1 = findViewById(R.id.userview_feedbacknarr);
@@ -126,8 +128,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
         feedbackimgUser2 = findViewById(R.id.imageViewOtziv2);
         noReviews = findViewById(R.id.no_reviews);
         devider = findViewById(R.id.divider_view);
-        backblue = findViewById(R.id.view_back_blue);
-        backwhite = findViewById(R.id.view_back_white);
+
         shim = (ShimmerFrameLayout) findViewById(R.id.userviewShimmerLayout);
         shim.startShimmer();
 
@@ -355,8 +356,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
                             feedbackimgUser2.setVisibility(View.GONE);
                             devider.setVisibility(View.GONE);
                             shim.setVisibility(View.INVISIBLE);
-                            backblue.setVisibility(View.INVISIBLE);
-                            backwhite.setVisibility(View.INVISIBLE);
+                            imageView.setVisibility(View.INVISIBLE);
                             noReviews.setVisibility(View.VISIBLE);
                         }
                     });
@@ -496,8 +496,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
                     }
 
                     shim.setVisibility(View.INVISIBLE);
-                    backblue.setVisibility(View.INVISIBLE);
-                    backwhite.setVisibility(View.INVISIBLE);
+                    imageView.setVisibility(View.INVISIBLE);
 
                 }
 

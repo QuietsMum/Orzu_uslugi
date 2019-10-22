@@ -146,17 +146,12 @@
 
             </LinearLayout>
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="8dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+           <androidx.cardview.widget.CardView
+               android:id="@+id/card_of_user_view_activity_shim"
+               android:layout_width="match_parent"
+               android:layout_height="0dp"
+               android:layout_weight="5"
+               >
 
                 <LinearLayout
                     android:layout_width="match_parent"

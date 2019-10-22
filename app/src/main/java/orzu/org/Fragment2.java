@@ -3,6 +3,8 @@ package orzu.org;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,12 +20,15 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +65,7 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
     TextView notif_buttonleft,notif_buttonright;
     ImageView triangle_left,triangle_right;
     CardView cardView;
+    BottomNavigationView navigationView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +91,7 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
         notif_buttonright = view.findViewById(R.id.notif_buttonright);
         triangle_left = view.findViewById(R.id.triangle_left);
         triangle_right = view.findViewById(R.id.triangle_right);
+        navigationView = view.findViewById(R.id.navigation);
         ProgressBar progressBar = view.findViewById(R.id.progressBarMain2);
         progressBar.setVisibility(View.INVISIBLE);
         btnNotif = view.findViewById(R.id.notif_buttonleft);
@@ -144,6 +151,7 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
                 startActivity(intent);
             }
         });
+
 
         return view;
     }

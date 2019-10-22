@@ -93,8 +93,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
 
     View devider;
     ShimmerFrameLayout shim;
-    View backblue;
-    View backwhite;
+    ImageView image_back;
     String mStatus;
     String image1;
     String image2;
@@ -102,6 +101,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
     String encodedString;
     ImageView imageViewName;
     ArrayList<String> returnValue = new ArrayList<>();
+    CardView cardView_shim;
     CardView cardView;
     DBHelper dbHelper;
     String tokenUser;
@@ -152,12 +152,13 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         feedbackimgUser2 = view.findViewById(R.id.imageViewOtziv2my);
         noReviews = view.findViewById(R.id.no_reviewsmy);
         devider = view.findViewById(R.id.divider_viewmy);
-        backblue = view.findViewById(R.id.view_back_bluemy);
-        backwhite = view.findViewById(R.id.view_back_whitemy);
+        image_back = view.findViewById(R.id.img_back);
         shim = (ShimmerFrameLayout) view.findViewById(R.id.userviewShimmerLayoutmy);
         shim.startShimmer();
         cardView = view.findViewById(R.id.card_of_user_view);
         cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
+        cardView_shim = view.findViewById(R.id.card_of_user_view_activity_shim);
+        cardView_shim.setBackgroundResource(R.drawable.shape_card_topcorners);
         taskCountReq = view.findViewById(R.id.viewuser_task_count_reqmy);
         taskCount = view.findViewById(R.id.viewuser_task_countmy);
         userCity = view.findViewById(R.id.viewuser_citymy);
@@ -485,8 +486,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                             feedbackimgUser2.setVisibility(View.GONE);
                             devider.setVisibility(View.GONE);
                             shim.setVisibility(View.INVISIBLE);
-                            backblue.setVisibility(View.INVISIBLE);
-                            backwhite.setVisibility(View.INVISIBLE);
+                            image_back.setVisibility(View.INVISIBLE);
                             noReviews.setVisibility(View.VISIBLE);
                         }
                     });
@@ -626,8 +626,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                     }
 
                     shim.setVisibility(View.INVISIBLE);
-                    backblue.setVisibility(View.INVISIBLE);
-                    backwhite.setVisibility(View.INVISIBLE);
+                    image_back.setVisibility(View.INVISIBLE);
                 }
             }
         });

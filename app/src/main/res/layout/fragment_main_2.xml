@@ -164,5 +164,8 @@
         android:layout_gravity="bottom"
         android:background="?android:attr/windowBackground"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/notification_menu" />
+        app:menu="@menu/notification_menu"
+        app:itemIconTint="@color/colorOrange"
+        app:itemTextColor="@color/colorOrange"
+        app:labelVisibilityMode="selected"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
