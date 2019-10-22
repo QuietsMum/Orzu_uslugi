@@ -3,6 +3,7 @@ package orzu.org;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -42,6 +43,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.AuthResult;
@@ -77,7 +79,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
     EditText phonCount;
     EditText pass;
     String sms;
-    Button button;
+    FloatingActionButton button;
     Button button2;
     String mMessage;
     String mPhone;
@@ -93,6 +95,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
     BroadcastReceiver otp;
     EditText input;
     DBHelper dbHelper;
+    CardView cardview;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
 
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks
@@ -120,7 +123,8 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
 
         }
 
-
+        cardview = findViewById(R.id.card_of_registr);
+        cardview.setBackgroundResource(R.drawable.shape_card_topcorners);
         IntentFilter filter = new IntentFilter();
         filter.addAction("service.to.activity.transfer");
         otp = new BroadcastReceiver() {
@@ -148,7 +152,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
         phon = (EditText) findViewById(R.id.editTextPhone_reg);
         phonCount = (EditText) findViewById(R.id.editTextPhoneCountry);
         pass = (EditText) findViewById(R.id.editTextPass);
-        button = (Button) findViewById(R.id.button_phone_login);
+        button =  findViewById(R.id.button_phone_login);
 
         float dip = 16f;
         Resources r = Resources.getSystem();
