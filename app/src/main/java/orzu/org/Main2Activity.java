@@ -332,6 +332,7 @@ public class Main2Activity extends AppCompatActivity
                 e.printStackTrace();
             }
             toolbar.setBackgroundColor(getResources().getColor(R.color.back_for_feed));
+            toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorTextDark));
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryGrey));
             // Вставляем фрагмент, заменяя текущий фрагмент
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -349,6 +350,7 @@ public class Main2Activity extends AppCompatActivity
         } else if (id == R.id.third) {
             toolbar.setBackgroundColor(getResources().getColor(R.color.back_for_feed));
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryGrey));
+            toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorTextDark));
             fragmentClass = Fragment4.class;
             try {
                 fragment = (Fragment) fragmentClass.newInstance();
@@ -602,4 +604,8 @@ public class Main2Activity extends AppCompatActivity
         nav_user.setImageDrawable(Common.d);
         nav_user_name.setText(Common.name);
     }
+
+
+
+
 }
