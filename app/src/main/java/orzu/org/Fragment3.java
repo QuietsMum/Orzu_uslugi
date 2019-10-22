@@ -369,9 +369,9 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         drawable = DrawableCompat.wrap(drawable);
         drawable2 = DrawableCompat.wrap(drawable2);
         drawable3 = DrawableCompat.wrap(drawable3);
-        DrawableCompat.setTint(drawable, ContextCompat.getColor(getActivity(), R.color.colorTextDark));
-        DrawableCompat.setTint(drawable2, ContextCompat.getColor(getActivity(), R.color.colorTextDark));
-        DrawableCompat.setTint(drawable3, ContextCompat.getColor(getActivity(), R.color.colorTextDark));
+        DrawableCompat.setTint(drawable, ContextCompat.getColor(getActivity(), R.color.colorBackgrndFrg));
+        DrawableCompat.setTint(drawable2, ContextCompat.getColor(getActivity(), R.color.colorBackgrndFrg));
+        DrawableCompat.setTint(drawable3, ContextCompat.getColor(getActivity(), R.color.colorBackgrndFrg));
         menu.findItem(R.id.share_item).setIcon(drawable);
         menu.findItem(R.id.settings_item).setIcon(drawable2);
         menu.findItem(R.id.item_subscribe).setIcon(drawable3);

@@ -40,6 +40,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.PhoneAuthProvider;
 import com.rilixtech.Country;
 import com.rilixtech.CountryCodePicker;
 
@@ -50,6 +51,7 @@ import org.w3c.dom.Text;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -83,6 +85,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
     EditText input;
     DBHelper dbHelper;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
+    PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -236,6 +239,12 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                     public void onClick(View v) {
                         try {
                             getSMSResponse();
+                            PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                                    mPhone,        // Phone number to verify
+                                    60,                 // Timeout duration
+                                    TimeUnit.SECONDS,   // Unit of timeout
+                                    LoginActivity2.this,               // Activity (for callback binding)
+                                    mCallbacks);        // OnVerificationStateChangedCallbacks
 
                         } catch (IOException e) {
                             e.printStackTrace();
