@@ -20,11 +20,4 @@
         android:iconTint="@android:color/holo_green_light"
         android:title="Системные уведомления"
         app:showAsAction="ifRoom"></item>
-    <item
-        android:id="@+id/news_notif"
-        android:icon="@drawable/ic_notif"
-        android:iconTint="@android:color/darker_gray"
-        android:title="Новости"
-        app:showAsAction="ifRoom"></item>
-
 </menu>

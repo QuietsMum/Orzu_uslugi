@@ -2,6 +2,7 @@ package orzu.org;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
@@ -13,9 +14,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -33,16 +36,16 @@ public class NotificationSettings extends AppCompatActivity {
     Dialog dialog;
     TimePicker time;
     TextView to_time_text,from_time_text;
+    CardView cardView;
+    ImageView imageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryOrangeTop));
         setContentView(R.layout.activity_notification_settings);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
-        getSupportActionBar().setTitle("Настройки уведомления");
-        getSupportActionBar().setElevation(0);
 
         switch_notif = findViewById(R.id.switch_notif);
         switch_time = findViewById(R.id.switch_time);
@@ -55,6 +58,15 @@ public class NotificationSettings extends AppCompatActivity {
         time_of_notif = findViewById(R.id.time_of_notif);
         to_time_text = findViewById(R.id.to_time_text);
         from_time_text = findViewById(R.id.from_time_text);
+        cardView = findViewById(R.id.card_of_notif_settings);
+        cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
+        imageView = findViewById(R.id.notif_setting_back);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         dialog = new Dialog(this);
         switch_notif.setChecked(prefs.getBoolean("disableNotifiaction",false));
         if(switch_notif.isChecked()){

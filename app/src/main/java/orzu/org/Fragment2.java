@@ -42,30 +42,23 @@ import orzu.org.Notification.feedbackItem;
 import orzu.org.chat.ChatAdapter;
 import orzu.org.chat.chatItems;
 
-public class Fragment2 extends Fragment implements View.OnClickListener {
+public class Fragment2 extends Fragment {
 
     String url = "https://orzu.org/tasks/new/techrepair/techrepairother?token=";
     DBHelper dbHelper;
     ArrayList<Map<String, Object>> data;
-    ArrayList<Map<String, Object>> truedata;
     List<Literature> lit;
-    List<chatItems> chatItem = new ArrayList<>();
-    RecyclerView rv, rv_of_chat;
+    RecyclerView rv;
     AdapterDifferentLayout adapter;
-    TextView btnNotif;
-    TextView btnMessage;
     String messageNot;
     String idUserNot;
-    ChatAdapter chatAdapter;
-    FrameLayout chat_layout;
     SQLiteDatabase db;
     ImageView no_task;
     TextView no_task_text;
     String idUser;
-    TextView notif_buttonleft,notif_buttonright;
-    ImageView triangle_left,triangle_right;
     CardView cardView;
     BottomNavigationView navigationView;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,116 +78,54 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
         idUser = c.getString(idColIndex);
         c.close();
         db.close();
-        cardView =view.findViewById(R.id.card_of_notif);
+        cardView = view.findViewById(R.id.card_of_notif);
         cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
-        notif_buttonleft = view.findViewById(R.id.notif_buttonleft);
-        notif_buttonright = view.findViewById(R.id.notif_buttonright);
-        triangle_left = view.findViewById(R.id.triangle_left);
-        triangle_right = view.findViewById(R.id.triangle_right);
         navigationView = view.findViewById(R.id.navigation);
         ProgressBar progressBar = view.findViewById(R.id.progressBarMain2);
         progressBar.setVisibility(View.INVISIBLE);
-        btnNotif = view.findViewById(R.id.notif_buttonleft);
-        btnMessage = view.findViewById(R.id.notif_buttonright);
-        btnNotif.setOnClickListener(this);
-        btnMessage.setOnClickListener(this);
 
         no_task = view.findViewById(R.id.imageNoTask);
         no_task_text = view.findViewById(R.id.textViewNoTask);
-        rv_of_chat = view.findViewById(R.id.rv_of_chat);
         rv = view.findViewById(R.id.rv_notif);
         getNotif();
         rv.setHasFixedSize(true);
         rv.setNestedScrollingEnabled(false);
-        rv_of_chat.setHasFixedSize(true);
-        rv_of_chat.setNestedScrollingEnabled(false);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         rv.setLayoutManager(llm);
-        rv_of_chat.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        chatAdapter = new ChatAdapter(getContext(), chatItem);
         adapter = new AdapterDifferentLayout(getActivity(), lit);
         rv.setAdapter(adapter);
-        rv_of_chat.setAdapter(chatAdapter);
 
         adapter.setClickListener(new AdapterDifferentLayout.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
 
-               Log.e("type", String.valueOf(adapter.getItemViewType(position)));
+                Log.e("type", String.valueOf(adapter.getItemViewType(position)));
 
-               if (adapter.getItemViewType(position) == 103){
-                   Intent intent = new Intent(getActivity(), ItemSubsNews.class);
-                   startActivity(intent);
-                } else if(adapter.getItemViewType(position) == 101){
-                   Intent intent = new Intent(getActivity(), TaskViewMain.class);
-                   intent.putExtra("id", "13");
-                   intent.putExtra("opt", "view");
-                   intent.putExtra("mytask", "my");
-                   startActivity(intent);
-               } else if(adapter.getItemViewType(position) == 102){
-                   Intent intent = new Intent(getActivity(), Feedback.class);
-                   intent.putExtra("idUserFeedback", idUser);
-                   startActivity(intent);
-               }
+                if (adapter.getItemViewType(position) == 103) {
+                    Intent intent = new Intent(getActivity(), ItemSubsNews.class);
+                    startActivity(intent);
+                } else if (adapter.getItemViewType(position) == 101) {
+                    Intent intent = new Intent(getActivity(), TaskViewMain.class);
+                    intent.putExtra("id", "13");
+                    intent.putExtra("opt", "view");
+                    intent.putExtra("mytask", "my");
+                    startActivity(intent);
+                } else if (adapter.getItemViewType(position) == 102) {
+                    Intent intent = new Intent(getActivity(), Feedback.class);
+                    intent.putExtra("idUserFeedback", idUser);
+                    startActivity(intent);
+                }
 
 
             }
         });
 
-        chatAdapter.setClickListener(new ChatAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Common.nameOfChat = chatItem.get(position).getName();
-                Common.chatId = chatItem.get(position).getId();
-                Intent intent = new Intent(getActivity(), ChatActivity.class);
-                startActivity(intent);
-            }
-        });
 
 
         return view;
     }
 
-    private void getChat() {
-        chatItem.clear();
-        dbHelper = new DBHelper(getActivity());
-        db = dbHelper.getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM orzuchat Group by id", null);
-
-        while (cursor.moveToNext()) {
-            int name = cursor.getColumnIndex("name");
-            int id = cursor.getColumnIndex("id");
-            chatItems items = new chatItems();
-            items.setName(cursor.getString(name));
-            items.setId(cursor.getString(id));
-            chatItem.add(items);
-        }
-        Log.wtf("asdasdas", chatItem.size() + "");
-        if (chatItem.size() == 0) {
-            no_task.setVisibility(View.VISIBLE);
-            no_task_text.setVisibility(View.VISIBLE);
-            rv_of_chat.setVisibility(View.GONE);
-        } else {
-            no_task.setVisibility(View.INVISIBLE);
-            no_task_text.setVisibility(View.INVISIBLE);
-        }
-        cursor.close();
-        for (int i = 0; i < chatItem.size(); i++) {
-            Cursor date = db.rawQuery("SELECT * FROM orzuchat where id = '" + chatItem.get(i).getId() + "' Order by date", null);
-            date.moveToLast();
-            chatItem.get(i).setTime(date.getString(date.getColumnIndex("date")));
-            if (date.getString(date.getColumnIndex("their_text")) != null) {
-                chatItem.get(i).setChat(date.getString(date.getColumnIndex("their_text")));
-            } else {
-                chatItem.get(i).setChat(date.getString(date.getColumnIndex("my_text")));
-            }
-            chatItem.get(i).setNotification("1");
-            date.close();
-        }
-        db.close();
-        dbHelper.close();
-    }
 
     private void getNotif() {
         dbHelper = new DBHelper(getActivity());
@@ -241,18 +172,6 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
         db.close();
     }
 
-    public boolean isTableExists(String tableName) {
-        boolean isExist = false;
-        Cursor cursor = db.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = '" + tableName + "'", null);
-        if (cursor != null) {
-            if (cursor.getCount() > 0) {
-                isExist = true;
-            }
-            cursor.close();
-        }
-        return isExist;
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.notif_menu, menu);
@@ -268,36 +187,11 @@ public class Fragment2 extends Fragment implements View.OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.settings_item_notif:
-                Intent intent = new Intent(getActivity(),NotificationSettings.class);
+                Intent intent = new Intent(getActivity(), NotificationSettings.class);
                 startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.notif_buttonleft:
-                triangle_left.setVisibility(View.VISIBLE);
-                triangle_right.setVisibility(View.INVISIBLE);
-
-                rv.setVisibility(View.VISIBLE);
-                rv_of_chat.setVisibility(View.GONE);
-                getNotif();
-                break;
-            case R.id.notif_buttonright:
-                triangle_right.setVisibility(View.VISIBLE);
-                triangle_left.setVisibility(View.INVISIBLE);
-
-                rv.setVisibility(View.GONE);
-                rv_of_chat.setVisibility(View.VISIBLE);
-                no_task.setVisibility(View.INVISIBLE);
-                no_task_text.setVisibility(View.INVISIBLE);
-                getChat();
-                break;
         }
     }
 }
