@@ -166,10 +166,20 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         Intent intent = getIntent();
 
         if (intent != null) {
-            id = "" + intent.getStringExtra("id");
-            opt = intent.getStringExtra("opt");
-            myTask = intent.getStringExtra("mytask");
+            id = "" + intent.getExtras().getString("id");
+            opt = intent.getExtras().getString("opt");
+            myTask = intent.getExtras().getString("mytask");
         }
+        SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        if(prefs.getBoolean("notif",false)){
+            id = prefs.getString("idd","");
+            opt = prefs.getString("opt","");
+            myTask = prefs.getString("mytask","");
+            editor.putBoolean("notif", false);
+        }
+
         getSupportActionBar().setTitle("Задание №" + id);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -280,7 +290,6 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                     buttonGettask.startAnimation(animZoomIn);
                 }
             }, animationn.getDuration());
-            final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
 
             datetype = Integer.parseInt(prefs.getString(Util.TASK_DATETYPE, ""));
             placetype = Integer.parseInt(prefs.getString(Util.TASK_PLACETYPE, ""));

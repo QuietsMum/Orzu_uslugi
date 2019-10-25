@@ -37,13 +37,13 @@ import java.util.Random;
 public class NotificationsMessagingService extends FirebaseMessagingService {
     Context context = this;
     DBHelper dbHelper;
-
+    SharedPreferences prefs;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onMessageReceived(@NotNull RemoteMessage remoteMessage) {
 
-        final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
+        prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("New_task", remoteMessage.getData() + "");
         editor.apply();
@@ -56,9 +56,13 @@ public class NotificationsMessagingService extends FirebaseMessagingService {
     private void showNotification(@NotNull RemoteMessage remoteMessage) {
 
         Intent intent = new Intent(this, TaskViewMain.class);
-        intent.putExtra("id", remoteMessage.getData().get("ID"));
-        intent.putExtra("opt", "view");
-        intent.putExtra("mytask", "not");
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("idd", remoteMessage.getData().get("ID"));
+        editor.putString("New_task", remoteMessage.getData() + "");
+        editor.putString("opt", "view");
+        editor.putString("mytask", "not");
+        editor.putBoolean("notif", true);
+        editor.apply();
         PendingIntent activity = PendingIntent.getActivity(this, 0, intent, 0);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
