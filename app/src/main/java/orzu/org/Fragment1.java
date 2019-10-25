@@ -416,11 +416,20 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             URL orzuEndpoint = null;
             JsonReader jsonReader = null;
             HttpsURLConnection myConnection = null;
+            HttpsURLConnection myConnectiontrack = null;
             final char dm = (char) 34;
 
             try {
                 orzuEndpoint = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=all&status=open&page=" + count);
-
+                myConnectiontrack =
+                        (HttpsURLConnection) orzuEndpoint.openConnection();
+                if (myConnectiontrack.getResponseCode() == 200) {
+                    // Success
+                    InputStream responseBody = myConnectiontrack.getInputStream();
+                    Scanner s = new Scanner(responseBody).useDelimiter("\\A");
+                    result = s.hasNext() ? s.next() : "";
+                    Log.e("RESULT", result);
+                }
                 myConnection =
                         (HttpsURLConnection) orzuEndpoint.openConnection();
                 if (myConnection.getResponseCode() == 200) {
@@ -429,9 +438,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     InputStreamReader responseBodyReader =
                             new InputStreamReader(responseBody, "UTF-8");
                     jsonReader = new JsonReader(responseBodyReader);
-                    Scanner s = new Scanner(responseBody).useDelimiter("\\A");
-                    result = s.hasNext() ? s.next() : "";
-
                 }
 
                 status = myConnection.getResponseCode();
@@ -443,8 +449,8 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
 
                 if (result.equals(dm + "Not tasks yet" + dm)) {
-                    Log.e("RESULT", result);
                     track = false;
+                    catTask.cancel(true);
                 } else {
                     jsonReader.beginArray(); // Start processing the JSON object
                     while (jsonReader.hasNext()) { // Loop through all keys
@@ -974,7 +980,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                             subcategories.add(new category_model(object.getString("id"), object.getString("name"), object.getString("parent_id")));
                             adapter_subcategory = new MainSubCategoryAdapter(getContext(), subcategories);
                             subcategory_rv.setAdapter(adapter_subcategory);
-                            Log.wtf("wtfisthat", subcategories.get(i).getName());
                             adapter_category.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
