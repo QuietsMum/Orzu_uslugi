@@ -211,6 +211,11 @@ public class Main2Activity extends AppCompatActivity
                         .setBottomRightCorner(CornerFamily.ROUNDED,160)
                         .build());
 
+        SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean("notif", false);
+        editor.apply();
+
         try {
             getUserResponse();
         } catch (IOException e) {

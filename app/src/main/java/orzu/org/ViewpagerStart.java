@@ -104,7 +104,7 @@ public class ViewpagerStart extends AppCompatActivity implements View.OnClickLis
                     getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryGreen));
                 } else if (currentPage == 1){
                     getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryBlue));
-                } else getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryRed));
+                } else getWindow().setStatusBarColor(getResources().getColor(R.color.redview));
             }
 
             @Override

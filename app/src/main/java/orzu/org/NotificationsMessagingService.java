@@ -49,14 +49,16 @@ public class NotificationsMessagingService extends FirebaseMessagingService {
         editor.apply();
         Log.wtf("sadad", remoteMessage.getData() + "");
 
-        showNotification(remoteMessage);
-
+        if(remoteMessage.getData().containsKey("ID")){
+            showNotification(remoteMessage);
+        }
     }
 
     private void showNotification(@NotNull RemoteMessage remoteMessage) {
 
         Intent intent = new Intent(this, TaskViewMain.class);
         SharedPreferences.Editor editor = prefs.edit();
+
         editor.putString("idd", remoteMessage.getData().get("ID"));
         editor.putString("New_task", remoteMessage.getData() + "");
         editor.putString("opt", "view");

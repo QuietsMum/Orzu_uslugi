@@ -168,19 +168,17 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
 
         SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-
+        if (intent != null) {
+            id = "" + intent.getStringExtra("id");
+            opt = intent.getStringExtra("opt");
+            myTask = intent.getStringExtra("mytask");
+        }
         if(prefs.getBoolean("notif", false)){
             id = prefs.getString("idd","");
             opt = prefs.getString("opt","");
             myTask = prefs.getString("mytask","");
             editor.putBoolean("notif", false);
             editor.apply();
-        }else {
-            if (intent != null) {
-                id = "" + intent.getStringExtra("id");
-                opt = intent.getStringExtra("opt");
-                myTask = intent.getStringExtra("mytask");
-            }
         }
 
         getSupportActionBar().setTitle("Задание №" + id);
