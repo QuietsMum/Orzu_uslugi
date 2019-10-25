@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -69,6 +70,7 @@ public class Fragment2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstantState) {
         final View view = inflater.inflate(R.layout.fragment_main_2, container, false);
 
+        getActivity().setTitle(Html.fromHtml("<font color='#ffffff'>Уведомления</font>"));
         dbHelper = new DBHelper(getActivity());
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("orzutable", null, null, null, null, null, null);
@@ -140,7 +142,7 @@ public class Fragment2 extends Fragment {
                     int tokenColIndex = c.getColumnIndex("token");
                     int idColIndex = c.getColumnIndex("idUser");
                     int mesColIndex = c.getColumnIndex("message");
-                    OtklikITem item1 = new OtklikITem("Вся правда о кондиционерах", "Максимально упрощайте ежедневные задачи для большей продуктивности рабочего дня");
+                    //OtklikITem item1 = new OtklikITem("Вся правда о кондиционерах", "Максимально упрощайте ежедневные задачи для большей продуктивности рабочего дня");
                     ChooseYouItem item2 = new ChooseYouItem("Nikita", "Android develop", "10000$", "Making apps", "13,09,2018 10:20");
                     feedbackItem item3 = new feedbackItem(R.drawable.images_background_4, "Иван Иваныч", "2", "qwe", "Безопасная оплата картой и гарантия возврата денег. Компенсация в случае морального ущерба.");
                     messageNot = c.getString(mesColIndex);
@@ -148,10 +150,10 @@ public class Fragment2 extends Fragment {
                     feedbackItem item4 = new feedbackItem(R.drawable.images_background_4, idUserNot, "2", "qwe", messageNot);
                     lit.add(item3);
                     lit.add(item2);
-                    lit.add(item1);
+                   // lit.add(item1);
                     lit.add(item3);
                     lit.add(item2);
-                    lit.add(item1);
+                 //   lit.add(item1);
                     lit.add(item2);
                     lit.add(item3);
                     lit.add(item4);
