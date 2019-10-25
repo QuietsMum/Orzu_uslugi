@@ -83,6 +83,23 @@ public class Fragment2 extends Fragment {
         cardView = view.findViewById(R.id.card_of_notif);
         cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
         navigationView = view.findViewById(R.id.navigation);
+        navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.all_notif:
+                        getNotif();
+                        break;
+                    case R.id.feedback_notif:
+                        getOtkliki();
+                        break;
+                    case R.id.system_notif:
+
+                        break;
+                }
+                return false;
+            }
+        });
         ProgressBar progressBar = view.findViewById(R.id.progressBarMain2);
         progressBar.setVisibility(View.INVISIBLE);
 
@@ -126,6 +143,9 @@ public class Fragment2 extends Fragment {
 
 
         return view;
+    }
+
+    private void getOtkliki() {
     }
 
 
