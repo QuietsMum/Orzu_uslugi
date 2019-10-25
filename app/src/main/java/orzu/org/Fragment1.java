@@ -40,6 +40,7 @@ import com.android.volley.toolbox.Volley;
 
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.gms.common.util.IOUtils;
 import com.google.gson.JsonArray;
 
 
@@ -50,6 +51,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -57,6 +59,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Scanner;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -398,7 +401,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
     class AsyncOrzuTasksMain extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {
 
-
+        String result;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -414,6 +417,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             JsonReader jsonReader = null;
             HttpsURLConnection myConnection = null;
             final char dm = (char) 34;
+
             try {
                 orzuEndpoint = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=all&status=open&page=" + count);
 
@@ -425,6 +429,8 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     InputStreamReader responseBodyReader =
                             new InputStreamReader(responseBody, "UTF-8");
                     jsonReader = new JsonReader(responseBodyReader);
+                    Scanner s = new Scanner(responseBody).useDelimiter("\\A");
+                    result = s.hasNext() ? s.next() : "";
 
                 }
 
@@ -436,7 +442,8 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
 
 
-                if (jsonReader.equals(dm + "Not tasks yet" + dm)) {
+                if (result.equals(dm + "Not tasks yet" + dm)) {
+                    Log.e("RESULT", result);
                     track = false;
                 } else {
                     jsonReader.beginArray(); // Start processing the JSON object
@@ -619,7 +626,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
     class AsyncOrzuTasksMainRefresh extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {
         final HttpsURLConnection[] myConnection = new HttpsURLConnection[1];
         final URL[] orzuEndpoint = new URL[1];
-
+        String result;
 
         @Override
         protected void onPreExecute() {
@@ -647,8 +654,9 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     InputStreamReader responseBodyReader =
                             new InputStreamReader(responseBody, "UTF-8");
                     jsonReader[0] = new JsonReader(responseBodyReader);
-
-                    if (responseBody.equals("\"Not tasks yet\"")) {
+                    Scanner s = new Scanner(responseBody).useDelimiter("\\A");
+                    result = s.hasNext() ? s.next() : "";
+                    if (result.equals("\"Not tasks yet\"")) {
                         catTask.cancel(true);
                     }
 
