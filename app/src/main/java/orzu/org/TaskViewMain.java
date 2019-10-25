@@ -828,7 +828,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             urlPrice = "&price=wtasker";
         }
 
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
+        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
                 "&opt=input_task" +
                 "&task=" + name +
                 "&catid=" + catid +

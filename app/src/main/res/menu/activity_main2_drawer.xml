@@ -6,21 +6,21 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/first"
-            android:icon="@drawable/my_tasks"
+            android:icon="@drawable/find_selector"
             android:title="@string/all_tasks" />
 
         <item
             android:id="@+id/second"
-            android:icon="@drawable/my_tasks"
+            android:icon="@drawable/create_selector"
             android:title="@string/add_task" />
 
         <item
             android:id="@+id/third"
-            android:icon="@drawable/my_tasks"
+            android:icon="@drawable/my_taks_selector"
             android:title="@string/my_tasks" />
         <item
             android:id="@+id/fourth"
-            android:icon="@drawable/my_tasks"
+            android:icon="@drawable/notif_selector"
             android:title="@string/notification" />
 
     </group>

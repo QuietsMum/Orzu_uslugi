@@ -147,6 +147,7 @@ public class Main2Activity extends AppCompatActivity
                 });
             }
 
+
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String mMessage = response.body().string();
@@ -189,6 +190,8 @@ public class Main2Activity extends AppCompatActivity
         });
     }
 
+
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,7 +203,7 @@ public class Main2Activity extends AppCompatActivity
 //        toolbar.setBackground(getResources().getDrawable(R.drawable.gradient_back));
         setSupportActionBar(toolbar);
         navigationView = findViewById(R.id.nav_view);
-
+        navigationView.setItemIconTintList(null);
         MaterialShapeDrawable navViewBackground = (MaterialShapeDrawable) navigationView.getBackground();
         navViewBackground.setShapeAppearanceModel(
                 navViewBackground.getShapeAppearanceModel()
