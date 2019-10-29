@@ -446,8 +446,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 myConnection.setInstanceFollowRedirects(true);
                 data = new ArrayList<>();
 
-
-
                 if (result.equals(dm + "Not tasks yet" + dm)) {
                     track = false;
                     catTask.cancel(true);

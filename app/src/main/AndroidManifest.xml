@@ -23,7 +23,8 @@
         android:screenOrientation="portrait">
         <activity android:name=".ItemSubsNews"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".NotificationSettings" />
+        <activity android:name=".NotificationSettings"
+            android:screenOrientation="portrait"/>
 
         <service android:name=".NotificationsMessagingService">
             <intent-filter android:priority="1">
