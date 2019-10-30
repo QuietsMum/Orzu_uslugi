@@ -210,7 +210,6 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setElevation(0);
 
-
         img_of_task = findViewById(R.id.img_of_task);
         shim = (ShimmerFrameLayout) findViewById(R.id.parentShimmerLayoutViewTask);
         shim.startShimmer();
@@ -361,7 +360,15 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             }
         }
 
-
+        if(!Common.values.isEmpty()){
+            img_of_task.setVisibility(View.VISIBLE);
+            img_of_task.setBackgroundResource(R.drawable.shape_viewpager_corners);
+            myPager = new pager_adapter(TaskViewMain.this, Common.values);
+            viewPager = findViewById(R.id.view_pager3);
+            viewPager.setAdapter(myPager);
+            circleIndicator = findViewById(R.id.circle2);
+            circleIndicator.setViewPager(viewPager);
+        }
     }
 
     @Override

@@ -12,14 +12,22 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class pager_adapter extends PagerAdapter {
     private Context context;
-    List<String> imgs;
+    List<String> imgs = new ArrayList<>();
+    HashMap<Integer, String> values = new HashMap<>();
     public pager_adapter(Context context, List<String> imgs) {
         this.context = context;
         this.imgs = imgs;
+    }
+
+    public pager_adapter(TaskViewMain context, HashMap<Integer, String> values) {
+        this.context = context;
+        this.values = values;
     }
 
     /*
@@ -32,15 +40,28 @@ public class pager_adapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         View view = LayoutInflater.from(context).inflate(R.layout.pager_item, null);
         ImageView imageView = view.findViewById(R.id.image);
-        Picasso.get().load("https://projectapi.pw/"+imgs.get(position)).into(imageView);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context,FullScreenImageActivity.class);
-                intent.setData(Uri.parse("https://projectapi.pw/"+imgs.get(position)));
-                context.startActivity(intent);
-            }
-        });
+        if(!imgs.isEmpty()) {
+            Picasso.get().load("https://projectapi.pw/" + imgs.get(position)).into(imageView);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, FullScreenImageActivity.class);
+                    intent.setData(Uri.parse("https://projectapi.pw/" + imgs.get(position)));
+                    context.startActivity(intent);
+                }
+            });
+        }else{
+            imageView.setImageURI(Uri.parse(values.get(position)));
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, FullScreenImageActivity.class);
+                    intent.setData(Uri.parse(values.get(position)));
+                    intent.putExtra("isFromCreate",true);
+                    context.startActivity(intent);
+                }
+            });
+        }
         container.addView(view);
         return view;
     }
@@ -59,7 +80,11 @@ public class pager_adapter extends PagerAdapter {
     */
     @Override
     public int getCount() {
-        return imgs.size();
+        if(!imgs.isEmpty()) {
+            return imgs.size();
+        }else{
+            return values.size();
+        }
     }
 
     /*

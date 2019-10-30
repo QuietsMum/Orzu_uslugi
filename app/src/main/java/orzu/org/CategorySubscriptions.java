@@ -138,7 +138,9 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
 
         expandableListView = (ExpandableListView) findViewById(R.id.expListView);
         podstilka = findViewById(R.id.podstilkaSuibs);
+        podstilka.setBackgroundResource(R.drawable.shape_card_topcorners);
         shim = findViewById(R.id.shimSubs);
+        shim.setBackgroundResource(R.drawable.shape_card_topcorners);
         shim.startShimmer();
         expandableListView.setIndicatorBoundsRelative(50, 50);
         expandableListView.setAdapter(mNewAdapter);

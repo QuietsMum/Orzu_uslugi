@@ -66,6 +66,7 @@ public class FeedbackTask extends AppCompatActivity implements MainItemSelect {
         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_feedback_task);
         shim = (ShimmerFrameLayout) findViewById(R.id.feedbackshimmertask);
+        shim.setBackgroundResource(R.drawable.shape_card_topcorners);
         shim.startShimmer();
         cardView = findViewById(R.id.card_of_feedback);
         cardView.setBackgroundResource(R.drawable.shape_card_topcorners);

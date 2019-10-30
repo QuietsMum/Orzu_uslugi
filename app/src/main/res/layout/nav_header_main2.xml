@@ -7,7 +7,7 @@
     android:layout_height="150dp"
     android:gravity="bottom"
     android:orientation="horizontal"
-    android:background="@color/back_for_feed"
+    android:background="@android:color/darker_gray"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
 

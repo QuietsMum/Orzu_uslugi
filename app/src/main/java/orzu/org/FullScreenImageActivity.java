@@ -25,6 +25,7 @@ public class FullScreenImageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_full_screen_image);
         PhotoView fullScreenImageView = findViewById(R.id.fullScreenImageView);
         Intent callingActivityIntent = getIntent();
+        Boolean bool = getIntent().getBooleanExtra("isFromCreate",false);
         fullScreenImageView_back = findViewById(R.id.fullScreenImageView_back);
         fullScreenImageView_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,10 +35,12 @@ public class FullScreenImageActivity extends AppCompatActivity {
         });
         if(callingActivityIntent != null) {
             Uri imageUri = callingActivityIntent.getData();
-            if(imageUri != null && fullScreenImageView != null) {
+            if(imageUri != null && fullScreenImageView != null&&!bool) {
                 Glide.with(this)
                         .load(imageUri)
                         .into(fullScreenImageView);
+            }else if(imageUri != null && fullScreenImageView != null&&bool){
+                fullScreenImageView.setImageURI(callingActivityIntent.getData());
             }
         }
     }
