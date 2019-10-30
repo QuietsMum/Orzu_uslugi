@@ -318,8 +318,8 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                     JSONObject jsonObject = new JSONObject(mMessage);
                     mName = jsonObject.getString("name");
                     mFiName = jsonObject.getString("fname");
-                    mCount = jsonObject.getString("tasks");
-                    mCountReq = jsonObject.getString("task_requests");
+                    mCount = jsonObject.getString("task_requests");
+                    mCountReq = jsonObject.getString("tasks");
                     mCity = jsonObject.getString("city");
                     Common.city = mCity;
                     mBday = jsonObject.getString("birthday");

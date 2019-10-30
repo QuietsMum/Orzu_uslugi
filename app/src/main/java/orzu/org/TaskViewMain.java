@@ -496,7 +496,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                         img_of_task.setVisibility(View.VISIBLE);
                         img_of_task.setBackgroundResource(R.drawable.shape_viewpager_corners);
                         myPager = new pager_adapter(TaskViewMain.this, images);
-                        viewPager = findViewById(R.id.view_pager2);
+                        viewPager = findViewById(R.id.view_pager3);
                         viewPager.setAdapter(myPager);
                         circleIndicator = findViewById(R.id.circle2);
                         circleIndicator.setViewPager(viewPager);
@@ -962,7 +962,6 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
     public void getEditAvatarResponse(String id, String path) throws IOException {
 
         String url = "https://projectapi.pw/api/avatar";
-        Log.e("userCreatedURL", path);
         OkHttpClient client = new OkHttpClient();
 
         File myFile = new File(Uri.parse(path).getPath());
@@ -1011,10 +1010,9 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             public void onResponse(Call call, Response response) throws IOException {
 
                 String mMessage = response.body().string();
-                Log.e("userCreatedAvatar", mMessage);
                 TaskViewMain.this.runOnUiThread(new Runnable() {
                     public void run() {
-                        Toast.makeText(TaskViewMain.this, "Ваш профиль изменен", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TaskViewMain.this, "Фото добавленно", Toast.LENGTH_SHORT).show();
                     }
                 });
 
