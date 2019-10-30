@@ -17,9 +17,10 @@
         android:layout_height="100dp">
 
         <ImageView
+            android:id="@+id/subcategory_back_item"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/subcategory_back"
+            android:src="@drawable/subcategory_back1"
             android:scaleType="centerCrop"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout

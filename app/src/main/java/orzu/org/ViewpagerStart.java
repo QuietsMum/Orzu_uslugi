@@ -50,7 +50,6 @@ public class ViewpagerStart extends AppCompatActivity implements View.OnClickLis
             ImagesArrayBack.add(IMAGESBACK[i]);
             TextArray.add(TEXT[i]);
             TextArray2.add(TEXT2[i]);
-
         }
         mPager = (ViewPager) findViewById(R.id.pager);
 

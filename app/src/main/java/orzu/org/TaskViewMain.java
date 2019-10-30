@@ -1,10 +1,13 @@
 package orzu.org;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -12,7 +15,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +27,8 @@ import android.util.DisplayMetrics;
 import android.util.JsonReader;
 import android.util.JsonToken;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -39,14 +46,21 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.squareup.picasso.Picasso;
+
+import com.viewpagerindicator.CirclePageIndicator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -59,6 +73,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -68,8 +83,11 @@ import javax.net.ssl.HttpsURLConnection;
 //import io.intercom.com.google.gson.JsonArray;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import orzu.org.ui.login.model;
 
@@ -96,6 +114,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
     final String dateList = "Дата публицации";
     final String cityList = "Город";
     final String needList = "Сроки";
+    final String imageList = "Картинки";
     String needListdfrom = "Сроки";
     ProgressBar progressBar;
     AsyncOrzuTask task;
@@ -125,6 +144,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
     TextView buttonGettask;
     TextView buttonGettaskShim;
     LinearLayout viewUserInfo;
+    LinearLayout img_of_task;
 
     String name = "";
     String idUser = "";
@@ -155,6 +175,10 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
 
     ImageView back;
     CardView cardView;
+    List<String> images = new ArrayList<>();
+    private ViewPager viewPager;
+    private CirclePageIndicator circleIndicator;
+    private pager_adapter myPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,10 +197,10 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             opt = intent.getStringExtra("opt");
             myTask = intent.getStringExtra("mytask");
         }
-        if(prefs.getBoolean("notif", false)){
-            id = prefs.getString("idd","");
-            opt = prefs.getString("opt","");
-            myTask = prefs.getString("mytask","");
+        if (prefs.getBoolean("notif", false)) {
+            id = prefs.getString("idd", "");
+            opt = prefs.getString("opt", "");
+            myTask = prefs.getString("mytask", "");
             editor.putBoolean("notif", false);
             editor.apply();
         }
@@ -186,6 +210,8 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setElevation(0);
 
+
+        img_of_task = findViewById(R.id.img_of_task);
         shim = (ShimmerFrameLayout) findViewById(R.id.parentShimmerLayoutViewTask);
         shim.startShimmer();
         progressBar = findViewById(R.id.progres_create_task);
@@ -415,8 +441,9 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                 jsonReader[0].beginArray();
                 while (jsonReader[0].hasNext()) {
                     jsonReader[0].beginArray(); // Start processing the JSON object
-                    while (jsonReader[0].hasNext()) { // Loop through all keys
 
+                    while (jsonReader[0].hasNext()) { // Loop through all keys
+                        Log.wtf("asdasd", jsonReader[0].toString());
                         m = readMessage(jsonReader[0]);
 
                         m_new.put(idList, m.get(idList));
@@ -465,7 +492,15 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                     taskAdr.setText(m_new.get(adress).toString());
                     taskBeg.setText(m_new.get(needListdfrom).toString());
                     taskOpen.setText(m_new.get(createList).toString());
-
+                    if (m.containsKey(imageList)) {
+                        img_of_task.setVisibility(View.VISIBLE);
+                        img_of_task.setBackgroundResource(R.drawable.shape_viewpager_corners);
+                        myPager = new pager_adapter(TaskViewMain.this, images);
+                        viewPager = findViewById(R.id.view_pager2);
+                        viewPager.setAdapter(myPager);
+                        circleIndicator = findViewById(R.id.circle2);
+                        circleIndicator.setViewPager(viewPager);
+                    }
                     if (m_new.get(priceList).toString().equals("Предложите цену")) {
                         taskAmtOnce.setVisibility(View.INVISIBLE);
                     }
@@ -612,12 +647,17 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                                     m.put(cityList, "Неизвестно");
                                     reader.skipValue();
                                 }
-
                                 break;
                             case "work_with":
                                 reader.nextName();
                                 adr = reader.nextString();
                                 m.put(needListdfrom, "Дата по договоренности");
+                                break;
+                            case "image":
+                                reader.nextName();
+                                adr = reader.nextString();
+                                m.put(imageList, adr);
+                                images.add(adr);
                                 break;
                             case "level_l":
                                 reader.nextName();
@@ -888,10 +928,19 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onResponse(Call call, Response response) throws IOException {
 
-                String mMessage = response.body().string();
+
+
+                String[] mMessage = response.body().string().split(":");
                 final char dm = (char) 34;
-                if (mMessage.equals(dm + "Task created" + dm)) {
+                if (mMessage[0].equals(dm+"Task created")) {
+                    if (!Common.values.isEmpty()) {
+                        for (int i = 0; i < Common.values.size(); i++) {
+                            getEditAvatarResponse(mMessage[1].substring(0,mMessage[1].length()-1), Common.values.get(i));
+                            Log.e("userCreatedURL", mMessage[1]+Common.values.get(i));
+                        }
+                    }
                     Intent intent = new Intent(TaskViewMain.this, Congratz.class);
+                    Common.values = new ArrayList<>();
                     startActivity(intent);
                     finish();
                     CreateTaskDetail.fa.finish();
@@ -901,12 +950,75 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                     CreateTaskName.fa.finish();
                     CreateTaskCategory.fa.finish();
                     CreateTaskSubCategory.fa.finish();
+
                 }
                 progressBar.setVisibility(View.INVISIBLE);
-                Log.e("created response", mMessage);
+                Log.e("created response", mMessage[0] + mMessage[1]);
 
             }
         });
     }
 
+    public void getEditAvatarResponse(String id, String path) throws IOException {
+
+        String url = "https://projectapi.pw/api/avatar";
+        Log.e("userCreatedURL", path);
+        OkHttpClient client = new OkHttpClient();
+
+        File myFile = new File(Uri.parse(path).getPath());
+        RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("file", myFile.getName(),
+                        RequestBody.create(MediaType.parse("text/csv"), myFile))
+                .addFormDataPart("task_id", id)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                TaskViewMain.this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Dialog dialog = new Dialog(TaskViewMain.this, android.R.style.Theme_Material_Light_NoActionBar);
+                        dialog.setContentView(R.layout.dialog_no_internet);
+                        Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                        // if button is clicked, close the custom dialog
+                        dialogButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                try {
+                                    getEditAvatarResponse(id, path);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.show();
+                            }
+                        }, 500);
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                String mMessage = response.body().string();
+                Log.e("userCreatedAvatar", mMessage);
+                TaskViewMain.this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(TaskViewMain.this, "Ваш профиль изменен", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+        });
+    }
 }

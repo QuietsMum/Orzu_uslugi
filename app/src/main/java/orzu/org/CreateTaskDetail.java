@@ -286,6 +286,7 @@ public class CreateTaskDetail extends AppCompatActivity implements View.OnClickL
         String imageEncoded;
         if (resultCode == Activity.RESULT_OK && requestCode == 100) {
             returnValue = data.getStringArrayListExtra(Pix.IMAGE_RESULTS);
+            Common.values.add(returnValue.get(0));
             Log.e("stringPath", String.valueOf(returnValue));
 
         }

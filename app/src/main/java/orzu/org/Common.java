@@ -3,6 +3,8 @@ package orzu.org;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 
+import java.util.ArrayList;
+
 public class Common {
     public static String userId = "";
     public static String taskId = "";
@@ -20,4 +22,5 @@ public class Common {
     public static String nameOfChat;
     public static String chatId;
     public static String taskName;
+    public static ArrayList<String> values = new ArrayList<>();
 }
