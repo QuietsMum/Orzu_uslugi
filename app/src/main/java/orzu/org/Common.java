@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class Common {
     public static String userId = "";
@@ -22,5 +24,5 @@ public class Common {
     public static String nameOfChat;
     public static String chatId;
     public static String taskName;
-    public static ArrayList<String> values = new ArrayList<>();
+    public static HashMap<Integer,String> values = new HashMap<>();
 }

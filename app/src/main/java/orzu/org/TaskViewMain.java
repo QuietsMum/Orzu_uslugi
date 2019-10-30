@@ -92,7 +92,7 @@ import okhttp3.Response;
 import orzu.org.ui.login.model;
 
 public class TaskViewMain extends AppCompatActivity implements View.OnClickListener {
-
+    int count = 0;
     String id = "";
     String opt = "";
     String myTask = "";
@@ -934,22 +934,20 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                 final char dm = (char) 34;
                 if (mMessage[0].equals(dm+"Task created")) {
                     if (!Common.values.isEmpty()) {
-                        for (int i = 0; i < Common.values.size(); i++) {
-                            getEditAvatarResponse(mMessage[1].substring(0,mMessage[1].length()-1), Common.values.get(i));
-                            Log.e("userCreatedURL", mMessage[1]+Common.values.get(i));
-                        }
+                        getEditAvatarResponse(mMessage[1].substring(0,mMessage[1].length()-1));
+                    }else {
+                        Intent intent = new Intent(TaskViewMain.this, Congratz.class);
+                        Common.values.clear();
+                        startActivity(intent);
+                        finish();
+                        CreateTaskDetail.fa.finish();
+                        CreateTaskAmout.fa.finish();
+                        CreateTaskTerm.fa.finish();
+                        CreateTaskPlace.fa.finish();
+                        CreateTaskName.fa.finish();
+                        CreateTaskCategory.fa.finish();
+                        CreateTaskSubCategory.fa.finish();
                     }
-                    Intent intent = new Intent(TaskViewMain.this, Congratz.class);
-                    Common.values = new ArrayList<>();
-                    startActivity(intent);
-                    finish();
-                    CreateTaskDetail.fa.finish();
-                    CreateTaskAmout.fa.finish();
-                    CreateTaskTerm.fa.finish();
-                    CreateTaskPlace.fa.finish();
-                    CreateTaskName.fa.finish();
-                    CreateTaskCategory.fa.finish();
-                    CreateTaskSubCategory.fa.finish();
 
                 }
                 progressBar.setVisibility(View.INVISIBLE);
@@ -959,12 +957,34 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    public void getEditAvatarResponse(String id, String path) throws IOException {
+    public boolean getEditAvatarResponse(String id) throws IOException {
 
+        if(count>=Common.values.size()){
+            TaskViewMain.this.runOnUiThread(new Runnable() {
+                public void run() {
+                    Toast.makeText(TaskViewMain.this, "Фото добавленно", Toast.LENGTH_SHORT).show();
+                }
+            });
+            count = 0;
+            Intent intent = new Intent(TaskViewMain.this, Congratz.class);
+            Common.values.clear();
+            startActivity(intent);
+            finish();
+            CreateTaskDetail.fa.finish();
+            CreateTaskAmout.fa.finish();
+            CreateTaskTerm.fa.finish();
+            CreateTaskPlace.fa.finish();
+            CreateTaskName.fa.finish();
+            CreateTaskCategory.fa.finish();
+            CreateTaskSubCategory.fa.finish();
+            return true;
+        }
+
+        Log.wtf("asdasd",id+" "+Common.values.get(count));
         String url = "https://projectapi.pw/api/avatar";
         OkHttpClient client = new OkHttpClient();
 
-        File myFile = new File(Uri.parse(path).getPath());
+        File myFile = new File(Uri.parse(Common.values.get(count)).getPath());
         RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart("file", myFile.getName(),
                         RequestBody.create(MediaType.parse("text/csv"), myFile))
@@ -989,7 +1009,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                             @Override
                             public void onClick(View v) {
                                 try {
-                                    getEditAvatarResponse(id, path);
+                                    getEditAvatarResponse(id);
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
@@ -1008,15 +1028,17 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-
+                count++;
                 String mMessage = response.body().string();
                 TaskViewMain.this.runOnUiThread(new Runnable() {
                     public void run() {
-                        Toast.makeText(TaskViewMain.this, "Фото добавленно", Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.VISIBLE);
+                        buttonGettask.setVisibility(View.GONE);
                     }
                 });
-
+                getEditAvatarResponse(id);
             }
         });
+        return true;
     }
 }
