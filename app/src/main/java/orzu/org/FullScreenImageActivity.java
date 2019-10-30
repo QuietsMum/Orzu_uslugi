@@ -21,6 +21,7 @@ public class FullScreenImageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         getSupportActionBar().hide();
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorTextLight));
         setContentView(R.layout.activity_full_screen_image);
         PhotoView fullScreenImageView = findViewById(R.id.fullScreenImageView);
         Intent callingActivityIntent = getIntent();
