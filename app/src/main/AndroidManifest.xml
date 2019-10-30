@@ -13,10 +13,10 @@
     <application
         android:allowBackup="false"
         android:hardwareAccelerated="true"
-        android:icon="@drawable/ic_logo_01"
+        android:icon="@drawable/logo_in_desktop"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:roundIcon="@drawable/ic_logo_01"
+        android:roundIcon="@drawable/logo_in_desktop"
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
