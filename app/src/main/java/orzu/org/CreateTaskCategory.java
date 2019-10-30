@@ -53,6 +53,7 @@ public class CreateTaskCategory extends AppCompatActivity {
         setContentView(R.layout.activity_create_task_category);
 
         progressBar = findViewById(R.id.progressBarCatCreate);
+        progressBar.setBackgroundResource(R.drawable.shape_card_topcorners);
         progressBar.startShimmer();
         fa = this;
 

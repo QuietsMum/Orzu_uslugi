@@ -60,6 +60,7 @@ public class CreateTaskSubCategory extends AppCompatActivity {
         String nameIntent = getIntent().getExtras().getString("name");
 
         progressBar = findViewById(R.id.progressBarSubCatCreate);
+        progressBar.setBackgroundResource(R.drawable.shape_card_topcorners);
         progressBar.startShimmer();
         fa = this;
         cardView = findViewById(R.id.card_of_subcategory);

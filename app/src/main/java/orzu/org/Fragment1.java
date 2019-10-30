@@ -645,7 +645,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
             orzuEndpoint[0] = null;
             JsonReader[] jsonReader = new JsonReader[1];
-
             try {
 
                 orzuEndpoint[0] = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=all&status=open&page=0");
@@ -756,6 +755,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 Long idnew = (Long) m_new_2.get(idList);
                 if (!idold.equals(idnew) || noTasks) {
                     count = 1;
+                    countPager = false;
                     imagenotask.setVisibility(View.INVISIBLE);
                     textnotask.setVisibility(View.INVISIBLE);
                     truedata = new ArrayList<>();
