@@ -17,14 +17,17 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:roundIcon="@drawable/ic_logo_01"
+        android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true"
-        android:screenOrientation="portrait">
-        <activity android:name=".ItemSubsNews"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".NotificationSettings"
-            android:screenOrientation="portrait"/>
+        android:usesCleartextTraffic="true">
+        <activity android:name=".FullScreenImageActivity"></activity>
+        <activity
+            android:name=".ItemSubsNews"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NotificationSettings"
+            android:screenOrientation="portrait" />
 
         <service android:name=".NotificationsMessagingService">
             <intent-filter android:priority="1">

@@ -1,6 +1,8 @@
 package orzu.org;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +33,14 @@ public class pager_adapter extends PagerAdapter {
         View view = LayoutInflater.from(context).inflate(R.layout.pager_item, null);
         ImageView imageView = view.findViewById(R.id.image);
         Picasso.get().load("https://projectapi.pw/"+imgs.get(position)).into(imageView);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context,FullScreenImageActivity.class);
+                intent.setData(Uri.parse("https://projectapi.pw/"+imgs.get(position)));
+                context.startActivity(intent);
+            }
+        });
         container.addView(view);
         return view;
     }
