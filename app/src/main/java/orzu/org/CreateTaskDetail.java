@@ -294,22 +294,27 @@ public class CreateTaskDetail extends AppCompatActivity implements View.OnClickL
         if (!multy) {
             if (counter == 1) {
                 image1.setImageURI(Uri.parse(returnValue.get(0)));
+                Common.values.add(0, returnValue.get(0));
                 delete1.setVisibility(View.VISIBLE);
             } else if (counter == 2) {
                 image2.setImageURI(Uri.parse(returnValue.get(0)));
+                Common.values.add(1, returnValue.get(0));
                 delete2.setVisibility(View.VISIBLE);
             } else if (counter == 3) {
                 image3.setImageURI(Uri.parse(returnValue.get(0)));
+                Common.values.add(2, returnValue.get(0));
                 delete3.setVisibility(View.VISIBLE);
-            }
-            if (counter == 4) {
+            } else if (counter == 4) {
                 image4.setImageURI(Uri.parse(returnValue.get(0)));
+                Common.values.add(3, returnValue.get(0));
                 delete4.setVisibility(View.VISIBLE);
             } else if (counter == 5) {
                 image5.setImageURI(Uri.parse(returnValue.get(0)));
+                Common.values.add(4, returnValue.get(0));
                 delete5.setVisibility(View.VISIBLE);
             } else if (counter == 6) {
                 image6.setImageURI(Uri.parse(returnValue.get(0)));
+                Common.values.add(5, returnValue.get(0));
                 delete6.setVisibility(View.VISIBLE);
             }
 
