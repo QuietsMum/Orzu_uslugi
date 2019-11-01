@@ -61,7 +61,7 @@ public class SubCategoryView2 extends AppCompatActivity {
     ArrayList<Map<String, Object>> data;
     SimpleAdapter arrayAdapter1;
     RecyclerView suggestResultView;
-    ArrayAdapterMy resultAdapter;
+    AdapterCityFilter resultAdapter;
     List<String> suggestResult;
     ProgressBar pr;
     ImageView cities_back;
@@ -82,7 +82,7 @@ public class SubCategoryView2 extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         suggestResultView.setLayoutManager(layoutManager);
         suggestResult = new ArrayList<>();
-        resultAdapter = new ArrayAdapterMy(this, suggestResult);
+        resultAdapter = new AdapterCityFilter(this, suggestResult);
         suggestResultView.setAdapter(resultAdapter);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(suggestResultView.getContext(),
                 layoutManager.getOrientation());

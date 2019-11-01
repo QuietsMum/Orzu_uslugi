@@ -70,13 +70,29 @@
                     android:id="@+id/expListView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="85dp"
                     android:paddingRight="10dp"
                     android:paddingLeft="10dp"
+                    android:paddingBottom="85dp"
+                    android:clipToPadding="false"
                     android:paddingTop="8dp"
                     android:groupIndicator="@drawable/group_indicator"></ExpandableListView>
 
-
+               <androidx.constraintlayout.widget.ConstraintLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:background="@android:color/transparent">
+                   <TextView
+                       android:id="@+id/confirmSubs"
+                       android:layout_width="match_parent"
+                       android:layout_height="50dp"
+                       android:layout_margin="32dp"
+                       android:background="@drawable/gradient_of_next_button"
+                       android:gravity="center"
+                       android:text="@string/next_button"
+                       android:textColor="@color/colorBackgrndFrg"
+                       android:textSize="16sp"
+                       app:layout_constraintBottom_toBottomOf="parent" />
+               </androidx.constraintlayout.widget.ConstraintLayout>
                 <View
                     android:id="@+id/podstilkaSuibs"
                     android:layout_width="match_parent"
@@ -100,6 +116,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
+                        android:paddingRight="10dp"
+                        android:paddingLeft="10dp"
                         android:background="@drawable/shape_card_topcorners">
 
                         <LinearLayout
@@ -404,17 +422,5 @@
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/confirmSubs"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="32dp"
-        android:background="@drawable/gradient_of_next_button"
-        android:gravity="center"
-        android:text="@string/next_button"
-        android:textColor="@color/colorBackgrndFrg"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

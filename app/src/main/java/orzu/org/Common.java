@@ -25,4 +25,5 @@ public class Common {
     public static String chatId;
     public static String taskName;
     public static HashMap<Integer,String> values = new HashMap<>();
+    public static String city1 = "";
 }

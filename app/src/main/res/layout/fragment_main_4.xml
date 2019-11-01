@@ -18,6 +18,7 @@
             android:layout_height="match_parent">
 
             <androidx.core.widget.NestedScrollView
+                android:id="@+id/scroll_of_fragment4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="64dp"
@@ -46,6 +47,13 @@
                         android:paddingRight="23dp"
                         android:paddingBottom="30dp"
                         android:scrollbars="vertical" />
+                    <ProgressBar
+                        android:visibility="gone"
+                        android:id="@+id/progress_loading2"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginBottom="20dp"
+                        app:layout_constraintBottom_toTopOf="@id/create_task_main"/>
 
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>

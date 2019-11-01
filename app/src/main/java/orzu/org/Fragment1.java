@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
@@ -94,13 +95,13 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
     String needListdfrom = "Сроки";
     int count;
     int countItem;
-    boolean countPager = true;
     boolean imageClicked = false;
     SwipeRefreshLayout swipeLayout;
     AsyncOrzuTasksMain catTask;
     AsyncOrzuTasksMainRefresh catTaskRef;
     AsyncOrzuTasksGetSubs getFilteredSubs;
     Boolean track = true;
+    Boolean noTasksYet = false;
     Boolean noTasks = true;
 
     AsyncOrzuTasksFind catTaskFind;
@@ -120,6 +121,8 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
     List<category_model> categories = new ArrayList<>();
     List<category_model> subcategories = new ArrayList<>();
     NestedScrollView scroll_of_fragment1;
+    ProgressBar progress_loading;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,7 +147,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         category_rv.setLayoutManager(layoutManager);
         subcategory_rv.setLayoutManager(layoutManager_sub);
-
+        progress_loading = view.findViewById(R.id.progress_loading);
         create_task_main = view.findViewById(R.id.create_task_main);
         editFind = view.findViewById(R.id.editFind);
         editFind.addTextChangedListener(new TextWatcher() {
@@ -158,6 +161,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
             @Override
             public void afterTextChanged(Editable editable) {
+                noTasksYet = false;
                 edittextFind = String.valueOf(editFind.getText());
                 catTaskFind = new AsyncOrzuTasksFind();
                 catTaskFind.execute();
@@ -191,36 +195,30 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             }
         });
         rv.setNestedScrollingEnabled(false);
-        rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-
-
-                super.onScrolled(recyclerView, dx, dy);
-            }
-        });
 
         scroll_of_fragment1.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View view, int i, int i1, int i2, int i3) {
-                Log.wtf("scroll of rv","asdasd");
-                View view1 = (View)scroll_of_fragment1.getChildAt(scroll_of_fragment1.getChildCount() - 1);
+                if(!noTasksYet) {
+                    Log.wtf("scroll of rv", "asdasd");
+                    View view1 = (View) scroll_of_fragment1.getChildAt(scroll_of_fragment1.getChildCount() - 1);
 
-                int diff = (view1.getBottom() - (scroll_of_fragment1.getHeight() + scroll_of_fragment1
-                        .getScrollY()));
+                    int diff = (view1.getBottom() - (scroll_of_fragment1.getHeight() + scroll_of_fragment1
+                            .getScrollY()));
 
-                Log.wtf("Diff",diff+"");
-                Log.wtf("Diff",countPager+"");
+                    Log.wtf("Diff", diff + "");
 
-                if (diff == 0) {
-                    swipeLayout.setEnabled(llm.findFirstCompletelyVisibleItemPosition() == 0 || adapter.getItemCount() == 0);
-                    if (!imageClicked) {
-                        Log.wtf("sadasd","asdasd");
-                        catTask = new AsyncOrzuTasksMain();
-                        catTask.execute();
-                    }else {
-                        getFilteredSubs = new AsyncOrzuTasksGetSubs();
-                        getFilteredSubs.execute();
+                    if (diff == 0) {
+                        swipeLayout.setEnabled(llm.findFirstCompletelyVisibleItemPosition() == 0 || adapter.getItemCount() == 0);
+                        progress_loading.setVisibility(View.VISIBLE);
+                        if (!imageClicked) {
+                            Log.wtf("sadasd", "asdasd");
+                            catTask = new AsyncOrzuTasksMain();
+                            catTask.execute();
+                        } else {
+                            getFilteredSubs = new AsyncOrzuTasksGetSubs();
+                            getFilteredSubs.execute();
+                        }
                     }
                 }
             }
@@ -235,6 +233,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         MainSubCategoryAdapter.setSelect(new NameItemSelect() {
             @Override
             public void onItemSelectedListener(View view, int position) {
+                noTasksYet = false;
                 imageClicked = true;
                 count = 0;
                 truedata.clear();
@@ -253,6 +252,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             @Override
             public void onItemSelectedListener(View view, int position) {
                 if (position == 0) {
+                    noTasksYet = false;
                     swipeLayout.setRefreshing(false);
                     catTaskRef = new AsyncOrzuTasksMainRefresh();
                     catTaskRef.execute();
@@ -278,6 +278,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         int numItems = adapter.getItemCount();
         return (pos >= numItems);
     }
+
     void filterByCategory(String category) {
         filtered.clear();
         if (category.length() != 0) {
@@ -449,7 +450,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
         @Override
         protected ArrayList<Map<String, Object>> doInBackground(String... strings) {
-            Log.wtf("asdasd","asasd");
+            Log.wtf("asdasd", "asasd");
             URL orzuEndpoint = null;
             JsonReader jsonReader = null;
             HttpsURLConnection myConnection = null;
@@ -486,14 +487,17 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 if (result.equals(dm + "Not tasks yet" + dm)) {
                     track = false;
                     catTask.cancel(true);
-                    countPager = false;
+                    Fragment1.this.getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            progress_loading.setVisibility(View.GONE);
+                        }
+                    });
                 } else {
                     jsonReader.beginArray(); // Start processing the JSON object
                     while (jsonReader.hasNext()) { // Loop through all keys
 
                         countItem++;
                         if (countItem == 6) {
-                            countPager = true;
                             countItem = 1;
                             count++;
                         }
@@ -515,8 +519,8 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                         }
 
                         if (det == 0L) {
-                            if (Common.city.length() != 0) {
-                                if (Common.city.equals(m.get(cityList))) {
+                            if (Common.city1.length() != 0) {
+                                if (Common.city1.equals(m.get(cityList))) {
                                     m_new.put(idList, m.get(idList));
                                     m_new.put(taskList, m.get(taskList));
                                     m_new.put(categoryList, m.get(categoryList));
@@ -544,8 +548,8 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
                                 if (savedList[i] != null) {
                                     if (savedList[i].toString().equals(m.get(catidList).toString())) {
-                                        if (Common.city.length() != 0) {
-                                            if (Common.city.equals(m.get(cityList))) {
+                                        if (Common.city1.length() != 0) {
+                                            if (Common.city1.equals(m.get(cityList))) {
                                                 m_new.put(idList, m.get(idList));
                                                 m_new.put(taskList, m.get(taskList));
                                                 m_new.put(categoryList, m.get(categoryList));
@@ -626,7 +630,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             super.onPostExecute(result);
             adapter = new RVAdapter(getContext(), truedata);
             rv.setAdapter(adapter);
-
+            progress_loading.setVisibility(View.GONE);
             RVAdapter.setSelect(new MainItemSelect() {
                 @Override
                 public void onItemSelectedListener(View view, int position) {
@@ -660,6 +664,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
     @Override
     public void onRefresh() {
+        noTasksYet = false;
         swipeLayout.setRefreshing(false);
         catTaskRef = new AsyncOrzuTasksMainRefresh();
         catTaskRef.execute();
@@ -698,7 +703,15 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     Scanner s = new Scanner(responseBody).useDelimiter("\\A");
                     result = s.hasNext() ? s.next() : "";
                     if (result.equals("\"Not tasks yet\"")) {
+                        noTasksYet = true;
                         catTask.cancel(true);
+                        Fragment1.this.getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                progress_loading.setVisibility(View.GONE);
+                            }
+                        });
+                    }else{
+                        noTasksYet = false;
                     }
 
                 }
@@ -793,7 +806,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 Long idnew = (Long) m_new_2.get(idList);
                 if (!idold.equals(idnew) || noTasks) {
                     count = 1;
-                    countPager = true;
                     imagenotask.setVisibility(View.INVISIBLE);
                     textnotask.setVisibility(View.INVISIBLE);
                     truedata = new ArrayList<>();
@@ -825,7 +837,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
         @Override
         protected ArrayList<Map<String, Object>> doInBackground(String... strings) {
-            Log.wtf("asdasd","asasd");
+            Log.wtf("asdasd", "asasd");
             URL orzuEndpoint = null;
             JsonReader jsonReader = null;
             HttpsURLConnection myConnection = null;
@@ -833,7 +845,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             final char dm = (char) 34;
 
             try {
-                orzuEndpoint = new URL("https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&catid="+idOfSub+"&page="+count);
+                orzuEndpoint = new URL("https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&catid=" + idOfSub + "&page=" + count);
                 myConnectiontrack =
                         (HttpsURLConnection) orzuEndpoint.openConnection();
                 if (myConnectiontrack.getResponseCode() == 200) {
@@ -860,18 +872,19 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 data = new ArrayList<>();
 
                 if (result.equals(dm + "Not tasks yet" + dm)) {
+                    noTasksYet = true;
                     track = false;
                     catTask.cancel(true);
                 } else {
+                    noTasksYet = false;
                     jsonReader.beginArray(); // Start processing the JSON object
                     while (jsonReader.hasNext()) { // Loop through all keys
 
                         countItem++;
                         if (countItem == 6) {
-                            countPager = true;
                             countItem = 1;
                             count++;
-                        } else countPager = false;
+                        }
 
                         m = new HashMap<>();
                         m_new = new HashMap<>();
@@ -890,8 +903,8 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                         }
 
                         if (det == 0L) {
-                            if (Common.city.length() != 0) {
-                                if (Common.city.equals(m.get(cityList))) {
+                            if (Common.city1.length() != 0) {
+                                if (Common.city1.equals(m.get(cityList))) {
                                     m_new.put(idList, m.get(idList));
                                     m_new.put(taskList, m.get(taskList));
                                     m_new.put(categoryList, m.get(categoryList));
@@ -919,8 +932,8 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
                                 if (savedList[i] != null) {
                                     if (savedList[i].toString().equals(m.get(catidList).toString())) {
-                                        if (Common.city.length() != 0) {
-                                            if (Common.city.equals(m.get(cityList))) {
+                                        if (Common.city1.length() != 0) {
+                                            if (Common.city1.equals(m.get(cityList))) {
                                                 m_new.put(idList, m.get(idList));
                                                 m_new.put(taskList, m.get(taskList));
                                                 m_new.put(categoryList, m.get(categoryList));
@@ -1001,7 +1014,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             super.onPostExecute(result);
             adapter = new RVAdapter(getContext(), truedata);
             rv.setAdapter(adapter);
-
+            progress_loading.setVisibility(View.GONE);
             RVAdapter.setSelect(new MainItemSelect() {
                 @Override
                 public void onItemSelectedListener(View view, int position) {

@@ -38,6 +38,7 @@ public class NotificationSettings extends AppCompatActivity {
     TextView to_time_text,from_time_text;
     CardView cardView;
     ImageView imageView;
+    TextView notif_set_save;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
@@ -79,7 +80,13 @@ public class NotificationSettings extends AppCompatActivity {
             time_of_notif.setVisibility(View.INVISIBLE);
         }
 
-
+        notif_set_save = findViewById(R.id.notif_set_save);
+        notif_set_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         if(prefs.getBoolean("enableTime",false)){
             switch_time.setChecked(true);
             switch_time.setChecked(true);

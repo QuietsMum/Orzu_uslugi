@@ -221,5 +221,17 @@
         </androidx.cardview.widget.CardView>
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/notif_set_save"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:layout_margin="32dp"
+        android:background="@drawable/gradient_of_next_button"
+        android:gravity="center"
+        android:text="Сохранить"
+        android:textColor="@color/colorBackgrndFrg"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

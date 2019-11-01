@@ -117,11 +117,12 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
                 idArray[0] = 0L;
                 model.array = idArray;
                 button.setVisibility(View.VISIBLE);
-                Common.city = "";
+                Common.city1 = "";
                 Map<String, Object> m2sort = new HashMap<>();
                 m2sort.put(cat, filtname1[1]);
                 m2sort.put(res, "Алматы");
-                m2sort.put(img, filtimg1[1]);
+                m2sort.put(img
+                        , filtimg1[1]);
                 data1.remove(1);
                 data1.add(1, m2sort);
                 arrayAdapter1.notifyDataSetChanged();
@@ -198,7 +199,7 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
                 String result = data.getStringExtra("result");
-                Common.city = result;
+                Common.city1 = result;
                 Map<String, Object> m2sort = new HashMap<>();
                 m2sort.put(cat, filtname1[1]);
                 m2sort.put(res, result);
@@ -238,7 +239,7 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
                 idArray[0] = 0L;
                 model.array = idArray;
                 button.setVisibility(View.VISIBLE);
-                Common.city = "";
+                Common.city1 = "";
                 Map<String, Object> m2sort = new HashMap<>();
                 m2sort.put(cat, filtname1[1]);
                 m2sort.put(res, "Алматы");

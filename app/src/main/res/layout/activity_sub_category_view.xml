@@ -109,12 +109,12 @@
                     android:id="@+id/list_sub_cat_sub"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clipToPadding="false"
                     android:orientation="vertical"
                     android:overScrollMode="never"
-                    android:paddingLeft="8dp"
                     android:paddingTop="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingBottom="75dp"
+
+                    android:paddingBottom="85dp"
                     android:scrollbars="none" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
