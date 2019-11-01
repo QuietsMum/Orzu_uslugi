@@ -7,7 +7,7 @@
     android:layout_height="150dp"
     android:gravity="bottom"
     android:orientation="horizontal"
-    android:background="@android:color/darker_gray"
+    android:background="@drawable/shape_viewpager_corners"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
 

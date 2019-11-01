@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -22,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -93,9 +95,11 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
     int count;
     int countItem;
     boolean countPager = true;
+    boolean imageClicked = false;
     SwipeRefreshLayout swipeLayout;
     AsyncOrzuTasksMain catTask;
     AsyncOrzuTasksMainRefresh catTaskRef;
+    AsyncOrzuTasksGetSubs getFilteredSubs;
     Boolean track = true;
     Boolean noTasks = true;
 
@@ -111,16 +115,18 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
     CardView cardMain;
     EditText editFind;
     String edittextFind;
+    String idOfSub;
 
     List<category_model> categories = new ArrayList<>();
     List<category_model> subcategories = new ArrayList<>();
-
+    NestedScrollView scroll_of_fragment1;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstantState) {
 
@@ -157,7 +163,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 catTaskFind.execute();
             }
         });
-
+        scroll_of_fragment1 = view.findViewById(R.id.scroll_of_fragment1);
         shim = (ShimmerFrameLayout) view.findViewById(R.id.parentShimmerLayout);
         shim.startShimmer();
         rv = view.findViewById(R.id.rv);
@@ -180,22 +186,42 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         create_task_main.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(),CreateTaskCategory.class);
+                Intent intent = new Intent(getActivity(), CreateTaskCategory.class);
                 startActivity(intent);
             }
         });
-
+        rv.setNestedScrollingEnabled(false);
         rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+
+
                 super.onScrolled(recyclerView, dx, dy);
-                if (!recyclerView.canScrollVertically(1)) {
+            }
+        });
+
+        scroll_of_fragment1.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View view, int i, int i1, int i2, int i3) {
+                Log.wtf("scroll of rv","asdasd");
+                View view1 = (View)scroll_of_fragment1.getChildAt(scroll_of_fragment1.getChildCount() - 1);
+
+                int diff = (view1.getBottom() - (scroll_of_fragment1.getHeight() + scroll_of_fragment1
+                        .getScrollY()));
+
+                Log.wtf("Diff",diff+"");
+                Log.wtf("Diff",countPager+"");
+
+                if (diff == 0) {
                     swipeLayout.setEnabled(llm.findFirstCompletelyVisibleItemPosition() == 0 || adapter.getItemCount() == 0);
-                    if (countPager) {
+                    if (!imageClicked) {
+                        Log.wtf("sadasd","asdasd");
                         catTask = new AsyncOrzuTasksMain();
                         catTask.execute();
+                    }else {
+                        getFilteredSubs = new AsyncOrzuTasksGetSubs();
+                        getFilteredSubs.execute();
                     }
-
                 }
             }
         });
@@ -209,7 +235,12 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         MainSubCategoryAdapter.setSelect(new NameItemSelect() {
             @Override
             public void onItemSelectedListener(View view, int position) {
-                filterByCategory(subcategories.get(position).getName());
+                imageClicked = true;
+                count = 0;
+                truedata.clear();
+                idOfSub = subcategories.get(position).getId();
+                getFilteredSubs = new AsyncOrzuTasksGetSubs();
+                getFilteredSubs.execute();
 
             }
 
@@ -221,12 +252,13 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         MainCategoryAdapter.setSelect(new NameItemSelect() {
             @Override
             public void onItemSelectedListener(View view, int position) {
-                if(position==0){
-                    adapter = new RVAdapter(getContext(), truedata);
-                    rv.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
+                if (position == 0) {
+                    swipeLayout.setRefreshing(false);
+                    catTaskRef = new AsyncOrzuTasksMainRefresh();
+                    catTaskRef.execute();
+                    imageClicked = false;
 
-                }else{
+                } else {
                     getSubCategories(categories.get(position).getId());
                 }
                 adapter_category.changeColor(position);
@@ -240,11 +272,16 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         return view;
     }
 
-
+    boolean isLastVisible() {
+        LinearLayoutManager layoutManager = ((LinearLayoutManager) rv.getLayoutManager());
+        int pos = layoutManager.findLastCompletelyVisibleItemPosition();
+        int numItems = adapter.getItemCount();
+        return (pos >= numItems);
+    }
     void filterByCategory(String category) {
         filtered.clear();
         if (category.length() != 0) {
-            if(truedata.size()!=0) {
+            if (truedata.size() != 0) {
                 for (int i = 0; i < truedata.size(); i++) {
                     if (truedata.get(i).get("Категория задачи").toString().equals(category)) {
                         Log.e("ФильтрыФтльтры", truedata.get(i).get("Категория задачи").toString() + "  " + category);
@@ -256,10 +293,10 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 adapter.notifyDataSetChanged();
             }
         }
-        if(filtered.size()!=0){
+        if (filtered.size() != 0) {
             imagenotask.setVisibility(View.INVISIBLE);
             textnotask.setVisibility(View.INVISIBLE);
-        }else{
+        } else {
             imagenotask.setVisibility(View.VISIBLE);
             textnotask.setVisibility(View.VISIBLE);
         }
@@ -400,8 +437,8 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
     }
 
     class AsyncOrzuTasksMain extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {
-
         String result;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -412,7 +449,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
         @Override
         protected ArrayList<Map<String, Object>> doInBackground(String... strings) {
-
+            Log.wtf("asdasd","asasd");
             URL orzuEndpoint = null;
             JsonReader jsonReader = null;
             HttpsURLConnection myConnection = null;
@@ -449,6 +486,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 if (result.equals(dm + "Not tasks yet" + dm)) {
                     track = false;
                     catTask.cancel(true);
+                    countPager = false;
                 } else {
                     jsonReader.beginArray(); // Start processing the JSON object
                     while (jsonReader.hasNext()) { // Loop through all keys
@@ -458,7 +496,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                             countPager = true;
                             countItem = 1;
                             count++;
-                        } else countPager = false;
+                        }
 
                         m = new HashMap<>();
                         m_new = new HashMap<>();
@@ -755,7 +793,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 Long idnew = (Long) m_new_2.get(idList);
                 if (!idold.equals(idnew) || noTasks) {
                     count = 1;
-                    countPager = false;
+                    countPager = true;
                     imagenotask.setVisibility(View.INVISIBLE);
                     textnotask.setVisibility(View.INVISIBLE);
                     truedata = new ArrayList<>();
@@ -773,6 +811,226 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         }
     }
 
+
+    class AsyncOrzuTasksGetSubs extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {
+        String result;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            imagenotask.setVisibility(View.INVISIBLE);
+            textnotask.setVisibility(View.INVISIBLE);
+        }
+
+
+        @Override
+        protected ArrayList<Map<String, Object>> doInBackground(String... strings) {
+            Log.wtf("asdasd","asasd");
+            URL orzuEndpoint = null;
+            JsonReader jsonReader = null;
+            HttpsURLConnection myConnection = null;
+            HttpsURLConnection myConnectiontrack = null;
+            final char dm = (char) 34;
+
+            try {
+                orzuEndpoint = new URL("https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&catid="+idOfSub+"&page="+count);
+                myConnectiontrack =
+                        (HttpsURLConnection) orzuEndpoint.openConnection();
+                if (myConnectiontrack.getResponseCode() == 200) {
+                    // Success
+                    InputStream responseBody = myConnectiontrack.getInputStream();
+                    Scanner s = new Scanner(responseBody).useDelimiter("\\A");
+                    result = s.hasNext() ? s.next() : "";
+                    Log.e("RESULT", result);
+                }
+                myConnection =
+                        (HttpsURLConnection) orzuEndpoint.openConnection();
+                if (myConnection.getResponseCode() == 200) {
+                    // Success
+                    InputStream responseBody = myConnection.getInputStream();
+                    InputStreamReader responseBodyReader =
+                            new InputStreamReader(responseBody, "UTF-8");
+                    jsonReader = new JsonReader(responseBodyReader);
+                }
+
+                status = myConnection.getResponseCode();
+
+
+                myConnection.setInstanceFollowRedirects(true);
+                data = new ArrayList<>();
+
+                if (result.equals(dm + "Not tasks yet" + dm)) {
+                    track = false;
+                    catTask.cancel(true);
+                } else {
+                    jsonReader.beginArray(); // Start processing the JSON object
+                    while (jsonReader.hasNext()) { // Loop through all keys
+
+                        countItem++;
+                        if (countItem == 6) {
+                            countPager = true;
+                            countItem = 1;
+                            count++;
+                        } else countPager = false;
+
+                        m = new HashMap<>();
+                        m_new = new HashMap<>();
+                        m_new_2 = new HashMap<>();
+                        m = readMessage(jsonReader);
+                        Long[] savedList = model.array;
+
+                        Long det = 0L;
+
+                        if (savedList != null) {
+                            for (int i = 0; i < savedList.length; i++) {
+                                if (savedList[i] != null && savedList[i] != 0) {
+                                    det = savedList[i];
+                                }
+                            }
+                        }
+
+                        if (det == 0L) {
+                            if (Common.city.length() != 0) {
+                                if (Common.city.equals(m.get(cityList))) {
+                                    m_new.put(idList, m.get(idList));
+                                    m_new.put(taskList, m.get(taskList));
+                                    m_new.put(categoryList, m.get(categoryList));
+                                    m_new.put(priceList, m.get(priceList));
+                                    m_new.put(servList, m.get(servList));
+                                    m_new.put(dateList, m.get(dateList));
+                                    m_new.put(cityList, m.get(cityList));
+                                    m_new.put(needListdfrom, m.get(needListdfrom));
+                                    m_new.put(catidList, m.get(catidList));
+                                }
+                            } else {
+                                m_new.put(idList, m.get(idList));
+                                m_new.put(taskList, m.get(taskList));
+                                m_new.put(categoryList, m.get(categoryList));
+                                m_new.put(priceList, m.get(priceList));
+                                m_new.put(servList, m.get(servList));
+                                m_new.put(dateList, m.get(dateList));
+                                m_new.put(cityList, m.get(cityList));
+                                m_new.put(needListdfrom, m.get(needListdfrom));
+                                m_new.put(catidList, m.get(catidList));
+                            }
+
+                        } else {
+                            for (int i = 0; i < savedList.length; i++) {
+
+                                if (savedList[i] != null) {
+                                    if (savedList[i].toString().equals(m.get(catidList).toString())) {
+                                        if (Common.city.length() != 0) {
+                                            if (Common.city.equals(m.get(cityList))) {
+                                                m_new.put(idList, m.get(idList));
+                                                m_new.put(taskList, m.get(taskList));
+                                                m_new.put(categoryList, m.get(categoryList));
+                                                m_new.put(priceList, m.get(priceList));
+                                                m_new.put(servList, m.get(servList));
+                                                m_new.put(dateList, m.get(dateList));
+                                                m_new.put(cityList, m.get(cityList));
+                                                m_new.put(needListdfrom, m.get(needListdfrom));
+                                                m_new.put(catidList, m.get(catidList));
+                                            }
+                                        } else {
+                                            m_new.put(idList, m.get(idList));
+                                            m_new.put(taskList, m.get(taskList));
+                                            m_new.put(categoryList, m.get(categoryList));
+                                            m_new.put(priceList, m.get(priceList));
+                                            m_new.put(servList, m.get(servList));
+                                            m_new.put(dateList, m.get(dateList));
+                                            m_new.put(cityList, m.get(cityList));
+                                            m_new.put(needListdfrom, m.get(needListdfrom));
+                                            m_new.put(catidList, m.get(catidList));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (!m_new.isEmpty()) {
+                            data.add(m_new);
+
+                        }
+
+                    }
+                    truedata.addAll(data);
+                    jsonReader.endArray();
+                    jsonReader.close();
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                if (status != 200) {
+                    Fragment1.this.getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            imagenotask.setVisibility(View.VISIBLE);
+                            textnotask.setVisibility(View.VISIBLE);
+                            dialog = new Dialog(Fragment1.this.getActivity(), android.R.style.Theme_Material_Light_NoActionBar);
+                            dialog.setContentView(R.layout.dialog_no_internet);
+                            Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                            // if button is clicked, close the custom dialog
+                            dialogButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+
+                                    catTask = new AsyncOrzuTasksMain();
+                                    catTask.execute();
+                                    dialog.dismiss();
+                                }
+                            });
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialog.show();
+                                }
+                            }, 500);
+
+
+                            catTask.cancel(true);
+                        }
+                    });
+                }
+                e.printStackTrace();
+            }
+            myConnection.disconnect();
+            return null;
+        }
+
+        protected void onPostExecute(ArrayList<Map<String, Object>> result) {
+            super.onPostExecute(result);
+            adapter = new RVAdapter(getContext(), truedata);
+            rv.setAdapter(adapter);
+
+            RVAdapter.setSelect(new MainItemSelect() {
+                @Override
+                public void onItemSelectedListener(View view, int position) {
+
+                    Intent intent = new Intent(getActivity(), TaskViewMain.class);
+                    Map<String, Object> map;
+                    map = truedata.get(position);
+                    intent.putExtra("id", map.get(idList).toString());
+                    intent.putExtra("opt", "view");
+                    intent.putExtra("mytask", "not");
+                    startActivity(intent);
+
+                }
+
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+            noTasks = false;
+
+            if (adapter.getItemCount() == 0) {
+                noTasks = true;
+                imagenotask.setVisibility(View.VISIBLE);
+                textnotask.setVisibility(View.VISIBLE);
+            }
+
+        }
+    }
 
     class AsyncOrzuTasksFind extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {
         final HttpsURLConnection[] myConnection = new HttpsURLConnection[1];

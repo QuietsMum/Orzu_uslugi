@@ -48,6 +48,7 @@
             android:layout_height="match_parent">
 
             <androidx.core.widget.NestedScrollView
+                android:id="@+id/scroll_of_fragment1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="64dp"
