@@ -351,9 +351,48 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
                         m_new = new HashMap<>();
                         m_new_2 = new HashMap<>();
                         m = readMessage(jsonReader[0]);
+                        Long[] savedList = model.array;
 
                         Long det = 0L;
 
+                        if (savedList != null) {
+                            for (int i = 0; i < savedList.length; i++) {
+                                if (savedList[i] != null && savedList[i] != 0) {
+                                    det = savedList[i];
+                                }
+                            }
+                        }
+
+                        if (det == 0L) {
+                            m_new.put(idList, m.get(idList));
+                            m_new.put(taskList, m.get(taskList));
+                            m_new.put(categoryList, m.get(categoryList));
+                            m_new.put(priceList, m.get(priceList));
+                            m_new.put(servList, m.get(servList));
+                            m_new.put(dateList, m.get(dateList));
+                            m_new.put(cityList, m.get(cityList));
+                            m_new.put(needListdfrom, m.get(needListdfrom));
+                            m_new.put(catidList, m.get(catidList));
+
+                        } else {
+                            for (int i = 0; i < savedList.length; i++) {
+
+                                if (savedList[i] != null) {
+                                    if (savedList[i].toString().equals(m.get(catidList).toString())) {
+                                        m_new.put(idList, m.get(idList));
+                                        m_new.put(taskList, m.get(taskList));
+                                        m_new.put(categoryList, m.get(categoryList));
+                                        m_new.put(priceList, m.get(priceList));
+                                        m_new.put(servList, m.get(servList));
+                                        m_new.put(dateList, m.get(dateList));
+                                        m_new.put(cityList, m.get(cityList));
+                                        m_new.put(needListdfrom, m.get(needListdfrom));
+                                        m_new.put(catidList, m.get(catidList));
+
+                                    }
+                                }
+                            }
+                        }
 
                         if (!m_new.isEmpty()) {
                             data.add(m_new);
@@ -494,9 +533,31 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
                     jsonReader[0].beginObject();
                     jsonReader[0].nextName();
                     Long id = jsonReader[0].nextLong();
+                    Long[] savedList = model.array;
                     Long det = 0L;
 
+                    if (savedList != null) {
+                        for (int i = 0; i < savedList.length; i++) {
+                            if (savedList[i] != null && savedList[i] != 0) {
+                                det = savedList[i];
+                            }
+                        }
+                    }
 
+                    if (det == 0L) {
+                        m_new_2.put(idList, id);
+
+                    } else {
+                        for (int i = 0; i < savedList.length; i++) {
+
+                            if (savedList[i] != null) {
+                                if (savedList[i].toString().equals(m.get(catidList).toString())) {
+                                    m_new_2.put(idList, id);
+
+                                }
+                            }
+                        }
+                    }
 
                     jsonReader[0].close();
 
