@@ -202,7 +202,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 if(!noTasksYet) {
                     Log.wtf("scroll of rv", "asdasd");
                     View view1 = (View) scroll_of_fragment1.getChildAt(scroll_of_fragment1.getChildCount() - 1);
-
+                    progress_loading.setVisibility(View.VISIBLE);
                     int diff = (view1.getBottom() - (scroll_of_fragment1.getHeight() + scroll_of_fragment1
                             .getScrollY()));
 
@@ -210,7 +210,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
                     if (diff == 0) {
                         swipeLayout.setEnabled(llm.findFirstCompletelyVisibleItemPosition() == 0 || adapter.getItemCount() == 0);
-                        progress_loading.setVisibility(View.VISIBLE);
+
                         if (!imageClicked) {
                             Log.wtf("sadasd", "asdasd");
                             catTask = new AsyncOrzuTasksMain();
@@ -496,11 +496,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     jsonReader.beginArray(); // Start processing the JSON object
                     while (jsonReader.hasNext()) { // Loop through all keys
 
-                        countItem++;
-                        if (countItem == 6) {
-                            countItem = 1;
-                            count++;
-                        }
+
 
                         m = new HashMap<>();
                         m_new = new HashMap<>();
@@ -628,6 +624,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
         protected void onPostExecute(ArrayList<Map<String, Object>> result) {
             super.onPostExecute(result);
+            count++;
             adapter = new RVAdapter(getContext(), truedata);
             rv.setAdapter(adapter);
             progress_loading.setVisibility(View.GONE);
@@ -880,11 +877,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     jsonReader.beginArray(); // Start processing the JSON object
                     while (jsonReader.hasNext()) { // Loop through all keys
 
-                        countItem++;
-                        if (countItem == 6) {
-                            countItem = 1;
-                            count++;
-                        }
+
 
                         m = new HashMap<>();
                         m_new = new HashMap<>();
@@ -1012,6 +1005,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
         protected void onPostExecute(ArrayList<Map<String, Object>> result) {
             super.onPostExecute(result);
+            count++;
             adapter = new RVAdapter(getContext(), truedata);
             rv.setAdapter(adapter);
             progress_loading.setVisibility(View.GONE);

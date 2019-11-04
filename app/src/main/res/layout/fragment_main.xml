@@ -140,8 +140,7 @@
                         android:id="@+id/progress_loading"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
-                        android:layout_marginBottom="20dp"
-                        app:layout_constraintBottom_toTopOf="@id/create_task_main"/>
+                        android:layout_marginBottom="20dp" />
                 </LinearLayout>
 
             </androidx.core.widget.NestedScrollView>
