@@ -22,7 +22,8 @@ public class MainSubCategoryAdapter extends RecyclerView.Adapter<MainSubCategory
     private static NameItemSelect sw;
     private List<category_model> maps;
     Context context;
-    int[] backs = {R.drawable.subcategory_back1, R.drawable.subcategory_back2, R.drawable.subcategory_back3, R.drawable.subcategory_back4, R.drawable.subcategory_back5, R.drawable.subcategory_back6};
+    int[] backs = {R.drawable.subcategory_back1, R.drawable.subcategory_back2, R.drawable.subcategory_back3, R.drawable.subcategory_back4, R.drawable.subcategory_back5, R.drawable.subcategory_back6
+    ,R.drawable.subcategory_back7,R.drawable.subcategory_back8,R.drawable.subcategory_back9,R.drawable.subcategory_back10,R.drawable.subcategory_back11};
     int last_index = -1;
 
     public MainSubCategoryAdapter(Context context, List<category_model> maps) {
@@ -46,7 +47,7 @@ public class MainSubCategoryAdapter extends RecyclerView.Adapter<MainSubCategory
 
     private int randomInt() {
         Random random = new Random();
-        int rand = random.nextInt(6);
+        int rand = random.nextInt(backs.length);
         while (true) {
             if (rand != last_index) {
                 last_index = rand;
