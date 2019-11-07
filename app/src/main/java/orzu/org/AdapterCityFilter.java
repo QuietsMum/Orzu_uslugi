@@ -12,13 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-
 public class AdapterCityFilter extends RecyclerView.Adapter<AdapterCityFilter.MyViewHolder>{
 
-    static NameItemSelect select;
     List<String> maps;
     Context context;
-
+    private ItemClickListener mClickListener;
     public AdapterCityFilter(Context context, List<String> maps) {
         this.context = context;
         this.maps = maps;
@@ -36,7 +34,7 @@ public class AdapterCityFilter extends RecyclerView.Adapter<AdapterCityFilter.My
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-            holder.a.setText(maps.get(position));
+            holder.header.setText(maps.get(position));
 
     }
 
@@ -45,22 +43,26 @@ public class AdapterCityFilter extends RecyclerView.Adapter<AdapterCityFilter.My
         return maps.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView a;
+    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView header;
 
         MyViewHolder(View itemView) {
             super(itemView);
-            a = itemView.findViewById(R.id.city_text);
+            header = itemView.findViewById(R.id.city_text);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            select.onItemSelectedListener(view, getAdapterPosition());
+            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
         }
     }
+    public void setClickListener(ItemClickListener itemClickListener) {
+        this.mClickListener = itemClickListener;
+    }
 
-    public static void setSelect(NameItemSelect select) {
-        AdapterCityFilter.select = select;
+    // parent activity will implement this method to respond to click events
+    public interface ItemClickListener {
+        void onItemClick(View view, int position);
     }
 }

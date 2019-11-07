@@ -166,20 +166,14 @@ public class SubCategoryView2 extends AppCompatActivity {
                     pr.setVisibility(View.INVISIBLE);
 
 
-                    ArrayAdapterMy.setSelect(new NameItemSelect() {
+                    resultAdapter.setClickListener(new AdapterCityFilter.ItemClickListener() {
                         @Override
-                        public void onItemSelectedListener(View view, int position) {
+                        public void onItemClick(View view, int position) {
                             Intent returnIntent = new Intent();
                             returnIntent.putExtra("result", suggestResult.get(position));
                             Log.e("resultCity", suggestResult.get(position));
                             setResult(Activity.RESULT_OK, returnIntent);
                             finish();
-
-                        }
-
-                        @Override
-                        public void onClick(View view) {
-
                         }
                     });
 

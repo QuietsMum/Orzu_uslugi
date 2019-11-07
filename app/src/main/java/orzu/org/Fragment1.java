@@ -69,7 +69,7 @@ import javax.net.ssl.HttpsURLConnection;
 import orzu.org.ui.login.model;
 
 public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-
+    String filter = "";
     ArrayList<Map<String, Object>> data;
     ArrayList<Map<String, Object>> truedata;
     RecyclerView rv;
@@ -100,9 +100,12 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
     AsyncOrzuTasksMain catTask;
     AsyncOrzuTasksMainRefresh catTaskRef;
     AsyncOrzuTasksGetSubs getFilteredSubs;
+    AsyncOrzuTasksGetSubsFiltered getFilteredSubsFiltered;
+    AsyncOrzuTasksGetCity getFilteredCity;
     Boolean track = true;
     Boolean noTasksYet = false;
     Boolean noTasks = true;
+    Boolean cityChoose = false;
 
     AsyncOrzuTasksFind catTaskFind;
 
@@ -136,6 +139,11 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         final View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         nestshimmer = view.findViewById(R.id.nestshimmer);
+        for (int i = 0; i < model.array.length; i++) {
+            if (model.array[i] != null) {
+                filter = filter + "catid[]=" + model.array[i] + "&";
+            }
+        }
 
         imagenotask = view.findViewById(R.id.imageNoTask);
         textnotask = view.findViewById(R.id.textViewNoTask);
@@ -184,8 +192,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         truedata = new ArrayList<>();
         count = 1;
         countItem = 1;
-        catTask = new AsyncOrzuTasksMain();
-        catTask.execute();
+
 
         create_task_main.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -199,25 +206,26 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         scroll_of_fragment1.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View view, int i, int i1, int i2, int i3) {
-                if(!noTasksYet) {
-                    Log.wtf("scroll of rv", "asdasd");
+                if (!noTasksYet) {
                     View view1 = (View) scroll_of_fragment1.getChildAt(scroll_of_fragment1.getChildCount() - 1);
                     progress_loading.setVisibility(View.VISIBLE);
                     int diff = (view1.getBottom() - (scroll_of_fragment1.getHeight() + scroll_of_fragment1
                             .getScrollY()));
 
-                    Log.wtf("Diff", diff + "");
-
                     if (diff == 0) {
                         swipeLayout.setEnabled(llm.findFirstCompletelyVisibleItemPosition() == 0 || adapter.getItemCount() == 0);
-
-                        if (!imageClicked) {
-                            Log.wtf("sadasd", "asdasd");
-                            catTask = new AsyncOrzuTasksMain();
-                            catTask.execute();
-                        } else {
+                        if (model.array.length > 1) {
+                            getFilteredSubsFiltered = new AsyncOrzuTasksGetSubsFiltered();
+                            getFilteredSubsFiltered.execute();
+                        } else if (cityChoose) {
+                            getFilteredCity = new AsyncOrzuTasksGetCity();
+                            getFilteredCity.execute();
+                        } else if (imageClicked) {
                             getFilteredSubs = new AsyncOrzuTasksGetSubs();
                             getFilteredSubs.execute();
+                        } else {
+                            catTask = new AsyncOrzuTasksMain();
+                            catTask.execute();
                         }
                     }
                 }
@@ -233,8 +241,14 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         MainSubCategoryAdapter.setSelect(new NameItemSelect() {
             @Override
             public void onItemSelectedListener(View view, int position) {
-                noTasksYet = false;
                 imageClicked = true;
+                noTasksYet = false;
+                cityChoose = false;
+                Long[] idArray = new Long[1];
+                idArray[0] = 0L;
+                model.array = idArray;
+                filter = "";
+                Common.city1 = "";
                 count = 0;
                 truedata.clear();
                 idOfSub = subcategories.get(position).getId();
@@ -269,38 +283,23 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
             }
         });
-        return view;
-    }
-
-    boolean isLastVisible() {
-        LinearLayoutManager layoutManager = ((LinearLayoutManager) rv.getLayoutManager());
-        int pos = layoutManager.findLastCompletelyVisibleItemPosition();
-        int numItems = adapter.getItemCount();
-        return (pos >= numItems);
-    }
-
-    void filterByCategory(String category) {
-        filtered.clear();
-        if (category.length() != 0) {
-            if (truedata.size() != 0) {
-                for (int i = 0; i < truedata.size(); i++) {
-                    if (truedata.get(i).get("Категория задачи").toString().equals(category)) {
-                        Log.e("ФильтрыФтльтры", truedata.get(i).get("Категория задачи").toString() + "  " + category);
-                        filtered.add(truedata.get(i));
-                    }
-                }
-                adapter = new RVAdapter(getContext(), filtered);
-                rv.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
-            }
-        }
-        if (filtered.size() != 0) {
-            imagenotask.setVisibility(View.INVISIBLE);
-            textnotask.setVisibility(View.INVISIBLE);
+        if (model.array.length > 1) {
+            truedata.clear();
+            count = 1;
+            getFilteredSubsFiltered = new AsyncOrzuTasksGetSubsFiltered();
+            getFilteredSubsFiltered.execute();
+        } else if (Common.city1.length() > 0) {
+            cityChoose = true;
+            count = 1;
+            getFilteredCity = new AsyncOrzuTasksGetCity();
+            getFilteredCity.execute();
         } else {
-            imagenotask.setVisibility(View.VISIBLE);
-            textnotask.setVisibility(View.VISIBLE);
+            cityChoose = false;
+            count = 1;
+            catTask = new AsyncOrzuTasksMain();
+            catTask.execute();
         }
+        return view;
     }
 
     private Map<String, Object> readMessage(JsonReader reader) throws IOException {
@@ -450,7 +449,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
         @Override
         protected ArrayList<Map<String, Object>> doInBackground(String... strings) {
-            Log.wtf("asdasd", "asasd");
             URL orzuEndpoint = null;
             JsonReader jsonReader = null;
             HttpsURLConnection myConnection = null;
@@ -466,7 +464,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     InputStream responseBody = myConnectiontrack.getInputStream();
                     Scanner s = new Scanner(responseBody).useDelimiter("\\A");
                     result = s.hasNext() ? s.next() : "";
-                    Log.e("RESULT", result);
                 }
                 myConnection =
                         (HttpsURLConnection) orzuEndpoint.openConnection();
@@ -495,88 +492,12 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 } else {
                     jsonReader.beginArray(); // Start processing the JSON object
                     while (jsonReader.hasNext()) { // Loop through all keys
-
-
-
                         m = new HashMap<>();
-                        m_new = new HashMap<>();
-                        m_new_2 = new HashMap<>();
                         m = readMessage(jsonReader);
-                        Long[] savedList = model.array;
-
-                        Long det = 0L;
-
-                        if (savedList != null) {
-                            for (int i = 0; i < savedList.length; i++) {
-                                if (savedList[i] != null && savedList[i] != 0) {
-                                    det = savedList[i];
-                                }
-                            }
-                        }
-
-                        if (det == 0L) {
-                            if (Common.city1.length() != 0) {
-                                if (Common.city1.equals(m.get(cityList))) {
-                                    m_new.put(idList, m.get(idList));
-                                    m_new.put(taskList, m.get(taskList));
-                                    m_new.put(categoryList, m.get(categoryList));
-                                    m_new.put(priceList, m.get(priceList));
-                                    m_new.put(servList, m.get(servList));
-                                    m_new.put(dateList, m.get(dateList));
-                                    m_new.put(cityList, m.get(cityList));
-                                    m_new.put(needListdfrom, m.get(needListdfrom));
-                                    m_new.put(catidList, m.get(catidList));
-                                }
-                            } else {
-                                m_new.put(idList, m.get(idList));
-                                m_new.put(taskList, m.get(taskList));
-                                m_new.put(categoryList, m.get(categoryList));
-                                m_new.put(priceList, m.get(priceList));
-                                m_new.put(servList, m.get(servList));
-                                m_new.put(dateList, m.get(dateList));
-                                m_new.put(cityList, m.get(cityList));
-                                m_new.put(needListdfrom, m.get(needListdfrom));
-                                m_new.put(catidList, m.get(catidList));
-                            }
-
-                        } else {
-                            for (int i = 0; i < savedList.length; i++) {
-
-                                if (savedList[i] != null) {
-                                    if (savedList[i].toString().equals(m.get(catidList).toString())) {
-                                        if (Common.city1.length() != 0) {
-                                            if (Common.city1.equals(m.get(cityList))) {
-                                                m_new.put(idList, m.get(idList));
-                                                m_new.put(taskList, m.get(taskList));
-                                                m_new.put(categoryList, m.get(categoryList));
-                                                m_new.put(priceList, m.get(priceList));
-                                                m_new.put(servList, m.get(servList));
-                                                m_new.put(dateList, m.get(dateList));
-                                                m_new.put(cityList, m.get(cityList));
-                                                m_new.put(needListdfrom, m.get(needListdfrom));
-                                                m_new.put(catidList, m.get(catidList));
-                                            }
-                                        } else {
-                                            m_new.put(idList, m.get(idList));
-                                            m_new.put(taskList, m.get(taskList));
-                                            m_new.put(categoryList, m.get(categoryList));
-                                            m_new.put(priceList, m.get(priceList));
-                                            m_new.put(servList, m.get(servList));
-                                            m_new.put(dateList, m.get(dateList));
-                                            m_new.put(cityList, m.get(cityList));
-                                            m_new.put(needListdfrom, m.get(needListdfrom));
-                                            m_new.put(catidList, m.get(catidList));
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        if (!m_new.isEmpty()) {
-                            data.add(m_new);
+                        if (!m.isEmpty()) {
+                            data.add(m);
 
                         }
-
                     }
                     truedata.addAll(data);
                     jsonReader.endArray();
@@ -661,7 +582,14 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
     @Override
     public void onRefresh() {
+        Long[] idArray = new Long[1];
+        idArray[0] = 0L;
+        model.array = idArray;
+        filter = "";
+        Common.city1 = "";
+        cityChoose = false;
         noTasksYet = false;
+        imageClicked = false;
         swipeLayout.setRefreshing(false);
         catTaskRef = new AsyncOrzuTasksMainRefresh();
         catTaskRef.execute();
@@ -687,7 +615,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             JsonReader[] jsonReader = new JsonReader[1];
             try {
 
-                orzuEndpoint[0] = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=all&status=open&page=0");
+                orzuEndpoint[0] = new URL("https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=all&status=open&page=0");
 
                 myConnection[0] =
                         (HttpsURLConnection) orzuEndpoint[0].openConnection();
@@ -697,24 +625,11 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     InputStreamReader responseBodyReader =
                             new InputStreamReader(responseBody, "UTF-8");
                     jsonReader[0] = new JsonReader(responseBodyReader);
-                    Scanner s = new Scanner(responseBody).useDelimiter("\\A");
-                    result = s.hasNext() ? s.next() : "";
-                    if (result.equals("\"Not tasks yet\"")) {
-                        noTasksYet = true;
-                        catTask.cancel(true);
-                        Fragment1.this.getActivity().runOnUiThread(new Runnable() {
-                            public void run() {
-                                progress_loading.setVisibility(View.GONE);
-                            }
-                        });
-                    }else{
-                        noTasksYet = false;
-                    }
+
 
                 }
 
                 status = myConnection[0].getResponseCode();
-
 
                 myConnection[0].setInstanceFollowRedirects(true);
                 data = new ArrayList<>();
@@ -726,35 +641,8 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     jsonReader[0].beginObject();
                     jsonReader[0].nextName();
                     Long id = jsonReader[0].nextLong();
-                    Long[] savedList = model.array;
-                    Long det = 0L;
-
-                    if (savedList != null) {
-                        for (int i = 0; i < savedList.length; i++) {
-                            if (savedList[i] != null && savedList[i] != 0) {
-                                det = savedList[i];
-                            }
-                        }
-                    }
-
-                    if (det == 0L) {
-                        m_new_2.put(idList, id);
-
-                    } else {
-                        for (int i = 0; i < savedList.length; i++) {
-
-                            if (savedList[i] != null) {
-                                if (savedList[i].toString().equals(m.get(catidList).toString())) {
-                                    m_new_2.put(idList, id);
-
-                                }
-                            }
-                        }
-                    }
-
+                    m_new_2.put(idList, id);
                     jsonReader[0].close();
-
-
                 }
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -797,23 +685,18 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
         protected void onPostExecute(ArrayList<Map<String, Object>> result) {
             super.onPostExecute(result);
-            if (truedata.size() != 0) {
-                m_ref = truedata.get(0);
-                Long idold = (Long) m_ref.get(idList);
-                Long idnew = (Long) m_new_2.get(idList);
-                if (!idold.equals(idnew) || noTasks) {
-                    count = 1;
-                    imagenotask.setVisibility(View.INVISIBLE);
-                    textnotask.setVisibility(View.INVISIBLE);
-                    truedata = new ArrayList<>();
-                    data = new ArrayList<>();
-                    adapter.notifyDataSetChanged();
-                    catTask = new AsyncOrzuTasksMain();
-                    catTask.execute();
-                }
-            } else {
-                imagenotask.setVisibility(View.VISIBLE);
-                textnotask.setVisibility(View.VISIBLE);
+
+            Long idold = (Long) m.get(idList);
+            Long idnew = (Long) m_new_2.get(idList);
+            if (!idold.equals(idnew) || noTasksYet) {
+                count = 1;
+                imagenotask.setVisibility(View.INVISIBLE);
+                textnotask.setVisibility(View.INVISIBLE);
+                truedata = new ArrayList<>();
+                data = new ArrayList<>();
+                adapter.notifyDataSetChanged();
+                catTask = new AsyncOrzuTasksMain();
+                catTask.execute();
             }
 
 
@@ -834,7 +717,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
         @Override
         protected ArrayList<Map<String, Object>> doInBackground(String... strings) {
-            Log.wtf("asdasd", "asasd");
             URL orzuEndpoint = null;
             JsonReader jsonReader = null;
             HttpsURLConnection myConnection = null;
@@ -842,7 +724,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             final char dm = (char) 34;
 
             try {
-                orzuEndpoint = new URL("https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&catid=" + idOfSub + "&page=" + count);
+                orzuEndpoint = new URL("https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&catid[]=" + idOfSub + "&page=" + count);
                 myConnectiontrack =
                         (HttpsURLConnection) orzuEndpoint.openConnection();
                 if (myConnectiontrack.getResponseCode() == 200) {
@@ -850,7 +732,303 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     InputStream responseBody = myConnectiontrack.getInputStream();
                     Scanner s = new Scanner(responseBody).useDelimiter("\\A");
                     result = s.hasNext() ? s.next() : "";
-                    Log.e("RESULT", result);
+                }
+                myConnection =
+                        (HttpsURLConnection) orzuEndpoint.openConnection();
+                if (myConnection.getResponseCode() == 200) {
+                    // Success
+                    InputStream responseBody = myConnection.getInputStream();
+                    InputStreamReader responseBodyReader =
+                            new InputStreamReader(responseBody, "UTF-8");
+                    jsonReader = new JsonReader(responseBodyReader);
+                }
+
+                status = myConnection.getResponseCode();
+
+
+                myConnection.setInstanceFollowRedirects(true);
+                data = new ArrayList<>();
+
+                if (result.equals("[[]]")) {
+                    noTasksYet = true;
+                    track = false;
+                    catTask.cancel(true);
+                } else {
+                    noTasksYet = false;
+                    jsonReader.beginArray();
+                    while (jsonReader.hasNext()) {
+                        // Start processing the JSON object
+                        jsonReader.beginArray();
+                        while (jsonReader.hasNext()) { // Loop through all keys
+
+
+                            m = new HashMap<>();
+                            m = readMessage(jsonReader);
+
+                            if (!m.isEmpty()) {
+                                data.add(m);
+
+                            }
+
+                        }
+                    }
+                    truedata.addAll(data);
+                    jsonReader.endArray();
+                    jsonReader.close();
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                if (status != 200) {
+                    Fragment1.this.getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            imagenotask.setVisibility(View.VISIBLE);
+                            textnotask.setVisibility(View.VISIBLE);
+                            dialog = new Dialog(Fragment1.this.getActivity(), android.R.style.Theme_Material_Light_NoActionBar);
+                            dialog.setContentView(R.layout.dialog_no_internet);
+                            Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                            // if button is clicked, close the custom dialog
+                            dialogButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+
+                                    catTask = new AsyncOrzuTasksMain();
+                                    catTask.execute();
+                                    dialog.dismiss();
+                                }
+                            });
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialog.show();
+                                }
+                            }, 500);
+
+
+                            catTask.cancel(true);
+                        }
+                    });
+                }
+                e.printStackTrace();
+            }
+            myConnection.disconnect();
+            return null;
+        }
+
+        protected void onPostExecute(ArrayList<Map<String, Object>> result) {
+            super.onPostExecute(result);
+            count++;
+            adapter = new RVAdapter(getContext(), truedata);
+            rv.setAdapter(adapter);
+            progress_loading.setVisibility(View.GONE);
+            RVAdapter.setSelect(new MainItemSelect() {
+                @Override
+                public void onItemSelectedListener(View view, int position) {
+
+                    Intent intent = new Intent(getActivity(), TaskViewMain.class);
+                    Map<String, Object> map;
+                    map = truedata.get(position);
+                    intent.putExtra("id", map.get(idList).toString());
+                    intent.putExtra("opt", "view");
+                    intent.putExtra("mytask", "not");
+                    startActivity(intent);
+
+                }
+
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+            noTasks = false;
+
+            if (adapter.getItemCount() == 0) {
+                noTasks = true;
+                imagenotask.setVisibility(View.VISIBLE);
+                textnotask.setVisibility(View.VISIBLE);
+            }
+
+        }
+    }
+
+    class AsyncOrzuTasksGetSubsFiltered extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {
+        String result;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            imagenotask.setVisibility(View.INVISIBLE);
+            textnotask.setVisibility(View.INVISIBLE);
+        }
+
+
+        @Override
+        protected ArrayList<Map<String, Object>> doInBackground(String... strings) {
+            URL orzuEndpoint = null;
+            JsonReader jsonReader = null;
+            HttpsURLConnection myConnection = null;
+            HttpsURLConnection myConnectiontrack = null;
+            final char dm = (char) 34;
+
+            try {
+                orzuEndpoint = new URL("https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&" + filter + "page=" + count);
+                myConnectiontrack =
+                        (HttpsURLConnection) orzuEndpoint.openConnection();
+                if (myConnectiontrack.getResponseCode() == 200) {
+                    // Success
+                    InputStream responseBody = myConnectiontrack.getInputStream();
+                    Scanner s = new Scanner(responseBody).useDelimiter("\\A");
+                    result = s.hasNext() ? s.next() : "";
+                }
+                myConnection =
+                        (HttpsURLConnection) orzuEndpoint.openConnection();
+                if (myConnection.getResponseCode() == 200) {
+                    // Success
+                    InputStream responseBody = myConnection.getInputStream();
+                    InputStreamReader responseBodyReader =
+                            new InputStreamReader(responseBody, "UTF-8");
+                    jsonReader = new JsonReader(responseBodyReader);
+                }
+
+                status = myConnection.getResponseCode();
+
+
+                myConnection.setInstanceFollowRedirects(true);
+                data = new ArrayList<>();
+                if (result.equals("[[]]")) {
+                    noTasksYet = true;
+                    track = false;
+                    catTask.cancel(true);
+                } else {
+                    noTasksYet = false;
+                    jsonReader.beginArray();
+
+                    while (jsonReader.hasNext()) {
+                        if(JsonToken.BEGIN_ARRAY.equals(jsonReader.peek())) {
+                            jsonReader.beginArray();
+                            while (jsonReader.hasNext()) {
+
+                                m = new HashMap<>();
+                                m = readMessage(jsonReader);
+
+                                if (!m.isEmpty()) {
+                                    data.add(m);
+                                }
+
+                            }
+                            jsonReader.endArray();
+                        }
+                    }
+                    truedata.addAll(data);
+                    jsonReader.endArray();
+                    jsonReader.close();
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                if (status != 200) {
+                    Fragment1.this.getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            imagenotask.setVisibility(View.VISIBLE);
+                            textnotask.setVisibility(View.VISIBLE);
+                            dialog = new Dialog(Fragment1.this.getActivity(), android.R.style.Theme_Material_Light_NoActionBar);
+                            dialog.setContentView(R.layout.dialog_no_internet);
+                            Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                            // if button is clicked, close the custom dialog
+                            dialogButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+
+                                    catTask = new AsyncOrzuTasksMain();
+                                    catTask.execute();
+                                    dialog.dismiss();
+                                }
+                            });
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialog.show();
+                                }
+                            }, 500);
+
+
+                            catTask.cancel(true);
+                        }
+                    });
+                }
+                e.printStackTrace();
+            }
+            myConnection.disconnect();
+            return null;
+        }
+
+        protected void onPostExecute(ArrayList<Map<String, Object>> result) {
+            super.onPostExecute(result);
+            count++;
+            adapter = new RVAdapter(getContext(), truedata);
+            rv.setAdapter(adapter);
+            progress_loading.setVisibility(View.GONE);
+            RVAdapter.setSelect(new MainItemSelect() {
+                @Override
+                public void onItemSelectedListener(View view, int position) {
+
+                    Intent intent = new Intent(getActivity(), TaskViewMain.class);
+                    Map<String, Object> map;
+                    map = truedata.get(position);
+                    intent.putExtra("id", map.get(idList).toString());
+                    intent.putExtra("opt", "view");
+                    intent.putExtra("mytask", "not");
+                    startActivity(intent);
+
+                }
+
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+            noTasks = false;
+
+            if (adapter.getItemCount() == 0) {
+                noTasks = true;
+                imagenotask.setVisibility(View.VISIBLE);
+                textnotask.setVisibility(View.VISIBLE);
+            }
+
+        }
+    }
+
+
+    class AsyncOrzuTasksGetCity extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {
+        String result;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            imagenotask.setVisibility(View.INVISIBLE);
+            textnotask.setVisibility(View.INVISIBLE);
+        }
+
+
+        @Override
+        protected ArrayList<Map<String, Object>> doInBackground(String... strings) {
+            URL orzuEndpoint = null;
+            JsonReader jsonReader = null;
+            HttpsURLConnection myConnection = null;
+            HttpsURLConnection myConnectiontrack = null;
+            final char dm = (char) 34;
+
+            try {
+                orzuEndpoint = new URL("https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&city=" + Common.city1 + "&page=" + count);
+                myConnectiontrack =
+                        (HttpsURLConnection) orzuEndpoint.openConnection();
+                if (myConnectiontrack.getResponseCode() == 200) {
+                    // Success
+                    InputStream responseBody = myConnectiontrack.getInputStream();
+                    Scanner s = new Scanner(responseBody).useDelimiter("\\A");
+                    result = s.hasNext() ? s.next() : "";
                 }
                 myConnection =
                         (HttpsURLConnection) orzuEndpoint.openConnection();
@@ -871,90 +1049,15 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 if (result.equals(dm + "Not tasks yet" + dm)) {
                     noTasksYet = true;
                     track = false;
-                    catTask.cancel(true);
+                    getFilteredCity.cancel(true);
                 } else {
                     noTasksYet = false;
                     jsonReader.beginArray(); // Start processing the JSON object
                     while (jsonReader.hasNext()) { // Loop through all keys
-
-
-
                         m = new HashMap<>();
-                        m_new = new HashMap<>();
-                        m_new_2 = new HashMap<>();
                         m = readMessage(jsonReader);
-                        Long[] savedList = model.array;
-
-                        Long det = 0L;
-
-                        if (savedList != null) {
-                            for (int i = 0; i < savedList.length; i++) {
-                                if (savedList[i] != null && savedList[i] != 0) {
-                                    det = savedList[i];
-                                }
-                            }
-                        }
-
-                        if (det == 0L) {
-                            if (Common.city1.length() != 0) {
-                                if (Common.city1.equals(m.get(cityList))) {
-                                    m_new.put(idList, m.get(idList));
-                                    m_new.put(taskList, m.get(taskList));
-                                    m_new.put(categoryList, m.get(categoryList));
-                                    m_new.put(priceList, m.get(priceList));
-                                    m_new.put(servList, m.get(servList));
-                                    m_new.put(dateList, m.get(dateList));
-                                    m_new.put(cityList, m.get(cityList));
-                                    m_new.put(needListdfrom, m.get(needListdfrom));
-                                    m_new.put(catidList, m.get(catidList));
-                                }
-                            } else {
-                                m_new.put(idList, m.get(idList));
-                                m_new.put(taskList, m.get(taskList));
-                                m_new.put(categoryList, m.get(categoryList));
-                                m_new.put(priceList, m.get(priceList));
-                                m_new.put(servList, m.get(servList));
-                                m_new.put(dateList, m.get(dateList));
-                                m_new.put(cityList, m.get(cityList));
-                                m_new.put(needListdfrom, m.get(needListdfrom));
-                                m_new.put(catidList, m.get(catidList));
-                            }
-
-                        } else {
-                            for (int i = 0; i < savedList.length; i++) {
-
-                                if (savedList[i] != null) {
-                                    if (savedList[i].toString().equals(m.get(catidList).toString())) {
-                                        if (Common.city1.length() != 0) {
-                                            if (Common.city1.equals(m.get(cityList))) {
-                                                m_new.put(idList, m.get(idList));
-                                                m_new.put(taskList, m.get(taskList));
-                                                m_new.put(categoryList, m.get(categoryList));
-                                                m_new.put(priceList, m.get(priceList));
-                                                m_new.put(servList, m.get(servList));
-                                                m_new.put(dateList, m.get(dateList));
-                                                m_new.put(cityList, m.get(cityList));
-                                                m_new.put(needListdfrom, m.get(needListdfrom));
-                                                m_new.put(catidList, m.get(catidList));
-                                            }
-                                        } else {
-                                            m_new.put(idList, m.get(idList));
-                                            m_new.put(taskList, m.get(taskList));
-                                            m_new.put(categoryList, m.get(categoryList));
-                                            m_new.put(priceList, m.get(priceList));
-                                            m_new.put(servList, m.get(servList));
-                                            m_new.put(dateList, m.get(dateList));
-                                            m_new.put(cityList, m.get(cityList));
-                                            m_new.put(needListdfrom, m.get(needListdfrom));
-                                            m_new.put(catidList, m.get(catidList));
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        if (!m_new.isEmpty()) {
-                            data.add(m_new);
+                        if (!m.isEmpty()) {
+                            data.add(m);
 
                         }
 
@@ -1084,31 +1187,12 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     jsonReader[0].beginArray(); // Start processing the JSON object
                     while (jsonReader[0].hasNext()) { // Loop through all keys
 
-//                        countItem++;
-//                        if (countItem == 6){
-//                            countPager = true;
-//                            countItem=1;
-//                            count++;
-//                        } else countPager = false;
 
                         m = new HashMap<>();
-                        m_new = new HashMap<>();
-                        m_new_2 = new HashMap<>();
                         m = readMessage(jsonReader[0]);
 
-
-                        m_new.put(idList, m.get(idList));
-                        m_new.put(taskList, m.get(taskList));
-                        m_new.put(categoryList, m.get(categoryList));
-                        m_new.put(priceList, m.get(priceList));
-                        m_new.put(servList, m.get(servList));
-                        m_new.put(dateList, m.get(dateList));
-                        m_new.put(cityList, m.get(cityList));
-                        m_new.put(needListdfrom, m.get(needListdfrom));
-                        m_new.put(catidList, m.get(catidList));
-
-                        if (!m_new.isEmpty()) {
-                            data.add(m_new);
+                        if (!m.isEmpty()) {
+                            data.add(m);
 
                         }
 
