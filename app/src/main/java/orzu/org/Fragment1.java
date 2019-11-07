@@ -283,22 +283,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
             }
         });
-        if (model.array.length > 1) {
-            truedata.clear();
-            count = 1;
-            getFilteredSubsFiltered = new AsyncOrzuTasksGetSubsFiltered();
-            getFilteredSubsFiltered.execute();
-        } else if (Common.city1.length() > 0) {
-            cityChoose = true;
-            count = 1;
-            getFilteredCity = new AsyncOrzuTasksGetCity();
-            getFilteredCity.execute();
-        } else {
-            cityChoose = false;
-            count = 1;
-            catTask = new AsyncOrzuTasksMain();
-            catTask.execute();
-        }
         return view;
     }
 
@@ -523,6 +507,8 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                                     catTask = new AsyncOrzuTasksMain();
                                     catTask.execute();
                                     dialog.dismiss();
+                                    imagenotask.setVisibility(View.INVISIBLE);
+                                    textnotask.setVisibility(View.INVISIBLE);
                                 }
                             });
                             new Handler().postDelayed(new Runnable() {
@@ -539,7 +525,12 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 }
                 e.printStackTrace();
             }
-            myConnection.disconnect();
+            try {
+                myConnection.disconnect();
+            }catch (Exception e){
+
+            }
+
             return null;
         }
 
@@ -776,9 +767,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     jsonReader.endArray();
                     jsonReader.close();
                 }
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            }catch (IOException e) {
                 if (status != 200) {
                     Fragment1.this.getActivity().runOnUiThread(new Runnable() {
                         public void run() {
@@ -793,8 +782,8 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                                 public void onClick(View v) {
 
 
-                                    catTask = new AsyncOrzuTasksMain();
-                                    catTask.execute();
+                                    getFilteredSubs = new AsyncOrzuTasksGetSubs();
+                                    getFilteredSubs.execute();
                                     dialog.dismiss();
                                 }
                             });
@@ -806,13 +795,18 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                             }, 500);
 
 
-                            catTask.cancel(true);
+                            getFilteredSubs.cancel(true);
                         }
                     });
                 }
                 e.printStackTrace();
             }
-            myConnection.disconnect();
+            try {
+                myConnection.disconnect();
+            }catch (Exception e){
+
+            }
+
             return null;
         }
 
@@ -899,7 +893,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 if (result.equals("[[]]")) {
                     noTasksYet = true;
                     track = false;
-                    catTask.cancel(true);
+                    getFilteredSubsFiltered.cancel(true);
                 } else {
                     noTasksYet = false;
                     jsonReader.beginArray();
@@ -941,8 +935,8 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                                 public void onClick(View v) {
 
 
-                                    catTask = new AsyncOrzuTasksMain();
-                                    catTask.execute();
+                                    getFilteredSubsFiltered = new AsyncOrzuTasksGetSubsFiltered();
+                                    getFilteredSubsFiltered.execute();
                                     dialog.dismiss();
                                 }
                             });
@@ -954,13 +948,17 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                             }, 500);
 
 
-                            catTask.cancel(true);
+                            getFilteredSubsFiltered.cancel(true);
                         }
                     });
                 }
                 e.printStackTrace();
             }
-            myConnection.disconnect();
+            try {
+                myConnection.disconnect();
+            }catch (Exception e){
+
+            }
             return null;
         }
 
@@ -1083,8 +1081,8 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                                 public void onClick(View v) {
 
 
-                                    catTask = new AsyncOrzuTasksMain();
-                                    catTask.execute();
+                                    getFilteredCity = new AsyncOrzuTasksGetCity();
+                                    getFilteredCity.execute();
                                     dialog.dismiss();
                                 }
                             });
@@ -1096,13 +1094,17 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                             }, 500);
 
 
-                            catTask.cancel(true);
+                            getFilteredCity.cancel(true);
                         }
                     });
                 }
                 e.printStackTrace();
             }
-            myConnection.disconnect();
+            try {
+                myConnection.disconnect();
+            }catch (Exception e){
+
+            }
             return null;
         }
 
@@ -1306,10 +1308,36 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace(); //log the error resulting from the request for diagnosis/debugging
+                imagenotask.setVisibility(View.VISIBLE);
+                textnotask.setVisibility(View.VISIBLE);
+                dialog = new Dialog(Fragment1.this.getActivity(), android.R.style.Theme_Material_Light_NoActionBar);
+                dialog.setContentView(R.layout.dialog_no_internet);
+                Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getAll();
+                        dialog.dismiss();
+                    }
+                });
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.show();
+                    }
+                }, 500);
             }
         });
 //make the request to your server as indicated in your request url
         Volley.newRequestQueue(Objects.requireNonNull(getContext())).add(stringRequest);
+    }
+
+    private void getAll() {
+        getSubCategories("1");
+        getCategories();
+        catTask = new AsyncOrzuTasksMain();
+        catTask.execute();
     }
 
     private void getSubCategories(String id) {
@@ -1334,6 +1362,22 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     }
                     shim.setVisibility(View.INVISIBLE);
                     nestshimmer.setVisibility(View.INVISIBLE);
+                    if (model.array.length > 1) {
+                        truedata.clear();
+                        count = 1;
+                        getFilteredSubsFiltered = new AsyncOrzuTasksGetSubsFiltered();
+                        getFilteredSubsFiltered.execute();
+                    } else if (Common.city1.length() > 0) {
+                        cityChoose = true;
+                        count = 1;
+                        getFilteredCity = new AsyncOrzuTasksGetCity();
+                        getFilteredCity.execute();
+                    } else {
+                        cityChoose = false;
+                        count = 1;
+                        catTask = new AsyncOrzuTasksMain();
+                        catTask.execute();
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -1342,6 +1386,25 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace(); //log the error resulting from the request for diagnosis/debugging
+                imagenotask.setVisibility(View.VISIBLE);
+                textnotask.setVisibility(View.VISIBLE);
+                dialog = new Dialog(Fragment1.this.getActivity(), android.R.style.Theme_Material_Light_NoActionBar);
+                dialog.setContentView(R.layout.dialog_no_internet);
+                Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getAll();
+                        dialog.dismiss();
+                    }
+                });
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.show();
+                    }
+                }, 500);
             }
         });
 //make the request to your server as indicated in your request url
