@@ -63,6 +63,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -139,11 +140,14 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         final View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         nestshimmer = view.findViewById(R.id.nestshimmer);
-        for (int i = 0; i < model.array.length; i++) {
-            if (model.array[i] != null) {
-                filter = filter + "catid[]=" + model.array[i] + "&";
+        Set<String> keys = Common.subFilter.keySet();
+        for (String key : keys) {
+            Set<Integer> key_of_value = Common.subFilter.get(key).keySet();
+            for (Integer keyV : key_of_value){
+                filter = filter + "catid[]=" + Common.subFilter.get(key).get(keyV) + "&";
             }
         }
+        Log.wtf("asdasd", filter);
 
         imagenotask = view.findViewById(R.id.imageNoTask);
         textnotask = view.findViewById(R.id.textViewNoTask);
@@ -214,7 +218,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
                     if (diff == 0) {
                         swipeLayout.setEnabled(llm.findFirstCompletelyVisibleItemPosition() == 0 || adapter.getItemCount() == 0);
-                        if (model.array.length > 1) {
+                        if (Common.subFilter.size() > 1) {
                             getFilteredSubsFiltered = new AsyncOrzuTasksGetSubsFiltered();
                             getFilteredSubsFiltered.execute();
                         } else if (cityChoose) {
@@ -247,6 +251,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 Long[] idArray = new Long[1];
                 idArray[0] = 0L;
                 model.array = idArray;
+                Common.subFilter = new HashMap<>();
                 filter = "";
                 Common.city1 = "";
                 count = 0;
@@ -527,7 +532,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             }
             try {
                 myConnection.disconnect();
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
 
@@ -576,6 +581,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         Long[] idArray = new Long[1];
         idArray[0] = 0L;
         model.array = idArray;
+        Common.subFilter = new HashMap<>();
         filter = "";
         Common.city1 = "";
         cityChoose = false;
@@ -767,7 +773,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     jsonReader.endArray();
                     jsonReader.close();
                 }
-            }catch (IOException e) {
+            } catch (IOException e) {
                 if (status != 200) {
                     Fragment1.this.getActivity().runOnUiThread(new Runnable() {
                         public void run() {
@@ -803,7 +809,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             }
             try {
                 myConnection.disconnect();
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
 
@@ -899,7 +905,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     jsonReader.beginArray();
 
                     while (jsonReader.hasNext()) {
-                        if(JsonToken.BEGIN_ARRAY.equals(jsonReader.peek())) {
+                        if (JsonToken.BEGIN_ARRAY.equals(jsonReader.peek())) {
                             jsonReader.beginArray();
                             while (jsonReader.hasNext()) {
 
@@ -956,7 +962,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             }
             try {
                 myConnection.disconnect();
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
             return null;
@@ -1102,7 +1108,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             }
             try {
                 myConnection.disconnect();
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
             return null;
@@ -1362,7 +1368,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     }
                     shim.setVisibility(View.INVISIBLE);
                     nestshimmer.setVisibility(View.INVISIBLE);
-                    if (model.array.length > 1) {
+                    if (Common.subFilter.size() > 1) {
                         truedata.clear();
                         count = 1;
                         getFilteredSubsFiltered = new AsyncOrzuTasksGetSubsFiltered();

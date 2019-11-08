@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,6 +44,7 @@ public class CategoryView extends AppCompatActivity {
     CardView card_of_category_view;
     ProgressBar progressBar;
     ImageView category_view_back;
+    TextView button_categ;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, CategoryView.class);
@@ -57,7 +59,13 @@ public class CategoryView extends AppCompatActivity {
         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_category_view);
 
-
+        button_categ = findViewById(R.id.button_categ);
+        button_categ.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         progressBar = findViewById(R.id.progressBarCat);
         card_of_category_view = findViewById(R.id.card_of_category_view);
         card_of_category_view.setBackgroundResource(R.drawable.shape_card_topcorners);
@@ -192,7 +200,6 @@ public class CategoryView extends AppCompatActivity {
                         intent.putExtra("id", map.get(idList).toString());
                         intent.putExtra("name", map.get(taskList).toString());
                         startActivity(intent);
-                        finish();
                     }
                 });
 

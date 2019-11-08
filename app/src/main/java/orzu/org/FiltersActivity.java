@@ -116,6 +116,7 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
                 Long[] idArray = new Long[1];
                 idArray[0] = 0L;
                 model.array = idArray;
+                Common.subFilter = new HashMap<>();
                 button.setVisibility(View.VISIBLE);
                 Common.city1 = "";
                 Map<String, Object> m2sort = new HashMap<>();
@@ -238,6 +239,7 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
                 Long[] idArray = new Long[1];
                 idArray[0] = 0L;
                 model.array = idArray;
+                Common.subFilter = new HashMap<>();
                 button.setVisibility(View.VISIBLE);
                 Common.city1 = "";
                 Map<String, Object> m2sort = new HashMap<>();

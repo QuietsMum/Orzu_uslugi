@@ -43,7 +43,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -63,7 +65,8 @@ public class SubCategoryView extends AppCompatActivity implements View.OnClickLi
     CardView card_of_subcategory_view;
     ImageView back;
     TextView button_done,name_of_subcategory_view;
-
+    Map<Integer,Integer> indexes = new HashMap<>();
+    String idIntent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +75,7 @@ public class SubCategoryView extends AppCompatActivity implements View.OnClickLi
         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_sub_category_view);
         String idList = "ID";
-        String idIntent = getIntent().getExtras().getString("id");
+        idIntent = getIntent().getExtras().getString("id");
         String nameIntent = getIntent().getExtras().getString("name");
         String cat = "Категории";
         lvCat = (ListView) findViewById(R.id.list_sub_cat_sub);
@@ -85,6 +88,7 @@ public class SubCategoryView extends AppCompatActivity implements View.OnClickLi
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                model.array = idArray;
                 finish();
             }
         });
@@ -118,7 +122,6 @@ public class SubCategoryView extends AppCompatActivity implements View.OnClickLi
         parent.setText(nameIntent);
         final HttpsURLConnection[] myConnection = new HttpsURLConnection[1];
         final URL[] orzuEndpoint = new URL[1];
-
 
         class AsyncOrzuTasks extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {
 
@@ -181,8 +184,27 @@ public class SubCategoryView extends AppCompatActivity implements View.OnClickLi
 
                 final ViewHolder[] holder = {null};
                 arrayAdapter = new SimpleAdapter(getBaseContext(), data, R.layout.sub_cat_item, from, to);
-
                 lvCat.setAdapter(arrayAdapter);
+                if(Common.subFilter.containsKey(idIntent)){
+                    indexes = Common.subFilter.get(idIntent);
+                    Set<Integer> keys = Common.subFilter.get(idIntent).keySet();
+                    for(Integer key: keys){
+                        Map<String, Object> map;
+                        map = data.get(key);
+                        holder[0] = new ViewHolder();
+                        holder[0].check = lvCat.getAdapter().getView(key,null,lvCat).findViewById(R.id.checkBoxFilt);
+                        lvCat.getAdapter().getView(key,null,lvCat).setTag(holder);
+                        if (!holder[0].check.isChecked()) {
+                            idArray[key] = (Long) map.get(idList);
+                            holder[0].check.setChecked(true);
+                            map.put(ckeckList, true);
+                        }
+                    }
+                }
+                arrayAdapter.notifyDataSetChanged();
+                lvCat.invalidateViews();
+                lvCat.setAdapter(arrayAdapter);
+
                 lvCat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -196,11 +218,14 @@ public class SubCategoryView extends AppCompatActivity implements View.OnClickLi
                             idArray[i] = (Long) map.get(idList);
                             holder[0].check.setChecked(true);
                             map.put(ckeckList, true);
+                            indexes.put(i,Integer.parseInt(String.valueOf(idArray[i])));
                         } else {
                             idArray[i] = 0L;
                             holder[0].check.setChecked(false);
                             map.put(ckeckList, false);
+                            indexes.remove(i);
                         }
+                        Common.subFilter.put(idIntent,indexes);
                         arrayAdapter.notifyDataSetChanged();
                         lvCat.invalidateViews();
                     }

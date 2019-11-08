@@ -17,6 +17,8 @@ import android.util.Log;
 import android.view.Window;
 import android.widget.ImageView;
 
+import java.util.HashMap;
+
 import orzu.org.ui.login.LoginActivity;
 import orzu.org.ui.login.model;
 
@@ -38,7 +40,7 @@ public class CoreActivity extends AppCompatActivity {
         Long[] idArray = new Long[1];
         idArray[0] = 0L;
         model.array = idArray;
-
+        Common.subFilter = new HashMap<>();
 
         ImageView logo = (ImageView)findViewById(R.id.imageLogoNew);
 
