@@ -147,6 +147,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 filter = filter + "catid[]=" + Common.subFilter.get(key).get(keyV) + "&";
             }
         }
+
         Log.wtf("asdasd", filter);
 
         imagenotask = view.findViewById(R.id.imageNoTask);

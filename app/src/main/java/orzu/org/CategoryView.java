@@ -10,10 +10,13 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.JsonReader;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -106,7 +109,15 @@ public class CategoryView extends AppCompatActivity {
                 //CategoryView.start(view.getContext());
             }
         });*/
-
+        button_categ.setVisibility(View.GONE);
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                button_categ.setVisibility(View.VISIBLE);
+                Animation animZoomIn = AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.zoom_in);
+                button_categ.startAnimation(animZoomIn);
+            }
+        }, animation.getDuration());
         final String categoryList = "Категория задачи";
         String taskList = "Категория";
         String idList = "ID";

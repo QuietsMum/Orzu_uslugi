@@ -186,6 +186,10 @@ public class SubCategoryView extends AppCompatActivity implements View.OnClickLi
                 arrayAdapter = new SimpleAdapter(getBaseContext(), data, R.layout.sub_cat_item, from, to);
                 lvCat.setAdapter(arrayAdapter);
                 if(Common.subFilter.containsKey(idIntent)){
+                    if(Common.subFilter.get(idIntent).size()==data.size()){
+                        CheckBox c = findViewById(R.id.checkBoxParent);
+                        c.setChecked(true);
+                    }
                     indexes = Common.subFilter.get(idIntent);
                     Set<Integer> keys = Common.subFilter.get(idIntent).keySet();
                     for(Integer key: keys){
@@ -298,6 +302,7 @@ public class SubCategoryView extends AppCompatActivity implements View.OnClickLi
                 map = data.get(i);
                 idArray[i] = (Long) map.get(idList);
                 map.put(ckeckList, true);
+                indexes.put(i,Integer.parseInt(String.valueOf(idArray[i])));
             }
             check = true;
         } else {
@@ -306,6 +311,7 @@ public class SubCategoryView extends AppCompatActivity implements View.OnClickLi
                 map = data.get(i);
                 idArray[i] = 0L;
                 map.put(ckeckList, false);
+                indexes.remove(i);
             }
             check = false;
         }
@@ -316,7 +322,7 @@ public class SubCategoryView extends AppCompatActivity implements View.OnClickLi
             m_new.put(ckeckList, check);
             datanew.add(m_new);
         }      */
-
+        Common.subFilter.put(idIntent,indexes);
         arrayAdapter.notifyDataSetChanged();
         lvCat.invalidateViews();
         lvCat.setAdapter(arrayAdapter);
