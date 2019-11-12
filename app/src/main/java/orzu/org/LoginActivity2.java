@@ -326,7 +326,11 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                 mMessage = response.body().string();
                 final char dm = (char) 34;
                 Log.e("response", mMessage);
-
+                if(mMessage.equals("\"This user alreday registered\"")){
+                    Toast.makeText(getApplicationContext(), "No registered user!", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getApplicationContext(), PhoneLoginActivity.class);
+                    startActivity(intent);
+                }
                 try {
                     obj = new JSONObject(mMessage);
                     mStatus = obj.getString("auth_status");
