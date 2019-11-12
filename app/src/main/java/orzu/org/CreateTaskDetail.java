@@ -290,108 +290,110 @@ public class CreateTaskDetail extends AppCompatActivity implements View.OnClickL
 
         }
         String[] filePathColumn = {MediaStore.Images.Media.DATA};
-        if (!multy) {
-            if (counter == 1) {
-                image1.setImageURI(Uri.parse(returnValue.get(0)));
-                Common.values.put(0, returnValue.get(0));
-                delete1.setVisibility(View.VISIBLE);
-            } else if (counter == 2) {
-                image2.setImageURI(Uri.parse(returnValue.get(0)));
-                Common.values.put(1, returnValue.get(0));
-                delete2.setVisibility(View.VISIBLE);
-            } else if (counter == 3) {
-                image3.setImageURI(Uri.parse(returnValue.get(0)));
-                Common.values.put(2, returnValue.get(0));
-                delete3.setVisibility(View.VISIBLE);
-            } else if (counter == 4) {
-                image4.setImageURI(Uri.parse(returnValue.get(0)));
-                Common.values.put(3, returnValue.get(0));
-                delete4.setVisibility(View.VISIBLE);
-            } else if (counter == 5) {
-                image5.setImageURI(Uri.parse(returnValue.get(0)));
-                Common.values.put(4, returnValue.get(0));
-                delete5.setVisibility(View.VISIBLE);
-            } else if (counter == 6) {
-                image6.setImageURI(Uri.parse(returnValue.get(0)));
-                Common.values.put(5, returnValue.get(0));
-                delete6.setVisibility(View.VISIBLE);
+        if (returnValue.size() != 0) {
+            if (!multy) {
+                if (counter == 1) {
+                    image1.setImageURI(Uri.parse(returnValue.get(0)));
+                    Common.values.put(0, returnValue.get(0));
+                    delete1.setVisibility(View.VISIBLE);
+                } else if (counter == 2) {
+                    image2.setImageURI(Uri.parse(returnValue.get(0)));
+                    Common.values.put(1, returnValue.get(0));
+                    delete2.setVisibility(View.VISIBLE);
+                } else if (counter == 3) {
+                    image3.setImageURI(Uri.parse(returnValue.get(0)));
+                    Common.values.put(2, returnValue.get(0));
+                    delete3.setVisibility(View.VISIBLE);
+                } else if (counter == 4) {
+                    image4.setImageURI(Uri.parse(returnValue.get(0)));
+                    Common.values.put(3, returnValue.get(0));
+                    delete4.setVisibility(View.VISIBLE);
+                } else if (counter == 5) {
+                    image5.setImageURI(Uri.parse(returnValue.get(0)));
+                    Common.values.put(4, returnValue.get(0));
+                    delete5.setVisibility(View.VISIBLE);
+                } else if (counter == 6) {
+                    image6.setImageURI(Uri.parse(returnValue.get(0)));
+                    Common.values.put(5, returnValue.get(0));
+                    delete6.setVisibility(View.VISIBLE);
+                }
+
+
+            } else {
+
+                int size = returnValue.size();
+                if (size == 1) {
+                    image1.setImageURI(Uri.parse(returnValue.get(0)));
+                    Common.values.put(0, returnValue.get(0));
+                    delete1.setVisibility(View.VISIBLE);
+                } else if (size == 2) {
+                    image1.setImageURI(Uri.parse(returnValue.get(0)));
+                    Common.values.put(0, returnValue.get(0));
+                    delete1.setVisibility(View.VISIBLE);
+                    image2.setImageURI(Uri.parse(returnValue.get(1)));
+                    Common.values.put(1, returnValue.get(1));
+                    delete2.setVisibility(View.VISIBLE);
+                } else if (size == 3) {
+                    image1.setImageURI(Uri.parse(returnValue.get(0)));
+                    Common.values.put(0, returnValue.get(0));
+                    delete1.setVisibility(View.VISIBLE);
+                    image2.setImageURI(Uri.parse(returnValue.get(1)));
+                    Common.values.put(1, returnValue.get(1));
+                    delete2.setVisibility(View.VISIBLE);
+                    image3.setImageURI(Uri.parse(returnValue.get(2)));
+                    Common.values.put(2, returnValue.get(2));
+                    delete3.setVisibility(View.VISIBLE);
+                } else if (size == 4) {
+                    image1.setImageURI(Uri.parse(returnValue.get(0)));
+                    Common.values.put(0, returnValue.get(0));
+                    delete1.setVisibility(View.VISIBLE);
+                    image2.setImageURI(Uri.parse(returnValue.get(1)));
+                    Common.values.put(1, returnValue.get(1));
+                    delete2.setVisibility(View.VISIBLE);
+                    image3.setImageURI(Uri.parse(returnValue.get(2)));
+                    Common.values.put(2, returnValue.get(2));
+                    delete3.setVisibility(View.VISIBLE);
+                    image4.setImageURI(Uri.parse(returnValue.get(3)));
+                    Common.values.put(3, returnValue.get(3));
+                    delete4.setVisibility(View.VISIBLE);
+                } else if (size == 5) {
+                    image1.setImageURI(Uri.parse(returnValue.get(0)));
+                    Common.values.put(0, returnValue.get(0));
+                    delete1.setVisibility(View.VISIBLE);
+                    image2.setImageURI(Uri.parse(returnValue.get(1)));
+                    Common.values.put(1, returnValue.get(1));
+                    delete2.setVisibility(View.VISIBLE);
+                    image3.setImageURI(Uri.parse(returnValue.get(2)));
+                    Common.values.put(2, returnValue.get(2));
+                    delete3.setVisibility(View.VISIBLE);
+                    image4.setImageURI(Uri.parse(returnValue.get(3)));
+                    Common.values.put(3, returnValue.get(3));
+                    delete4.setVisibility(View.VISIBLE);
+                    image5.setImageURI(Uri.parse(returnValue.get(4)));
+                    Common.values.put(4, returnValue.get(4));
+                    delete5.setVisibility(View.VISIBLE);
+                } else if (size == 6) {
+                    image1.setImageURI(Uri.parse(returnValue.get(0)));
+                    Common.values.put(0, returnValue.get(0));
+                    delete1.setVisibility(View.VISIBLE);
+                    image2.setImageURI(Uri.parse(returnValue.get(1)));
+                    Common.values.put(1, returnValue.get(1));
+                    delete2.setVisibility(View.VISIBLE);
+                    image3.setImageURI(Uri.parse(returnValue.get(2)));
+                    Common.values.put(2, returnValue.get(2));
+                    delete3.setVisibility(View.VISIBLE);
+                    image4.setImageURI(Uri.parse(returnValue.get(3)));
+                    Common.values.put(3, returnValue.get(3));
+                    delete4.setVisibility(View.VISIBLE);
+                    image5.setImageURI(Uri.parse(returnValue.get(4)));
+                    Common.values.put(4, returnValue.get(4));
+                    delete5.setVisibility(View.VISIBLE);
+                    image6.setImageURI(Uri.parse(returnValue.get(5)));
+                    Common.values.put(5, returnValue.get(5));
+                    delete6.setVisibility(View.VISIBLE);
+                }
+                counter = 1;
             }
-
-
-        } else {
-
-            int size = returnValue.size();
-            if (size == 1) {
-                image1.setImageURI(Uri.parse(returnValue.get(0)));
-                Common.values.put(0, returnValue.get(0));
-                delete1.setVisibility(View.VISIBLE);
-            } else if (size == 2) {
-                image1.setImageURI(Uri.parse(returnValue.get(0)));
-                Common.values.put(0, returnValue.get(0));
-                delete1.setVisibility(View.VISIBLE);
-                image2.setImageURI(Uri.parse(returnValue.get(1)));
-                Common.values.put(1, returnValue.get(1));
-                delete2.setVisibility(View.VISIBLE);
-            } else if (size == 3) {
-                image1.setImageURI(Uri.parse(returnValue.get(0)));
-                Common.values.put(0, returnValue.get(0));
-                delete1.setVisibility(View.VISIBLE);
-                image2.setImageURI(Uri.parse(returnValue.get(1)));
-                Common.values.put(1, returnValue.get(1));
-                delete2.setVisibility(View.VISIBLE);
-                image3.setImageURI(Uri.parse(returnValue.get(2)));
-                Common.values.put(2, returnValue.get(2));
-                delete3.setVisibility(View.VISIBLE);
-            } else if (size == 4) {
-                image1.setImageURI(Uri.parse(returnValue.get(0)));
-                Common.values.put(0, returnValue.get(0));
-                delete1.setVisibility(View.VISIBLE);
-                image2.setImageURI(Uri.parse(returnValue.get(1)));
-                Common.values.put(1, returnValue.get(1));
-                delete2.setVisibility(View.VISIBLE);
-                image3.setImageURI(Uri.parse(returnValue.get(2)));
-                Common.values.put(2, returnValue.get(2));
-                delete3.setVisibility(View.VISIBLE);
-                image4.setImageURI(Uri.parse(returnValue.get(3)));
-                Common.values.put(3, returnValue.get(3));
-                delete4.setVisibility(View.VISIBLE);
-            } else if (size == 5) {
-                image1.setImageURI(Uri.parse(returnValue.get(0)));
-                Common.values.put(0, returnValue.get(0));
-                delete1.setVisibility(View.VISIBLE);
-                image2.setImageURI(Uri.parse(returnValue.get(1)));
-                Common.values.put(1, returnValue.get(1));
-                delete2.setVisibility(View.VISIBLE);
-                image3.setImageURI(Uri.parse(returnValue.get(2)));
-                Common.values.put(2, returnValue.get(2));
-                delete3.setVisibility(View.VISIBLE);
-                image4.setImageURI(Uri.parse(returnValue.get(3)));
-                Common.values.put(3, returnValue.get(3));
-                delete4.setVisibility(View.VISIBLE);
-                image5.setImageURI(Uri.parse(returnValue.get(4)));
-                Common.values.put(4, returnValue.get(4));
-                delete5.setVisibility(View.VISIBLE);
-            } else if (size == 6) {
-                image1.setImageURI(Uri.parse(returnValue.get(0)));
-                Common.values.put(0, returnValue.get(0));
-                delete1.setVisibility(View.VISIBLE);
-                image2.setImageURI(Uri.parse(returnValue.get(1)));
-                Common.values.put(1, returnValue.get(1));
-                delete2.setVisibility(View.VISIBLE);
-                image3.setImageURI(Uri.parse(returnValue.get(2)));
-                Common.values.put(2, returnValue.get(2));
-                delete3.setVisibility(View.VISIBLE);
-                image4.setImageURI(Uri.parse(returnValue.get(3)));
-                Common.values.put(3, returnValue.get(3));
-                delete4.setVisibility(View.VISIBLE);
-                image5.setImageURI(Uri.parse(returnValue.get(4)));
-                Common.values.put(4, returnValue.get(4));
-                delete5.setVisibility(View.VISIBLE);
-                image6.setImageURI(Uri.parse(returnValue.get(5)));
-                Common.values.put(5, returnValue.get(5));
-                delete6.setVisibility(View.VISIBLE);
-            }
-            counter = 1;
         }
     }
 

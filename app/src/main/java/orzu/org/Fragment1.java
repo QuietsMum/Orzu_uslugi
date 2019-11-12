@@ -143,7 +143,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         Set<String> keys = Common.subFilter.keySet();
         for (String key : keys) {
             Set<Integer> key_of_value = Common.subFilter.get(key).keySet();
-            for (Integer keyV : key_of_value){
+            for (Integer keyV : key_of_value) {
                 filter = filter + "catid[]=" + Common.subFilter.get(key).get(keyV) + "&";
             }
         }
@@ -445,7 +445,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             HttpsURLConnection myConnectiontrack = null;
             final char dm = (char) 34;
             try {
-                orzuEndpoint = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=all&status=open&page=" + count);
+                orzuEndpoint = new URL("https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&requests=no&page=" + count);
                 myConnectiontrack =
                         (HttpsURLConnection) orzuEndpoint.openConnection();
                 if (myConnectiontrack.getResponseCode() == 200) {
@@ -466,14 +466,13 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
                 status = myConnection.getResponseCode();
 
-
                 myConnection.setInstanceFollowRedirects(true);
                 data = new ArrayList<>();
-                Log.wtf("adsda",result);
+                Log.wtf("adsda", result);
                 if (result.equals("\"Not tasks yet\"")) {
                     track = false;
-                    Log.wtf("adsda",result);
-                    if(count!=1){
+                    Log.wtf("adsda", result);
+                    if (count != 1) {
                         catTask.cancel(true);
                     }
                     Fragment1.this.getActivity().runOnUiThread(new Runnable() {
@@ -488,7 +487,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                         m = readMessage(jsonReader);
                         if (!m.isEmpty()) {
                             data.add(m);
-
                         }
                     }
                     truedata.addAll(data);
@@ -510,8 +508,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                             dialogButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-
-
                                     catTask = new AsyncOrzuTasksMain();
                                     catTask.execute();
                                     dialog.dismiss();
@@ -525,8 +521,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                                     dialog.show();
                                 }
                             }, 500);
-
-
                             catTask.cancel(true);
                         }
                     });
@@ -538,7 +532,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             } catch (Exception e) {
 
             }
-
             return null;
         }
 
@@ -568,14 +561,12 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 }
             });
             noTasks = false;
-            Log.wtf("sddsad",adapter.getItemCount()+"");
+            Log.wtf("sddsad", adapter.getItemCount() + "");
             if (adapter.getItemCount() == 0) {
                 noTasks = true;
                 imagenotask.setVisibility(View.VISIBLE);
                 textnotask.setVisibility(View.VISIBLE);
-
             }
-
         }
     }
 
@@ -659,8 +650,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                             dialogButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-
-
                                     catTaskRef = new AsyncOrzuTasksMainRefresh();
                                     catTaskRef.execute();
                                     dialog.dismiss();
@@ -672,8 +661,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                                     dialog.show();
                                 }
                             }, 500);
-
-
                             catTaskRef.cancel(true);
                         }
                     });
@@ -686,8 +673,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
         protected void onPostExecute(ArrayList<Map<String, Object>> result) {
             super.onPostExecute(result);
-
-            try{
+            try {
                 Long idold = (Long) m.get(idList);
                 Long idnew = (Long) m_new_2.get(idList);
                 if (!idold.equals(idnew) || noTasksYet) {
@@ -700,8 +686,15 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     catTask = new AsyncOrzuTasksMain();
                     catTask.execute();
                 }
-            }catch (Exception e){
-
+            } catch (Exception e) {
+                count = 1;
+                imagenotask.setVisibility(View.INVISIBLE);
+                textnotask.setVisibility(View.INVISIBLE);
+                truedata = new ArrayList<>();
+                data = new ArrayList<>();
+                adapter.notifyDataSetChanged();
+                catTask = new AsyncOrzuTasksMain();
+                catTask.execute();
             }
         }
     }
@@ -716,7 +709,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             imagenotask.setVisibility(View.INVISIBLE);
             textnotask.setVisibility(View.INVISIBLE);
         }
-
 
         @Override
         protected ArrayList<Map<String, Object>> doInBackground(String... strings) {
@@ -748,7 +740,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
                 status = myConnection.getResponseCode();
 
-
                 myConnection.setInstanceFollowRedirects(true);
                 data = new ArrayList<>();
 
@@ -763,16 +754,12 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                         // Start processing the JSON object
                         jsonReader.beginArray();
                         while (jsonReader.hasNext()) { // Loop through all keys
-
-
                             m = new HashMap<>();
                             m = readMessage(jsonReader);
 
                             if (!m.isEmpty()) {
                                 data.add(m);
-
                             }
-
                         }
                     }
                     truedata.addAll(data);
@@ -1056,10 +1043,17 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 myConnection.setInstanceFollowRedirects(true);
                 data = new ArrayList<>();
 
-                if (result.equals(dm + "Not tasks yet" + dm)) {
+                if (result.equals("\"Not tasks yet\"")) {
                     noTasksYet = true;
                     track = false;
-                    getFilteredCity.cancel(true);
+                    if (count != 1) {
+                        getFilteredCity.cancel(true);
+                    }
+                    Fragment1.this.getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            progress_loading.setVisibility(View.GONE);
+                        }
+                    });
                 } else {
                     noTasksYet = false;
                     jsonReader.beginArray(); // Start processing the JSON object
@@ -1374,17 +1368,21 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     }
                     shim.setVisibility(View.INVISIBLE);
                     nestshimmer.setVisibility(View.INVISIBLE);
-                    if (Common.subFilter.size() > 1) {
+                    Log.wtf("asdasd", Common.subFilter.size() + "");
+                    if (filter.length() > 8) {
+                        Log.wtf("subfilter", "subfilter");
                         truedata.clear();
                         count = 1;
                         getFilteredSubsFiltered = new AsyncOrzuTasksGetSubsFiltered();
                         getFilteredSubsFiltered.execute();
                     } else if (Common.city1.length() > 0) {
+                        Log.wtf("city", "city");
                         cityChoose = true;
                         count = 1;
                         getFilteredCity = new AsyncOrzuTasksGetCity();
                         getFilteredCity.execute();
                     } else {
+                        Log.wtf("main", "main");
                         cityChoose = false;
                         count = 1;
                         catTask = new AsyncOrzuTasksMain();
