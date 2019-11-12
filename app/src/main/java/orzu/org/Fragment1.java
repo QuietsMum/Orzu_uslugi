@@ -97,6 +97,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
     int count;
     int countItem;
     boolean imageClicked = false;
+    boolean clickedCategory = false;
     SwipeRefreshLayout swipeLayout;
     AsyncOrzuTasksMain catTask;
     AsyncOrzuTasksMainRefresh catTaskRef;
@@ -216,10 +217,10 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     progress_loading.setVisibility(View.VISIBLE);
                     int diff = (view1.getBottom() - (scroll_of_fragment1.getHeight() + scroll_of_fragment1
                             .getScrollY()));
-
+                    Log.wtf("asdasda", filter.length() + " " + cityChoose + " " + imageClicked);
                     if (diff == 0) {
                         swipeLayout.setEnabled(llm.findFirstCompletelyVisibleItemPosition() == 0 || adapter.getItemCount() == 0);
-                        if (Common.subFilter.size() > 1) {
+                        if (filter.length() > 8) {
                             getFilteredSubsFiltered = new AsyncOrzuTasksGetSubsFiltered();
                             getFilteredSubsFiltered.execute();
                         } else if (cityChoose) {
@@ -271,14 +272,17 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         MainCategoryAdapter.setSelect(new NameItemSelect() {
             @Override
             public void onItemSelectedListener(View view, int position) {
+                filter = "";
                 if (position == 0) {
                     noTasksYet = false;
                     swipeLayout.setRefreshing(false);
                     catTaskRef = new AsyncOrzuTasksMainRefresh();
                     catTaskRef.execute();
                     imageClicked = false;
-
+                    clickedCategory = false;
                 } else {
+                    clickedCategory = true;
+                    truedata.clear();
                     getSubCategories(categories.get(position).getId());
                 }
                 adapter_category.changeColor(position);
@@ -573,6 +577,9 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
     @Override
     public void onRefresh() {
+        adapter_category.changeColor(0);
+        category_rv.scrollToPosition(0);
+        subcategory_rv.scrollToPosition(0);
         Long[] idArray = new Long[1];
         idArray[0] = 0L;
         model.array = idArray;
@@ -674,18 +681,15 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         protected void onPostExecute(ArrayList<Map<String, Object>> result) {
             super.onPostExecute(result);
             try {
-                Long idold = (Long) m.get(idList);
-                Long idnew = (Long) m_new_2.get(idList);
-                if (!idold.equals(idnew) || noTasksYet) {
-                    count = 1;
-                    imagenotask.setVisibility(View.INVISIBLE);
-                    textnotask.setVisibility(View.INVISIBLE);
-                    truedata = new ArrayList<>();
-                    data = new ArrayList<>();
-                    adapter.notifyDataSetChanged();
-                    catTask = new AsyncOrzuTasksMain();
-                    catTask.execute();
-                }
+                count = 1;
+                imagenotask.setVisibility(View.INVISIBLE);
+                textnotask.setVisibility(View.INVISIBLE);
+                truedata = new ArrayList<>();
+                data = new ArrayList<>();
+                adapter.notifyDataSetChanged();
+                catTask = new AsyncOrzuTasksMain();
+                catTask.execute();
+
             } catch (Exception e) {
                 count = 1;
                 imagenotask.setVisibility(View.INVISIBLE);
@@ -746,7 +750,14 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 if (result.equals("[[]]")) {
                     noTasksYet = true;
                     track = false;
-                    getFilteredSubs.cancel(true);
+                    if (count != 1) {
+                        getFilteredSubs.cancel(true);
+                    }
+                    Fragment1.this.getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            progress_loading.setVisibility(View.GONE);
+                        }
+                    });
                 } else {
                     noTasksYet = false;
                     jsonReader.beginArray();
@@ -1340,6 +1351,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
     }
 
     private void getAll() {
+        clickedCategory = false;
         getSubCategories("1");
         getCategories();
         catTask = new AsyncOrzuTasksMain();
@@ -1366,9 +1378,14 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                             e.printStackTrace();
                         }
                     }
+                    if (clickedCategory) {
+                        for (int k = 0; k < subcategories.size(); k++) {
+                            filter = filter + "catid[]=" + subcategories.get(k).getId() + "&";
+                        }
+                    }
                     shim.setVisibility(View.INVISIBLE);
                     nestshimmer.setVisibility(View.INVISIBLE);
-                    Log.wtf("asdasd", Common.subFilter.size() + "");
+                    Log.wtf("asdasd", filter);
                     if (filter.length() > 8) {
                         Log.wtf("subfilter", "subfilter");
                         truedata.clear();
