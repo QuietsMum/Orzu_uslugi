@@ -573,8 +573,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             }
         }
     }
-
-
     @Override
     public void onRefresh() {
         adapter_category.changeColor(0);
