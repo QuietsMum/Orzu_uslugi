@@ -30,7 +30,7 @@
         app:layout_constraintLeft_toLeftOf="@id/date_picker"
         app:layout_constraintRight_toRightOf="@id/date_picker"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calendarView"/>
+        app:layout_constraintTop_toBottomOf="@+id/date_picker"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

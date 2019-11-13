@@ -78,7 +78,7 @@ public class SubCategoryView2 extends AppCompatActivity {
         setContentView(R.layout.activity_sub_category_view2);
 
         pr = findViewById(R.id.progrescity);
-        all_city_text = findViewById(R.id.all_city_text);
+        all_city_text = findViewById(R.id.all_city_text_in_filter);
         all_city_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
