@@ -390,8 +390,8 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                             Toast.makeText(UserEditProfile.this, mMessage, Toast.LENGTH_SHORT).show();
                         }
                     });
-                    SharedPreferences pref = UserEditProfile.this.getSharedPreferences("", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = pref.edit();
+                    final SharedPreferences prefs = UserEditProfile.this.getSharedPreferences(" ", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
                     editor.putString("UserCityPref",userCity.getSelectedItem().toString());
                     editor.apply();
                     bar.setVisibility(View.INVISIBLE);

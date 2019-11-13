@@ -94,7 +94,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
 
     private FirebaseAuth fbAuth;
     private String phoneVerificationId;
-
+    Boolean ok;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -183,7 +183,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
         View arv = view;
 
 
-        if (phon.getText().length() != 0 ) {
+        if (phon.getText().length() != 0&pass.getText().length()!=0) {
             mPhone = phonCount.getText() + phon.getText().toString();
             try {
                 checkPhone();
