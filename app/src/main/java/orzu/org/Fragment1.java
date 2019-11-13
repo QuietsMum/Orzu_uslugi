@@ -2,6 +2,8 @@ package orzu.org;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -67,6 +69,9 @@ import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
 import orzu.org.ui.login.model;
 
 public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -134,11 +139,37 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         setHasOptionsMenu(true);
     }
 
+    DBHelper dbHelper;
+    String tokenUser;
+    String idUser;
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstantState) {
-
         final View view = inflater.inflate(R.layout.fragment_main, container, false);
+        dbHelper = new DBHelper(getContext());
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor c = db.query("orzutable", null, null, null, null, null, null);
+        c.moveToFirst();
+        int idColIndex = c.getColumnIndex("id");
+        int tokenColIndex = c.getColumnIndex("token");
+        idUser = c.getString(idColIndex);
+        if (!Common.allCity) {
+            try {
+                getUserResponse();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Common.URL = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&requests=no&page=";
+            Common.allCity = false;
+            getCategories();
+            getSubCategories("1");
+        }
+        tokenUser = c.getString(tokenColIndex);
+        c.moveToFirst();
+        c.close();
+        db.close();
 
         nestshimmer = view.findViewById(R.id.nestshimmer);
         Set<String> keys = Common.subFilter.keySet();
@@ -199,7 +230,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         count = 1;
         countItem = 1;
 
-
         create_task_main.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -238,8 +268,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             }
         });
         categories.add(new category_model("0", "Все категорий", "0"));
-        getCategories();
-        getSubCategories("1");
+
         adapter_category = new MainCategoryAdapter(getContext(), categories);
         category_rv.setAdapter(adapter_category);
         adapter_subcategory = new MainSubCategoryAdapter(getContext(), subcategories);
@@ -293,8 +322,72 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
             }
         });
+
         return view;
     }
+
+
+    public void getUserResponse() throws IOException {
+        // api?appid=&opt=view_user&=user=id
+
+        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + idUser + "&param=more";
+        OkHttpClient client = new OkHttpClient();
+
+        okhttp3.Request request = new okhttp3.Request.Builder()
+                .url(url)
+                .header("Accept", "application/json")
+                .header("Content-Type", "application/json")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        Dialog dialog = new Dialog(getContext(), android.R.style.Theme_Material_Light_NoActionBar);
+                        dialog.setContentView(R.layout.dialog_no_internet);
+                        Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                        // if button is clicked, close the custom dialog
+                        dialogButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                try {
+                                    getUserResponse();
+                                } catch (IOException e1) {
+                                    e1.printStackTrace();
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.show();
+                            }
+                        }, 500);
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, okhttp3.Response response) throws IOException {
+
+                String mMessage = response.body().string();
+
+                try {
+                    JSONObject jsonObject = new JSONObject(mMessage);
+                    Common.URL = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&city=" + jsonObject.getString("city") + "&page=";
+                    Common.city_for_main_fragment = jsonObject.getString("city");
+                    getCategories();
+                    getSubCategories("1");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+    }
+
 
     private Map<String, Object> readMessage(JsonReader reader) throws IOException {
         long id = 1;
@@ -449,7 +542,8 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             HttpsURLConnection myConnectiontrack = null;
             final char dm = (char) 34;
             try {
-                orzuEndpoint = new URL("https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&requests=no&page=" + count);
+                orzuEndpoint = new URL(Common.URL + "" + count);
+                Log.wtf("sadasdsa", orzuEndpoint + "");
                 myConnectiontrack =
                         (HttpsURLConnection) orzuEndpoint.openConnection();
                 if (myConnectiontrack.getResponseCode() == 200) {
@@ -573,8 +667,10 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             }
         }
     }
+
     @Override
     public void onRefresh() {
+        Common.URL = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&city=" + Common.city_for_main_fragment + "&page=";
         adapter_category.changeColor(0);
         category_rv.scrollToPosition(0);
         subcategory_rv.scrollToPosition(0);
@@ -901,7 +997,14 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 if (result.equals("[[]]")) {
                     noTasksYet = true;
                     track = false;
-                    getFilteredSubsFiltered.cancel(true);
+                    if (count != 1) {
+                        getFilteredSubsFiltered.cancel(true);
+                    }
+                    Fragment1.this.getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            progress_loading.setVisibility(View.GONE);
+                        }
+                    });
                 } else {
                     noTasksYet = false;
                     jsonReader.beginArray();

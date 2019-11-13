@@ -51,6 +51,7 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
     TextView phoneCountName;
     EditText password;
     TextView regist;
+    TextView forgot_pwd;
     FloatingActionButton button;
     ProgressBar progressBar;
     String mMessage;
@@ -86,7 +87,15 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
 
         cardView = findViewById(R.id.constrlog2);
         cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
-
+        forgot_pwd = findViewById(R.id.forgot_pwd);
+        forgot_pwd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(PhoneLoginActivity.this,ForgotPasswordActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
         regist = findViewById(R.id.button_phone_regist);
         ccp = (CountryCodePicker) findViewById(R.id.ccp);
         linLay = findViewById(R.id.linearidccp);

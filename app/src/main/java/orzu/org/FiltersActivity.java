@@ -102,13 +102,21 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
             data1.add(m1);
         }
 
-        for (int i = 0; i < 3; i++) {
-            Map<String, Object> m2 = new HashMap<>();
-            m2.put(cat, filtname2[i]);
-            m2.put(res, filtres2[i]);
-            m2.put(img, filtimg2[i]);
-            data2.add(m2);
-        }
+
+        Map<String, Object> m2 = new HashMap<>();
+        m2.put(cat, filtname2[1]);
+        m2.put(res, filtres2[1]);
+        m2.put(img, filtimg2[1]);
+        data2.add(m2);
+
+        //Filters oplata
+//        for (int i = 0; i < 3; i++) {
+//            Map<String, Object> m2 = new HashMap<>();
+//            m2.put(cat, filtname2[i]);
+//            m2.put(res, filtres2[i]);
+//            m2.put(img, filtimg2[i]);
+//            data2.add(m2);
+//        }
         clear = findViewById(R.id.clear);
         clear.setOnClickListener(new View.OnClickListener() {
             @Override

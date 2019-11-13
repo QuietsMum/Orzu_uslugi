@@ -21,7 +21,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".FullScreenImageActivity"></activity>
+        <activity android:name=".ForgotPasswordActivity"></activity>
+        <activity android:name=".FullScreenImageActivity" />
         <activity
             android:name=".ItemSubsNews"
             android:screenOrientation="portrait" />

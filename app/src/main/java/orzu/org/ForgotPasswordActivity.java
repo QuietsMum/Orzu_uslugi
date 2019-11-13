@@ -73,30 +73,20 @@ import orzu.org.ui.login.LoginActivity;
 
 import static orzu.org.MessageReceiver.extra;
 
-public class LoginActivity2 extends AppCompatActivity implements View.OnClickListener {
-    EditText name;
+public class ForgotPasswordActivity extends AppCompatActivity implements View.OnClickListener {
     EditText phon;
     EditText phonCount;
-    EditText pass;
-    String sms;
     FloatingActionButton button;
-    Button button2;
     String mMessage;
     String mPhone;
-    String mName;
-    String mPassword;
-    String mStatus;
-    String mToken;
-    Long mID;
     String code;
     ProgressBar progressBar;
-    JSONObject obj;
     CountryCodePicker ccp;
     BroadcastReceiver otp;
     EditText input;
     DBHelper dbHelper;
     CardView cardview;
-    public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
+    EditText pass;
 
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks
             verificationCallbacks;
@@ -110,9 +100,8 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         getSupportActionBar().hide();
-        setContentView(R.layout.activity_login2);
+        setContentView(R.layout.activity_forgot_password);
         //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorBackLight)));
-        dbHelper = new DBHelper(this);
         fbAuth = FirebaseAuth.getInstance();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECEIVE_SMS)) {
@@ -122,8 +111,8 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
             }
 
         }
-
-        cardview = findViewById(R.id.card_of_registr);
+        pass = (EditText) findViewById(R.id.editTextPass_forgot);
+        cardview = findViewById(R.id.card_of_registr_forgot);
         cardview.setBackgroundResource(R.drawable.shape_card_topcorners);
         IntentFilter filter = new IntentFilter();
         filter.addAction("service.to.activity.transfer");
@@ -136,23 +125,16 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                     input.setText(substr);
                     extra = "";
 
-                    final SharedPreferences prefs = getSharedPreferences("", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putString("Username", name.getText().toString());
-                    editor.apply();
-
                 }
             }
         };
         registerReceiver(otp, filter);
 
-        progressBar = findViewById(R.id.progressBarLogin_reg);
+        progressBar = findViewById(R.id.progressBarLogin_reg_forgot);
         progressBar.setVisibility(View.INVISIBLE);
-        name = (EditText) findViewById(R.id.editTextNameUser);
-        phon = (EditText) findViewById(R.id.editTextPhone_reg);
-        phonCount = (EditText) findViewById(R.id.editTextPhoneCountry);
-        pass = (EditText) findViewById(R.id.editTextPass);
-        button = findViewById(R.id.button_phone_login);
+        phon = (EditText) findViewById(R.id.editTextPhone_reg_forgot);
+        phonCount = (EditText) findViewById(R.id.editTextPhoneCountry_forgot);
+        button =  findViewById(R.id.button_phone_login_forgot);
 
         float dip = 16f;
         Resources r = Resources.getSystem();
@@ -162,7 +144,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                 r.getDisplayMetrics()
         );
 
-        ccp = (CountryCodePicker) findViewById(R.id.ccp_reg);
+        ccp = (CountryCodePicker) findViewById(R.id.ccp_reg_forgot);
         //ccp.registerPhoneNumberTextView(phone);
         ccp.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
             @Override
@@ -199,83 +181,25 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View view) {
         View arv = view;
-        if (name.getText().length() != 0 && phon.getText().length() != 0 && pass.getText().length() != 0) {
-            progressBar.setVisibility(View.VISIBLE);
-
-        /*Intent intent = new Intent();
-        String sms_body = intent.getExtras().getString("sms_body");
-        sms = sms_body;*/
 
 
+        if (phon.getText().length() != 0 ) {
             mPhone = phonCount.getText() + phon.getText().toString();
-            Log.wtf("phone", mPhone);
-            mName = name.getText().toString();
-            mPassword = pass.getText().toString();
-            sendCode();
-
-
-            final Dialog dialog = new Dialog(this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
-            dialog.setContentView(R.layout.alert_dialog);
-
-            // set the custom dialog components - text, image and button
-            input = dialog.findViewById(R.id.editTextSms);
-
-
-            Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
-            // if button is clicked, close the cust
-            TextView textView = dialog.findViewById(R.id.count);
-            TextView btn = dialog.findViewById(R.id.btn);
-            CountDownTimer timer = new CountDownTimer(60000, 1000) {
-
-                @SuppressLint("SetTextI18n")
-                public void onTick(long millisUntilFinished) {
-                    textView.setText("" + millisUntilFinished / 1000);
-                }
-
-                public void onFinish() {
-                    textView.setVisibility(View.INVISIBLE);
-                    btn.setVisibility(View.VISIBLE);
-
-                }
-            }.start();
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    btn.setVisibility(View.INVISIBLE);
-                    textView.setVisibility(View.VISIBLE);
-                    timer.start();
-                    Log.wtf("sadaasd", "asdsadas");
-
-                }
-            });
-            timer.start();
-            dialogButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    verifyCode();
-
-
-                    dialog.dismiss();
-                }
-            });
-
-            dialog.show();
-
-
+            try {
+                checkPhone();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else {
             Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show();
         }
 
     }
 
-    public void getHttpResponse() throws IOException {
+    public void changePassoword() throws IOException {
         // api?appid=&opt=register_user&phone=&password=&name=
-        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=register_user&phone="
-                + mPhone
-                + "&password=" + mPassword
-                + "&name=" + mName;
+        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=forget_password&phone="+mPhone+"&password="+pass.getText();
+
         Log.e("failure Response URL", url);
         OkHttpClient client = new OkHttpClient();
 
@@ -295,7 +219,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                     Intent intent = new Intent(getApplicationContext(), LoginActivity2.class);
                     startActivity(intent);
                 } else {
-                    Dialog dialog = new Dialog(LoginActivity2.this, android.R.style.Theme_Material_Light_NoActionBar);
+                    Dialog dialog = new Dialog(ForgotPasswordActivity.this, android.R.style.Theme_Material_Light_NoActionBar);
                     dialog.setContentView(R.layout.dialog_no_internet);
                     Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
                     // if button is clicked, close the custom dialog
@@ -303,7 +227,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                         @Override
                         public void onClick(View v) {
                             try {
-                                getHttpResponse();
+                                changePassoword();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -324,44 +248,20 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
             public void onResponse(Call call, Response response) throws IOException {
 
                 mMessage = response.body().string();
-                final char dm = (char) 34;
-                Log.e("response", mMessage);
-                if(mMessage.equals("\"This user alreday registered\"")){
-                    Toast.makeText(getApplicationContext(), "No registered user!", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(getApplicationContext(), PhoneLoginActivity.class);
+                if(mMessage.equals("\"password changed\"")){
+                    Intent intent = new Intent(ForgotPasswordActivity.this,PhoneLoginActivity.class);
                     startActivity(intent);
-                }
-                try {
-                    obj = new JSONObject(mMessage);
-                    mStatus = obj.getString("auth_status");
-                    mToken = obj.getString("_token");
-                    mID = obj.getLong("id");
-                    SQLiteDatabase db = dbHelper.getWritableDatabase();
-                    ContentValues cv = new ContentValues();
-                    cv.put("id", mID);
-                    cv.put("token", mToken);
-                    cv.put("name", mName);
-                    db.insert("orzutable", null, cv);
-                    db.close();
-                    dbHelper.close();
-                    Intent intent = new Intent(getApplicationContext(), RegistCity.class);
-                    startActivity(intent);
-                    progressBar.setVisibility(View.INVISIBLE);
                     finish();
-                } catch (JSONException e) {
-
-                    e.printStackTrace();
+                }else{
+                    Toast.makeText(ForgotPasswordActivity.this, "Password is not changed", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
     }
-
-    public void getSMSResponse() throws IOException {
+    public void checkPhone() throws IOException {
         // api?appid=&opt=register_user&phone=&password=&name=
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=check_sms&phone= "
-                + ccp.getFullNumberWithPlus() + mPhone
-                + "&code=" + input.getText();
+        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=check_phone&phone="
+                + mPhone;
         Log.e("failure Response URL", url);
         OkHttpClient client = new OkHttpClient();
 
@@ -381,89 +281,138 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                     Intent intent = new Intent(getApplicationContext(), LoginActivity2.class);
                     startActivity(intent);
                 } else {
-                    LoginActivity2.this.runOnUiThread(new Runnable() {
-                        public void run() {
-                            Dialog dialog = new Dialog(LoginActivity2.this, android.R.style.Theme_Material_Light_NoActionBar);
-                            dialog.setContentView(R.layout.dialog_no_internet);
-                            Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
-                            // if button is clicked, close the custom dialog
-                            dialogButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    try {
-                                        getSMSResponse();
-                                    } catch (IOException e1) {
-                                        e1.printStackTrace();
-                                    }
-                                    dialog.dismiss();
-                                }
-                            });
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    dialog.show();
-                                }
-                            }, 500);
-                            progressBar.setVisibility(View.INVISIBLE);
+                    Dialog dialog = new Dialog(ForgotPasswordActivity.this, android.R.style.Theme_Material_Light_NoActionBar);
+                    dialog.setContentView(R.layout.dialog_no_internet);
+                    Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                    // if button is clicked, close the custom dialog
+                    dialogButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            try {
+                                checkPhone();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            dialog.dismiss();
                         }
                     });
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialog.show();
+                        }
+                    }, 500);
                 }
 
             }
 
             @Override
-            public void onResponse(Call call, Response
-                    response) throws IOException {
+            public void onResponse(Call call, Response response) throws IOException {
 
                 mMessage = response.body().string();
-                final char dm = (char) 34;
-
                 Log.e("response", mMessage);
+                if (mMessage.equals("\"phone exists\"")) {
+                    ForgotPasswordActivity.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            progressBar.setVisibility(View.VISIBLE);
+                        }
+                    });
+                    Log.wtf("phone", mPhone);
 
-                try {
-                    obj = new JSONObject(mMessage);
-                    mStatus = obj.getString("check");
 
-                    if (obj.getString("check").equals("yes")) {
+                    sendCode();
 
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+
+                    ForgotPasswordActivity.this.runOnUiThread(new Runnable() {
+                        public void run() {
+
+                            final Dialog dialog = new Dialog(ForgotPasswordActivity.this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
+                            dialog.setContentView(R.layout.alert_dialog);
+
+                            // set the custom dialog components - text, image and button
+                            input = dialog.findViewById(R.id.editTextSms);
+
+
+                            Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+                            // if button is clicked, close the cust
+                            TextView textView = dialog.findViewById(R.id.count);
+                            TextView btn = dialog.findViewById(R.id.btn);
+                            CountDownTimer timer = new CountDownTimer(60000, 1000) {
+
+                                @SuppressLint("SetTextI18n")
+                                public void onTick(long millisUntilFinished) {
+                                    textView.setText("" + millisUntilFinished / 1000);
+                                }
+
+                                public void onFinish() {
+                                    textView.setVisibility(View.INVISIBLE);
+                                    btn.setVisibility(View.VISIBLE);
+
+                                }
+                            }.start();
+                            btn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                    btn.setVisibility(View.INVISIBLE);
+                                    textView.setVisibility(View.VISIBLE);
+                                    timer.start();
+                                    Log.wtf("sadaasd", "asdsadas");
+
+                                }
+                            });
+                            timer.start();
+                            dialogButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    verifyCode();
+
+
+                                    dialog.dismiss();
+                                }
+                            });
+                            dialog.show();
+                        }
+                    });
+
+
                 }
-
             }
         });
     }
 
     public void sendCode() {
 
+        Log.wtf("sendCode","asda");
 
         setUpVerificatonCallbacks();
-
+        Log.wtf("sendCode","asda");
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 mPhone,        // Phone number to verify
                 60,                 // Timeout duration
                 TimeUnit.SECONDS,   // Unit of timeout
-                this,               // Activity (for callback binding)
+                ForgotPasswordActivity.this,               // Activity (for callback binding)
                 verificationCallbacks);
+
     }
 
     private void setUpVerificatonCallbacks() {
-
+        Log.wtf("setUpVer","asda");
         verificationCallbacks =
                 new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
                     @Override
                     public void onVerificationCompleted(
                             PhoneAuthCredential credential) {
-
+                        Log.wtf("Complete","asda");
                         signInWithPhoneAuthCredential(credential);
-                        Toast.makeText(LoginActivity2.this, "Success", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ForgotPasswordActivity.this, "Success", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onVerificationFailed(FirebaseException e) {
-
+                        Log.wtf("Failed","asda");
                         if (e instanceof FirebaseAuthInvalidCredentialsException) {
                             // Invalid request
                             Log.d("asdsd", "Invalid credential: "
@@ -477,7 +426,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                     @Override
                     public void onCodeSent(String verificationId,
                                            PhoneAuthProvider.ForceResendingToken token) {
-
+                        Log.wtf("sended","asda");
                         phoneVerificationId = verificationId;
                         resendToken = token;
 
@@ -486,14 +435,16 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+        Log.wtf("signIn","asda");
         fbAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            Log.wtf("success","asda");
                             FirebaseUser user = task.getResult().getUser();
                             try {
-                                getHttpResponse();
+                                changePassoword();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }

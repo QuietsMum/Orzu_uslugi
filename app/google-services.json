@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "566295266578-pc311p4t33f75lbeprncmbk444m96f1k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "orzu.org",
+            "certificate_hash": "367394ddda27f98397aa6d7b00f98fa528f0b2b7"
+          }
+        },
+        {
           "client_id": "566295266578-m8pag9eur9qvkjbda9fpku3v3sldepb6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

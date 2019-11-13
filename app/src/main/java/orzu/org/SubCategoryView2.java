@@ -31,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,6 +67,7 @@ public class SubCategoryView2 extends AppCompatActivity {
     ProgressBar pr;
     ImageView cities_back;
     CardView cardView;
+    TextView all_city_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +78,14 @@ public class SubCategoryView2 extends AppCompatActivity {
         setContentView(R.layout.activity_sub_category_view2);
 
         pr = findViewById(R.id.progrescity);
-
+        all_city_text = findViewById(R.id.all_city_text);
+        all_city_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Common.allCity = true;
+                finish();
+            }
+        });
         suggestResultView = findViewById(R.id.result_city);
         suggestResultView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
