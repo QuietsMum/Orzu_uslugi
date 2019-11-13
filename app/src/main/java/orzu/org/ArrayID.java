@@ -19,7 +19,7 @@ public class ArrayID {
     }
 
     public void setArrayID(Long [] arrayID) {
-        Log.e("TOCLASS", String.valueOf(arrayID[0]));
+
         this.arrayID = arrayID;
     }
 

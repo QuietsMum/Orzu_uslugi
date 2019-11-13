@@ -7,6 +7,7 @@ import androidx.cardview.widget.CardView;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -46,7 +47,7 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
 
     String[] filtname1 = {"Категории", "Город"};
     String[] filtname2 = {"Оплата картой", "Задания без предложений", "Бизнес-задания"};
-    String[] filtres1 = {"Все категории", "Алматы"};
+    String[] filtres1 = {"Все категории", Common.city};
     String[] filtres2 = {"Через сделку без риска", "Успей откликнутся", "Безналичная оплата"};
     int[] filtimg1 = {R.drawable.all_org, R.drawable.point_org};
     int[] filtimg2 = {R.drawable.card_org, R.drawable.flash_org, R.drawable.work_org};
@@ -65,10 +66,11 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
     CardView cardView;
     ImageView filter_back;
     TextView clear;
-
+    SharedPreferences prefs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        prefs = this.getSharedPreferences(" ", Context.MODE_PRIVATE);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         getSupportActionBar().hide();
         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
@@ -121,6 +123,7 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Common.allCity = false;
                 Long[] idArray = new Long[1];
                 idArray[0] = 0L;
                 model.array = idArray;
@@ -129,7 +132,7 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
                 Common.city1 = "";
                 Map<String, Object> m2sort = new HashMap<>();
                 m2sort.put(cat, filtname1[1]);
-                m2sort.put(res, "Алматы");
+                m2sort.put(res,prefs.getString("UserCityPref","Алматы"));
                 m2sort.put(img
                         , filtimg1[1]);
                 data1.remove(1);
@@ -209,6 +212,9 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
             if (resultCode == Activity.RESULT_OK) {
                 String result = data.getStringExtra("result");
                 Common.city1 = result;
+                if(Common.allCity){
+                    Common.city1 = "";
+                }
                 Map<String, Object> m2sort = new HashMap<>();
                 m2sort.put(cat, filtname1[1]);
                 m2sort.put(res, result);
@@ -217,7 +223,7 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
                 data1.remove(1);
                 data1.add(1, m2sort);
                 arrayAdapter1.notifyDataSetChanged();
-                Log.wtf("city", result);
+
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result
@@ -252,7 +258,7 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
                 Common.city1 = "";
                 Map<String, Object> m2sort = new HashMap<>();
                 m2sort.put(cat, filtname1[1]);
-                m2sort.put(res, "Алматы");
+                m2sort.put(res, prefs.getString("UserCityPref","Алматы"));
                 m2sort.put(img, filtimg1[1]);
                 data1.remove(1);
                 data1.add(1, m2sort);

@@ -131,7 +131,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (!extra.equals("")) {
-                    Log.e("smsmessage", extra);
+
                     String substr = extra.substring(extra.indexOf(" ") + 1);
                     input.setText(substr);
                     extra = "";
@@ -208,7 +208,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
 
 
             mPhone = phonCount.getText() + phon.getText().toString();
-            Log.wtf("phone", mPhone);
+
             mName = name.getText().toString();
             mPassword = pass.getText().toString();
             sendCode();
@@ -245,7 +245,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                     btn.setVisibility(View.INVISIBLE);
                     textView.setVisibility(View.VISIBLE);
                     timer.start();
-                    Log.wtf("sadaasd", "asdsadas");
+
 
                 }
             });
@@ -276,7 +276,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                 + mPhone
                 + "&password=" + mPassword
                 + "&name=" + mName;
-        Log.e("failure Response URL", url);
+
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
@@ -325,7 +325,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
 
                 mMessage = response.body().string();
                 final char dm = (char) 34;
-                Log.e("response", mMessage);
+
                 if(mMessage.equals("\"This user alreday registered\"")){
                     Toast.makeText(getApplicationContext(), "No registered user!", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getApplicationContext(), PhoneLoginActivity.class);
@@ -362,7 +362,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
         String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=check_sms&phone= "
                 + ccp.getFullNumberWithPlus() + mPhone
                 + "&code=" + input.getText();
-        Log.e("failure Response URL", url);
+
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
@@ -418,7 +418,6 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                 mMessage = response.body().string();
                 final char dm = (char) 34;
 
-                Log.e("response", mMessage);
 
                 try {
                     obj = new JSONObject(mMessage);
@@ -466,11 +465,10 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
 
                         if (e instanceof FirebaseAuthInvalidCredentialsException) {
                             // Invalid request
-                            Log.d("asdsd", "Invalid credential: "
-                                    + e.getLocalizedMessage());
+
                         } else if (e instanceof FirebaseTooManyRequestsException) {
                             // SMS quota exceeded
-                            Log.d("asdsd", "SMS Quota exceeded.");
+
                         }
                     }
 

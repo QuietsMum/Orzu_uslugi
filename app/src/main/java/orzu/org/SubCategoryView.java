@@ -248,9 +248,6 @@ public class SubCategoryView extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onClick(View view) {
                 model.array = idArray;
-                for (int i = 0; i < model.array.length; i++) {
-                    Log.e("LOGMODEL", String.valueOf(model.array[i]));
-                }
                 finish();
             }
         });

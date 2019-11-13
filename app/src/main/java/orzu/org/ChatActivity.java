@@ -76,7 +76,7 @@ public class ChatActivity extends AppCompatActivity {
         editText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.wtf("asd", "sad");
+
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {

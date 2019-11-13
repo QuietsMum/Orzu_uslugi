@@ -335,7 +335,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String mMessage = response.body().string();
-                Log.e("resultArrayFull", mMessage);
+
 
                 if (mMessage.equals(Character.toString((char) dchar) + "No reviews yet" + Character.toString((char) dchar))) {
 
@@ -370,7 +370,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
                         int bpHappy = R.drawable.ic_happy2;
 
                         int lenght = jsonArray.length();
-                        Log.e("lenghtArray", String.valueOf(lenght));
+
                         String feedName = "";
                         if (lenght > 1) {
                             lenght = 2;

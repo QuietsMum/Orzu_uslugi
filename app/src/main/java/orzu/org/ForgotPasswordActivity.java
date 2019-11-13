@@ -120,7 +120,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (!extra.equals("")) {
-                    Log.e("smsmessage", extra);
+
                     String substr = extra.substring(extra.indexOf(" ") + 1);
                     input.setText(substr);
                     extra = "";
@@ -200,7 +200,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
         // api?appid=&opt=register_user&phone=&password=&name=
         String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=forget_password&phone="+mPhone+"&password="+pass.getText();
 
-        Log.e("failure Response URL", url);
+
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
@@ -262,7 +262,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
         // api?appid=&opt=register_user&phone=&password=&name=
         String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=check_phone&phone="
                 + mPhone;
-        Log.e("failure Response URL", url);
+
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
@@ -310,14 +310,14 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
             public void onResponse(Call call, Response response) throws IOException {
 
                 mMessage = response.body().string();
-                Log.e("response", mMessage);
+
                 if (mMessage.equals("\"phone exists\"")) {
                     ForgotPasswordActivity.this.runOnUiThread(new Runnable() {
                         public void run() {
                             progressBar.setVisibility(View.VISIBLE);
                         }
                     });
-                    Log.wtf("phone", mPhone);
+
 
 
                     sendCode();
@@ -357,7 +357,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
                                     btn.setVisibility(View.INVISIBLE);
                                     textView.setVisibility(View.VISIBLE);
                                     timer.start();
-                                    Log.wtf("sadaasd", "asdsadas");
+
 
                                 }
                             });
@@ -384,10 +384,10 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
 
     public void sendCode() {
 
-        Log.wtf("sendCode","asda");
+
 
         setUpVerificatonCallbacks();
-        Log.wtf("sendCode","asda");
+
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 mPhone,        // Phone number to verify
                 60,                 // Timeout duration
@@ -398,35 +398,33 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
     }
 
     private void setUpVerificatonCallbacks() {
-        Log.wtf("setUpVer","asda");
+
         verificationCallbacks =
                 new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
                     @Override
                     public void onVerificationCompleted(
                             PhoneAuthCredential credential) {
-                        Log.wtf("Complete","asda");
+
                         signInWithPhoneAuthCredential(credential);
                         Toast.makeText(ForgotPasswordActivity.this, "Success", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onVerificationFailed(FirebaseException e) {
-                        Log.wtf("Failed","asda");
+
                         if (e instanceof FirebaseAuthInvalidCredentialsException) {
                             // Invalid request
-                            Log.d("asdsd", "Invalid credential: "
-                                    + e.getLocalizedMessage());
                         } else if (e instanceof FirebaseTooManyRequestsException) {
                             // SMS quota exceeded
-                            Log.d("asdsd", "SMS Quota exceeded.");
+
                         }
                     }
 
                     @Override
                     public void onCodeSent(String verificationId,
                                            PhoneAuthProvider.ForceResendingToken token) {
-                        Log.wtf("sended","asda");
+
                         phoneVerificationId = verificationId;
                         resendToken = token;
 
@@ -435,13 +433,13 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-        Log.wtf("signIn","asda");
+
         fbAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Log.wtf("success","asda");
+
                             FirebaseUser user = task.getResult().getUser();
                             try {
                                 changePassoword();

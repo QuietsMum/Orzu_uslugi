@@ -174,7 +174,7 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
                 break;
 
             case (R.id.linearidccp):
-                Log.e("linear", String.valueOf(ccp.isShown()));
+
                 //performClick(ccp);
 
                 break;
@@ -233,7 +233,6 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
             public void onResponse(Call call, Response response) throws IOException {
                 mMessage = response.body().string();
                 final char dm = (char) 34;
-                Log.e("response", mMessage);
 
                 if (mMessage.equals(dm + "noAuth" + dm)) {
                     PhoneLoginActivity.this.runOnUiThread(new Runnable() {

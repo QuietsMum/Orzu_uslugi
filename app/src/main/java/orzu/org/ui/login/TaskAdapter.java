@@ -69,7 +69,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         holder.nat.setText(logos.get(position).get("Nat").toString());
         holder.happy.setText(logos.get(position).get("Hap").toString());
         holder.price.setText(logos.get(position).get("Цена").toString());
-        Log.e("selected", logos.get(position).get("Select").toString());
+
         if (logos.get(position).get("Select").toString().equals("1")) {
             holder.button2.setVisibility(View.VISIBLE);
         }
@@ -84,7 +84,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View view) {
-                Log.wtf("button2", "clicked");
+
                 Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + logos.get(position).get("Phone").toString()));
 
                 if (context2.checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
@@ -117,7 +117,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
                 "&req_id=" + id +
                 "&userid=" + Common.userId +
                 "&utoken=" + Common.utoken;
-        Log.wtf("request", url);
+
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
@@ -149,7 +149,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String mMessage = response.body().string();
-                Log.e("result ADD USER TASK", mMessage);
+
                 FeedbackTask.fa.finish();
                 Intent intent = new Intent(context2, FeedbackTask.class);
                 context2.startActivity(intent);

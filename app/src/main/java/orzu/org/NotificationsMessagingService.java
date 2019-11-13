@@ -47,7 +47,7 @@ public class NotificationsMessagingService extends FirebaseMessagingService {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("New_task", remoteMessage.getData() + "");
         editor.apply();
-        Log.wtf("sadad", remoteMessage.getData() + "");
+
 
         if(remoteMessage.getData().containsKey("ID")){
             showNotification(remoteMessage);
@@ -94,6 +94,5 @@ public class NotificationsMessagingService extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
-        Log.wtf("TokenFirebase", s);
     }
 }

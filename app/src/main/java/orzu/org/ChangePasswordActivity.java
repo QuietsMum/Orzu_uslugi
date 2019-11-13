@@ -115,7 +115,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         c.close();
         db.close();
 
-        Log.wtf("asdasd", Common.name_only + " " + idUser);
+
 
         String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
                 "&opt=user_param" +
@@ -125,7 +125,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
                 "&name=" + Common.name_only +
                 "&password=" + newPwd.getText().toString() +
                 "&old_password=" + oldPwd.getText().toString();
-        Log.e("userCreatedURL", url);
+
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
@@ -165,7 +165,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
             public void onResponse(Call call, Response response) throws IOException {
                 String mMessage = response.body().string();
                 final char dm = (char) 34;
-                Log.e("Password Edited", mMessage);
+
                 if (mMessage.equals(dm+"Old password Error"+dm)) {
                     ChangePasswordActivity.this.runOnUiThread(new Runnable() {
                         public void run() {

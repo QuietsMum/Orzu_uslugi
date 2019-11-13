@@ -106,8 +106,7 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
         int tokenColIndex = c.getColumnIndex("token");
         idUser = c.getString(idColIndex);
         tokenUser = c.getString(tokenColIndex);
-        Log.e("idUSERUSER", idUser);
-        Log.e("idTOKENTOKEN", tokenUser);
+
         floaBtn = view.findViewById(R.id.create_task_main);
         floaBtn.setOnClickListener(this);
         progressBar = view.findViewById(R.id.progressBarMy);
@@ -138,13 +137,13 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
             @Override
             public void onScrollChange(View view, int i, int i1, int i2, int i3) {
                 if (!noTasksYet) {
-                    Log.wtf("scroll of rv", "asdasd");
+
                     View view1 = (View) scroll_of_fragment4.getChildAt(scroll_of_fragment4.getChildCount() - 1);
 
                     int diff = (view1.getBottom() - (scroll_of_fragment4.getHeight() + scroll_of_fragment4
                             .getScrollY()));
 
-                    Log.wtf("Diff", diff + "");
+
                     progress_loading.setVisibility(View.VISIBLE);
                     if (diff == 0) {
                         swipeLayout.setEnabled(llm.findFirstCompletelyVisibleItemPosition() == 0 || adapter.getItemCount() == 0);
@@ -300,7 +299,6 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
             String result;
             try {
                 orzuEndpoint[0] = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=all&userid= " + idUser + "&page=" + count);
-                Log.e("counterMAIN", String.valueOf(count));
                 myConnection[0] =
                         (HttpsURLConnection) orzuEndpoint[0].openConnection();
                 if (myConnection[0].getResponseCode() == 200) {
@@ -308,8 +306,8 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
                     InputStream responseBody = myConnection[0].getInputStream();
                     Scanner s = new Scanner(responseBody).useDelimiter("\\A");
                     result = s.hasNext() ? s.next() : "";
-                    Log.e("RESULT", result);
-                    Log.wtf("result",result);
+
+
                     if (result.equals("\"Not tasks yet\"")) {
                         noTasksYet = true;
                         catTask.cancel(true);

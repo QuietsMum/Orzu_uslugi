@@ -177,7 +177,6 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String mMessage = response.body().string();
-                Log.e("resultArrayFull", mMessage);
                 if (!mMessage.equals("\"No reviews yet\"")) {
                     try {
                         Map<String, Object> m;
@@ -198,7 +197,7 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
 
                             String[] splited = jsonObject.getString("avatar").split(Character.toString((char) 94));
                             String str = Arrays.toString(splited);
-                            Log.wtf("count", str + "");
+
                             try {
                                 Bitmap bitmap = Picasso.get().load("https://orzu.org" + str.substring(1, str.length() - 1)).get();
                                 m.put(avatar, bitmap);

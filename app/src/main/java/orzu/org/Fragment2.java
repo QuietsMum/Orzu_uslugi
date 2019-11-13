@@ -119,7 +119,7 @@ public class Fragment2 extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
 
-                Log.e("type", String.valueOf(adapter.getItemViewType(position)));
+
 
                 if (adapter.getItemViewType(position) == 103) {
                     Intent intent = new Intent(getActivity(), ItemSubsNews.class);
@@ -180,7 +180,7 @@ public class Fragment2 extends Fragment {
                     no_task.setVisibility(View.INVISIBLE);
                     no_task_text.setVisibility(View.INVISIBLE);
                 } catch (Exception e) {
-                    Log.wtf("sadas", "asdasddasdas");
+
                     no_task.setVisibility(View.VISIBLE);
                     no_task_text.setVisibility(View.VISIBLE);
                     rv.setVisibility(View.GONE);

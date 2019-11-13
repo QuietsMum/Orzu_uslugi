@@ -116,7 +116,7 @@ public class CreateTaskName extends AppCompatActivity implements View.OnClickLis
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editName.getText().length() != 0) {
-                    Log.e("result", "enter");
+
                     requestSuggest();
                 }
             }
@@ -151,7 +151,7 @@ public class CreateTaskName extends AppCompatActivity implements View.OnClickLis
 
         String url = "https://orzu.org/tasks/taskajaxupload?find=" + editName.getText();
         OkHttpClient client = new OkHttpClient();
-        Log.e("result", "enterFunction");
+
         Request request = new Request.Builder()
                 .url(url)
                 .build();

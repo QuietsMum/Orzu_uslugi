@@ -116,7 +116,7 @@ public class ViewpagerStart extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
-        Log.e("curentpage", String.valueOf(currentPage));
+
         if(currentPage == 0){
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryGreen));
         } else if (currentPage == 1){

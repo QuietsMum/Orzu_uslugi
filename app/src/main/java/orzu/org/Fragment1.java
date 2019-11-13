@@ -150,6 +150,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstantState) {
         final View view = inflater.inflate(R.layout.fragment_main, container, false);
         prefs = getActivity().getSharedPreferences(" ", Context.MODE_PRIVATE);
+        Common.city = prefs.getString("UserCityPref","");
         if(prefs.getString("UserCityPref","").equals("")){
             Intent intent = new Intent(getActivity(),RegistCity.class);
             startActivity(intent);
@@ -160,8 +161,8 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             getCategories();
             getSubCategories("1");
         } else {
+            Common.city1 ="";
             Common.URL = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&requests=no&page=";
-            Common.allCity = false;
             getCategories();
             getSubCategories("1");
         }
@@ -175,7 +176,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             }
         }
 
-        Log.wtf("asdasd", filter);
+
 
         imagenotask = view.findViewById(R.id.imageNoTask);
         textnotask = view.findViewById(R.id.textViewNoTask);
@@ -242,7 +243,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     progress_loading.setVisibility(View.VISIBLE);
                     int diff = (view1.getBottom() - (scroll_of_fragment1.getHeight() + scroll_of_fragment1
                             .getScrollY()));
-                    Log.wtf("asdasda", filter.length() + " " + cityChoose + " " + imageClicked);
+
                     if (diff == 0) {
                         swipeLayout.setEnabled(llm.findFirstCompletelyVisibleItemPosition() == 0 || adapter.getItemCount() == 0);
                         if (filter.length() > 8) {
@@ -475,7 +476,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             final char dm = (char) 34;
             try {
                 orzuEndpoint = new URL(Common.URL + "" + count);
-                Log.wtf("sadasdsa", orzuEndpoint + "");
+
                 myConnectiontrack =
                         (HttpsURLConnection) orzuEndpoint.openConnection();
                 if (myConnectiontrack.getResponseCode() == 200) {
@@ -498,10 +499,10 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
                 myConnection.setInstanceFollowRedirects(true);
                 data = new ArrayList<>();
-                Log.wtf("adsda", result);
+
                 if (result.equals("\"Not tasks yet\"")) {
                     track = false;
-                    Log.wtf("adsda", result);
+
                     if (count != 1) {
                         catTask.cancel(true);
                     }
@@ -591,7 +592,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 }
             });
             noTasks = false;
-            Log.wtf("sddsad", adapter.getItemCount() + "");
+
             if (adapter.getItemCount() == 0) {
                 noTasks = true;
                 imagenotask.setVisibility(View.VISIBLE);
@@ -609,6 +610,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         Long[] idArray = new Long[1];
         idArray[0] = 0L;
         model.array = idArray;
+        Common.allCity = false;
         Common.subFilter = new HashMap<>();
         filter = "";
         Common.city1 = "";
@@ -1418,21 +1420,19 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     }
                     shim.setVisibility(View.INVISIBLE);
                     nestshimmer.setVisibility(View.INVISIBLE);
-                    Log.wtf("asdasd", filter);
                     if (filter.length() > 8) {
-                        Log.wtf("subfilter", "subfilter");
                         truedata.clear();
                         count = 1;
                         getFilteredSubsFiltered = new AsyncOrzuTasksGetSubsFiltered();
                         getFilteredSubsFiltered.execute();
                     } else if (Common.city1.length() > 0) {
-                        Log.wtf("city", "city");
+                        Log.wtf("asdasd","asdasd");
                         cityChoose = true;
                         count = 1;
                         getFilteredCity = new AsyncOrzuTasksGetCity();
                         getFilteredCity.execute();
                     } else {
-                        Log.wtf("main", "main");
+
                         cityChoose = false;
                         count = 1;
                         catTask = new AsyncOrzuTasksMain();

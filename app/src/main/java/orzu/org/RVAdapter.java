@@ -75,7 +75,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MyViewHolder> {
         if (category.length() != 0) {
             for (int i = 0; i < maps.size(); i++) {
                 if (maps.get(i).get("Категория задачи").toString().equals(category)) {
-                    Log.e("ФильтрыФтльтры", maps.get(i).get("Категория задачи").toString() + "  " + category);
+
                     filtered.add(maps.get(i));
                 }
             }

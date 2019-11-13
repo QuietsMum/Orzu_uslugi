@@ -39,7 +39,7 @@ public class NotificationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.e(TAG, "onStartCommand");
+
         super.onStartCommand(intent, flags, startId);
 
         startTimer();
@@ -48,16 +48,10 @@ public class NotificationService extends Service {
     }
 
 
-    @Override
-    public void onCreate() {
-        Log.e(TAG, "onCreate");
-
-
-    }
 
     @Override
     public void onDestroy() {
-        Log.e(TAG, "onDestroy");
+
         stoptimertask();
         super.onDestroy();
 

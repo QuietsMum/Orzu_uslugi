@@ -62,8 +62,7 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
         db.close();
         final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
         nameUser = prefs.getString(Util.TASK_USERNAME, "");
-        Log.e("Username", nameUser);
-        Log.e("Userid", idUser);
+
 
         suggest_back = findViewById(R.id.suggest_back);
         suggest_back.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +72,7 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
             }
         });
         idTask = getIntent().getExtras().getString("idTaskSuggest");
-        Log.e("Taskid", idTask);
+
 
         backButton = findViewById(R.id.button_back_sugg);
         backButton.setOnClickListener(this);

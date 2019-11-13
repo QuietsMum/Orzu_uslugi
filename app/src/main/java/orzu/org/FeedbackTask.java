@@ -151,7 +151,7 @@ public class FeedbackTask extends AppCompatActivity implements MainItemSelect {
                 Map<String, Object> m2 = data.get(position);
                 Intent intent = new Intent(getApplication(), UserView.class);
                 intent.putExtra("idhis", String.valueOf(m2.get(cat)));
-                Log.wtf("Click","cliked");
+
                 startActivity(intent);
             }
         });
@@ -189,7 +189,7 @@ public class FeedbackTask extends AppCompatActivity implements MainItemSelect {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String mMessage = response.body().string();
-                Log.e("resultArrayFull", mMessage);
+
 
                 if (mMessage.equals("\"No request yet\"")){
                     runOnUiThread(new Runnable() {

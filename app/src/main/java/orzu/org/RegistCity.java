@@ -63,7 +63,6 @@ public class RegistCity extends AppCompatActivity {
     public void requestCity() {
         String url = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=getOther&get=cities";
         OkHttpClient client = new OkHttpClient();
-        Log.e("result", "enterFunction");
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -97,7 +96,6 @@ public class RegistCity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String mMessage = response.body().string();
-                Log.e("resultArrayFull", mMessage);
                 int i;
                 try {
                     JSONArray jsonArray = new JSONArray(mMessage);
@@ -139,7 +137,6 @@ public class RegistCity extends AppCompatActivity {
         c.close();
         db.close();
 
-        Log.wtf("asdasd", name + " " + idUser);
 
         String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
                 "&opt=user_param" +
@@ -148,7 +145,7 @@ public class RegistCity extends AppCompatActivity {
                 "&utoken=" + tokenUser +
                 "&name=" + name +
                 "&city=" + spin.getSelectedItem().toString();
-        Log.e("userCreatedURL", url);
+
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
@@ -191,7 +188,7 @@ public class RegistCity extends AppCompatActivity {
                 editor.putString("UserCityPref", spin.getSelectedItem().toString());
                 editor.apply();
                 String mMessage = response.body().string();
-                Log.e("userCreated", mMessage);
+
                 Intent intent = new Intent(RegistCity.this,Main2Activity.class);
                 startActivity(intent);
                 finish();

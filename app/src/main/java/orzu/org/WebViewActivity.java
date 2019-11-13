@@ -48,7 +48,7 @@ public class WebViewActivity extends AppCompatActivity {
         if (intent != null)
         {
             id = "" + intent.getStringExtra("id");
-            Log.e("newwnewnewnewnwenwe", id);
+
         }
         toolbar.setTitle("Задание №" + id);
         url = url + id + "?token=" + c.getString(tokenColIndex);

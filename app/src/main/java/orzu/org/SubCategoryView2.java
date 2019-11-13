@@ -118,7 +118,7 @@ public class SubCategoryView2 extends AppCompatActivity {
 
         String url = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=getOther&get=cities";
         OkHttpClient client = new OkHttpClient();
-        Log.e("result", "enterFunction");
+
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -153,7 +153,7 @@ public class SubCategoryView2 extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String mMessage = response.body().string();
-                Log.e("resultArrayFull", mMessage);
+
                 int i;
                 try {
                     JSONArray jsonArray = new JSONArray(mMessage);
@@ -180,7 +180,7 @@ public class SubCategoryView2 extends AppCompatActivity {
                         public void onItemClick(View view, int position) {
                             Intent returnIntent = new Intent();
                             returnIntent.putExtra("result", suggestResult.get(position));
-                            Log.e("resultCity", suggestResult.get(position));
+                            Common.allCity = false;
                             setResult(Activity.RESULT_OK, returnIntent);
                             finish();
                         }

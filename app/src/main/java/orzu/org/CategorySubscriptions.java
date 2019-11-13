@@ -209,7 +209,7 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String mMessage = response.body().string();
-                Log.e("resultArrayFull", mMessage);
+
                 try {
                     JSONArray jsonArray = new JSONArray(mMessage);
                     int lenght = jsonArray.length();
@@ -299,7 +299,7 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
                     if (por != groupId.size()) {
 
                         requestSubCategoryList();
-                        Log.wtf("kakdela", "");
+
 
                     } else {
                         shim.setVisibility(View.INVISIBLE);
@@ -382,7 +382,6 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
                         try {
                             Object value = jsonObject.get(key);
                             subsServer.add(key);
-                            Log.e("ininininin123123", subsServer.get(i));
                         } catch (JSONException e) {
                         }
                         i++;
@@ -410,14 +409,14 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
         for (Map.Entry<String, String> entry : model.mapa.entrySet()) {
             modelString = modelString + "&cat[]=" + entry.getKey();
         }
-        Log.e("ADDADDADDADDADD", modelString);
+
         final char dm = (char) 34;
 
         String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param" +
                 "&userid=" + idUser +
                 "&utoken=" + tokenUser +
                 "&act=subscribe" + modelString;
-        Log.e("stringModelFull", url);
+
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
@@ -453,7 +452,6 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String mMessage = response.body().string();
-                Log.e("result", mMessage);
                 if (mMessage.equals(dm + "Success" + dm)) {
                     pb.setVisibility(View.INVISIBLE);
                     finish();

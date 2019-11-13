@@ -6,7 +6,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -251,7 +253,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
 
         String url = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=getOther&get=cities";
         OkHttpClient client = new OkHttpClient();
-        Log.e("result", "enterFunction");
+
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -286,7 +288,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String mMessage = response.body().string();
-                Log.e("resultArrayFull", mMessage);
+
                 int i;
                 try {
                     JSONArray jsonArray = new JSONArray(mMessage);
@@ -341,7 +343,6 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                 "&bday=" + day +
                 "&bmonth=" + monthNumber +
                 "&byear=" + year;
-        Log.e("userCreatedURL", url);
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
@@ -382,13 +383,17 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
             public void onResponse(Call call, Response response) throws IOException {
 
                 String mMessage = response.body().string();
-                Log.e("userCreated", mMessage);
+
                 if (returnValue.isEmpty()) {
                     UserEditProfile.this.runOnUiThread(new Runnable() {
                         public void run() {
                             Toast.makeText(UserEditProfile.this, mMessage, Toast.LENGTH_SHORT).show();
                         }
                     });
+                    SharedPreferences pref = UserEditProfile.this.getSharedPreferences("", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putString("UserCityPref",userCity.getSelectedItem().toString());
+                    editor.apply();
                     bar.setVisibility(View.INVISIBLE);
                     Common.d = mAvatar.getDrawable();
                     Common.name = userName.getText() + " " + userFname.getText();
@@ -411,7 +416,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
     public void getEditAvatarResponse() throws IOException {
 
         String url = "https://orzu.org/api/avatar";
-        Log.e("userCreatedURL", url);
+
         OkHttpClient client = new OkHttpClient();
 
         File myFile = new File(Uri.parse(returnValue.get(0)).getPath());
@@ -464,7 +469,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
             public void onResponse(Call call, Response response) throws IOException {
 
                 String mMessage = response.body().string();
-                Log.e("userCreatedAvatar", mMessage);
+
                 UserEditProfile.this.runOnUiThread(new Runnable() {
                     public void run() {
                         Toast.makeText(UserEditProfile.this, "Ваш профиль изменен", Toast.LENGTH_SHORT).show();
@@ -623,7 +628,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
 
             //Use your Base64 String as you wish
             encodedString = Base64.encodeToString(byteArray, Base64.DEFAULT);
-            Log.wtf("stringPath", returnValue.toString());
+
         }
 
     }

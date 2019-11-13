@@ -289,7 +289,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         if (opt.equals("view")) {
             task = new AsyncOrzuTask();
             task.execute();
-            Log.wtf("asd", "sad");
+
         } else {
             // DATE TYPE
             // 1 - в любое время 
@@ -342,7 +342,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                 date = "Дата по договоренности";
             }
 
-            Log.e("VALUEs", name + " " + catid + " " + address + " " + cdate + " " + edate + " " + amout + " " + narrative + " " + nameUser);
+
             String outputPattern = "EEE, d MMMM yyyy HH:mm:ss";
             Locale myLocale = new Locale("ru", "RU");
             SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern, myLocale);
@@ -450,7 +450,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                     jsonReader[0].beginArray(); // Start processing the JSON object
 
                     while (jsonReader[0].hasNext()) { // Loop through all keys
-                        Log.wtf("asdasd", jsonReader[0].toString());
+
                         m = readMessage(jsonReader[0]);
 
                         m_new.put(idList, m.get(idList));
@@ -896,7 +896,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                 urlPrice +
                 "&utoken=" + tokenUser;
         OkHttpClient client = new OkHttpClient();
-        Log.e("create url", url);
+
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -958,7 +958,6 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
 
                 }
                 progressBar.setVisibility(View.INVISIBLE);
-                Log.e("created response", mMessage[0] + mMessage[1]);
 
             }
         });
@@ -987,7 +986,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             return true;
         }
 
-        Log.wtf("asdasd",id+" "+Common.values.get(count));
+
         String url = "https://projectapi.pw/api/avatar";
         OkHttpClient client = new OkHttpClient();
 

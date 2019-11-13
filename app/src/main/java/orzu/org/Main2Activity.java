@@ -91,7 +91,7 @@ public class Main2Activity extends AppCompatActivity
         for (int i = 0; i < subsServer.size(); i++){
             PushNotifications.addDeviceInterest("cat_" + subsServer.get(i));
         }
-        Log.e("QWERTY", String.valueOf(PushNotifications.getDeviceInterests()));
+
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("idUser", "1231234");
@@ -112,7 +112,7 @@ public class Main2Activity extends AppCompatActivity
         int idColIndex = c.getColumnIndex("id");
         int tokenColIndex = c.getColumnIndex("token");
         idUser = c.getString(idColIndex);
-        Log.e("userCreatedURL",  c.getString(tokenColIndex)+" "+idUser);
+
         c.close();
         db.close();
         String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_user&user_cat=" + idUser;
@@ -165,7 +165,7 @@ public class Main2Activity extends AppCompatActivity
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Log.e("QWERTY", String.valueOf(subsServer));
+
                 setupBeams();
             }
         });
@@ -577,7 +577,7 @@ public class Main2Activity extends AppCompatActivity
                 bitmap = BitmapFactory.decodeStream(inputStream);       // Decode Bitmap
                 inputStream.close();
             } catch (Exception e) {
-                Log.d(TAG, "Exception 1, Something went wrong!");
+
                 e.printStackTrace();
             }
             return bitmap;
@@ -597,7 +597,7 @@ public class Main2Activity extends AppCompatActivity
 
     public void saveImage(Context context, Bitmap b, String imageName) {
         FileOutputStream foStream;
-        Log.d("saveImage", "Exception 2,went!");
+
         try {
             foStream = context.openFileOutput(imageName, Context.MODE_PRIVATE);
             b.compress(Bitmap.CompressFormat.PNG, 100, foStream);
@@ -612,11 +612,11 @@ public class Main2Activity extends AppCompatActivity
                 nav_user.setImageBitmap(myBitmap);
                 Common.bitmap = myBitmap;
                 Common.d = nav_user.getDrawable();
-                Log.d("saveImage", "Exception 2,went!");
+
 
             }
         } catch (Exception e) {
-            Log.d("saveImage", "Exception 2, Something went wrong!");
+
             e.printStackTrace();
         }
     }
