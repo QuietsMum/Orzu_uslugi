@@ -80,6 +80,7 @@ public class Main2Activity extends AppCompatActivity
     RelativeLayout userviewBtn;
     TextView nav_user_name;
     String modelString;
+    String city = "";
     Toolbar toolbar;
     ActionBarDrawerToggle toggle;
     private void setupBeams() {
@@ -480,14 +481,26 @@ public class Main2Activity extends AppCompatActivity
                     mName = jsonObject.getString("name");
                     mFiName = jsonObject.getString("fname");
                     image = jsonObject.getString("avatar");
+                    city = jsonObject.getString("city");
                     if (mFiName.equals("null")) {
                         text = mName;
                     } else text = mName + "\n" + mFiName;
 
 
+
+
+
                     final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putString(Util.TASK_USERNAME, mName);
+                    if(!city.isEmpty()){
+                        editor.putString("UserCityPref", city);
+                        editor.apply();
+                    }else{
+                        Intent intent = new Intent(Main2Activity.this,RegistCity.class);
+                        startActivity(intent);
+                        finish();
+                    }
                     editor.apply();
                     View hView = navigationView.getHeaderView(0);
                     nav_user_name = (TextView) hView.findViewById(R.id.textViewName);

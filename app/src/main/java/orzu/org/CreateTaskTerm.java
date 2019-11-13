@@ -88,6 +88,7 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
         switch3.setOnClickListener(this);
         spiner = findViewById(R.id.spinner_term);
         spiner.setVisibility(View.INVISIBLE);
+
         text_examle1 = findViewById(R.id.createTerm_textisp);
         text_date1 = findViewById(R.id.term_text_from_date);
         text_date1_2 = findViewById(R.id.term_text_to_date);

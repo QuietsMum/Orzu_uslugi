@@ -30,6 +30,5 @@ public class Common {
     public static HashMap<Integer,String> values = new HashMap<>();
     public static HashMap<String, Map<Integer,Integer>> subFilter = new HashMap<>();
     public static String city1 = "";
-    public static String city_for_main_fragment = "";
 
 }

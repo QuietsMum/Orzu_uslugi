@@ -3,7 +3,9 @@ package orzu.org;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -184,7 +186,10 @@ public class RegistCity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-
+                final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("UserCityPref", spin.getSelectedItem().toString());
+                editor.apply();
                 String mMessage = response.body().string();
                 Log.e("userCreated", mMessage);
                 Intent intent = new Intent(RegistCity.this,Main2Activity.class);
