@@ -28,6 +28,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/task_view_main_delete"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:visibility="gone"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/ic_delete"
+        app:layout_constraintTop_toTopOf="@id/task_view_main_back"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/task_view_main_back"/>
 
 
     <LinearLayout
@@ -145,14 +155,13 @@
                             android:id="@+id/img_of_task"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:visibility="gone"
+                            android:orientation="vertical"
 
-                            android:orientation="vertical">
+                            android:visibility="gone">
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="150dp"
-                                >
+                                android:layout_height="150dp">
 
                                 <androidx.viewpager.widget.ViewPager
                                     android:id="@+id/view_pager3"
@@ -169,9 +178,9 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="10dp"
                                     android:layout_marginRight="10dp"
+                                    app:layout_constraintBottom_toBottomOf="@+id/view_pager3"
                                     app:layout_constraintLeft_toLeftOf="parent"
-                                    app:layout_constraintRight_toRightOf="parent"
-                                    app:layout_constraintBottom_toBottomOf="@+id/view_pager3"/>
+                                    app:layout_constraintRight_toRightOf="parent" />
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
                         </LinearLayout>

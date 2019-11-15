@@ -2,6 +2,7 @@ package orzu.org;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
@@ -9,8 +10,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -166,6 +169,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
     String date = "";
 
     ImageView imageViewName;
+    ImageView delete;
 
     int datetype;
     int placetype;
@@ -183,6 +187,17 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dbHelper = new DBHelper(this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor c = db.query("orzutable", null, null, null, null, null, null);
+        c.moveToFirst();
+        int idColIndex = c.getColumnIndex("id");
+        int tokenColIndex = c.getColumnIndex("token");
+        idUser = c.getString(idColIndex);
+        tokenUser = c.getString(tokenColIndex);
+        c.moveToFirst();
+        c.close();
+        db.close();
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         getSupportActionBar().hide();
         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
@@ -205,11 +220,32 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             editor.apply();
         }
 
-        getSupportActionBar().setTitle("Задание №" + id);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setElevation(0);
-
+        delete = findViewById(R.id.task_view_main_delete);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog alertDialog = new AlertDialog.Builder(TaskViewMain.this).create();
+                alertDialog.setTitle("Удаление");
+                alertDialog.setMessage("Вы уверенны что хотите удалить задание?");
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "ДА",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                deleteTask(id);
+                                Intent returnIntent = new Intent(TaskViewMain.this,Main2Activity.class);
+                                startActivity(returnIntent);
+                                finish();
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "НЕТ",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+            }
+        });
         img_of_task = findViewById(R.id.img_of_task);
         shim = (ShimmerFrameLayout) findViewById(R.id.parentShimmerLayoutViewTask);
         shim.startShimmer();
@@ -269,6 +305,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
 
             buttonGettask.setText("Посмотреть отклики");
             buttonGettaskShim.setText("Посмотреть отклики");
+            delete.setVisibility(View.VISIBLE);
             TranslateAnimation animationn = new TranslateAnimation(0.0f, 0.0f,
                     1500.0f, 0.0f);
             animationn.setDuration(500);
@@ -360,7 +397,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             }
         }
 
-        if(!Common.values.isEmpty()){
+        if (!Common.values.isEmpty()) {
             img_of_task.setVisibility(View.VISIBLE);
             img_of_task.setBackgroundResource(R.drawable.shape_viewpager_corners);
             myPager = new pager_adapter(TaskViewMain.this, Common.values);
@@ -591,6 +628,13 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                 case "user_id":
                     if (reader.peek() != JsonToken.NULL) {
                         userid = reader.nextLong();
+                        if(idUser.equals(userid+"")){
+                            TaskViewMain.this.runOnUiThread(new Runnable() {
+                                public void run() {
+                                    delete.setVisibility(View.VISIBLE);
+                                }
+                            });
+                        }
                         m.put(useridList, userid);
                     } else reader.skipValue();
                     break;
@@ -831,17 +875,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
 
     public void getCreateResponse() throws IOException {
         // api?appid=&opt=view_user&=user=id
-        dbHelper = new DBHelper(this);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor c = db.query("orzutable", null, null, null, null, null, null);
-        c.moveToFirst();
-        int idColIndex = c.getColumnIndex("id");
-        int tokenColIndex = c.getColumnIndex("token");
-        idUser = c.getString(idColIndex);
-        tokenUser = c.getString(tokenColIndex);
-        c.moveToFirst();
-        c.close();
-        db.close();
+
         progressBar.setVisibility(View.VISIBLE);
         // DATE TYPE
         // 1. Точная дата 
@@ -936,13 +970,12 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             public void onResponse(Call call, Response response) throws IOException {
 
 
-
                 String[] mMessage = response.body().string().split(":");
                 final char dm = (char) 34;
-                if (mMessage[0].equals(dm+"Task created")) {
+                if (mMessage[0].equals(dm + "Task created")) {
                     if (!Common.values.isEmpty()) {
-                        getEditAvatarResponse(mMessage[1].substring(0,mMessage[1].length()-1));
-                    }else {
+                        getEditAvatarResponse(mMessage[1].substring(0, mMessage[1].length() - 1));
+                    } else {
                         Intent intent = new Intent(TaskViewMain.this, Congratz.class);
                         Common.values.clear();
                         startActivity(intent);
@@ -965,7 +998,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
 
     public boolean getEditAvatarResponse(String id) throws IOException {
 
-        if(count>=Common.values.size()){
+        if (count >= Common.values.size()) {
             TaskViewMain.this.runOnUiThread(new Runnable() {
                 public void run() {
                     Toast.makeText(TaskViewMain.this, "Фото добавленно", Toast.LENGTH_SHORT).show();
@@ -1047,4 +1080,40 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         });
         return true;
     }
+
+    private void deleteTask(String id) {
+        String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=all&userid="+idUser+"&delete=" + id;
+        Log.wtf("asdads",requestUrl);
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.wtf("asdads",response);
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace(); //log the error resulting from the request for diagnosis/debugging
+                Dialog dialog = new Dialog(TaskViewMain.this, android.R.style.Theme_Material_Light_NoActionBar);
+                dialog.setContentView(R.layout.dialog_no_internet);
+                Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        deleteTask(id);
+                        dialog.dismiss();
+                    }
+                });
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.show();
+                    }
+                }, 500);
+            }
+        });
+//make the request to your server as indicated in your request url
+        Volley.newRequestQueue(this).add(stringRequest);
+    }
+
 }

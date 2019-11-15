@@ -405,6 +405,7 @@ public class Main2Activity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        Log.wtf("Asdsad","asdasd");
         if (resultCode == Activity.RESULT_OK && requestCode == 100) {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag("fragment3");
             fragment.onActivityResult(requestCode, resultCode, data);
@@ -412,6 +413,14 @@ public class Main2Activity extends AppCompatActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container, new Fragment1()).commit();
         }
+    }
+    @Override
+    public void onRestart()
+    {
+        Log.wtf("asdsadas","asdsad");
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
     }
 
     public void getUserResponse() throws IOException {
