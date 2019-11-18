@@ -289,7 +289,6 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onFailure(Call call, IOException e) {
                 mMessage = e.getMessage().toString();
-                Log.w("failure Response", mMessage);
                 if (mMessage.equals("noAuth")) {
                     Toast.makeText(getApplicationContext(), "No registered user!", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getApplicationContext(), LoginActivity2.class);
@@ -375,7 +374,6 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onFailure(Call call, IOException e) {
                 mMessage = e.getMessage().toString();
-                Log.w("failure Response", mMessage);
                 if (mMessage.equals("noAuth")) {
                     Toast.makeText(getApplicationContext(), "No registered user!", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getApplicationContext(), LoginActivity2.class);

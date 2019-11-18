@@ -35,7 +35,6 @@ public class MessageReceiver extends BroadcastReceiver {
                     String message = currentMessage.getDisplayMessageBody();
                     String[] asd = message.split(" ");
                     extra = asd[0];
-                    Log.i("SmsReceiver", "senderNum: "+ senderNum + "; message: " + asd[0]);
                     // Show Alert
                     int duration = Toast.LENGTH_LONG;
                     Toast toast = Toast.makeText(context,
