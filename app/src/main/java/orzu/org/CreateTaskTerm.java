@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -149,7 +148,6 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
         TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f,
                 1500.0f, 0.0f);
         animation.setDuration(500);
-        //animation.setFillAfter(true);
         cardView.startAnimation(animation);
         tri_center.startAnimation(animation);
         switch1.startAnimation(animation);
@@ -165,16 +163,6 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
             }
         }, animation.getDuration());
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     @Override
     public void onClick(View view) {
 

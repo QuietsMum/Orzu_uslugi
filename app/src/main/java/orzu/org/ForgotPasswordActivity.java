@@ -1,42 +1,29 @@
 package orzu.org;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.provider.Telephony;
-import android.telephony.SmsMessage;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,13 +42,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.rilixtech.Country;
 import com.rilixtech.CountryCodePicker;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
-
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -69,7 +50,6 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import orzu.org.ui.login.LoginActivity;
 
 import static orzu.org.MessageReceiver.extra;
 
@@ -94,14 +74,12 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
 
     private FirebaseAuth fbAuth;
     private String phoneVerificationId;
-    Boolean ok;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_forgot_password);
-        //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorBackLight)));
         fbAuth = FirebaseAuth.getInstance();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECEIVE_SMS)) {
@@ -136,28 +114,15 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
         phonCount = (EditText) findViewById(R.id.editTextPhoneCountry_forgot);
         button =  findViewById(R.id.button_phone_login_forgot);
 
-        float dip = 16f;
-        Resources r = Resources.getSystem();
-        float px = TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                dip,
-                r.getDisplayMetrics()
-        );
-
         ccp = (CountryCodePicker) findViewById(R.id.ccp_reg_forgot);
-        //ccp.registerPhoneNumberTextView(phone);
         ccp.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
             @Override
             public void onCountrySelected(Country selectedCountry) {
                 code = ccp.getSelectedCountryCodeWithPlus();
-                //phon.setCompoundDrawablesWithIntrinsicBounds(new TextDrawable(getApplicationContext(), code), null, null, null);
-                //phon.setCompoundDrawablePadding((int) (code.length()*px));
                 phonCount.setText(code);
             }
         });
         code = ccp.getSelectedCountryCodeWithPlus();
-        //phon.setCompoundDrawablesWithIntrinsicBounds(new TextDrawable(getApplicationContext(), code), null, null, null);
-        //phon.setCompoundDrawablePadding((int) (code.length()*px));
         phonCount.setText(code);
         button.setOnClickListener(this);
     }
@@ -382,9 +347,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
     }
 
     public void sendCode() {
-
-
-
         setUpVerificatonCallbacks();
 
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
@@ -397,7 +359,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
     }
 
     private void setUpVerificatonCallbacks() {
-
         verificationCallbacks =
                 new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
@@ -458,8 +419,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
     @Override
     protected void onResume() {
         super.onResume();
-
-//        register broadcast receiver
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.provider.Telephony.SMS_RECEIVED");
         registerReceiver(otp, filter);
@@ -472,7 +431,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
     }
 
     public void verifyCode() {
-
         String code = input.getText().toString();
 
         PhoneAuthCredential credential =

@@ -21,14 +21,6 @@ public class ItemSubsNews extends AppCompatActivity implements View.OnClickListe
         btn.setOnClickListener(this);
     }
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-    @Override
     public void onClick(View v) {
         finish();
     }

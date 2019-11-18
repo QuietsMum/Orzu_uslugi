@@ -170,14 +170,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         animation_of_shim.setDuration(300);
         card_of_shimmer.startAnimation(animation_of_shim);
     }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {

@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.JsonReader;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.TranslateAnimation;
@@ -61,13 +60,9 @@ public class CreateTaskCategory extends AppCompatActivity {
         TranslateAnimation animation_of_shim = new TranslateAnimation(0.0f, 0.0f,
                 1500.0f, 0.0f);
         animation_of_shim.setDuration(300);
-        //animation.setFillAfter(true);
         progressBar.startAnimation(animation_of_shim);
-        String cat = "Категории";
         ListView lvCat = (ListView)findViewById(R.id.list_cat_create);
         data = new ArrayList<>();
-
-        final String categoryList = "Категория задачи";
         String taskList = "Категория";
         String idList = "ID";
         final HttpsURLConnection[] myConnection = new HttpsURLConnection[1];
@@ -194,14 +189,4 @@ public class CreateTaskCategory extends AppCompatActivity {
         reader.endObject();
         return m;
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
 }

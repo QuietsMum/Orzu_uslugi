@@ -77,7 +77,6 @@ public class CategoryView extends AppCompatActivity {
         animation.setDuration(500);
         card_of_category_view.startAnimation(animation);
 
-        String cat = "Категории";
         ListView lvCat = (ListView) findViewById(R.id.list_cat);
         data = new ArrayList<>();
 
@@ -90,7 +89,6 @@ public class CategoryView extends AppCompatActivity {
                 button_categ.startAnimation(animZoomIn);
             }
         }, animation.getDuration());
-        final String categoryList = "Категория задачи";
         String taskList = "Категория";
         String idList = "ID";
         final HttpsURLConnection[] myConnection = new HttpsURLConnection[1];
@@ -216,15 +214,6 @@ public class CategoryView extends AppCompatActivity {
         }
         reader.endObject();
         return m;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 }

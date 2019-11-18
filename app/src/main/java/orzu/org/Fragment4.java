@@ -265,7 +265,7 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
         protected ArrayList<Map<String, Object>> doInBackground(String... strings) {
             orzuEndpoint[0] = null;
             JsonReader[] jsonReader = new JsonReader[1];
-            String result;
+            String result = "";
             try {
                 orzuEndpoint[0] = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=all&userid= " + idUser + "&page=" + count);
                 myConnection[0] =
@@ -275,17 +275,20 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
                     InputStream responseBody = myConnection[0].getInputStream();
                     Scanner s = new Scanner(responseBody).useDelimiter("\\A");
                     result = s.hasNext() ? s.next() : "";
-                    if (result.equals("\"Not tasks yet\"")) {
-                        noTasksYet = true;
+
+                }
+                if (result.equals("\"Not tasks yet\"")) {
+                    noTasksYet = true;
+                    Fragment4.this.getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            progress_loading.setVisibility(View.GONE);
+                        }
+                    });
+                    if(count!=1){
                         catTask.cancel(true);
-                        Fragment4.this.getActivity().runOnUiThread(new Runnable() {
-                            public void run() {
-                                progress_loading.setVisibility(View.GONE);
-                            }
-                        });
-                    } else {
-                        noTasksYet = false;
                     }
+                } else {
+                    noTasksYet = false;
                 }
                 myConnection[0] =
                         (HttpsURLConnection) orzuEndpoint[0].openConnection();

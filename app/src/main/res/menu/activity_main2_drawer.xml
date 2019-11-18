@@ -22,7 +22,10 @@
             android:id="@+id/fourth"
             android:icon="@drawable/notif_selector"
             android:title="@string/notification" />
-
+        <item
+            android:id="@+id/menu_none"
+            android:title=""
+            android:visible="false"/>
     </group>
 
 

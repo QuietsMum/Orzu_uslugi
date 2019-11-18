@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class AdapterCityFilter extends RecyclerView.Adapter<AdapterCityFilter.MyViewHolder>{
-
     List<String> maps;
     Context context;
     private ItemClickListener mClickListener;
@@ -19,28 +18,22 @@ public class AdapterCityFilter extends RecyclerView.Adapter<AdapterCityFilter.My
         this.context = context;
         this.maps = maps;
     }
-
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.city_item, parent,false);
         return new MyViewHolder(v);
     }
-
-
-
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
             holder.header.setText(maps.get(position));
 
     }
-
     @Override
     public int getItemCount() {
         return maps.size();
     }
-
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView header;
 
@@ -58,8 +51,6 @@ public class AdapterCityFilter extends RecyclerView.Adapter<AdapterCityFilter.My
     public void setClickListener(ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
-
-    // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onItemClick(View view, int position);
     }

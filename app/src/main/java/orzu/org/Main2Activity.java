@@ -13,30 +13,37 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.annotation.RequiresApi;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+
 import android.os.Handler;
 import android.view.MenuItem;
+
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.firebase.messaging.RemoteMessage;
 import com.pusher.pushnotifications.PushNotificationReceivedListener;
 import com.pusher.pushnotifications.PushNotifications;
+
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -46,6 +53,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+
 import io.intercom.android.sdk.Intercom;
 import io.intercom.android.sdk.UserAttributes;
 import io.intercom.android.sdk.identity.Registration;
@@ -75,12 +83,14 @@ public class Main2Activity extends AppCompatActivity
     String city = "";
     Toolbar toolbar;
     ActionBarDrawerToggle toggle;
+    int index = 1;
+
     private void setupBeams() {
         PushNotifications.start(getApplicationContext(), "e33cda0a-16d0-41cd-a5c9-8ae60b9b7042");
         PushNotifications.clearDeviceInterests();
         PushNotifications.addDeviceInterest("user_" + idUser);
         PushNotifications.getDeviceInterests();
-        for (int i = 0; i < subsServer.size(); i++){
+        for (int i = 0; i < subsServer.size(); i++) {
             PushNotifications.addDeviceInterest("cat_" + subsServer.get(i));
         }
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -89,6 +99,7 @@ public class Main2Activity extends AppCompatActivity
         cv.put("message", "123123123");
         db.insert("orzunotif", null, cv);
     }
+
     public void requestSubsServerMain() {
         dbHelper = new DBHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -128,10 +139,11 @@ public class Main2Activity extends AppCompatActivity
                     }
                 });
             }
+
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String mMessage = response.body().string();
-                subsServer =  new ArrayList<>();
+                subsServer = new ArrayList<>();
                 try {
                     JSONObject jsonObject = new JSONObject(mMessage);
                     Iterator<String> iter = jsonObject.keys();
@@ -146,6 +158,7 @@ public class Main2Activity extends AppCompatActivity
             }
         });
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -160,7 +173,25 @@ public class Main2Activity extends AppCompatActivity
                 }
             }
         });
+        if (index == 0) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.container, new Fragment3()).commit();
+            navigationView.setCheckedItem(R.id.menu_none);
+        } else if (index == 1) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.container, new Fragment1()).commit();
+            navigationView.setCheckedItem(R.id.first);
+        } else if (index == 3) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.container, new Fragment4()).commit();
+            navigationView.setCheckedItem(R.id.third);
+        } else {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.container, new Fragment2()).commit();
+            navigationView.setCheckedItem(R.id.fourth);
+        }
     }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,7 +206,7 @@ public class Main2Activity extends AppCompatActivity
         navViewBackground.setShapeAppearanceModel(
                 navViewBackground.getShapeAppearanceModel()
                         .toBuilder()
-                        .setBottomRightCorner(CornerFamily.ROUNDED,160)
+                        .setBottomRightCorner(CornerFamily.ROUNDED, 160)
                         .build());
         SharedPreferences prefs = Main2Activity.this.getSharedPreferences(" ", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
@@ -192,29 +223,7 @@ public class Main2Activity extends AppCompatActivity
         Common.utoken = c.getString(tokenColIndex);
         c.close();
         requestSubsServerMain();
-        ContentValues cv = new ContentValues();
-        cv.put("id", "1");
-        cv.put("name", "mako");
-        cv.put("date", getCurrentTimeStamp());
-        cv.put("their_text", "salam kalay");
-        db.insert("orzuchat", null, cv);
-        cv.put("id", "2");
-        cv.put("name", "Nikita");
-        cv.put("date", getCurrentTimeStamp());
-        cv.put("my_text", "salam kalay");
-        db.insert("orzuchat", null, cv);
-        cv.put("id", "1");
-        cv.put("name", "mako");
-        cv.put("date", getCurrentTimeStamp());
-        cv.put("my_text", "salam poidet");
-        db.insert("orzuchat", null, cv);
-        cv.put("id", "2");
-        cv.put("name", "Nikita");
-        cv.put("date", getCurrentTimeStamp());
-        cv.put("their_text", "kalay makalay");
-        db.insert("orzuchat", null, cv);
-        db.close();
-        dbHelper.close();
+
         Intercom.initialize(getApplication(), "android_sdk-805f0d44d62fbc8e72058b9c8eee61c94c43c874", "p479kps8");
         intercomBtn = findViewById(R.id.techsupp);
         intercomBtn.setOnClickListener(this);
@@ -235,16 +244,7 @@ public class Main2Activity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         onNavigationItemSelected(navigationView.getMenu().getItem(0));
     }
-    public String getCurrentTimeStamp() {
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String currentTimeStamp = dateFormat.format(new Date()); // Find todays date
-            return currentTimeStamp;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -256,6 +256,7 @@ public class Main2Activity extends AppCompatActivity
             editor.apply();
         }
     }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -265,12 +266,14 @@ public class Main2Activity extends AppCompatActivity
             super.onBackPressed();
         }
     }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         if (id == R.id.first) {
+            index = 1;
             fragmentClass = Fragment1.class;
             try {
                 fragment = (Fragment) fragmentClass.newInstance();
@@ -291,6 +294,7 @@ public class Main2Activity extends AppCompatActivity
             Intent intent = new Intent(this, CreateTaskCategory.class);
             startActivity(intent);
         } else if (id == R.id.third) {
+            index = 3;
             toolbar.setBackgroundColor(getResources().getColor(R.color.back_for_feed));
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryGrey));
             toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorTextDark));
@@ -308,6 +312,7 @@ public class Main2Activity extends AppCompatActivity
             // Выводим выбранный пункт в заголовке
             setTitle(item.getTitle());
         } else if (id == R.id.fourth) {
+            index = 4;
             toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
             toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorBackgrndFrg));
@@ -329,6 +334,7 @@ public class Main2Activity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -340,13 +346,7 @@ public class Main2Activity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.container, new Fragment1()).commit();
         }
     }
-    @Override
-    public void onRestart()
-    {
-        super.onRestart();
-        finish();
-        startActivity(getIntent());
-    }
+
     public void getUserResponse() throws IOException {
         dbHelper = new DBHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -359,7 +359,7 @@ public class Main2Activity extends AppCompatActivity
         Common.utoken = c.getString(tokenColIndex);
         c.close();
         db.close();
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + idUser+"&param=more";
+        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + idUser + "&param=more";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
@@ -395,6 +395,7 @@ public class Main2Activity extends AppCompatActivity
                     }
                 });
             }
+
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 mMessage = response.body().string();
@@ -410,10 +411,10 @@ public class Main2Activity extends AppCompatActivity
                     final SharedPreferences prefs = Main2Activity.this.getSharedPreferences(" ", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putString(Util.TASK_USERNAME, mName);
-                    if(!city.isEmpty()){
+                    if (!city.isEmpty()) {
                         editor.putString("UserCityPref", city);
-                    }else{
-                        Intent intent = new Intent(Main2Activity.this,RegistCity.class);
+                    } else {
+                        Intent intent = new Intent(Main2Activity.this, RegistCity.class);
                         startActivity(intent);
                         finish();
                     }
@@ -438,6 +439,7 @@ public class Main2Activity extends AppCompatActivity
             }
         });
     }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -454,6 +456,8 @@ public class Main2Activity extends AppCompatActivity
                 Intercom.client().setBottomPadding(20);
                 break;
             case R.id.headerOfdrawer:
+                navigationView.setCheckedItem(R.id.menu_none);
+                index = 0;
                 fragmentClass = Fragment3.class;
                 try {
                     fragment = (Fragment) fragmentClass.newInstance();
@@ -476,8 +480,10 @@ public class Main2Activity extends AppCompatActivity
                 break;
         }
     }
+
     private class DownloadImage extends AsyncTask<String, Void, Bitmap> {
         private String TAG = "DownloadImage";
+
         private Bitmap downloadImageBitmap(String sUrl) {
             Bitmap bitmap = null;
             try {
@@ -489,15 +495,19 @@ public class Main2Activity extends AppCompatActivity
             }
             return bitmap;
         }
+
         @Override
         protected Bitmap doInBackground(String... params) {
             return downloadImageBitmap(params[0]);
         }
+
         protected void onPostExecute(Bitmap result) {
             saveImage(getApplicationContext(), result, "my_image.jpeg");
         }
     }
+
     ImageView nav_user;
+
     public void saveImage(Context context, Bitmap b, String imageName) {
         FileOutputStream foStream;
         try {
@@ -517,6 +527,7 @@ public class Main2Activity extends AppCompatActivity
             e.printStackTrace();
         }
     }
+
     public void changeImage() {
         nav_user.setImageDrawable(Common.d);
         nav_user_name.setText(Common.name);

@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import orzu.org.ui.login.model;
 
-@SuppressWarnings("unchecked")
 public class AdapterRespandableLV extends BaseExpandableListAdapter {
 
     public ArrayList<String> groupItem;
@@ -45,7 +44,6 @@ public class AdapterRespandableLV extends BaseExpandableListAdapter {
     }
 
     CheckBox text = null;
-
 
     @Override
     public View getChildView(int groupPosition, final int childPosition,

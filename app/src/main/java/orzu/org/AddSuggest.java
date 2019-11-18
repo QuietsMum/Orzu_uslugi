@@ -10,8 +10,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -34,7 +32,6 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
     String tokenUser;
     String nameUser;
     String idTask;
-    int amout;
     TextView username;
     ImageView person_logo_sugg2,suggest_back;
 
@@ -86,24 +83,6 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
         person_logo_sugg2.setImageBitmap(Common.bitmap);
 
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
 
     public void sendSuggest() throws IOException {
 
