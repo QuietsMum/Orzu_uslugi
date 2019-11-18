@@ -10,6 +10,7 @@
 
 
     <ImageView
+        android:id="@+id/imageView4"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
@@ -22,6 +23,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:id="@+id/imageView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scaleType="centerCrop"
@@ -34,15 +36,21 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:weightSum="5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="2" />
 
 
         <androidx.cardview.widget.CardView
@@ -50,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="4dp"
-            android:layout_weight="1">
+            android:layout_weight="3">
 
 
             <LinearLayout
@@ -58,8 +66,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
                 android:orientation="vertical">
 
 
@@ -68,7 +76,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginLeft="16dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginBottom="16dp"
                     android:text="Вход"
                     android:textColor="@color/colorPrimaryDark"
@@ -80,27 +88,26 @@
                     android:id="@+id/linearidccp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textViewPhone"
-                    android:orientation="horizontal">
+                    app:layout_constraintTop_toTopOf="@+id/textViewPhone">
 
                     <com.rilixtech.CountryCodePicker
                         android:id="@+id/ccp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="12dp"
-                        app:ccp_textFont="opensans.ttf"
-                        app:ccp_textColor="@color/colorAccent"
+                        app:ccp_arrowSize="26sp"
                         app:ccp_countryPreference="KZ,TJ"
+                        app:ccp_customMasterCountries="KZ,TJ,KG,UZ,AE,TR,CZ"
                         app:ccp_defaultNameCode="KZ"
                         app:ccp_hidePhoneCode="true"
-                        app:ccp_arrowSize="26sp"
-                        app:ccp_textSize="20sp"
                         app:ccp_showFullName="true"
-                        app:ccp_customMasterCountries="KZ,TJ,KG,UZ,AE,TR,CZ"/>
-
+                        app:ccp_textColor="@color/colorAccent"
+                        app:ccp_textFont="opensans.ttf"
+                        app:ccp_textSize="20sp" />
 
 
                 </LinearLayout>
@@ -157,9 +164,7 @@
                     android:id="@+id/password_text_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
                     android:layout_marginLeft="12dp"
-                    android:layout_marginEnd="12dp"
                     android:layout_marginRight="12dp"
                     android:background="@color/colorBackLight"
                     android:hint="@string/shr_hint_password"
@@ -180,29 +185,33 @@
 
                         android:textColor="@color/colorAccent" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
-
-                        <TextView
-                            android:id="@+id/forgot_pwd"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/forgot_pwd" />
-
-                        <TextView
-                            android:id="@+id/button_phone_regist"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/registration" />
-                    </LinearLayout>
 
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/forgot_pwd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/forgot_pwd" />
+
+                    <TextView
+                        android:id="@+id/button_phone_regist"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/registration" />
+                </LinearLayout>
+
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </LinearLayout>
@@ -219,6 +228,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/textView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="32dp"
@@ -229,22 +239,27 @@
         app:layout_constraintTop_toBottomOf="@+id/dobro" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/button_change_pwd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="4dp"
             android:textColor="@color/colorPrimaryLight"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:backgroundTint="@color/colorAccent"
-            app:tint="@color/colorBackgrndFrg"
-            app:srcCompat="@drawable/baseline_keyboard_arrow_right_black_18dp" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/baseline_keyboard_arrow_right_black_18dp"
+            app:tint="@color/colorBackgrndFrg" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
