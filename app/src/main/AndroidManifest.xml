@@ -21,7 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ForgotPasswordActivity"></activity>
+        <activity android:name=".ForgotPasswordActivity"/>
         <activity android:name=".FullScreenImageActivity" />
         <activity
             android:name=".ItemSubsNews"
@@ -30,7 +30,8 @@
             android:name=".NotificationSettings"
             android:screenOrientation="portrait" />
 
-        <service android:name=".NotificationsMessagingService">
+        <service android:name=".NotificationsMessagingService"
+            android:exported="false">
             <intent-filter android:priority="1">
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -119,6 +120,7 @@
 
         <receiver
             android:name=".MessageReceiver"
+            android:permission="android.permission.BROADCAST_SMS"
             android:enabled="true"
             android:exported="true">
             <intent-filter android:priority="100">
@@ -131,7 +133,19 @@
             android:label="@string/title_activity_main2"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="https"
+                    android:host="orzu.org"
+                    android:pathPattern="/orzu" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".LoginActivity2"
             android:screenOrientation="portrait" />
@@ -154,7 +168,6 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
