@@ -1,44 +1,30 @@
 package orzu.org;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
-import android.widget.Button;
 import android.widget.CalendarView;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class CreateTaskTerm extends AppCompatActivity implements View.OnClickListener {
@@ -62,12 +48,10 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
     String selectedDate;
     CalendarView calendar;
     WindowManager.LayoutParams lp;
-    GregorianCalendar calendarGeor;
     Locale myLocale = new Locale("ru", "RU");
     int dateType;
     ImageView tri_left, tri_center, tri_right, create_term_back;
     CardView cardView;
-
     View view_layout_term_text_from1, view_layout_term_text_from2, view_layout_term_onedate1, view_layout_term_onedate2;
     BottomSheetDialog dialog;
 
@@ -88,12 +72,10 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
         switch3.setOnClickListener(this);
         spiner = findViewById(R.id.spinner_term);
         spiner.setVisibility(View.INVISIBLE);
-
         text_examle1 = findViewById(R.id.createTerm_textisp);
         text_date1 = findViewById(R.id.term_text_from_date);
         text_date1_2 = findViewById(R.id.term_text_to_date);
         text_date2 = findViewById(R.id.term_text_one_date);
-
         tri_center = findViewById(R.id.tri_center);
         tri_left = findViewById(R.id.tri_left);
         tri_right = findViewById(R.id.tri_right);
@@ -106,7 +88,6 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
         });
         cardView = findViewById(R.id.card_of_create_term);
         cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
-
         lin_examlpe1_1 = findViewById(R.id.layout_term_text_from);
         lin_examlpe1_1.setOnClickListener(this);
         lin_examlpe1_1.setVisibility(View.VISIBLE);
@@ -117,29 +98,20 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
         lin_examlpe2.setOnClickListener(this);
         lin_examlpe2.setVisibility(View.INVISIBLE);
         text_examle1.setVisibility(View.INVISIBLE);
-
         lp = new WindowManager.LayoutParams();
-        //lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        //lp.height = getResources().getDisplayMetrics().heightPixels/3;
-
         view_layout_term_onedate1 = findViewById(R.id.view_layout_term_onedate1);
         view_layout_term_onedate2 = findViewById(R.id.view_layout_term_onedate2);
         view_layout_term_text_from1 = findViewById(R.id.view_layout_term_text_from1);
         view_layout_term_text_from2 = findViewById(R.id.view_layout_term_text_from2);
-
         buttonCreate = findViewById(R.id.createTerm);
         buttonCreate.setOnClickListener(this);
         fa = this;
-
-
         dialog = new BottomSheetDialog(this);
-
         View sheetView = this.getLayoutInflater().inflate(R.layout.calendar_dialog, null);
         dialog.setContentView(sheetView);
         CardView cardView = dialog.findViewById(R.id.card_of_calendar);
         cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
         calendar = dialog.findViewById(R.id.calendarView);
-
         Calendar today = Calendar.getInstance();
         sdf = new SimpleDateFormat("dd.MM.yyyy", myLocale);
         selectedDate = sdf.format(today.getTime());
@@ -155,8 +127,6 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 if (count == 1) {
                     text_date1.setText(selectedDate);
                 } else if (count == 2) {
@@ -176,8 +146,6 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
                 dialog.dismiss();
             }
         });
-
-
         TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f,
                 1500.0f, 0.0f);
         animation.setDuration(500);
@@ -196,7 +164,6 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
                 buttonCreate.startAnimation(animZoomIn);
             }
         }, animation.getDuration());
-
     }
 
     @Override
@@ -214,7 +181,6 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
         // 1. Точная дата 
         // 2. Указать период 
         // 3. Договорюсь с исполнителем
-
 
         switch (view.getId()) {
             case R.id.createTerm:

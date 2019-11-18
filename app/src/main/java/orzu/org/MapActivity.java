@@ -1,9 +1,7 @@
 package orzu.org;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
-
 import com.yandex.mapkit.Animation;
 import com.yandex.mapkit.MapKitFactory;
 import com.yandex.mapkit.geometry.Point;
@@ -14,9 +12,7 @@ public class MapActivity extends AppCompatActivity {
 
     private final String MAPKIT_API_KEY = "38c4c9bc-766a-4574-8088-18a4e7583a90";
     private final Point TARGET_LOCATION = new Point(59.945933, 30.320045);
-
     private MapView mapView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,15 +32,12 @@ public class MapActivity extends AppCompatActivity {
         setContentView(R.layout.activity_map);
         super.onCreate(savedInstanceState);
         mapView = (MapView)findViewById(R.id.mapview);
-
         // Перемещение камеры в центр Санкт-Петербурга.
         mapView.getMap().move(
                 new CameraPosition(TARGET_LOCATION, 14.0f, 0.0f, 0.0f),
                 new Animation(Animation.Type.SMOOTH, 5),
                 null);
-
     }
-
     @Override
     protected void onStop() {
         // Вызов onStop нужно передавать инстансам MapView и MapKit.
@@ -52,7 +45,6 @@ public class MapActivity extends AppCompatActivity {
         MapKitFactory.getInstance().onStop();
         super.onStop();
     }
-
     @Override
     protected void onStart() {
         // Вызов onStart нужно передавать инстансам MapView и MapKit.

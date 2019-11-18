@@ -1,14 +1,10 @@
 package orzu.org;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.JsonReader;
@@ -20,11 +16,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
-
 import com.facebook.shimmer.ShimmerFrameLayout;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -33,7 +26,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.net.ssl.HttpsURLConnection;
 
 public class CreateTaskCategory extends AppCompatActivity {
@@ -94,7 +86,6 @@ public class CreateTaskCategory extends AppCompatActivity {
 
             @Override
             protected ArrayList<Map<String, Object>> doInBackground(String... strings)  {
-                // ArrayList<Map<String, Object>> data = null;
                 orzuEndpoint[0] = null;
                 JsonReader[] jsonReader = new JsonReader[1];
 

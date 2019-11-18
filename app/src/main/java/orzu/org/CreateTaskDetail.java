@@ -1,54 +1,31 @@
 package orzu.org;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-
 import android.app.Activity;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.fxn.pix.Options;
 import com.fxn.pix.Pix;
 import com.fxn.utility.ImageQuality;
 import com.fxn.utility.PermUtil;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class CreateTaskDetail extends AppCompatActivity implements View.OnClickListener {
 
@@ -71,10 +48,7 @@ public class CreateTaskDetail extends AppCompatActivity implements View.OnClickL
     ImageView back;
     LinearLayout linearImages;
     LinearLayout pluslinearyImages;
-    Uri imageUri;
     int counter;
-    int counterImage;
-    ArrayList<String> imagesEncodedList;
     ArrayList<String> returnValue = new ArrayList<>();
     Boolean multy = true;
 
@@ -157,7 +131,6 @@ public class CreateTaskDetail extends AppCompatActivity implements View.OnClickL
         TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f,
                 1500.0f, 0.0f);
         animation.setDuration(500);
-        //animation.setFillAfter(true);
         cardView.startAnimation(animation);
         buttonCreate.setVisibility(View.GONE);
         new Handler().postDelayed(new Runnable() {
@@ -283,12 +256,10 @@ public class CreateTaskDetail extends AppCompatActivity implements View.OnClickL
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        String imageEncoded;
         if (resultCode == Activity.RESULT_OK && requestCode == 100) {
             returnValue = data.getStringArrayListExtra(Pix.IMAGE_RESULTS);
 
         }
-        String[] filePathColumn = {MediaStore.Images.Media.DATA};
         if (returnValue.size() != 0) {
             if (!multy) {
                 if (counter == 1) {
@@ -316,7 +287,6 @@ public class CreateTaskDetail extends AppCompatActivity implements View.OnClickL
                     Common.values.put(5, returnValue.get(0));
                     delete6.setVisibility(View.VISIBLE);
                 }
-
 
             } else {
 

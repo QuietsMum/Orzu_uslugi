@@ -1,69 +1,39 @@
 package orzu.org;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.Activity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.ColorDrawable;
-
 import android.os.Bundle;
-
 import android.os.Handler;
-import android.os.PersistableBundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
-import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-import com.yandex.mapkit.GeoObjectCollection;
 import com.yandex.mapkit.MapKitFactory;
 import com.yandex.mapkit.geometry.BoundingBox;
 import com.yandex.mapkit.geometry.Point;
-import com.yandex.mapkit.map.CameraListener;
-import com.yandex.mapkit.map.CameraPosition;
-import com.yandex.mapkit.map.CameraUpdateSource;
-import com.yandex.mapkit.map.Map;
-import com.yandex.mapkit.map.MapObjectCollection;
-import com.yandex.mapkit.map.VisibleRegionUtils;
-import com.yandex.mapkit.mapview.MapView;
-import com.yandex.mapkit.search.Response;
 import com.yandex.mapkit.search.SearchFactory;
 import com.yandex.mapkit.search.SearchManager;
 import com.yandex.mapkit.search.SearchManagerType;
 import com.yandex.mapkit.search.SearchOptions;
 import com.yandex.mapkit.search.SearchType;
-import com.yandex.mapkit.search.Session;
 import com.yandex.mapkit.search.SuggestItem;
 import com.yandex.runtime.Error;
-import com.yandex.runtime.image.ImageProvider;
 import com.yandex.runtime.network.NetworkError;
 import com.yandex.runtime.network.RemoteError;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,7 +46,6 @@ public class CreateTaskPlace extends AppCompatActivity implements View.OnClickLi
     public static Activity fa;
     int counter;
     int placetype;
-    final String MAPKIT_API_KEY = "your_api_key";
     final int RESULT_NUMBER_LIMIT = 5;
     ImageView tri_left;
     ImageView tri_right;
@@ -111,7 +80,6 @@ public class CreateTaskPlace extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_create_task_place);
         counter = 1;
         placetype = 1;
-        //searchEdit = findViewById(R.id.editCreatePlace);
         textFar = findViewById(R.id.text_far);
         textFar.setVisibility(View.INVISIBLE);
         card_of_create_place = findViewById(R.id.card_of_create_place);

@@ -1,8 +1,5 @@
 package orzu.org;
 
-
-import android.util.Log;
-
 public class ArrayID {
 
     private Long[] arrayID;

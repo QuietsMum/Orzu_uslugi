@@ -1,18 +1,14 @@
 package orzu.org.ui.login;
-
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.annotation.NonNull;
-
 import orzu.org.data.LoginDataSource;
 import orzu.org.data.LoginRepository;
-
 /**
  * ViewModel provider factory to instantiate LoginViewModel.
  * Required given LoginViewModel has a non-empty constructor
  */
 public class LoginViewModelFactory implements ViewModelProvider.Factory {
-
     @NonNull
     @Override
     @SuppressWarnings("unchecked")

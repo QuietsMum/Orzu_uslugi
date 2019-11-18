@@ -1,7 +1,6 @@
 package orzu.org;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -10,21 +9,16 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -43,7 +37,6 @@ public class RegistCity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         getSupportActionBar().hide();
-
         setContentView(R.layout.activity_regist_city);
         regisCity = findViewById(R.id.regisCity);
         spin = findViewById(R.id.user_set_place);
@@ -59,14 +52,12 @@ public class RegistCity extends AppCompatActivity {
             }
         });
     }
-
     public void requestCity() {
         String url = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=getOther&get=cities";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
                 .build();
-
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -92,7 +83,6 @@ public class RegistCity extends AppCompatActivity {
                     }
                 });
             }
-
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String mMessage = response.body().string();
@@ -112,7 +102,6 @@ public class RegistCity extends AppCompatActivity {
                                     android.R.layout.simple_spinner_dropdown_item, cities);
                             spin.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
-
                         }
                     });
                 } catch (JSONException e) {
@@ -121,7 +110,6 @@ public class RegistCity extends AppCompatActivity {
             }
         });
     }
-
     public void getEditCity() throws IOException {
         DBHelper dbHelper = new DBHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -136,8 +124,6 @@ public class RegistCity extends AppCompatActivity {
         c.moveToFirst();
         c.close();
         db.close();
-
-
         String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
                 "&opt=user_param" +
                 "&act=edit_city" +
@@ -145,12 +131,10 @@ public class RegistCity extends AppCompatActivity {
                 "&utoken=" + tokenUser +
                 "&name=" + name +
                 "&city=" + spin.getSelectedItem().toString();
-
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
                 .build();
-
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -180,19 +164,15 @@ public class RegistCity extends AppCompatActivity {
                     }
                 });
             }
-
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString("UserCityPref", spin.getSelectedItem().toString());
                 editor.apply();
-                String mMessage = response.body().string();
-
                 Intent intent = new Intent(RegistCity.this,Main2Activity.class);
                 startActivity(intent);
                 finish();
-
             }
         });
     }

@@ -7,11 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import androidx.viewpager.widget.PagerAdapter;
-
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,12 +21,10 @@ public class pager_adapter extends PagerAdapter {
         this.context = context;
         this.imgs = imgs;
     }
-
     public pager_adapter(TaskViewMain context, HashMap<Integer, String> values) {
         this.context = context;
         this.values = values;
     }
-
     /*
     This callback is responsible for creating a page. We inflate the layout and set the drawable
     to the ImageView based on the position. In the end we add the inflated layout to the parent
@@ -65,7 +60,6 @@ public class pager_adapter extends PagerAdapter {
         container.addView(view);
         return view;
     }
-
     /*
     This callback is responsible for destroying a page. Since we are using view only as the
     object key we just directly remove the view from parent container
@@ -74,7 +68,6 @@ public class pager_adapter extends PagerAdapter {
     public void destroyItem(ViewGroup container, int position, Object view) {
         container.removeView((View) view);
     }
-
     /*
     Returns the count of the total pages
     */
@@ -86,7 +79,6 @@ public class pager_adapter extends PagerAdapter {
             return values.size();
         }
     }
-
     /*
     Used to determine whether the page view is associated with object key returned by instantiateItem.
     Since here view only is the key we return view==object

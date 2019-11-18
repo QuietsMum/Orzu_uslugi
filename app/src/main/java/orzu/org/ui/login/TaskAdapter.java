@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +15,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -33,33 +29,25 @@ import okhttp3.Response;
 import orzu.org.Common;
 import orzu.org.FeedbackTask;
 import orzu.org.R;
-import orzu.org.UserView;
-
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
-
     private List<Map<String, Object>> logos;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
     Context context2;
-
-
     // data is passed into the constructor
     public TaskAdapter(Context context, List<Map<String, Object>> logos) {
         this.mInflater = LayoutInflater.from(context);
         this.logos = logos;
         this.context2 = context;
     }
-
     // inflates the row layout from xml when needed
     @Override
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.feedback_task_item, parent, false);
-
         return new ViewHolder(view);
     }
-
     // binds the data to the view and textview in each row
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
@@ -69,11 +57,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         holder.nat.setText(logos.get(position).get("Nat").toString());
         holder.happy.setText(logos.get(position).get("Hap").toString());
         holder.price.setText(logos.get(position).get("Цена").toString());
-
         if (logos.get(position).get("Select").toString().equals("1")) {
             holder.button2.setVisibility(View.VISIBLE);
         }
-
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,46 +70,30 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View view) {
-
                 Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + logos.get(position).get("Phone").toString()));
-
                 if (context2.checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    Activity#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //  public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                     int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for Activity#requestPermissions for more details.
                     return;
                 }
-
                 context2.startActivity(intent);
             }
         });
     }
-
     // total number of rows
     @Override
     public int getItemCount() {
         return logos.size();
     }
-
     private void chooseSuggester(Object id) {
-
         String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
                 "&opt=task_requests" +
                 "&act=selected" +
                 "&req_id=" + id +
                 "&userid=" + Common.userId +
                 "&utoken=" + Common.utoken;
-
         OkHttpClient client = new OkHttpClient();
-
         Request request = new Request.Builder()
                 .url(url)
                 .build();
-
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -145,19 +115,14 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
                     }
                 }, 500);
             }
-
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                final String mMessage = response.body().string();
-
                 FeedbackTask.fa.finish();
                 Intent intent = new Intent(context2, FeedbackTask.class);
                 context2.startActivity(intent);
-
             }
         });
     }
-
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView name;
@@ -165,7 +130,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         LinearLayout button;
         LinearLayout button2;
         ImageView image;
-
         ViewHolder(View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.feedback_task_name);
@@ -184,18 +148,15 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
             }
             itemView.setOnClickListener(this);
         }
-
         @Override
         public void onClick(View view) {
             if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
         }
     }
-
     // allows clicks events to be caught
     public void setClickListener(ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
-
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onItemClick(View view, int position);

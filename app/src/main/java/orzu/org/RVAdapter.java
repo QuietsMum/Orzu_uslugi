@@ -1,19 +1,12 @@
 package orzu.org;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -28,18 +21,14 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MyViewHolder> {
         this.context = context;
         this.maps = maps;
     }
-
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.main_item, parent, false);
         return new MyViewHolder(v);
     }
-
-
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-
         if (maps.get(position).get("Категория задачи") == null) {
             holder.a.setText("Категория задачи");
         } else {
@@ -63,19 +52,13 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MyViewHolder> {
             holder.e.setText("");
         } else
             holder.e.setText(maps.get(position).get("Валюта").toString());
-
         if (maps.get(position).get("Город") != null)
-            /*//holder.f.setText("Город");
-        else*/
             holder.f.setText(maps.get(position).get("Город").toString());
     }
-
-
     void filterByCategory(String category) {
         if (category.length() != 0) {
             for (int i = 0; i < maps.size(); i++) {
                 if (maps.get(i).get("Категория задачи").toString().equals(category)) {
-
                     filtered.add(maps.get(i));
                 }
             }
@@ -83,16 +66,12 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MyViewHolder> {
             notifyDataSetChanged();
         }
     }
-
-
     @Override
     public int getItemCount() {
         return maps.size();
     }
-
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView a, b, c, d, e, f;
-
         MyViewHolder(View itemView) {
             super(itemView);
             a = itemView.findViewById(R.id.textView);
@@ -103,13 +82,11 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MyViewHolder> {
             f = itemView.findViewById(R.id.textView6);
             itemView.setOnClickListener(this);
         }
-
         @Override
         public void onClick(View view) {
             select.onItemSelectedListener(view, getAdapterPosition());
         }
     }
-
     public static void setSelect(MainItemSelect select) {
         RVAdapter.select = select;
     }

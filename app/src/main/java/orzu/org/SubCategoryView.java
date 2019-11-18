@@ -1,27 +1,15 @@
 package orzu.org;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.RecyclerView.ViewHolder;
-
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.JsonReader;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.SurfaceHolder;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -33,22 +21,16 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.net.ssl.HttpsURLConnection;
-
 import orzu.org.ui.login.model;
 
 public class SubCategoryView extends AppCompatActivity implements View.OnClickListener {
@@ -58,7 +40,6 @@ public class SubCategoryView extends AppCompatActivity implements View.OnClickLi
     ListView lvCat;
     String taskList = "Категория";
     Boolean check = false;
-    Boolean setChkd = false;
     String ckeckList = "Check";
     String idList = "ID";
     Long[] idArray;
@@ -67,6 +48,7 @@ public class SubCategoryView extends AppCompatActivity implements View.OnClickLi
     TextView button_done,name_of_subcategory_view;
     Map<Integer,Integer> indexes = new HashMap<>();
     String idIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,13 +59,10 @@ public class SubCategoryView extends AppCompatActivity implements View.OnClickLi
         String idList = "ID";
         idIntent = getIntent().getExtras().getString("id");
         String nameIntent = getIntent().getExtras().getString("name");
-        String cat = "Категории";
         lvCat = (ListView) findViewById(R.id.list_sub_cat_sub);
-
         TextView parent = findViewById(R.id.textViewParent);
         FrameLayout fmLay = findViewById(R.id.frameLayoutfilt);
         fmLay.setOnClickListener(this);
-
         back = findViewById(R.id.subcategory_view_back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,37 +91,22 @@ public class SubCategoryView extends AppCompatActivity implements View.OnClickLi
                 button_done.startAnimation(animZoomIn);
             }
         }, animation.getDuration());
-        //animation.setFillAfter(true);
         card_of_subcategory_view.startAnimation(animation);
         data = new ArrayList<>();
-
-        final String categoryList = "Категория задачи";
-
-
         parent.setText(nameIntent);
         final HttpsURLConnection[] myConnection = new HttpsURLConnection[1];
         final URL[] orzuEndpoint = new URL[1];
-
         class AsyncOrzuTasks extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {
-
-            //final ViewHolder holder = new ViewHolder();
-
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-
             }
-
             @Override
             protected ArrayList<Map<String, Object>> doInBackground(String... strings) {
-
                 orzuEndpoint[0] = null;
                 JsonReader[] jsonReader = new JsonReader[1];
-
                 try {
                     orzuEndpoint[0] = new URL("https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_subcat&id=" + idIntent);
-
-
                     myConnection[0] =
                             (HttpsURLConnection) orzuEndpoint[0].openConnection();
                     if (myConnection[0].getResponseCode() == 200) {
@@ -150,20 +114,14 @@ public class SubCategoryView extends AppCompatActivity implements View.OnClickLi
                         InputStream responseBody = myConnection[0].getInputStream();
                         InputStreamReader responseBodyReader =
                                 new InputStreamReader(responseBody, "UTF-8");
-
                         jsonReader[0] = new JsonReader(responseBodyReader);
                     }
-
                     data = new ArrayList<>();
                     jsonReader[0].beginArray(); // Start processing the JSON object
                     while (jsonReader[0].hasNext()) { // Loop through all keys
-
                         data.add(readMessage(jsonReader[0]));
-
                     }
                     jsonReader[0].endArray();
-
-
                     jsonReader[0].close();
                     myConnection[0].disconnect();
                 } catch (MalformedURLException e) {
@@ -171,17 +129,13 @@ public class SubCategoryView extends AppCompatActivity implements View.OnClickLi
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
                 return null;
             }
-
             protected void onPostExecute(ArrayList<Map<String, Object>> result) {
                 super.onPostExecute(result);
-
                 idArray = new Long[data.size()];
                 String[] from = {taskList, ckeckList};
                 int[] to = {R.id.textItemSubCat, R.id.checkBoxFilt};
-
                 final ViewHolder[] holder = {null};
                 arrayAdapter = new SimpleAdapter(getBaseContext(), data, R.layout.sub_cat_item, from, to);
                 lvCat.setAdapter(arrayAdapter);
@@ -208,11 +162,9 @@ public class SubCategoryView extends AppCompatActivity implements View.OnClickLi
                 arrayAdapter.notifyDataSetChanged();
                 lvCat.invalidateViews();
                 lvCat.setAdapter(arrayAdapter);
-
                 lvCat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
                         Map<String, Object> map;
                         map = data.get(i);
                         holder[0] = new ViewHolder();
@@ -239,11 +191,8 @@ public class SubCategoryView extends AppCompatActivity implements View.OnClickLi
                 lvCat.setAdapter(arrayAdapter);
             }
         }
-
-
         AsyncOrzuTasks catTask = new AsyncOrzuTasks();
         catTask.execute();
-
         button_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -251,13 +200,11 @@ public class SubCategoryView extends AppCompatActivity implements View.OnClickLi
                 finish();
             }
         });
-
     }
 
     private Map<String, Object> readMessage(JsonReader reader) throws IOException {
         long id = 1;
         String text = null;
-
         Map<String, Object> m = new HashMap<>();
         reader.beginObject();
         while (reader.hasNext()) {
@@ -276,25 +223,14 @@ public class SubCategoryView extends AppCompatActivity implements View.OnClickLi
         reader.endObject();
         return m;
     }
-
     @Override
     public void onClick(View view) {
-
         Map<String, Object> map;
         final ViewHolder[] holder = {null};
         holder[0] = new ViewHolder();
         holder[0].check = view.findViewById(R.id.checkBoxParent);
-        //holder[0].check.setPadding(0,0,0,0);
-
-       /* TextView text = lvCat.findViewById(R.id.textItemSubCat);
-        text.setPadding(0,0,0,0);
-        CheckBox checkBox = lvCat.findViewById(R.id.checkBoxFilt);
-        checkBox.setPadding(0,0,0,0);
-        lvCat.setPadding(0,0,0,0);*/
-
         if (!holder[0].check.isChecked()) {
             holder[0].check.setChecked(true);
-
             for (int i = 0; i < data.size(); i++) {
                 map = data.get(i);
                 idArray[i] = (Long) map.get(idList);
@@ -312,44 +248,29 @@ public class SubCategoryView extends AppCompatActivity implements View.OnClickLi
             }
             check = false;
         }
-
-       /*ArrayList<Map<String, Object>> datanew = new ArrayList<>();
-        for (int i = 0; i < data.size(); i++){
-            m_new =  data.get(i);
-            m_new.put(ckeckList, check);
-            datanew.add(m_new);
-        }      */
         Common.subFilter.put(idIntent,indexes);
         arrayAdapter.notifyDataSetChanged();
         lvCat.invalidateViews();
         lvCat.setAdapter(arrayAdapter);
-
-
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.up_menu_filters, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.new_filter_menu:
-
-
                 return true;
             case android.R.id.home:
-
                 finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
     static class ViewHolder {
         CheckBox check;
     }

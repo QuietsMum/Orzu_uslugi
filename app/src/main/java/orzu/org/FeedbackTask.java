@@ -6,40 +6,29 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
-
 import com.facebook.shimmer.ShimmerFrameLayout;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -51,7 +40,6 @@ public class FeedbackTask extends AppCompatActivity implements MainItemSelect {
 
     ShimmerFrameLayout shim;
     public static Activity fa;
-    View viewBack;
     ArrayList<Map<String, Object>> data;
     RecyclerView lvCat;
     CardView cardView;
@@ -90,28 +78,21 @@ public class FeedbackTask extends AppCompatActivity implements MainItemSelect {
             }
         }
     }
-
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
             case 0: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
                 }
                 else
-                {
-
-                }
+                {                }
                 return;
             }
         }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         return true;
     }
 
@@ -130,7 +111,6 @@ public class FeedbackTask extends AppCompatActivity implements MainItemSelect {
 
         String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=task_requests&act=view&task_id=" + Common.taskId;
         OkHttpClient client = new OkHttpClient();
-
         String cat = "ID";
         String name = "Имена";
         String nar = "Описание";
@@ -141,10 +121,8 @@ public class FeedbackTask extends AppCompatActivity implements MainItemSelect {
         String stars_hap = "Hap";
         String selected = "Select";
         String phone = "Phone";
-        String count = "Отзыв";
         data = new ArrayList<>();
         TaskAdapter arrayAdapter1 = new TaskAdapter(this, data);
-
         arrayAdapter1.setClickListener(new TaskAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -155,11 +133,9 @@ public class FeedbackTask extends AppCompatActivity implements MainItemSelect {
                 startActivity(intent);
             }
         });
-
         Request request = new Request.Builder()
                 .url(url)
                 .build();
-
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -185,12 +161,9 @@ public class FeedbackTask extends AppCompatActivity implements MainItemSelect {
                     }
                 });
             }
-
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String mMessage = response.body().string();
-
-
                 if (mMessage.equals("\"No request yet\"")){
                     runOnUiThread(new Runnable() {
                         @Override
@@ -199,9 +172,7 @@ public class FeedbackTask extends AppCompatActivity implements MainItemSelect {
                             shim.setVisibility(View.INVISIBLE);
                         }
                     });
-
                 }
-
                 try {
                     Map<String, Object> m;
                     JSONArray jsonArray = new JSONArray(mMessage);
@@ -224,8 +195,6 @@ public class FeedbackTask extends AppCompatActivity implements MainItemSelect {
                         m.put(phone, jsonObject.getString("userphone"));
                         data.add(m);
                     }
-                    //}
-
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -233,22 +202,16 @@ public class FeedbackTask extends AppCompatActivity implements MainItemSelect {
                             lvCat.setAdapter(arrayAdapter1);
                         }
                     });
-
                    shim.setVisibility(View.INVISIBLE);
-
                 } catch (JSONException e) {
                     e.printStackTrace(); }
             }
         });
     }
-
     @Override
     public void onClick(View view) {
-
     }
-
     @Override
     public void onItemSelectedListener(View view, int position) {
-
     }
 }

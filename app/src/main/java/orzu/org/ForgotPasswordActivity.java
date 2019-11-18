@@ -213,7 +213,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
             @Override
             public void onFailure(Call call, IOException e) {
                 mMessage = e.getMessage().toString();
-                Log.w("failure Response", mMessage);
                 if (mMessage.equals("noAuth")) {
                     Toast.makeText(getApplicationContext(), "No registered user!", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getApplicationContext(), LoginActivity2.class);

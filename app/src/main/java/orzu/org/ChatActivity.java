@@ -3,25 +3,19 @@ package orzu.org;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-
 import orzu.org.chat.ChattingAdapter;
-import orzu.org.chat.chatItems;
 import orzu.org.chat.message_interface;
 import orzu.org.chat.my_message;
 import orzu.org.chat.their_message;
@@ -47,8 +41,6 @@ public class ChatActivity extends AppCompatActivity {
         messages_view = findViewById(R.id.messages_view);
         editText = findViewById(R.id.editText);
         send = findViewById(R.id.chat_send_button);
-
-
 
         messages_view.setHasFixedSize(true);
         messages_view.setLayoutManager(new LinearLayoutManager(this));

@@ -3,7 +3,6 @@ package orzu.org;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -18,7 +17,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -36,19 +34,14 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.fxn.pix.Options;
 import com.fxn.pix.Pix;
 import com.fxn.utility.PermUtil;
 import com.squareup.picasso.Picasso;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -60,10 +53,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -71,9 +62,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-
 public class UserEditProfile extends AppCompatActivity implements View.OnClickListener {
-
     EditText userName;
     EditText userFname;
     EditText userNarr;
@@ -114,7 +103,6 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
     ShimmerFrameLayout shim;
     ImageView image_back_name_tast3;
     CardView cardView,card_of_shimmer;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,26 +140,18 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         image_back_name_tast3 = findViewById(R.id.image_back_name_tast3);
         dialog = new Dialog(this);
         dialog.setContentView(R.layout.calendar_dialog_spinner);
-
         calendar = dialog.findViewById(R.id.calendarView);
-
         bar = findViewById(R.id.progres_edit_profile);
-
         bar.setVisibility(View.INVISIBLE);
-
-
         requestCity();
         Calendar today = Calendar.getInstance();
         calendar.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
                 today.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
-
                     @Override
                     public void onDateChanged(DatePicker view, int year,
                                               int monthOfYear, int dayOfMonth) {
-
                         sdf = new SimpleDateFormat("dd.MM.yyyy", myLocale);
                         selectedDate = sdf.format(new Date(year - 1900, monthOfYear, dayOfMonth));
-
                     }
                 });
         TextView dialogButton = dialog.findViewById(R.id.button_choose);
@@ -179,23 +159,17 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 userDate.setText(selectedDate);
-
                 dialog.dismiss();
             }
         });
-
-
         card_of_shimmer = findViewById(R.id.card_of_user_edit2);
         card_of_shimmer.setBackgroundResource(R.drawable.shape_card_topcorners);
         TranslateAnimation animation_of_shim = new TranslateAnimation(0.0f, 0.0f,
                 1500.0f, 0.0f);
         animation_of_shim.setDuration(300);
-        //animation.setFillAfter(true);
         card_of_shimmer.startAnimation(animation_of_shim);
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -204,7 +178,6 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         }
         return super.onOptionsItemSelected(item);
     }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
@@ -219,15 +192,12 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
             }
         }
     }
-
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.user_edit_birth:
                 dialog.show();
                 break;
-
             case R.id.edit_user_btn:
                 bar.setVisibility(View.VISIBLE);
                 if (userName.getText().length() != 0 && userFname.getText().length() != 0
@@ -242,22 +212,17 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                     bar.setVisibility(View.INVISIBLE);
                 }
                 break;
-
             case R.id.userAvatar:
                 Pix.start(this, Options.init().setRequestCode(100));
                 break;
         }
     }
-
     public void requestCity() {
-
         String url = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=getOther&get=cities";
         OkHttpClient client = new OkHttpClient();
-
         Request request = new Request.Builder()
                 .url(url)
                 .build();
-
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -284,11 +249,9 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                     }
                 });
             }
-
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String mMessage = response.body().string();
-
                 int i;
                 try {
                     JSONArray jsonArray = new JSONArray(mMessage);
@@ -318,12 +281,10 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
             }
         });
     }
-
     public void getEditResponse() throws IOException {
         int day = calendar.getDayOfMonth();
         int monthNumber = calendar.getMonth() + 1;
         int year = calendar.getYear();
-
         radioButton = findViewById(R.id.male);
         if (radioButton.isChecked()) {
             gender = "male";
@@ -347,7 +308,6 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         Request request = new Request.Builder()
                 .url(url)
                 .build();
-
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -378,12 +338,9 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                     }
                 });
             }
-
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-
                 String mMessage = response.body().string();
-
                 if (returnValue.isEmpty()) {
                     UserEditProfile.this.runOnUiThread(new Runnable() {
                         public void run() {
@@ -404,7 +361,6 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                         Common.sex = "мужской";
                     } else
                         Common.sex = "женский";
-
                     finish();
                 } else {
                     getEditAvatarResponse();
@@ -412,13 +368,9 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
             }
         });
     }
-
     public void getEditAvatarResponse() throws IOException {
-
         String url = "https://orzu.org/api/avatar";
-
         OkHttpClient client = new OkHttpClient();
-
         File myFile = new File(Uri.parse(returnValue.get(0)).getPath());
         RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart("file", myFile.getName(),
@@ -427,12 +379,10 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                 .addFormDataPart("utoken", tokenUser)
                 .addFormDataPart("appid", "$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS")
                 .build();
-
         Request request = new Request.Builder()
                 .url(url)
                 .post(requestBody)
                 .build();
-
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -464,16 +414,11 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                     }
                 });
             }
-
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-
-                String mMessage = response.body().string();
-
                 UserEditProfile.this.runOnUiThread(new Runnable() {
                     public void run() {
                         Toast.makeText(UserEditProfile.this, "Ваш профиль изменен", Toast.LENGTH_SHORT).show();
-
                     }
                 });
                 bar.setVisibility(View.INVISIBLE);
@@ -482,9 +427,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
             }
         });
     }
-
     public void getUserForEdit() throws IOException {
-
         dbHelper = new DBHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("orzutable", null, null, null, null, null, null);
@@ -496,16 +439,13 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         c.moveToFirst();
         c.close();
         db.close();
-
         String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + idUser + "&param=more";
         OkHttpClient client = new OkHttpClient();
-
         Request request = new Request.Builder()
                 .url(url)
                 .header("Accept", "application/json")
                 .header("Content-Type", "application/json")
                 .build();
-
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -536,12 +476,9 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                     }
                 });
             }
-
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-
                 mMessage = response.body().string();
-
                 try {
                     JSONObject jsonObject = new JSONObject(mMessage);
                     mName = jsonObject.getString("name");
@@ -553,8 +490,6 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                     mSex = jsonObject.getString("sex");
                     mNarr = jsonObject.getString("about");
                     mAvatarstr = jsonObject.getString("avatar");
-
-
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -576,22 +511,17 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                             image_back_name_tast3.setVisibility(View.GONE);
                         }
                     });
-
-
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             userName.setText(mName);
                             userFname.setText(mFiName);
-
                             userCity.setSelection(Arrays.asList(cities).indexOf(mCity));
-
                             userNarr.setText(mNarr);
                             userDate.setText(mBday);
                             SimpleDateFormat fmt = new SimpleDateFormat("dd.MM.yyyy");
                             Date datesimple = new Date();
                             Calendar calendarnew = new GregorianCalendar();
-
                             try {
                                 datesimple = fmt.parse(mBday);
                                 if (datesimple != null) {
@@ -604,17 +534,14 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                             if (mSex.equals("male")) {
                                 radioGroup.check(R.id.male);
                             } else radioGroup.check(R.id.female);
-
                         }
                     });
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         });
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -625,11 +552,8 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
             byte[] byteArray = outputStream.toByteArray();
-
             //Use your Base64 String as you wish
             encodedString = Base64.encodeToString(byteArray, Base64.DEFAULT);
-
         }
-
     }
 }

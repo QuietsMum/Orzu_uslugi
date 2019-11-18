@@ -1,15 +1,12 @@
 package orzu.org;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.JsonReader;
@@ -21,12 +18,9 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-
 import com.facebook.shimmer.ShimmerFrameLayout;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -35,7 +29,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.net.ssl.HttpsURLConnection;
 
 public class CreateTaskSubCategory extends AppCompatActivity {
@@ -80,31 +73,12 @@ public class CreateTaskSubCategory extends AppCompatActivity {
         TranslateAnimation animation_of_shim = new TranslateAnimation(0.0f, 0.0f,
                 1500.0f, 0.0f);
         animation_of_shim.setDuration(300);
-        //animation.setFillAfter(true);
         progressBar.startAnimation(animation_of_shim);
         String cat = "Категории";
         ListView lvCat = (ListView)findViewById(R.id.list_subcat_create);
         data = new ArrayList<>();
-        /*for (int i = 0; i < catname1.length; i++){
-            Map<String, Object> m1 = new HashMap<>();
-            m1.put(cat,catname1[i]);
-            data.add(m1);
-        }
-        String[] from1 = { cat};
-        int[] to1 = { R.id.textItemSubCat};
-        SimpleAdapter arrayAdapter1 = new SimpleAdapter(this, data, R.layout.sub_cat_item, from1, to1);
-        lvCat.setAdapter(arrayAdapter1);
-
-        lvCat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //CategoryView.start(view.getContext());
-            }
-        });*/
-
-        final String categoryList = "Категория задачи";
+              final String categoryList = "Категория задачи";
         String taskList = "Категория";
-        String idList = "ID";
         final HttpsURLConnection[] myConnection = new HttpsURLConnection[1];
         final URL[] orzuEndpoint = new URL[1];
 
@@ -121,7 +95,6 @@ public class CreateTaskSubCategory extends AppCompatActivity {
 
             @Override
             protected ArrayList<Map<String, Object>> doInBackground(String... strings)  {
-                // ArrayList<Map<String, Object>> data = null;
                 orzuEndpoint[0] = null;
                 JsonReader[] jsonReader = new JsonReader[1];
 

@@ -2,14 +2,11 @@ package orzu.org;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-
 import android.app.Dialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
@@ -20,11 +17,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.io.IOException;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -45,11 +39,6 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         getSupportActionBar().hide();
         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryOrangeTop));
         setContentView(R.layout.activity_change_password);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setDisplayShowHomeEnabled(true);
-//        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
-//        getSupportActionBar().setTitle("Изменить пароль");
-//        getSupportActionBar().setElevation(0);
 
         bar = findViewById(R.id.progressBarLogin_reg);
         back = findViewById(R.id.change_back);
@@ -67,7 +56,6 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f,
                 1000.0f, 0.0f);
         animation.setDuration(500);
-        //animation.setFillAfter(true);
         cardView.startAnimation(animation);
         ok.setVisibility(View.GONE);
         new Handler().postDelayed(new Runnable() {

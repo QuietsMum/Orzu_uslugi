@@ -22,27 +22,22 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
-
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.fxn.pix.Options;
 import com.fxn.pix.Pix;
 import com.squareup.picasso.Picasso;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -75,22 +70,18 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
     TextView userSex;
     TextView userNarr;
     LinearLayout feedbackButtun;
-    LinearLayout feedbackButtunAdd;
-
     TextView feedbackname1;
     TextView feedbackplus1;
     TextView feedbacknarr1;
     TextView feedbackcat1;
     ImageView feedbackimg1;
     ImageView feedbackimgUser1;
-
     TextView feedbackname2;
     TextView feedbackplus2;
     TextView feedbacknarr2;
     TextView feedbackcat2;
     ImageView feedbackimg2;
     ImageView feedbackimgUser2;
-
     View devider;
     ShimmerFrameLayout shim;
     ImageView image_back;
@@ -98,7 +89,6 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
     String image1;
     String image2;
     ImageView statusImg;
-    String encodedString;
     ImageView imageViewName;
     ArrayList<String> returnValue = new ArrayList<>();
     CardView cardView_shim;
@@ -111,15 +101,12 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstantState) {
         final View view = inflater.inflate(R.layout.fragment_main_3, container, false);
-
         final SharedPreferences prefs = getActivity().getSharedPreferences(" ", Context.MODE_PRIVATE);
         idUser = prefs.getString(Util.TASK_USERID, "");
         my = prefs.getString(Util.TASK_USERIDMY, "");
-
         dbHelper = new DBHelper(getContext());
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("orzutable", null, null, null, null, null, null);
@@ -131,13 +118,9 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         c.moveToFirst();
         c.close();
         db.close();
-
-
         feedbackButtun = view.findViewById(R.id.linear_feed_click);
         feedbackButtun.setOnClickListener(this);
-
         nameUser = view.findViewById(R.id.name_fname);
-
         feedbackname1 = view.findViewById(R.id.userview_feedbacknamemy);
         feedbackplus1 = view.findViewById(R.id.userview_feedbackplusmy);
         feedbacknarr1 = view.findViewById(R.id.userview_feedbacknarrmy);
@@ -166,9 +149,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         userSex = view.findViewById(R.id.userview_sexmy);
         userNarr = view.findViewById(R.id.viewuser_narrativemy);
         statusImg = view.findViewById(R.id.imageViewStatusMy);
-
         imageViewName = view.findViewById(R.id.imageViewName);
-
         imageViewName.setImageBitmap(Common.bitmap);
         imageViewName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,7 +157,6 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                 Pix.start(getActivity(), Options.init().setRequestCode(100));
             }
         });
-
         try {
             getUserResponse();
         } catch (IOException e) {
@@ -185,7 +165,6 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         requestFeedbackMy();
         return view;
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -201,11 +180,8 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
             }
         }
     }
-
     public void getEditAvatarResponse() throws IOException {
-
         String url = "https://orzu.org/api/avatar";
-
         OkHttpClient client = new OkHttpClient();
         File myFile = new File(Uri.parse(returnValue.get(0)).getPath());
         RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
@@ -219,7 +195,6 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                 .url(url)
                 .post(requestBody)
                 .build();
-
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -249,36 +224,27 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                     }
                 });
             }
-
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-
-                String mMessage = response.body().string();
                 if (getActivity() == null)
                     return;
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         Toast.makeText(getContext(), "Ваш профиль изменен", Toast.LENGTH_SHORT).show();
-
                     }
                 });
             }
         });
     }
 
-
     public void getUserResponse() throws IOException {
-        // api?appid=&opt=view_user&=user=id
-
         String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + idUser + "&param=more";
         OkHttpClient client = new OkHttpClient();
-
         Request request = new Request.Builder()
                 .url(url)
                 .header("Accept", "application/json")
                 .header("Content-Type", "application/json")
                 .build();
-
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -308,12 +274,9 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                     }
                 });
             }
-
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-
                 mMessage = response.body().string();
-
                 try {
                     JSONObject jsonObject = new JSONObject(mMessage);
                     mName = jsonObject.getString("name");
@@ -338,8 +301,6 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                     if (mStatus.equals("false")) {
                         statusImg.setVisibility(View.INVISIBLE);
                     } else statusImg.setVisibility(View.VISIBLE);
-
-
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -355,11 +316,9 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         });
     }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.user_menu, menu);
@@ -377,7 +336,6 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         menu.findItem(R.id.item_subscribe).setIcon(drawable3);
         super.onCreateOptionsMenu(menu, inflater);
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -396,19 +354,16 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                 Intent intent2 = new Intent(getActivity(), CategorySubscriptions.class);
                 startActivity(intent2);
                 return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
     @Override
     public void onClick(View view) {
         Intent intent = new Intent(getActivity(), Feedback.class);
         intent.putExtra("idUserFeedback", idUser);
         startActivity(intent);
     }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -422,21 +377,16 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
             nameUser.setText(Common.name);
         }
     }
-
     public void requestFeedbackMy() {
-
         String url = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=reviews&act=view&userid=" + idUser + "&sort=all";
         OkHttpClient client = new OkHttpClient();
         final String[] name = new String[2];
-        String plus;
         final String[] narr = new String[2];
         final String[] date = new String[2];
-        int img;
         int dchar = 34;
         Request request = new Request.Builder()
                 .url(url)
                 .build();
-
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -462,13 +412,10 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                     }
                 });
             }
-
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String mMessage = response.body().string();
-
                 if (mMessage.equals(Character.toString((char) dchar) + "No reviews yet" + Character.toString((char) dchar))) {
-
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -490,17 +437,13 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                             noReviews.setVisibility(View.VISIBLE);
                         }
                     });
-
                 } else {
-
                     try {
                         JSONArray jsonArray = new JSONArray(mMessage);
                         int bpSad = R.drawable.ic_bad;
                         int bpNorm = R.drawable.ic_neutral2;
                         int bpHappy = R.drawable.ic_happy2;
-
                         int lenght = jsonArray.length();
-                        String feedName = "";
                         if (lenght > 1) {
                             lenght = 2;
                         } else if (lenght == 1) {
@@ -517,14 +460,11 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                                     devider.setVisibility(View.GONE);
                                 }
                             });
-
                         } else {
                             lenght = 0;
                         }
                         for (int i = 0; i < lenght; i++) {
-
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-
                             if (i == 0) {
                                 long like = jsonObject.getLong("like");
                                 if (like == 0L) {
@@ -535,7 +475,6 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                                             feedbackimg1.setImageResource(bpSad);
                                         }
                                     });
-
                                 } else if (like == 1L) {
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
@@ -544,7 +483,6 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                                             feedbackimg1.setImageResource(bpNorm);
                                         }
                                     });
-
                                 } else if (like == 2L) {
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
@@ -553,13 +491,11 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                                             feedbackimg1.setImageResource(bpHappy);
                                         }
                                     });
-
                                 }
                                 name[0] = jsonObject.getString("username");
                                 narr[0] = jsonObject.getString("narrative");
                                 date[0] = jsonObject.getString("datein");
                                 image1 = jsonObject.getString("avatar");
-
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -569,8 +505,6 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                                         Picasso.get().load("https://orzu.org" + image1).into(feedbackimgUser1);
                                     }
                                 });
-
-
                             } else {
                                 long like = jsonObject.getLong("like");
                                 if (like == 0L) {
@@ -581,7 +515,6 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                                             feedbackimg2.setImageResource(bpSad);
                                         }
                                     });
-
                                 } else if (like == 1L) {
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
@@ -590,7 +523,6 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                                             feedbackimg2.setImageResource(bpNorm);
                                         }
                                     });
-
                                 } else if (like == 2L) {
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
@@ -599,13 +531,11 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                                             feedbackimg2.setImageResource(bpHappy);
                                         }
                                     });
-
                                 }
                                 name[1] = jsonObject.getString("username");
                                 narr[1] = jsonObject.getString("narrative");
                                 date[1] = jsonObject.getString("datein");
                                 image2 = jsonObject.getString("avatar");
-
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -616,21 +546,15 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                                     }
                                 });
                             }
-
-
                         }
-
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                     shim.setVisibility(View.INVISIBLE);
                     image_back.setVisibility(View.INVISIBLE);
                 }
             }
         });
-
     }
 }
 

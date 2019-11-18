@@ -1,13 +1,10 @@
 package orzu.org;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,14 +16,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -35,10 +30,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.net.ssl.HttpsURLConnection;
 
-import orzu.org.ui.login.model;
 
 public class CategoryView extends AppCompatActivity {
 
@@ -82,33 +75,12 @@ public class CategoryView extends AppCompatActivity {
         TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f,
                 1500.0f, 0.0f);
         animation.setDuration(500);
-        //animation.setFillAfter(true);
         card_of_category_view.startAnimation(animation);
-        // ArrayList<Map<String, Object>> data = null;
-        /*String[] catname1 = { "Холодильники и морозильные камеры",  "Стиральные и сушильные машины", "Посудомоечные машины", "Электрические плиты и панели",
-                "Газовые плиты","Духовые шкафы", "Вытяжки", "Климатическая техника",
-                "Водонагреватели, бойлеры, котлы, колонки", "Швейные машины", "Пылесосы и очистители", "Утюги и уход за одеждой", "Кофемашины",
-                "СВЧ печи", "Мелкая кухонная техника", "Уход за телом и здоровьем", "Строительная и садовая техника", "Что-то другое"};*/
 
         String cat = "Категории";
         ListView lvCat = (ListView) findViewById(R.id.list_cat);
         data = new ArrayList<>();
-        /*for (int i = 0; i < catname1.length; i++){
-            Map<String, Object> m1 = new HashMap<>();
-            m1.put(cat,catname1[i]);
-            data.add(m1);
-        }
-        String[] from1 = { cat};
-        int[] to1 = { R.id.textItemSubCat};
-        SimpleAdapter arrayAdapter1 = new SimpleAdapter(this, data, R.layout.sub_cat_item, from1, to1);
-        lvCat.setAdapter(arrayAdapter1);
 
-        lvCat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //CategoryView.start(view.getContext());
-            }
-        });*/
         button_categ.setVisibility(View.GONE);
         new Handler().postDelayed(new Runnable() {
             public void run() {
@@ -136,7 +108,6 @@ public class CategoryView extends AppCompatActivity {
 
             @Override
             protected ArrayList<Map<String, Object>> doInBackground(String... strings) {
-                // ArrayList<Map<String, Object>> data = null;
                 orzuEndpoint[0] = null;
                 JsonReader[] jsonReader = new JsonReader[1];
 

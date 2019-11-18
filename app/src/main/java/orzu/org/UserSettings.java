@@ -1,15 +1,12 @@
 package orzu.org;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,8 +48,6 @@ public class UserSettings extends AppCompatActivity implements View.OnClickListe
         button_change_password.setOnClickListener(this);
         btn_notif_settings.setOnClickListener(this);
     }
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -63,7 +58,6 @@ public class UserSettings extends AppCompatActivity implements View.OnClickListe
                 return super.onOptionsItemSelected(item);
         }
     }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {

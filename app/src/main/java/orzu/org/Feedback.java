@@ -1,14 +1,12 @@
 package orzu.org;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,20 +16,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.squareup.picasso.Picasso;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -42,7 +36,6 @@ import orzu.org.ui.login.FeedbackAdapter;
 public class Feedback extends AppCompatActivity implements View.OnClickListener {
 
     ShimmerFrameLayout shim;
-    View viewBack;
     ArrayList<Map<String, Object>> all;
     ArrayList<Map<String, Object>> bad;
     ArrayList<Map<String, Object>> neutral;
@@ -55,7 +48,6 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
     FeedbackAdapter arrayAdapter1;
     TextView count_bad, count_neutral, count_happy, button_add_feed_in_feed;
     ImageView feedback_back;
-
     ImageView imagenotask;
     TextView textnotask;
 
@@ -95,7 +87,6 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
                 finish();
             }
         });
-
         button_add_feed_in_feed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,13 +96,11 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
                 startActivity(intent2);
             }
         });
-
         requestFeedback();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         return true;
     }
 
@@ -127,26 +116,21 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
     }
 
     public void requestFeedback() {
-
         String url = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=reviews&act=view&userid=" + idUser + "&sort=all";
         OkHttpClient client = new OkHttpClient();
-
         String cat = "Имена";
         String nar = "Описание";
         String img = "Картинка";
         String count = "Отзыв";
         String avatar = "Аватар";
-
         all = new ArrayList<>();
         bad = new ArrayList<>();
         happy = new ArrayList<>();
         neutral = new ArrayList<>();
-
         arrayAdapter1 = new FeedbackAdapter(this, all);
         Request request = new Request.Builder()
                 .url(url)
                 .build();
-
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -173,7 +157,6 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
                     }
                 });
             }
-
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String mMessage = response.body().string();
@@ -189,10 +172,6 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
                         for (int i = 0; i < lenght; i++) {
                             m = new HashMap<>();
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-                       /* if (jsonObject.getString("fname").equals("null")){
-                            feedName = jsonObject.getString("username");
-                        } else feedName = jsonObject.getString("username") + jsonObject.getString("fname");*/
-                            //feedName = jsonObject.getString("username") + jsonObject.getString("fname");
                             feedName = jsonObject.getString("username");
 
                             String[] splited = jsonObject.getString("avatar").split(Character.toString((char) 94));
@@ -229,8 +208,6 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
                             }
                             all.add(m);
                         }
-
-
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -245,8 +222,6 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
                                 textnotask.setVisibility(View.INVISIBLE);
                             }
                         });
-
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -269,7 +244,6 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
             }
         });
     }
-
     @Override
     public void onClick(View view) {
         float scale = getResources().getDisplayMetrics().density;
@@ -317,19 +291,15 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
                 break;
         }
     }
-
     private void getHappy() {
         arrayAdapter1.ChangeData(happy);
     }
-
     private void getNeutral() {
         arrayAdapter1.ChangeData(neutral);
     }
-
     private void getBad() {
         arrayAdapter1.ChangeData(bad);
     }
-
     private void getAll() {
         arrayAdapter1.ChangeData(all);
     }

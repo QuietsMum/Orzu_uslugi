@@ -4,30 +4,22 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import java.sql.Time;
-
 public class NotificationSettings extends AppCompatActivity {
-
     Switch switch_notif,switch_time;
     ConstraintLayout disable_notif;
     ConstraintLayout time_enable;
@@ -47,7 +39,6 @@ public class NotificationSettings extends AppCompatActivity {
         getSupportActionBar().hide();
         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryOrangeTop));
         setContentView(R.layout.activity_notification_settings);
-
         switch_notif = findViewById(R.id.switch_notif);
         switch_time = findViewById(R.id.switch_time);
         disable_notif = findViewById(R.id.disable_notif);
@@ -79,7 +70,6 @@ public class NotificationSettings extends AppCompatActivity {
             divider2.setVisibility(View.INVISIBLE);
             time_of_notif.setVisibility(View.INVISIBLE);
         }
-
         notif_set_save = findViewById(R.id.notif_set_save);
         notif_set_save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,7 +112,6 @@ public class NotificationSettings extends AppCompatActivity {
                 }
             }
         });
-
         time_enable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,7 +130,6 @@ public class NotificationSettings extends AppCompatActivity {
                 }
             }
         });
-
         from_time.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
@@ -152,7 +140,6 @@ public class NotificationSettings extends AppCompatActivity {
                 time.setHour(7);
                 time.setMinute(0);
                 TextView choose = dialog.findViewById(R.id.button_choose);
-
                 choose.setOnClickListener(new View.OnClickListener() {
                     @SuppressLint({"SetTextI18n", "DefaultLocale"})
                     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -165,7 +152,6 @@ public class NotificationSettings extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 });
-
                 dialog.show();
             }
         });
@@ -179,7 +165,6 @@ public class NotificationSettings extends AppCompatActivity {
                 time.setHour(0);
                 time.setMinute(0);
                 TextView choose = dialog.findViewById(R.id.button_choose);
-
                 choose.setOnClickListener(new View.OnClickListener() {
                     @SuppressLint({"SetTextI18n", "DefaultLocale"})
                     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -192,11 +177,9 @@ public class NotificationSettings extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 });
-
                 dialog.show();
             }
         });
-
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

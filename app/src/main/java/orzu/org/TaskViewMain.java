@@ -1,16 +1,9 @@
 package orzu.org;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,25 +11,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.transition.Explode;
-import android.util.DisplayMetrics;
 import android.util.JsonReader;
 import android.util.JsonToken;
-import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -47,29 +30,22 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.squareup.picasso.Picasso;
-
 import com.viewpagerindicator.CirclePageIndicator;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -79,11 +55,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
-
 import javax.net.ssl.HttpsURLConnection;
-
-//import io.intercom.com.google.gson.JsonArray;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -92,7 +64,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import orzu.org.ui.login.model;
 
 public class TaskViewMain extends AppCompatActivity implements View.OnClickListener {
     int count = 0;
@@ -102,7 +73,6 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
     ArrayList<Map<String, Object>> data;
     Map<String, Object> m = new HashMap<>();
     Map<String, Object> m_new = new HashMap<>();
-    final String categoryList = "Категория задачи";
     final String taskList = "Задание";
     String narrList = "Описание";
     String idList = "ID";
@@ -113,16 +83,12 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
     final String priceList = "Цена";
     final String priceList2 = "Валюта";
     final String createList = "Создано";
-    final String servList = "За услугу";
-    final String dateList = "Дата публицации";
     final String cityList = "Город";
-    final String needList = "Сроки";
     final String imageList = "Картинки";
     String needListdfrom = "Сроки";
     ProgressBar progressBar;
     AsyncOrzuTask task;
     TextView taskName;
-    TextView taskDate;
     TextView taskAdr;
     TextView taskBeg;
     TextView taskAmt;
@@ -134,7 +100,6 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
     TextView sad;
     TextView nat;
     TextView hap;
-    ImageView taskMaket;
     ImageView taskMaketBack;
     ImageView taskMaketView;
     String mMessage;
@@ -148,35 +113,26 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
     TextView buttonGettaskShim;
     LinearLayout viewUserInfo;
     LinearLayout img_of_task;
-
     String name = "";
     String idUser = "";
     String tokenUser = "";
     String nameUser = "";
     String catid = "";
     String amout = "";
-    String amoutVal = "";
     String cdate = "";
     String edate = "";
     String cdate_l = "";
     String level_l = "";
-    String work_with = "";
     String city = "";
     String address = "";
     String narrative = "";
-    String location = "123";
-    String locationVal = "123";
     String date = "";
-
     ImageView imageViewName;
     ImageView delete;
-
     int datetype;
     int placetype;
     int pricetype;
-
     DBHelper dbHelper;
-
     ImageView back;
     CardView cardView;
     List<String> images = new ArrayList<>();
@@ -203,8 +159,6 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_task_view_main);
         Intent intent = getIntent();
-
-
         SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         if (intent != null) {
@@ -219,7 +173,6 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             editor.putBoolean("notif", false);
             editor.apply();
         }
-
         delete = findViewById(R.id.task_view_main_delete);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -254,15 +207,12 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         buttonGettask = findViewById(R.id.button_gettask);
         buttonGettaskShim = findViewById(R.id.button_gettask_shim);
         buttonGettask.setOnClickListener(this);
-
         viewUserInfo = findViewById(R.id.view_user_info);
         viewUserInfo.setOnClickListener(this);
-
         taskName = findViewById(R.id.taskName);
         sad = findViewById(R.id.textSad);
         nat = findViewById(R.id.textNatural);
         hap = findViewById(R.id.textHappy);
-
         taskAdr = findViewById(R.id.taskAdr);
         taskBeg = findViewById(R.id.taskDate);
         taskAmt = findViewById(R.id.taskPrice);
@@ -271,7 +221,6 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         taskNarr = findViewById(R.id.taskNarr);
         taskOpen = findViewById(R.id.taskOpen);
         nav_user = findViewById(R.id.taskCreator);
-        //taskMaket = findViewById(R.id.maket_task);
         taskMaketBack = findViewById(R.id.maket_task_white);
         taskMaketView = findViewById(R.id.imageback_new);
         imageViewName = findViewById(R.id.imageViewName);
@@ -289,27 +238,19 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         TranslateAnimation animation_of_shim = new TranslateAnimation(0.0f, 0.0f,
                 1500.0f, 0.0f);
         animation_of_shim.setDuration(300);
-        //animation.setFillAfter(true);
         card_of_shimmer.startAnimation(animation_of_shim);
-
-
-        //carddis = findViewById(R.id.carddis);
         Animation animation = new AlphaAnimation(1, 0); //to change visibility from visible to invisible
         animation.setDuration(1000); //1 second duration for each animation cycle
         animation.setInterpolator(new LinearInterpolator());
         animation.setRepeatCount(Animation.INFINITE); //repeating indefinitely
         animation.setRepeatMode(Animation.REVERSE); //animation will start from end point once ended.
-        //taskMaket.startAnimation(animation); //to start animation
-
         if (myTask.equals("my")) {
-
             buttonGettask.setText("Посмотреть отклики");
             buttonGettaskShim.setText("Посмотреть отклики");
             delete.setVisibility(View.VISIBLE);
             TranslateAnimation animationn = new TranslateAnimation(0.0f, 0.0f,
                     1500.0f, 0.0f);
             animationn.setDuration(500);
-            //animation.setFillAfter(true);
             cardView.startAnimation(animationn);
             buttonGettask.setVisibility(View.GONE);
             new Handler().postDelayed(new Runnable() {
@@ -321,12 +262,9 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                 }
             }, animationn.getDuration());
         }
-
-
         if (opt.equals("view")) {
             task = new AsyncOrzuTask();
             task.execute();
-
         } else {
             // DATE TYPE
             // 1 - в любое время 
@@ -353,11 +291,9 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                     buttonGettask.startAnimation(animZoomIn);
                 }
             }, animationn.getDuration());
-
             datetype = Integer.parseInt(prefs.getString(Util.TASK_DATETYPE, ""));
             placetype = Integer.parseInt(prefs.getString(Util.TASK_PLACETYPE, ""));
             pricetype = Integer.parseInt(prefs.getString(Util.TASK_PPRICE_TYPE, ""));
-
             name = prefs.getString(Util.TASK_NAME, "");
             nameUser = prefs.getString(Util.TASK_USERNAME, "");
             address = prefs.getString(Util.TASK_PLACE, "");
@@ -368,7 +304,6 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             amout = prefs.getString(Util.TASK_PPRICE, "");
             catid = prefs.getString(Util.CAT_ID, "");
             narrative = prefs.getString(Util.TASK_ANNAT, "");
-
             if (datetype == 2) {
                 date = "С: " + cdate + " До: " + edate;
             }
@@ -378,8 +313,6 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             if (datetype == 3) {
                 date = "Дата по договоренности";
             }
-
-
             String outputPattern = "EEE, d MMMM yyyy HH:mm:ss";
             Locale myLocale = new Locale("ru", "RU");
             SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern, myLocale);
@@ -396,7 +329,6 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                 taskAmtOnce.setVisibility(View.INVISIBLE);
             }
         }
-
         if (!Common.values.isEmpty()) {
             img_of_task.setVisibility(View.VISIBLE);
             img_of_task.setBackgroundResource(R.drawable.shape_viewpager_corners);
@@ -407,20 +339,16 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             circleIndicator.setViewPager(viewPager);
         }
     }
-
     @Override
     public void onClick(View view) {
-
         switch (view.getId()) {
             case R.id.button_gettask:
                 if (!opt.equals("view")) {
-
                     try {
                         getCreateResponse();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
                 } else if (myTask.equals("my")) {
                     Intent intent = new Intent(this, FeedbackTask.class);
                     Common.taskId = id;
@@ -438,34 +366,24 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                 intent.putExtra("idhis", m_new.get(useridList).toString());
                 startActivity(intent);
                 break;
-
         }
-
     }
-
-
     class AsyncOrzuTask extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {
         final HttpsURLConnection[] myConnection = new HttpsURLConnection[1];
         final URL[] orzuEndpoint = new URL[1];
-
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
         }
-
         @Override
         protected ArrayList<Map<String, Object>> doInBackground(String... strings) {
             m = new HashMap<>();
             m_new = new HashMap<>();
-
             m.put(priceList, "Предложите цену");
             m.put(priceList2, "");
             m.put(adress, "Удаленно");
             m.put(needListdfrom, "Дата по договоренности");
             m.put(narrList, "");
-
             orzuEndpoint[0] = null;
             JsonReader[] jsonReader = new JsonReader[1];
             try {
@@ -477,19 +395,13 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                     InputStream responseBody = myConnection[0].getInputStream();
                     InputStreamReader responseBodyReader =
                             new InputStreamReader(responseBody, "UTF-8");
-
                     jsonReader[0] = new JsonReader(responseBodyReader);
-
                 }
-
                 jsonReader[0].beginArray();
                 while (jsonReader[0].hasNext()) {
                     jsonReader[0].beginArray(); // Start processing the JSON object
-
                     while (jsonReader[0].hasNext()) { // Loop through all keys
-
                         m = readMessage(jsonReader[0]);
-
                         m_new.put(idList, m.get(idList));
                         m_new.put(taskList, m.get(taskList));
                         m_new.put(narrList, m.get(narrList));
@@ -499,34 +411,26 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                         m_new.put(priceList2, m.get(priceList2));
                         m_new.put(needListdfrom, m.get(needListdfrom));
                         m_new.put(useridList, m.get(useridList));
-                        //  m_new.put(catidList, m.get(catidList));
                     }
                     jsonReader[0].endArray();
                 }
                 jsonReader[0].endArray();
-
                 jsonReader[0].close();
                 myConnection[0].disconnect();
-
-
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             try {
                 getUserResponse();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             return null;
         }
-
         protected void onPostExecute(ArrayList<Map<String, Object>> result) {
             super.onPostExecute(result);
-            //progressBar.setVisibility(View.INVISIBLE);
             try {
                 if (myConnection[0].getResponseCode() == 200) {
                     taskName.setText(m_new.get(taskList).toString());
@@ -574,22 +478,14 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
-
     private Map<String, Object> readMessage(JsonReader reader) throws IOException {
         long id = 1;
         long userid = 1;
         String text = null;
-        String jreader = null;
         String narr = null;
         String adr = null;
-        String date = null;
-        String update = null;
-        String needfrom = null;
-        String needto = null;
-        String workwith = null;
         String creat = null;
         long catid = 1;
-        String subcut = null;
         String price = null;
         reader.beginObject();
         while (reader.hasNext()) {
@@ -638,7 +534,6 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                         m.put(useridList, userid);
                     } else reader.skipValue();
                     break;
-
                 case "param":
                     param = reader.nextString();
                     if (reader.peek() != JsonToken.NULL) {
@@ -662,7 +557,6 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                                     m.put(priceList2, " орзуcoin");
                                     reader.skipValue();
                                 }
-
                                 break;
                             case "amout":
                                 reader.nextName();
@@ -725,24 +619,18 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         }
         reader.endObject();
         return m;
-
     }
-
-
     @Override
     public void onBackPressed() {
         finish();
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
             case android.R.id.home:
                 finish();
                 return true;
@@ -750,7 +638,6 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                 return super.onOptionsItemSelected(item);
         }
     }
-
     public String parseDateToddMMyyyy(String time) {
         String inputPattern = "yyyy-MM-dd HH:mm:ss";
         String outputPattern = "EEE, d MMMM yyyy HH:mm:ss";
@@ -780,19 +667,14 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         }
         return str;
     }
-
     public void getUserResponse() throws IOException {
-        // api?appid=&opt=view_user&=user=id
-
         String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + m.get(useridList);
         OkHttpClient client = new OkHttpClient();
-
         Request request = new Request.Builder()
                 .url(url)
                 .header("Accept", "application/json")
                 .header("Content-Type", "application/json")
                 .build();
-
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -823,12 +705,9 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                     }
                 });
             }
-
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-
                 mMessage = response.body().string();
-
                 try {
                     JSONObject jsonObject = new JSONObject(mMessage);
                     mName = jsonObject.getString("name");
@@ -840,7 +719,6 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                     if (mFiName.equals("null")) {
                         text = mName;
                     } else text = mName + " " + mFiName;
-
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -854,28 +732,16 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                             buttonGettask.startAnimation(animZoomIn);
                         }
                     });
-
-                    /*taskMaket.clearAnimation();
-                    taskMaket.setVisibility(View.INVISIBLE);
-                    carddis.setVisibility(View.INVISIBLE);*/
-
-
                     taskMaketView.setVisibility(View.INVISIBLE);
                     taskMaketBack.setVisibility(View.INVISIBLE);
                     shim.setVisibility(View.INVISIBLE);
-
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         });
     }
-
     public void getCreateResponse() throws IOException {
-        // api?appid=&opt=view_user&=user=id
-
         progressBar.setVisibility(View.VISIBLE);
         // DATE TYPE
         // 1. Точная дата 
@@ -893,7 +759,6 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         // PRICE TYPE
         // 1. Указать цену самому 
         // 2. Исполнитель предложит цену
-
         String urlLocation = "";
         String urlTerm = "";
         String urlPrice = "";
@@ -918,7 +783,6 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         if (pricetype == 2) {
             urlPrice = "&price=wtasker";
         }
-
         String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
                 "&opt=input_task" +
                 "&task=" + name +
@@ -930,11 +794,9 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                 urlPrice +
                 "&utoken=" + tokenUser;
         OkHttpClient client = new OkHttpClient();
-
         Request request = new Request.Builder()
                 .url(url)
                 .build();
-
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -965,11 +827,8 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                     }
                 });
             }
-
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-
-
                 String[] mMessage = response.body().string().split(":");
                 final char dm = (char) 34;
                 if (mMessage[0].equals(dm + "Task created")) {
@@ -988,16 +847,12 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                         CreateTaskCategory.fa.finish();
                         CreateTaskSubCategory.fa.finish();
                     }
-
                 }
                 progressBar.setVisibility(View.INVISIBLE);
-
             }
         });
     }
-
     public boolean getEditAvatarResponse(String id) throws IOException {
-
         if (count >= Common.values.size()) {
             TaskViewMain.this.runOnUiThread(new Runnable() {
                 public void run() {
@@ -1018,23 +873,18 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             CreateTaskSubCategory.fa.finish();
             return true;
         }
-
-
         String url = "https://projectapi.pw/api/avatar";
         OkHttpClient client = new OkHttpClient();
-
         File myFile = new File(Uri.parse(Common.values.get(count)).getPath());
         RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart("file", myFile.getName(),
                         RequestBody.create(MediaType.parse("text/csv"), myFile))
                 .addFormDataPart("task_id", id)
                 .build();
-
         Request request = new Request.Builder()
                 .url(url)
                 .post(requestBody)
                 .build();
-
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -1064,7 +914,6 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                     }
                 });
             }
-
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 count++;
@@ -1080,14 +929,11 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         });
         return true;
     }
-
     private void deleteTask(String id) {
         String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=all&userid="+idUser+"&delete=" + id;
-        Log.wtf("asdads",requestUrl);
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.wtf("asdads",response);
             }
         }, new com.android.volley.Response.ErrorListener() {
             @Override
@@ -1115,5 +961,4 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
 //make the request to your server as indicated in your request url
         Volley.newRequestQueue(this).add(stringRequest);
     }
-
 }

@@ -1,52 +1,34 @@
 package orzu.org;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.SimpleAdapter;
-import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
-
 import com.facebook.shimmer.ShimmerFrameLayout;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -55,24 +37,8 @@ import okhttp3.Response;
 import orzu.org.ui.login.model;
 
 public class CategorySubscriptions extends AppCompatActivity implements View.OnClickListener {
-    //    ArrayList<Map<String, Object>> data;
-//    ArrayList<Map<String, Object>> data2;
-    ExpandableListView lvCat;
-    //    SimpleExpandableListAdapter adapter;
     ExpandableListView expandableListView;
     View podstilka;
-//    private String[] mGroupsArrayName;
-//    private String[] mGroupsArrayID;
-//    private String[] mSubCategoryArray;
-//    Map<String, String> map;
-//    ArrayList<Map<String, String>> groupDataList = new ArrayList<>();
-//    ArrayList<ArrayList<Map<String, String>>> сhildDataList = new ArrayList<>();
-//    ArrayList<Map<String, String>> сhildDataItemList = new ArrayList<>();
-//    ListView lvSubCat;
-//    ImageView imageArrow;
-//    Boolean arrowTrue = true;
-
-
     ArrayList<String> groupItem = new ArrayList<String>();
     ArrayList<String> groupId = new ArrayList<String>();
     ArrayList<Object> childItem = new ArrayList<Object>();
