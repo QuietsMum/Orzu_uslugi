@@ -129,7 +129,6 @@ public class RegistCity extends AppCompatActivity {
                 "&act=edit_city" +
                 "&userid=" + idUser +
                 "&utoken=" + tokenUser +
-                "&name=" + name +
                 "&city=" + spin.getSelectedItem().toString();
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()

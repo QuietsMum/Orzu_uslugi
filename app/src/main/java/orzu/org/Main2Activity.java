@@ -19,6 +19,7 @@ import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
@@ -84,7 +85,7 @@ public class Main2Activity extends AppCompatActivity
     Toolbar toolbar;
     ActionBarDrawerToggle toggle;
     int index = 1;
-
+    DrawerLayout drawer;
     private void setupBeams() {
         PushNotifications.start(getApplicationContext(), "e33cda0a-16d0-41cd-a5c9-8ae60b9b7042");
         PushNotifications.clearDeviceInterests();
@@ -178,6 +179,14 @@ public class Main2Activity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.container, new Fragment3()).commit();
             navigationView.setCheckedItem(R.id.menu_none);
         } else if (index == 1) {
+            drawer = findViewById(R.id.drawer_layout);
+            toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            toolbar = findViewById(R.id.toolbar);
+            toolbar.setBackgroundColor(getResources().getColor(R.color.back_for_feed));
+            toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorTextDark));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryGrey));
+            setTitle("Найти задания");
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container, new Fragment1()).commit();
             navigationView.setCheckedItem(R.id.first);
@@ -227,7 +236,7 @@ public class Main2Activity extends AppCompatActivity
         Intercom.initialize(getApplication(), "android_sdk-805f0d44d62fbc8e72058b9c8eee61c94c43c874", "p479kps8");
         intercomBtn = findViewById(R.id.techsupp);
         intercomBtn.setOnClickListener(this);
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+       drawer = findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -291,6 +300,7 @@ public class Main2Activity extends AppCompatActivity
             // Выводим выбранный пункт в заголовке
             setTitle(item.getTitle());
         } else if (id == R.id.second) {
+            index = 1;
             Intent intent = new Intent(this, CreateTaskCategory.class);
             startActivity(intent);
         } else if (id == R.id.third) {

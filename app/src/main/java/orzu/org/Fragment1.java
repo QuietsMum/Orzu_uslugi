@@ -881,7 +881,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             RVAdapter.setSelect(new MainItemSelect() {
                 @Override
                 public void onItemSelectedListener(View view, int position) {
-                    Intent intent = new Intent(getActivity(), TaskViewMain.class);
+                    Intent intent = new Intent(getContext(), TaskViewMain.class);
                     Map<String, Object> map;
                     map = truedata.get(position);
                     intent.putExtra("id", map.get(idList).toString());

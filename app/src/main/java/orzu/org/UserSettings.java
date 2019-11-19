@@ -6,6 +6,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -49,16 +50,6 @@ public class UserSettings extends AppCompatActivity implements View.OnClickListe
         btn_notif_settings.setOnClickListener(this);
     }
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button_edit_profile:
@@ -77,12 +68,18 @@ public class UserSettings extends AppCompatActivity implements View.OnClickListe
                 DBHelper dbHelper = new DBHelper(this);
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
                 db.execSQL("delete from " + "orzutable");
+                final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.clear();
                 Intent mStartActivity = new Intent(this, CoreActivity.class);
-                int mPendingIntentId = 123456;
-                PendingIntent mPendingIntent = PendingIntent.getActivity(this, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-                AlarmManager mgr = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-                mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
-                System.exit(0);
+                startActivity(mStartActivity);
+                finishAffinity();
+                finish();
+//                int mPendingIntentId = 123456;
+//                PendingIntent mPendingIntent = PendingIntent.getActivity(this, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+//                AlarmManager mgr = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+//                mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+//                System.exit(0);
                 break;
         }
     }
