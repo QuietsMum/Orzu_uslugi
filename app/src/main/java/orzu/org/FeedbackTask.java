@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -14,14 +15,14 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.facebook.shimmer.ShimmerFrameLayout;
+
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,6 +30,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -39,6 +42,7 @@ import orzu.org.ui.login.TaskAdapter;
 public class FeedbackTask extends AppCompatActivity implements MainItemSelect {
 
     ShimmerFrameLayout shim;
+    @SuppressLint("StaticFieldLeak")
     public static Activity fa;
     ArrayList<Map<String, Object>> data;
     RecyclerView lvCat;
@@ -50,7 +54,7 @@ public class FeedbackTask extends AppCompatActivity implements MainItemSelect {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_feedback_task);
         shim = (ShimmerFrameLayout) findViewById(R.id.feedbackshimmertask);
@@ -91,21 +95,6 @@ public class FeedbackTask extends AppCompatActivity implements MainItemSelect {
             }
         }
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
     public void requestFeedback(){
 
@@ -138,7 +127,7 @@ public class FeedbackTask extends AppCompatActivity implements MainItemSelect {
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 FeedbackTask.this.runOnUiThread(new Runnable() {
                     public void run() {
                         Dialog dialog = new Dialog(FeedbackTask.this, android.R.style.Theme_Material_Light_NoActionBar);
@@ -162,8 +151,8 @@ public class FeedbackTask extends AppCompatActivity implements MainItemSelect {
                 });
             }
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String mMessage = response.body().string();
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                final String mMessage = Objects.requireNonNull(response.body()).string();
                 if (mMessage.equals("\"No request yet\"")){
                     runOnUiThread(new Runnable() {
                         @Override
@@ -176,7 +165,7 @@ public class FeedbackTask extends AppCompatActivity implements MainItemSelect {
                 try {
                     Map<String, Object> m;
                     JSONArray jsonArray = new JSONArray(mMessage);
-                    String feedID = "";
+                    String feedID;
 
                     int lenght = jsonArray.length();
                     for (int i = 0; i < lenght; i++){

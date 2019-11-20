@@ -2,6 +2,8 @@ package orzu.org;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +12,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
@@ -25,11 +26,16 @@ import com.fxn.pix.Options;
 import com.fxn.pix.Pix;
 import com.fxn.utility.ImageQuality;
 import com.fxn.utility.PermUtil;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class CreateTaskDetail extends AppCompatActivity implements View.OnClickListener {
 
     TextView buttonCreate;
+    @SuppressLint("StaticFieldLeak")
     public static Activity fa;
     LinearLayout linearImg;
     EditText annot;
@@ -55,16 +61,13 @@ public class CreateTaskDetail extends AppCompatActivity implements View.OnClickL
     CardView cardView;
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case PermUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Pix.start(this, Options.init().setRequestCode(100));
-                } else {
-                    Toast.makeText(this, "Approve permissions to open Pix ImagePicker", Toast.LENGTH_LONG).show();
-                }
-                return;
+    public void onRequestPermissionsResult(int requestCode, @NotNull String permissions[], @NotNull int[] grantResults) {
+        // If request is cancelled, the result arrays are empty.
+        if (requestCode == PermUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Pix.start(this, Options.init().setRequestCode(100));
+            } else {
+                Toast.makeText(this, "Approve permissions to open Pix ImagePicker", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -73,7 +76,7 @@ public class CreateTaskDetail extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_create_task_detail);
 
@@ -252,6 +255,7 @@ public class CreateTaskDetail extends AppCompatActivity implements View.OnClickL
             returnValue = data.getStringArrayListExtra(Pix.IMAGE_RESULTS);
 
         }
+        assert returnValue != null;
         if (returnValue.size() != 0) {
             if (!multy) {
                 if (counter == 1) {

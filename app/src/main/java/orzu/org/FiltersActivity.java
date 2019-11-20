@@ -25,6 +25,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+
 import orzu.org.ui.login.model;
 
 public class FiltersActivity extends AppCompatActivity implements View.OnClickListener {
@@ -58,7 +60,7 @@ public class FiltersActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         prefs = this.getSharedPreferences(" ", Context.MODE_PRIVATE);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_filters);
         lvMain1 = (ListView) findViewById(R.id.list_view_filters1);

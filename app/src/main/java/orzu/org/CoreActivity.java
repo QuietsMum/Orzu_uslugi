@@ -10,6 +10,8 @@ import android.os.Handler;
 import android.view.Window;
 import android.widget.ImageView;
 import java.util.HashMap;
+import java.util.Objects;
+
 import orzu.org.ui.login.model;
 
 public class CoreActivity extends AppCompatActivity {
@@ -20,7 +22,7 @@ public class CoreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
 
         setContentView(R.layout.activity_core);
 
@@ -44,6 +46,7 @@ public class CoreActivity extends AppCompatActivity {
 
                 final AnimatedVectorDrawableCompat anim = AnimatedVectorDrawableCompat.create(getApplication(), R.drawable.logo_animated);
                 logo.setImageDrawable(anim);
+                assert anim != null;
                 anim.start();
             }
         }, 500);

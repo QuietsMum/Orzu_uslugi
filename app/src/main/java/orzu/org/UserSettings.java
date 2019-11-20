@@ -1,15 +1,14 @@
 package orzu.org;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -65,16 +64,33 @@ public class UserSettings extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent3);
                 break;
             case R.id.button_logout:
-                DBHelper dbHelper = new DBHelper(this);
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
-                db.execSQL("delete from " + "orzutable");
-                final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.clear();
-                Intent mStartActivity = new Intent(this, CoreActivity.class);
-                startActivity(mStartActivity);
-                finishAffinity();
-                finish();
+                AlertDialog alertDialog = new AlertDialog.Builder(UserSettings.this).create();
+                alertDialog.setTitle("Выход");
+                alertDialog.setMessage("Вы уверенны что хотите выйти из профиля?");
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "ДА",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                DBHelper dbHelper = new DBHelper(UserSettings.this);
+                                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                                db.execSQL("delete from " + "orzutable");
+                                final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = prefs.edit();
+                                editor.clear();
+                                Intent mStartActivity = new Intent(UserSettings.this, CoreActivity.class);
+                                startActivity(mStartActivity);
+                                finishAffinity();
+                                finish();
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "НЕТ",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+
 //                int mPendingIntentId = 123456;
 //                PendingIntent mPendingIntent = PendingIntent.getActivity(this, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
 //                AlarmManager mgr = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);

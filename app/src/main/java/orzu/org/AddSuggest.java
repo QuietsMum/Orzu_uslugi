@@ -16,7 +16,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
+import java.util.Objects;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -39,7 +44,7 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         getWindow().setStatusBarColor(getResources().getColor(R.color.back_for_feed));
         setContentView(R.layout.activity_add_suggest);
 
@@ -64,7 +69,7 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
                 finish();
             }
         });
-        idTask = getIntent().getExtras().getString("idTaskSuggest");
+        idTask = Objects.requireNonNull(getIntent().getExtras()).getString("idTaskSuggest");
 
 
         backButton = findViewById(R.id.button_back_sugg);
@@ -103,7 +108,7 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
 
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NotNull Call call, IOException e) {
                 AddSuggest.this.runOnUiThread(new Runnable() {
                     public void run() {
                         Dialog dialog = new Dialog(AddSuggest.this, android.R.style.Theme_Material_Light_NoActionBar);
@@ -132,9 +137,9 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 
-                String mMessage = response.body().string();
+                String mMessage = Objects.requireNonNull(response.body()).string();
                 finish();
             }
         });

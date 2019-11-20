@@ -2,6 +2,8 @@ package orzu.org;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -27,9 +29,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+
 import javax.net.ssl.HttpsURLConnection;
 
 
@@ -51,7 +56,7 @@ public class CategoryView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_category_view);
 
@@ -95,6 +100,7 @@ public class CategoryView extends AppCompatActivity {
         final URL[] orzuEndpoint = new URL[1];
 
 
+        @SuppressLint("StaticFieldLeak")
         class AsyncOrzuTasks extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {
 
 
@@ -119,7 +125,7 @@ public class CategoryView extends AppCompatActivity {
                         // Success
                         InputStream responseBody = myConnection[0].getInputStream();
                         InputStreamReader responseBodyReader =
-                                new InputStreamReader(responseBody, "UTF-8");
+                                new InputStreamReader(responseBody, StandardCharsets.UTF_8);
 
                         jsonReader[0] = new JsonReader(responseBodyReader);
                     }

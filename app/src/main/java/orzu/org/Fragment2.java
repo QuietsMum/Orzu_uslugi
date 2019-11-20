@@ -23,9 +23,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
 import orzu.org.Notification.AdapterDifferentLayout;
 import orzu.org.Notification.ChooseYouItem;
 import orzu.org.Notification.Literature;
@@ -34,26 +39,24 @@ public class Fragment2 extends Fragment {
     String url = "https://orzu.org/tasks/new/techrepair/techrepairother?token=";
     DBHelper dbHelper;
     ArrayList<Map<String, Object>> data;
-    List<Literature> lit;
-    RecyclerView rv;
+    private List<Literature> lit;
+    private RecyclerView rv;
     AdapterDifferentLayout adapter;
-    String messageNot;
-    String idUserNot;
     SQLiteDatabase db;
-    ImageView no_task;
-    TextView no_task_text;
+    private ImageView no_task;
+    private TextView no_task_text;
     String idUser;
     CardView cardView;
-    BottomNavigationView navigationView;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
     @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstantState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, final ViewGroup container, Bundle savedInstantState) {
         final View view = inflater.inflate(R.layout.fragment_main_2, container, false);
-        getActivity().setTitle(Html.fromHtml("<font color='#ffffff'>Уведомления</font>"));
+        Objects.requireNonNull(getActivity()).setTitle(Html.fromHtml("<font color='#ffffff'>Уведомления</font>"));
         dbHelper = new DBHelper(getActivity());
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("orzutable", null, null, null, null, null, null);
@@ -64,7 +67,7 @@ public class Fragment2 extends Fragment {
         db.close();
         cardView = view.findViewById(R.id.card_of_notif);
         cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
-        navigationView = view.findViewById(R.id.navigation);
+        BottomNavigationView navigationView = view.findViewById(R.id.navigation);
         navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -122,32 +125,30 @@ public class Fragment2 extends Fragment {
         Cursor c = db.query("orzunotif", null, null, null, null, null, null);
         c.moveToFirst();
         lit = new ArrayList<>();
-        if (c != null) {
-            do {
-                try {
-                    int idColIndex = c.getColumnIndex("idUser");
-                    int mesColIndex = c.getColumnIndex("message");
-                    ChooseYouItem item2 = new ChooseYouItem("Nikita", "Android develop", "10000$", "Making apps", "13,09,2018 10:20");
-                    feedbackItem item3 = new feedbackItem(R.drawable.images_background_4, "Иван Иваныч", "2", "qwe", "Безопасная оплата картой и гарантия возврата денег. Компенсация в случае морального ущерба.");
-                    messageNot = c.getString(mesColIndex);
-                    idUserNot = c.getString(idColIndex);
-                    feedbackItem item4 = new feedbackItem(R.drawable.images_background_4, idUserNot, "2", "qwe", messageNot);
-                    lit.add(item3);
-                    lit.add(item2);
-                    lit.add(item3);
-                    lit.add(item2);
-                    lit.add(item2);
-                    lit.add(item3);
-                    lit.add(item4);
-                    no_task.setVisibility(View.INVISIBLE);
-                    no_task_text.setVisibility(View.INVISIBLE);
-                } catch (Exception e) {
-                    no_task.setVisibility(View.VISIBLE);
-                    no_task_text.setVisibility(View.VISIBLE);
-                    rv.setVisibility(View.GONE);
-                }
-            } while (c.moveToNext());
-        }
+        do {
+            try {
+                int idColIndex = c.getColumnIndex("idUser");
+                int mesColIndex = c.getColumnIndex("message");
+                ChooseYouItem item2 = new ChooseYouItem("Nikita", "Android develop", "10000$", "Making apps", "13,09,2018 10:20");
+                feedbackItem item3 = new feedbackItem(R.drawable.images_background_4, "Иван Иваныч", "2", "qwe", "Безопасная оплата картой и гарантия возврата денег. Компенсация в случае морального ущерба.");
+                String messageNot = c.getString(mesColIndex);
+                String idUserNot = c.getString(idColIndex);
+                feedbackItem item4 = new feedbackItem(R.drawable.images_background_4, idUserNot, "2", "qwe", messageNot);
+                lit.add(item3);
+                lit.add(item2);
+                lit.add(item3);
+                lit.add(item2);
+                lit.add(item2);
+                lit.add(item3);
+                lit.add(item4);
+                no_task.setVisibility(View.INVISIBLE);
+                no_task_text.setVisibility(View.INVISIBLE);
+            } catch (Exception e) {
+                no_task.setVisibility(View.VISIBLE);
+                no_task_text.setVisibility(View.VISIBLE);
+                rv.setVisibility(View.GONE);
+            }
+        } while (c.moveToNext());
         adapter = new AdapterDifferentLayout(getActivity(), lit);
         adapter.notifyDataSetChanged();
         c.close();
@@ -165,14 +166,12 @@ public class Fragment2 extends Fragment {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.settings_item_notif:
-                Intent intent = new Intent(getActivity(), NotificationSettings.class);
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.settings_item_notif) {
+            Intent intent = new Intent(getActivity(), NotificationSettings.class);
+            startActivity(intent);
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 }
 

@@ -13,11 +13,11 @@ import java.util.List;
 
 public class ArrayAdapterMy extends RecyclerView.Adapter<ArrayAdapterMy.MyViewHolder>{
 
-    static NameItemSelect select;
-    List<String> maps;
+    private static NameItemSelect select;
+    private List<String> maps;
     Context context;
 
-    public ArrayAdapterMy(Context context,List<String> maps) {
+    ArrayAdapterMy(Context context, List<String> maps) {
         this.context = context;
         this.maps = maps;
     }
@@ -58,7 +58,7 @@ public class ArrayAdapterMy extends RecyclerView.Adapter<ArrayAdapterMy.MyViewHo
         }
     }
 
-    public static void setSelect(NameItemSelect select) {
+    static void setSelect(NameItemSelect select) {
         ArrayAdapterMy.select = select;
     }
 }

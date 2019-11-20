@@ -14,7 +14,7 @@ public class AdapterCityFilter extends RecyclerView.Adapter<AdapterCityFilter.My
     List<String> maps;
     Context context;
     private ItemClickListener mClickListener;
-    public AdapterCityFilter(Context context, List<String> maps) {
+    AdapterCityFilter(Context context, List<String> maps) {
         this.context = context;
         this.maps = maps;
     }
@@ -48,7 +48,7 @@ public class AdapterCityFilter extends RecyclerView.Adapter<AdapterCityFilter.My
             if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
         }
     }
-    public void setClickListener(ItemClickListener itemClickListener) {
+    void setClickListener(ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
     public interface ItemClickListener {

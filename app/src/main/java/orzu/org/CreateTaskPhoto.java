@@ -3,9 +3,10 @@ package orzu.org;
 import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+
+import java.util.Objects;
 
 public class CreateTaskPhoto extends AppCompatActivity implements View.OnClickListener {
 
@@ -14,7 +15,7 @@ public class CreateTaskPhoto extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorAccent)));
+        Objects.requireNonNull(getSupportActionBar()).setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorAccent)));
         setContentView(R.layout.activity_create_task_photo);
 
         getSupportActionBar().setTitle("Фотография");

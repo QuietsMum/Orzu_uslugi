@@ -2,6 +2,8 @@ package orzu.org;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +21,8 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.Objects;
+
 public class CreateTaskAmout extends AppCompatActivity implements View.OnClickListener {
 
     TextView buttonCreate;
@@ -29,6 +33,7 @@ public class CreateTaskAmout extends AppCompatActivity implements View.OnClickLi
     TextInputEditText amoutEditPrice;
     int counter;
     int pricetype;
+    @SuppressLint("StaticFieldLeak")
     public static Activity fa;
     ImageView tri_left_amount,tri_right_amount,create_amount_back;
     CardView cardView;
@@ -37,7 +42,7 @@ public class CreateTaskAmout extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_create_task_amout);
         counter = 1;
@@ -94,7 +99,7 @@ public class CreateTaskAmout extends AppCompatActivity implements View.OnClickLi
         switch (view.getId()) {
             case R.id.createAmout:
                 if (amoutEdit.getVisibility() == View.VISIBLE) {
-                    if (amoutEditPrice.getText().length() != 0) {
+                    if (Objects.requireNonNull(amoutEditPrice.getText()).length() != 0) {
                         if (counter == 1) {
                             pricetype = 1;
                             editor.putString(Util.TASK_PPRICE, String.valueOf(amoutEditPrice.getText()));

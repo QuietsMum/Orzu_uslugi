@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +14,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
@@ -34,8 +35,12 @@ import com.yandex.mapkit.search.SuggestItem;
 import com.yandex.runtime.Error;
 import com.yandex.runtime.network.NetworkError;
 import com.yandex.runtime.network.RemoteError;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class CreateTaskPlace extends AppCompatActivity implements View.OnClickListener, SearchManager.SuggestListener {
@@ -43,6 +48,7 @@ public class CreateTaskPlace extends AppCompatActivity implements View.OnClickLi
     TextView buttonCreateLeft;
     TextView buttonCreateRight;
     TextView textFar;
+    @SuppressLint("StaticFieldLeak")
     public static Activity fa;
     int counter;
     int placetype;
@@ -75,7 +81,7 @@ public class CreateTaskPlace extends AppCompatActivity implements View.OnClickLi
         SearchFactory.initialize(this);
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_create_task_place);
         counter = 1;
@@ -222,7 +228,7 @@ public class CreateTaskPlace extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
-    public void onSuggestResponse(List<SuggestItem> suggest) {
+    public void onSuggestResponse(@NotNull List<SuggestItem> suggest) {
         suggestResult.clear();
         for (int i = 0; i < Math.min(RESULT_NUMBER_LIMIT, suggest.size()); i++) {
             suggestResult.add(suggest.get(i).getDisplayText());
@@ -246,7 +252,7 @@ public class CreateTaskPlace extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
-    public void onSuggestError(Error error) {
+    public void onSuggestError(@NotNull Error error) {
         String errorMessage = "unknown_error_message";
         if (error instanceof RemoteError) {
             errorMessage = "remote_error_message";

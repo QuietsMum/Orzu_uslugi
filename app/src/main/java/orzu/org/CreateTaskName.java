@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -13,7 +15,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
@@ -24,11 +25,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -40,6 +45,7 @@ public class CreateTaskName extends AppCompatActivity implements View.OnClickLis
     TextView buttonCreate;
     TextView name_of_subcategory;
     EditText editName;
+    @SuppressLint("StaticFieldLeak")
     public static Activity fa;
     RecyclerView suggestResultView;
     ArrayAdapterMy resultAdapter;
@@ -51,7 +57,7 @@ public class CreateTaskName extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_create_task_name);
         editName = findViewById(R.id.editCreateName);
@@ -137,7 +143,7 @@ public class CreateTaskName extends AppCompatActivity implements View.OnClickLis
 
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 CreateTaskName.this.runOnUiThread(new Runnable() {
                     public void run() {
                         Dialog dialog = new Dialog(CreateTaskName.this, android.R.style.Theme_Material_Light_NoActionBar);
@@ -162,8 +168,8 @@ public class CreateTaskName extends AppCompatActivity implements View.OnClickLis
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String mMessage = response.body().string();
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                final String mMessage = Objects.requireNonNull(response.body()).string();
                 suggestResult = new ArrayList<>();
 
                 try {
