@@ -52,6 +52,7 @@ dependencies {
     implementation 'jp.wasabeef:blurry:3.0.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.yandex.android:mapkit:3.4.0'
     implementation 'com.yandex.android:search:3.4.0'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
     implementation 'com.facebook.shimmer:shimmer:0.4.0'
