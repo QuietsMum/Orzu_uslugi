@@ -14,12 +14,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -42,7 +40,10 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.rilixtech.Country;
 import com.rilixtech.CountryCodePicker;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -70,7 +71,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
 
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks
             verificationCallbacks;
-    private PhoneAuthProvider.ForceResendingToken resendToken;
 
     private FirebaseAuth fbAuth;
     private String phoneVerificationId;
@@ -78,7 +78,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_forgot_password);
         fbAuth = FirebaseAuth.getInstance();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
@@ -131,13 +131,11 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case MY_REQUEST: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Ok", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Напишите код вручную", Toast.LENGTH_SHORT).show();
-                }
+        if (requestCode == MY_REQUEST) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Ok", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Напишите код вручную", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -145,7 +143,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onClick(View view) {
-        View arv = view;
 
 
         if (phon.getText().length() != 0&pass.getText().length()!=0) {
@@ -176,8 +173,9 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
 
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                mMessage = e.getMessage().toString();
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                mMessage = e.getMessage();
+                assert mMessage != null;
                 if (mMessage.equals("noAuth")) {
                     Toast.makeText(getApplicationContext(), "No registered user!", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getApplicationContext(), LoginActivity2.class);
@@ -209,9 +207,9 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 
-                mMessage = response.body().string();
+                mMessage = Objects.requireNonNull(response.body()).string();
                 if(mMessage.equals("\"password changed\"")){
                     Intent intent = new Intent(ForgotPasswordActivity.this,PhoneLoginActivity.class);
                     startActivity(intent);
@@ -237,10 +235,9 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
 
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                mMessage = e.getMessage().toString();
-                Log.w("failure Response", mMessage);
-                if (mMessage.equals("noAuth")) {
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                mMessage = e.getMessage();
+                if (Objects.equals(mMessage, "noAuth")) {
                     Toast.makeText(getApplicationContext(), "No registered user!", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getApplicationContext(), LoginActivity2.class);
                     startActivity(intent);
@@ -271,9 +268,9 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 
-                mMessage = response.body().string();
+                mMessage = Objects.requireNonNull(response.body()).string();
 
                 if (mMessage.equals("\"phone exists\"")) {
                     ForgotPasswordActivity.this.runOnUiThread(new Runnable() {
@@ -281,8 +278,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
                             progressBar.setVisibility(View.VISIBLE);
                         }
                     });
-
-
 
                     sendCode();
 
@@ -364,14 +359,14 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
 
                     @Override
                     public void onVerificationCompleted(
-                            PhoneAuthCredential credential) {
+                            @NotNull PhoneAuthCredential credential) {
 
                         signInWithPhoneAuthCredential(credential);
                         Toast.makeText(ForgotPasswordActivity.this, "Success", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
-                    public void onVerificationFailed(FirebaseException e) {
+                    public void onVerificationFailed(@NotNull FirebaseException e) {
 
                         if (e instanceof FirebaseAuthInvalidCredentialsException) {
                             // Invalid request
@@ -382,11 +377,10 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
                     }
 
                     @Override
-                    public void onCodeSent(String verificationId,
-                                           PhoneAuthProvider.ForceResendingToken token) {
+                    public void onCodeSent(@NotNull String verificationId,
+                                           @NotNull PhoneAuthProvider.ForceResendingToken token) {
 
                         phoneVerificationId = verificationId;
-                        resendToken = token;
 
                     }
                 };
@@ -400,17 +394,14 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
 
-                            FirebaseUser user = task.getResult().getUser();
+                            FirebaseUser user = Objects.requireNonNull(task.getResult()).getUser();
                             try {
                                 changePassoword();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
                         } else {
-                            if (task.getException() instanceof
-                                    FirebaseAuthInvalidCredentialsException) {
-                                // The verification code entered was invalid
-                            }
+                            task.getException();// The verification code entered was invalid
                         }
                     }
                 });

@@ -14,20 +14,20 @@ import orzu.org.ui.login.model;
 
 public class AdapterRespandableLV extends BaseExpandableListAdapter {
 
-    public ArrayList<String> groupItem;
-    public ArrayList<SubItem> tempChild;
-    public ArrayList<Object> Childtem = new ArrayList<Object>();
-    public LayoutInflater minflater;
+    private ArrayList<String> groupItem;
+    private ArrayList<SubItem> tempChild;
+    private ArrayList<Object> Childtem = new ArrayList<Object>();
+    private LayoutInflater minflater;
     public Activity activity;
     ArrayList<String> subsServer = model.arraySubs;
 
-    public AdapterRespandableLV(ArrayList<String> grList, ArrayList<Object> childItem) {
+    AdapterRespandableLV(ArrayList<String> grList, ArrayList<Object> childItem) {
         groupItem = grList;
         this.Childtem = childItem;
     }
 
 
-    public void setInflater(LayoutInflater mInflater, Activity act) {
+    void setInflater(LayoutInflater mInflater, Activity act) {
         this.minflater = mInflater;
         activity = act;
     }

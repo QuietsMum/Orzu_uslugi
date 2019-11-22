@@ -22,22 +22,28 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
+
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.fxn.pix.Options;
 import com.fxn.pix.Pix;
 import com.squareup.picasso.Picasso;
+
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -51,74 +57,69 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
 
     String idUser;
     String text;
-    String my;
     String mMessage;
-    String mName;
-    String mFiName;
-    String mCount;
-    String mCountReq;
-    String mCity;
-    String mBday;
-    String mSex;
-    String mNarr;
-    TextView nameUser;
-    TextView noReviews;
-    TextView taskCountReq;
-    TextView taskCount;
-    TextView userCity;
-    TextView userBday;
-    TextView userSex;
-    TextView userNarr;
-    LinearLayout feedbackButtun;
-    TextView feedbackname1;
-    TextView feedbackplus1;
-    TextView feedbacknarr1;
-    TextView feedbackcat1;
-    ImageView feedbackimg1;
-    ImageView feedbackimgUser1;
-    TextView feedbackname2;
-    TextView feedbackplus2;
-    TextView feedbacknarr2;
-    TextView feedbackcat2;
-    ImageView feedbackimg2;
-    ImageView feedbackimgUser2;
-    View devider;
-    ShimmerFrameLayout shim;
-    ImageView image_back;
-    String mStatus;
-    String image1;
-    String image2;
-    ImageView statusImg;
-    ImageView imageViewName;
-    ArrayList<String> returnValue = new ArrayList<>();
-    CardView cardView_shim;
-    CardView cardView;
-    DBHelper dbHelper;
-    String tokenUser;
+    private String mName;
+    private String mFiName;
+    private String mCount;
+    private String mCountReq;
+    private String mCity;
+    private String mBday;
+    private String mSex;
+    private String mNarr;
+    private TextView nameUser;
+    private TextView noReviews;
+    private TextView taskCountReq;
+    private TextView taskCount;
+    private TextView userCity;
+    private TextView userBday;
+    private TextView userSex;
+    private TextView userNarr;
+    private TextView feedbackname1;
+    private TextView feedbackplus1;
+    private TextView feedbacknarr1;
+    private TextView feedbackcat1;
+    private ImageView feedbackimg1;
+    private ImageView feedbackimgUser1;
+    private TextView feedbackname2;
+    private TextView feedbackplus2;
+    private TextView feedbacknarr2;
+    private TextView feedbackcat2;
+    private ImageView feedbackimg2;
+    private ImageView feedbackimgUser2;
+    private View devider;
+    private ShimmerFrameLayout shim;
+    private ImageView image_back;
+    private String mStatus;
+    private String image1;
+    private String image2;
+    private ImageView statusImg;
+    private ImageView imageViewName;
+    private ArrayList<String> returnValue = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstantState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, final ViewGroup container, Bundle savedInstantState) {
         final View view = inflater.inflate(R.layout.fragment_main_3, container, false);
-        final SharedPreferences prefs = getActivity().getSharedPreferences(" ", Context.MODE_PRIVATE);
+        final SharedPreferences prefs = Objects.requireNonNull(getActivity()).getSharedPreferences(" ", Context.MODE_PRIVATE);
         idUser = prefs.getString(Util.TASK_USERID, "");
-        my = prefs.getString(Util.TASK_USERIDMY, "");
-        dbHelper = new DBHelper(getContext());
+        String my = prefs.getString(Util.TASK_USERIDMY, "");
+        DBHelper dbHelper = new DBHelper(getContext());
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("orzutable", null, null, null, null, null, null);
         c.moveToFirst();
         int idColIndex = c.getColumnIndex("id");
         int tokenColIndex = c.getColumnIndex("token");
         idUser = c.getString(idColIndex);
-        tokenUser = c.getString(tokenColIndex);
+        String tokenUser = c.getString(tokenColIndex);
         c.moveToFirst();
         c.close();
         db.close();
-        feedbackButtun = view.findViewById(R.id.linear_feed_click);
+        LinearLayout feedbackButtun = view.findViewById(R.id.linear_feed_click);
         feedbackButtun.setOnClickListener(this);
         nameUser = view.findViewById(R.id.name_fname);
         feedbackname1 = view.findViewById(R.id.userview_feedbacknamemy);
@@ -138,9 +139,9 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         image_back = view.findViewById(R.id.img_back);
         shim = (ShimmerFrameLayout) view.findViewById(R.id.userviewShimmerLayoutmy);
         shim.startShimmer();
-        cardView = view.findViewById(R.id.card_of_user_view);
+        CardView cardView = view.findViewById(R.id.card_of_user_view);
         cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
-        cardView_shim = view.findViewById(R.id.card_of_user_view_activity_shim);
+        CardView cardView_shim = view.findViewById(R.id.card_of_user_view_activity_shim);
         cardView_shim.setBackgroundResource(R.drawable.shape_card_topcorners);
         taskCountReq = view.findViewById(R.id.viewuser_task_count_reqmy);
         taskCount = view.findViewById(R.id.viewuser_task_countmy);
@@ -165,14 +166,17 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         requestFeedbackMy();
         return view;
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && requestCode == 100) {
+            assert data != null;
             returnValue = data.getStringArrayListExtra(Pix.IMAGE_RESULTS);
+            assert returnValue != null;
             imageViewName.setImageURI(Uri.parse(returnValue.get(0)));
             Common.d = imageViewName.getDrawable();
-            ((Main2Activity) getActivity()).changeImage();
+            ((Main2Activity) Objects.requireNonNull(getActivity())).changeImage();
             try {
                 getEditAvatarResponse();
             } catch (IOException e) {
@@ -180,10 +184,11 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
             }
         }
     }
+
     public void getEditAvatarResponse() throws IOException {
         String url = "https://orzu.org/api/avatar";
         OkHttpClient client = new OkHttpClient();
-        File myFile = new File(Uri.parse(returnValue.get(0)).getPath());
+        File myFile = new File(Objects.requireNonNull(Uri.parse(returnValue.get(0)).getPath()));
         RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart("file", myFile.getName(),
                         RequestBody.create(MediaType.parse("text/csv"), myFile))
@@ -197,7 +202,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                     public void run() {
                         Dialog dialog = new Dialog(Objects.requireNonNull(getContext()), android.R.style.Theme_Material_Light_NoActionBar);
@@ -224,8 +229,9 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                     }
                 });
             }
+
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if (getActivity() == null)
                     return;
                 getActivity().runOnUiThread(new Runnable() {
@@ -237,7 +243,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         });
     }
 
-    public void getUserResponse() throws IOException {
+    private void getUserResponse() throws IOException {
         String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + idUser + "&param=more";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -247,8 +253,8 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                getActivity().runOnUiThread(new Runnable() {
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                     public void run() {
                         Dialog dialog = new Dialog(getContext(), android.R.style.Theme_Material_Light_NoActionBar);
                         dialog.setContentView(R.layout.dialog_no_internet);
@@ -274,9 +280,10 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                     }
                 });
             }
+
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                mMessage = response.body().string();
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                mMessage = Objects.requireNonNull(response.body()).string();
                 try {
                     JSONObject jsonObject = new JSONObject(mMessage);
                     mName = jsonObject.getString("name");
@@ -301,7 +308,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                     if (mStatus.equals("false")) {
                         statusImg.setVisibility(View.INVISIBLE);
                     } else statusImg.setVisibility(View.VISIBLE);
-                    getActivity().runOnUiThread(new Runnable() {
+                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             nameUser.setText(text);
@@ -319,8 +326,9 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
             }
         });
     }
+
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NotNull Menu menu, @NotNull MenuInflater inflater) {
         inflater.inflate(R.menu.user_menu, menu);
         Drawable drawable = menu.findItem(R.id.share_item).getIcon();
         Drawable drawable2 = menu.findItem(R.id.settings_item).getIcon();
@@ -328,7 +336,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         drawable = DrawableCompat.wrap(drawable);
         drawable2 = DrawableCompat.wrap(drawable2);
         drawable3 = DrawableCompat.wrap(drawable3);
-        DrawableCompat.setTint(drawable, ContextCompat.getColor(getActivity(), R.color.colorBackgrndFrg));
+        DrawableCompat.setTint(drawable, ContextCompat.getColor(Objects.requireNonNull(getActivity()), R.color.colorBackgrndFrg));
         DrawableCompat.setTint(drawable2, ContextCompat.getColor(getActivity(), R.color.colorBackgrndFrg));
         DrawableCompat.setTint(drawable3, ContextCompat.getColor(getActivity(), R.color.colorBackgrndFrg));
         menu.findItem(R.id.share_item).setIcon(drawable);
@@ -336,8 +344,9 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         menu.findItem(R.id.item_subscribe).setIcon(drawable3);
         super.onCreateOptionsMenu(menu, inflater);
     }
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NotNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.share_item:
                 Intent sendIntent = new Intent();
@@ -358,17 +367,19 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                 return super.onOptionsItemSelected(item);
         }
     }
+
     @Override
     public void onClick(View view) {
         Intent intent = new Intent(getActivity(), Feedback.class);
         intent.putExtra("idUserFeedback", idUser);
         startActivity(intent);
     }
+
     @Override
     public void onResume() {
         super.onResume();
         imageViewName.setImageDrawable(Common.d);
-        ((Main2Activity) getActivity()).changeImage();
+        ((Main2Activity) Objects.requireNonNull(getActivity())).changeImage();
         if (Common.sex != null) {
             userCity.setText(Common.city);
             userBday.setText(Common.birth);
@@ -377,7 +388,8 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
             nameUser.setText(Common.name);
         }
     }
-    public void requestFeedbackMy() {
+
+    private void requestFeedbackMy() {
         String url = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=reviews&act=view&userid=" + idUser + "&sort=all";
         OkHttpClient client = new OkHttpClient();
         final String[] name = new String[2];
@@ -389,10 +401,10 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                getActivity().runOnUiThread(new Runnable() {
+            public void onFailure(@NotNull Call call, IOException e) {
+                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                     public void run() {
-                        Dialog dialog = new Dialog(getContext(), android.R.style.Theme_Material_Light_NoActionBar);
+                        Dialog dialog = new Dialog(Objects.requireNonNull(getContext()), android.R.style.Theme_Material_Light_NoActionBar);
                         dialog.setContentView(R.layout.dialog_no_internet);
                         Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
                         // if button is clicked, close the custom dialog
@@ -412,11 +424,12 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                     }
                 });
             }
+
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String mMessage = response.body().string();
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                final String mMessage = Objects.requireNonNull(response.body()).string();
                 if (mMessage.equals(Character.toString((char) dchar) + "No reviews yet" + Character.toString((char) dchar))) {
-                    getActivity().runOnUiThread(new Runnable() {
+                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             feedbackname1.setVisibility(View.GONE);
@@ -447,8 +460,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                         if (lenght > 1) {
                             lenght = 2;
                         } else if (lenght == 1) {
-                            lenght = 1;
-                            getActivity().runOnUiThread(new Runnable() {
+                            Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     feedbackname2.setVisibility(View.GONE);
@@ -468,7 +480,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                             if (i == 0) {
                                 long like = jsonObject.getLong("like");
                                 if (like == 0L) {
-                                    getActivity().runOnUiThread(new Runnable() {
+                                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             feedbackplus1.setText("-1");
@@ -476,7 +488,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                                         }
                                     });
                                 } else if (like == 1L) {
-                                    getActivity().runOnUiThread(new Runnable() {
+                                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             feedbackplus1.setText("0");
@@ -484,7 +496,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                                         }
                                     });
                                 } else if (like == 2L) {
-                                    getActivity().runOnUiThread(new Runnable() {
+                                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             feedbackplus1.setText("+1");
@@ -496,7 +508,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                                 narr[0] = jsonObject.getString("narrative");
                                 date[0] = jsonObject.getString("datein");
                                 image1 = jsonObject.getString("avatar");
-                                getActivity().runOnUiThread(new Runnable() {
+                                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         feedbackname1.setText(name[0]);

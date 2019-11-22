@@ -18,7 +18,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
+import java.util.Objects;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -36,7 +41,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryOrangeTop));
         setContentView(R.layout.activity_change_password);
 
@@ -121,7 +126,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
 
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 ChangePasswordActivity.this.runOnUiThread(new Runnable() {
                     public void run() {
                         Dialog dialog = new Dialog(ChangePasswordActivity.this, android.R.style.Theme_Material_Light_NoActionBar);
@@ -150,8 +155,8 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String mMessage = response.body().string();
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String mMessage = Objects.requireNonNull(response.body()).string();
                 final char dm = (char) 34;
 
                 if (mMessage.equals(dm+"Old password Error"+dm)) {

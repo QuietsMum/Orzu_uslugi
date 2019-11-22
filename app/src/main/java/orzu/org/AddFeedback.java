@@ -16,7 +16,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
+import java.util.Objects;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -41,7 +46,7 @@ public class AddFeedback extends AppCompatActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         getWindow().setStatusBarColor(getResources().getColor(R.color.back_for_feed));
         setContentView(R.layout.activity_add_feedback);
 
@@ -56,7 +61,7 @@ public class AddFeedback extends AppCompatActivity implements View.OnClickListen
         c.close();
         db.close();
         like = 1;
-        idUserTo = getIntent().getExtras().getString("idUserFeedbackto");
+        idUserTo = Objects.requireNonNull(getIntent().getExtras()).getString("idUserFeedbackto");
 
         back = findViewById(R.id.feedback_back_in_feed);
         back.setOnClickListener(new View.OnClickListener() {
@@ -97,14 +102,12 @@ public class AddFeedback extends AppCompatActivity implements View.OnClickListen
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+    public boolean onOptionsItemSelected(@NotNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
 
@@ -127,7 +130,7 @@ public class AddFeedback extends AppCompatActivity implements View.OnClickListen
 
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 AddFeedback.this.runOnUiThread(new Runnable() {
                     public void run() {
                         Dialog dialog = new Dialog(AddFeedback.this, android.R.style.Theme_Material_Light_NoActionBar);
@@ -156,9 +159,9 @@ public class AddFeedback extends AppCompatActivity implements View.OnClickListen
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 
-                String mMessage = response.body().string();
+                String mMessage = Objects.requireNonNull(response.body()).string();
                 finish();
             }
         });

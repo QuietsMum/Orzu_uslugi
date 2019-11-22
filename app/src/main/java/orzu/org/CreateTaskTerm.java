@@ -2,6 +2,8 @@ package orzu.org;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -25,10 +27,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 public class CreateTaskTerm extends AppCompatActivity implements View.OnClickListener {
 
     TextView buttonCreate;
+    @SuppressLint("StaticFieldLeak")
     public static Activity fa;
     TextView switch1;
     TextView switch2;
@@ -58,7 +62,7 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_create_task_term);
         counterDef = 2;
@@ -109,7 +113,7 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
         View sheetView = this.getLayoutInflater().inflate(R.layout.calendar_dialog, null);
         dialog.setContentView(sheetView);
         CardView cardView = dialog.findViewById(R.id.card_of_calendar);
-        cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
+        Objects.requireNonNull(cardView).setBackgroundResource(R.drawable.shape_card_topcorners);
         calendar = dialog.findViewById(R.id.calendarView);
         Calendar today = Calendar.getInstance();
         sdf = new SimpleDateFormat("dd.MM.yyyy", myLocale);
@@ -123,7 +127,7 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
         });
         TextView dialogButton = dialog.findViewById(R.id.ok_calendar);
         // if button is clicked, close the custom dialog
-        dialogButton.setOnClickListener(new View.OnClickListener() {
+        Objects.requireNonNull(dialogButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (count == 1) {
@@ -138,7 +142,7 @@ public class CreateTaskTerm extends AppCompatActivity implements View.OnClickLis
         });
         TextView close = dialog.findViewById(R.id.cancel_calendar);
         // if button is clicked, close the custom dialog
-        close.setOnClickListener(new View.OnClickListener() {
+        Objects.requireNonNull(close).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

@@ -1,14 +1,14 @@
 package orzu.org;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -18,6 +18,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.squareup.picasso.Picasso;
+
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -55,10 +59,10 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         getWindow().setStatusBarColor(getResources().getColor(R.color.back_for_feed));
         setContentView(R.layout.activity_feedback);
-        idUser = getIntent().getExtras().getString("idUserFeedback");
+        idUser = Objects.requireNonNull(getIntent().getExtras()).getString("idUserFeedback");
         nameUserFeedbackto = getIntent().getExtras().getString("nameUserFeedbackto");
         sort = findViewById(R.id.sort);
         sort.setVisibility(View.INVISIBLE);
@@ -99,22 +103,6 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
         requestFeedback();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
     public void requestFeedback() {
         String url = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=reviews&act=view&userid=" + idUser + "&sort=all";
         OkHttpClient client = new OkHttpClient();
@@ -133,7 +121,7 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NotNull Call call, IOException e) {
                 Feedback.this.runOnUiThread(new Runnable() {
                     public void run() {
                         Dialog dialog = new Dialog(Feedback.this, android.R.style.Theme_Material_Light_NoActionBar);
@@ -158,8 +146,8 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
                 });
             }
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String mMessage = response.body().string();
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                final String mMessage = Objects.requireNonNull(response.body()).string();
                 if (!mMessage.equals("\"No reviews yet\"")) {
                     try {
                         Map<String, Object> m;
@@ -209,6 +197,7 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
                             all.add(m);
                         }
                         runOnUiThread(new Runnable() {
+                            @SuppressLint("SetTextI18n")
                             @Override
                             public void run() {
                                 shim.setVisibility(View.INVISIBLE);
@@ -227,6 +216,7 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
                     }
                 }else{
                     runOnUiThread(new Runnable() {
+                        @SuppressLint("SetTextI18n")
                         @Override
                         public void run() {
                             shim.setVisibility(View.INVISIBLE);

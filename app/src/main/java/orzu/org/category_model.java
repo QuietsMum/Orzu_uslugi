@@ -3,10 +3,10 @@ package orzu.org;
 public class category_model  {
     String id;
     String name;
-    String parent_id;
+    private String parent_id;
     String color = "1";
 
-    public category_model(String id, String name, String parent_id) {
+    category_model(String id, String name, String parent_id) {
         this.id = id;
         this.name = name;
         this.parent_id = parent_id;

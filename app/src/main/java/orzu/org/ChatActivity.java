@@ -3,11 +3,12 @@ package orzu.org;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -15,6 +16,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+
 import orzu.org.chat.ChattingAdapter;
 import orzu.org.chat.message_interface;
 import orzu.org.chat.my_message;
@@ -32,7 +35,7 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.gradient_back));
         getSupportActionBar().setTitle(Common.nameOfChat);
@@ -72,7 +75,7 @@ public class ChatActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        messages_view.smoothScrollToPosition(messages_view.getAdapter().getItemCount() - 1);
+                        messages_view.smoothScrollToPosition(Objects.requireNonNull(messages_view.getAdapter()).getItemCount() - 1);
                     }
                 }, 200);
             }
@@ -80,11 +83,11 @@ public class ChatActivity extends AppCompatActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String currentTimeStamp = dateFormat.format(new Date());
                 messages.add(new my_message(editText.getText().toString(), currentTimeStamp));
                 adapter.notifyDataSetChanged();
-                messages_view.smoothScrollToPosition(messages_view.getAdapter().getItemCount() - 1);
+                messages_view.smoothScrollToPosition(Objects.requireNonNull(messages_view.getAdapter()).getItemCount() - 1);
                 editText.setText("");
             }
         });

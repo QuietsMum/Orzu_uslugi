@@ -1,5 +1,6 @@
 package orzu.org;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
@@ -19,87 +20,88 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import androidx.annotation.RequiresApi;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Scanner;
+
 import javax.net.ssl.HttpsURLConnection;
+
 import orzu.org.ui.login.model;
 
 public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     String idUser;
-    String tokenUser;
-    DBHelper dbHelper;
-    Dialog dialog;
-    int status;
-    ArrayList<Map<String, Object>> data;
-    ArrayList<Map<String, Object>> truedata;
-    RecyclerView rv;
-    RVAdapter adapter;
-    Map<String, Object> m = new HashMap<>();
-    Map<String, Object> m_new = new HashMap<>();
-    Map<String, Object> m_new_2 = new HashMap<>();
-    Map<String, Object> m_ref = new HashMap<>();
-    AsyncOrzuTasksMainRefreshMy catTaskRef;
-    final String categoryList = "Категория задачи";
-    final String taskList = "Задание";
-    String idList = "ID";
-    String catidList = "CatID";
-    final String priceList = "Цена";
-    final String servList = "Валюта";
-    final String dateList = "Дата публицации";
-    final String cityList = "Город";
-    final String needList = "Сроки";
-    String needListdfrom = "Сроки";
-    ProgressBar progressBar;
-    int count;
-    int countItem;
-    SwipeRefreshLayout swipeLayout;
-    AsyncOrzuTasksMy catTask;
-    Boolean track = true;
-    Boolean noTasks = true;
-    int counter;
-    ImageView imagenotask;
-    TextView textnotask;
+    private Dialog dialog;
+    private int status;
+    private ArrayList<Map<String, Object>> data;
+    private ArrayList<Map<String, Object>> truedata;
+    private RecyclerView rv;
+    private RVAdapter adapter;
+    private Map<String, Object> m = new HashMap<>();
+    private Map<String, Object> m_new_2 = new HashMap<>();
+    private AsyncOrzuTasksMainRefreshMy catTaskRef;
+    private final String categoryList = "Категория задачи";
+    private final String taskList = "Задание";
+    private String idList = "ID";
+    private String catidList = "CatID";
+    private final String priceList = "Цена";
+    private final String servList = "Валюта";
+    private final String cityList = "Город";
+    private final String needList = "Сроки";
+    private String needListdfrom = "Сроки";
+    private ProgressBar progressBar;
+    private int count;
+    private SwipeRefreshLayout swipeLayout;
+    private AsyncOrzuTasksMy catTask;
+    private Boolean track = true;
+    private Boolean noTasks = true;
+    private ImageView imagenotask;
+    private TextView textnotask;
     boolean countPager = true;
-    boolean noTasksYet = false;
-    TextView floaBtn;
-    NestedScrollView scroll_of_fragment4;
-    ProgressBar progress_loading;
+    private boolean noTasksYet = false;
+    private NestedScrollView scroll_of_fragment4;
+    private ProgressBar progress_loading;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstantState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, final ViewGroup container, Bundle savedInstantState) {
         final View view = inflater.inflate(R.layout.fragment_main_4, container, false);
-        dbHelper = new DBHelper(getActivity());
+        DBHelper dbHelper = new DBHelper(getActivity());
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor c = db.query("orzutable", null, null, null, null, null, null);
+        @SuppressLint("Recycle") Cursor c = db.query("orzutable", null, null, null, null, null, null);
         c.moveToFirst();
         int idColIndex = c.getColumnIndex("id");
         int tokenColIndex = c.getColumnIndex("token");
         idUser = c.getString(idColIndex);
-        tokenUser = c.getString(tokenColIndex);
-        floaBtn = view.findViewById(R.id.create_task_main);
+        String tokenUser = c.getString(tokenColIndex);
+        TextView floaBtn = view.findViewById(R.id.create_task_main);
         floaBtn.setOnClickListener(this);
         progressBar = view.findViewById(R.id.progressBarMy);
-        counter = 1;
+        int counter = 1;
         imagenotask = view.findViewById(R.id.imageViewMy);
         textnotask = view.findViewById(R.id.textViewMy);
         imagenotask.setVisibility(View.INVISIBLE);
@@ -117,7 +119,7 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
                 getResources().getColor(R.color.colorPrimary));
         truedata = new ArrayList<>();
         count = 1;
-        countItem = 1;
+        int countItem = 1;
         catTask = new AsyncOrzuTasksMy();
         catTask.execute();
         scroll_of_fragment4 = view.findViewById(R.id.scroll_of_fragment4);
@@ -139,26 +141,29 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
         });
         return view;
     }
+
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NotNull Menu menu, @NotNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
     }
+
     @Override
     public void onClick(View view) {
         Intent intent = new Intent(getActivity(), CreateTaskCategory.class);
         startActivity(intent);
     }
+
     private Map<String, Object> readMessage(JsonReader reader) throws IOException {
-        long id = 1;
-        String text = null;
-        String date = null;
-        String update = null;
-        String needfrom = null;
-        String needto = null;
-        String catid = null;
-        String subcut = null;
-        String price = null;
+        long id;
+        String text;
+        String date;
+        String update;
+        String needfrom;
+        String needto;
+        String catid;
+        String subcut;
+        String price;
         Map<String, Object> m = new HashMap<>();
         reader.beginObject();
         while (reader.hasNext()) {
@@ -241,10 +246,12 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
         reader.endObject();
         return m;
     }
+
     @Override
     public void onDetach() {
         super.onDetach();
     }
+
     @Override
     public void onRefresh() {
         noTasksYet = false;
@@ -252,15 +259,19 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
         catTaskRef = new AsyncOrzuTasksMainRefreshMy();
         catTaskRef.execute();
     }
+
+    @SuppressLint("StaticFieldLeak")
     class AsyncOrzuTasksMy extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {
         final HttpsURLConnection[] myConnection = new HttpsURLConnection[1];
         final URL[] orzuEndpoint = new URL[1];
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             imagenotask.setVisibility(View.INVISIBLE);
             textnotask.setVisibility(View.INVISIBLE);
         }
+
         @Override
         protected ArrayList<Map<String, Object>> doInBackground(String... strings) {
             orzuEndpoint[0] = null;
@@ -279,12 +290,12 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
                 }
                 if (result.equals("\"Not tasks yet\"")) {
                     noTasksYet = true;
-                    Fragment4.this.getActivity().runOnUiThread(new Runnable() {
+                    Objects.requireNonNull(Fragment4.this.getActivity()).runOnUiThread(new Runnable() {
                         public void run() {
                             progress_loading.setVisibility(View.GONE);
                         }
                     });
-                    if(count!=1){
+                    if (count != 1) {
                         catTask.cancel(true);
                     }
                 } else {
@@ -296,7 +307,7 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
                     // Success
                     InputStream responseBody = myConnection[0].getInputStream();
                     InputStreamReader responseBodyReader =
-                            new InputStreamReader(responseBody, "UTF-8");
+                            new InputStreamReader(responseBody, StandardCharsets.UTF_8);
                     jsonReader[0] = new JsonReader(responseBodyReader);
                 }
                 status = myConnection[0].getResponseCode();
@@ -308,18 +319,19 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
                     jsonReader[0].beginArray(); // Start processing the JSON object
                     while (jsonReader[0].hasNext()) { // Loop through all keys
                         m = new HashMap<>();
-                        m_new = new HashMap<>();
+                        Map<String, Object> m_new = new HashMap<>();
                         m_new_2 = new HashMap<>();
                         m = readMessage(jsonReader[0]);
                         Long[] savedList = model.array;
                         Long det = 0L;
                         if (savedList != null) {
-                            for (int i = 0; i < savedList.length; i++) {
-                                if (savedList[i] != null && savedList[i] != 0) {
-                                    det = savedList[i];
+                            for (Long aLong : savedList) {
+                                if (aLong != null && aLong != 0) {
+                                    det = aLong;
                                 }
                             }
                         }
+                        String dateList = "Дата публицации";
                         if (det == 0L) {
                             m_new.put(idList, m.get(idList));
                             m_new.put(taskList, m.get(taskList));
@@ -331,9 +343,9 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
                             m_new.put(needListdfrom, m.get(needListdfrom));
                             m_new.put(catidList, m.get(catidList));
                         } else {
-                            for (int i = 0; i < savedList.length; i++) {
-                                if (savedList[i] != null) {
-                                    if (savedList[i].toString().equals(m.get(catidList).toString())) {
+                            for (Long aLong : savedList) {
+                                if (aLong != null) {
+                                    if (aLong.toString().equals(m.get(catidList).toString())) {
                                         m_new.put(idList, m.get(idList));
                                         m_new.put(taskList, m.get(taskList));
                                         m_new.put(categoryList, m.get(categoryList));
@@ -359,7 +371,7 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
                 e.printStackTrace();
             } catch (IOException e) {
                 if (status != 200) {
-                    Fragment4.this.getActivity().runOnUiThread(new Runnable() {
+                    Objects.requireNonNull(Fragment4.this.getActivity()).runOnUiThread(new Runnable() {
                         public void run() {
                             imagenotask.setVisibility(View.VISIBLE);
                             textnotask.setVisibility(View.VISIBLE);
@@ -390,6 +402,7 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
             myConnection[0].disconnect();
             return null;
         }
+
         protected void onPostExecute(ArrayList<Map<String, Object>> result) {
             super.onPostExecute(result);
             count++;
@@ -409,6 +422,7 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
                     intent.putExtra("mytask", "my");
                     startActivity(intent);
                 }
+
                 @Override
                 public void onClick(View view) {
                 }
@@ -421,15 +435,19 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
             }
         }
     }
+
+    @SuppressLint("StaticFieldLeak")
     class AsyncOrzuTasksMainRefreshMy extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {
         final HttpsURLConnection[] myConnection = new HttpsURLConnection[1];
         final URL[] orzuEndpoint = new URL[1];
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             imagenotask.setVisibility(View.INVISIBLE);
             textnotask.setVisibility(View.INVISIBLE);
         }
+
         @Override
         protected ArrayList<Map<String, Object>> doInBackground(String... strings) {
             orzuEndpoint[0] = null;
@@ -468,9 +486,9 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
                     if (det == 0L) {
                         m_new_2.put(idList, id);
                     } else {
-                        for (int i = 0; i < savedList.length; i++) {
-                            if (savedList[i] != null) {
-                                if (savedList[i].toString().equals(m.get(catidList).toString())) {
+                        for (Long aLong : savedList) {
+                            if (aLong != null) {
+                                if (aLong.toString().equals(m.get(catidList).toString())) {
                                     m_new_2.put(idList, id);
                                 }
                             }
@@ -482,11 +500,11 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
                 e.printStackTrace();
             } catch (IOException e) {
                 if (status != 200) {
-                    Fragment4.this.getActivity().runOnUiThread(new Runnable() {
+                    Objects.requireNonNull(Fragment4.this.getActivity()).runOnUiThread(new Runnable() {
                         public void run() {
                             imagenotask.setVisibility(View.VISIBLE);
                             textnotask.setVisibility(View.VISIBLE);
-                            dialog = new Dialog(Fragment4.this.getActivity(), android.R.style.Theme_Material_Light_NoActionBar);
+                            dialog = new Dialog(Objects.requireNonNull(Fragment4.this.getActivity()), android.R.style.Theme_Material_Light_NoActionBar);
                             dialog.setContentView(R.layout.dialog_no_internet);
                             Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
                             // if button is clicked, close the custom dialog
@@ -513,10 +531,11 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
             myConnection[0].disconnect();
             return null;
         }
+
         protected void onPostExecute(ArrayList<Map<String, Object>> result) {
             super.onPostExecute(result);
             if (truedata.size() != 0) {
-                m_ref = truedata.get(0);
+                Map<String, Object> m_ref = truedata.get(0);
                 Long idold = (Long) m_ref.get(idList);
                 Long idnew = (Long) m_new_2.get(idList);
                 if (!idold.equals(idnew) || noTasks) {

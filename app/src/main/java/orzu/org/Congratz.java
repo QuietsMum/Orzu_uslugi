@@ -9,13 +9,15 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Objects;
+
 public class Congratz extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_congratz);
 
 
@@ -31,6 +33,7 @@ public class Congratz extends AppCompatActivity implements View.OnClickListener 
 
                 final AnimatedVectorDrawableCompat anim = AnimatedVectorDrawableCompat.create(getApplication(), R.drawable.congratz);
                 feer1.setImageDrawable(anim);
+                assert anim != null;
                 anim.start();
             }
         }, 500);

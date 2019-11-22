@@ -2,6 +2,8 @@ package orzu.org;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -10,7 +12,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.JsonReader;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.TranslateAnimation;
@@ -29,6 +30,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+
 import javax.net.ssl.HttpsURLConnection;
 
 public class CreateTaskSubCategory extends AppCompatActivity {
@@ -40,16 +43,17 @@ public class CreateTaskSubCategory extends AppCompatActivity {
     CardView cardView;
     TextView name_of_subcategory;
     ImageView back;
+    @SuppressLint("StaticFieldLeak")
     public static Activity fa;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_create_task_sub_category);
 
-        String idIntent = getIntent().getExtras().getString("id");
+        String idIntent = Objects.requireNonNull(getIntent().getExtras()).getString("id");
         String nameIntent = getIntent().getExtras().getString("name");
 
         progressBar = findViewById(R.id.progressBarSubCatCreate);
@@ -83,6 +87,7 @@ public class CreateTaskSubCategory extends AppCompatActivity {
         final URL[] orzuEndpoint = new URL[1];
 
 
+        @SuppressLint("StaticFieldLeak")
         class AsyncOrzuTasks extends AsyncTask<String,String,ArrayList<Map<String, Object>>> {
 
 
@@ -185,8 +190,8 @@ public class CreateTaskSubCategory extends AppCompatActivity {
     }
 
     private Map<String, Object> readMessage(JsonReader reader) throws IOException {
-        long id = 1;
-        String text = null;
+        long id;
+        String text;
         Map<String, Object> m = new HashMap<>();
         String taskList = "Категория";
         String idList = "ID";
