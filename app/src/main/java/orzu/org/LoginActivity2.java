@@ -245,9 +245,14 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
             public void onResponse(Call call, Response response) throws IOException {
                 mMessage = response.body().string();
                 if(mMessage.equals("\"This user alreday registered\"")){
-                    Toast.makeText(getApplicationContext(), "No registered user!", Toast.LENGTH_LONG).show();
+                    LoginActivity2.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(LoginActivity2.this, "Этот номер уже зарегистрирован", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     Intent intent = new Intent(getApplicationContext(), PhoneLoginActivity.class);
                     startActivity(intent);
+                    finish();
                 }
                 try {
                     obj = new JSONObject(mMessage);
@@ -266,69 +271,6 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                     startActivity(intent);
                     progressBar.setVisibility(View.INVISIBLE);
                     finish();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-    public void getSMSResponse() throws IOException {
-        // api?appid=&opt=register_user&phone=&password=&name=
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=check_sms&phone= "
-                + ccp.getFullNumberWithPlus() + mPhone
-                + "&code=" + input.getText();
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(url)
-                .header("Accept", "application/json")
-                .header("Content-Type", "application/json")
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                mMessage = e.getMessage().toString();
-                if (mMessage.equals("noAuth")) {
-                    Toast.makeText(getApplicationContext(), "No registered user!", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity2.class);
-                    startActivity(intent);
-                } else {
-                    LoginActivity2.this.runOnUiThread(new Runnable() {
-                        public void run() {
-                            Dialog dialog = new Dialog(LoginActivity2.this, android.R.style.Theme_Material_Light_NoActionBar);
-                            dialog.setContentView(R.layout.dialog_no_internet);
-                            Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
-                            // if button is clicked, close the custom dialog
-                            dialogButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    try {
-                                        getSMSResponse();
-                                    } catch (IOException e1) {
-                                        e1.printStackTrace();
-                                    }
-                                    dialog.dismiss();
-                                }
-                            });
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    dialog.show();
-                                }
-                            }, 500);
-                            progressBar.setVisibility(View.INVISIBLE);
-                        }
-                    });
-                }
-            }
-            @Override
-            public void onResponse(Call call, Response
-                    response) throws IOException {
-                mMessage = response.body().string();
-                try {
-                    obj = new JSONObject(mMessage);
-                    mStatus = obj.getString("check");
-                    if (obj.getString("check").equals("yes")) {
-                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -357,8 +299,10 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                     public void onVerificationFailed(FirebaseException e) {
                         if (e instanceof FirebaseAuthInvalidCredentialsException) {
                             // Invalid request
+                            Toast.makeText(LoginActivity2.this, "Invalid request", Toast.LENGTH_SHORT).show();
                         } else if (e instanceof FirebaseTooManyRequestsException) {
                             // SMS quota exceeded
+                            Toast.makeText(LoginActivity2.this, "SMS quota exceeded", Toast.LENGTH_SHORT).show();
                         }
                     }
                     @Override
@@ -366,6 +310,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                                            PhoneAuthProvider.ForceResendingToken token) {
                         phoneVerificationId = verificationId;
                         resendToken = token;
+                        Toast.makeText(LoginActivity2.this, "Code sented", Toast.LENGTH_SHORT).show();
                     }
                 };
     }
@@ -384,6 +329,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                         } else {
                             if (task.getException() instanceof
                                     FirebaseAuthInvalidCredentialsException) {
+                                Toast.makeText(LoginActivity2.this, "The verification code entered was invalid", Toast.LENGTH_SHORT).show();
                                 // The verification code entered was invalid
                             }
                         }

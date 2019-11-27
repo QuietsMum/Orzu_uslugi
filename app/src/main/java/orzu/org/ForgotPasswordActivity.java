@@ -122,6 +122,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
                 phonCount.setText(code);
             }
         });
+
         code = ccp.getSelectedCountryCodeWithPlus();
         phonCount.setText(code);
         button.setOnClickListener(this);

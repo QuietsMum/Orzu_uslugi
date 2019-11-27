@@ -434,11 +434,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     if (count != 1) {
                         catTask.cancel(true);
                     }
-                    Fragment1.this.getActivity().runOnUiThread(new Runnable() {
-                        public void run() {
-                            progress_loading.setVisibility(View.GONE);
-                        }
-                    });
                 } else {
                     jsonReader.beginArray(); // Start processing the JSON object
                     while (jsonReader.hasNext()) { // Loop through all keys
