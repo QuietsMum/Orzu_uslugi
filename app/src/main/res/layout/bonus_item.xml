@@ -88,7 +88,7 @@
                 android:textColor="@color/colorTextDark" />
 
             <TextView
-                android:id="@+id/procent"
+                android:id="@+id/percentage"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
@@ -96,8 +96,9 @@
                 android:gravity="end"
                 android:layout_marginTop="8dp"
                 android:text="-20%"
+                android:textAlignment="center"
                 android:textColor="@color/colorOrangeRed"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/description_of_partner"
                 app:layout_constraintTop_toBottomOf="@+id/name_of_partner" />

@@ -33,14 +33,14 @@ public class Fragment5 extends Fragment {
         bonus_recycler.setNestedScrollingEnabled(false);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         bonus_recycler.setLayoutManager(llm);
-        bonuses.add(new Bonuses("Starbucks","Небольшое описание партнера символов на 75!","С нами с 01.01.2020",R.drawable.starbucks));
-        bonuses.add(new Bonuses("Nike","Небольшое описание партнера символов на 75!","С нами с 01.01.2020","http://mega.kz/media/shops/UP1M/1517855940dsynj.jpg"));
-        bonuses.add(new Bonuses("Спортмастер","Небольшое описание партнера символов на 75!","С нами с 01.01.2020","http://mega.kz/media/shops/r3Gt7/15166355196WkVV.png"));
-        bonuses.add(new Bonuses("Халык Банк","Небольшое описание партнера символов на 75!","С нами с 01.01.2020","http://mega.kz/media/shops/QFFuT6/1522139793hgt2Q.png"));
-        bonuses.add(new Bonuses("7 cups coffee","Небольшое описание партнера символов на 75!","С нами с 01.01.2020","http://mega.kz/media/shops/nr/1517906497r4kff.jpg"));
-        bonuses.add(new Bonuses("Burger King","Небольшое описание партнера символов на 75!","С нами с 01.01.2020","http://mega.kz/media/shops/v5HyA/1516635909Hp3Gz.png"));
-        bonuses.add(new Bonuses("Costa Coffee","Небольшое описание партнера символов на 75!","С нами с 01.01.2020","http://mega.kz/media/shops/AUnAM/1516033578vrfx4.png"));
-        bonuses.add(new Bonuses("KFC","Небольшое описание партнера символов на 75!","С нами с 01.01.2020","http://mega.kz/media/shops/wu3Bq/1516636228dxrCG.png"));
+        bonuses.add(new Bonuses("Starbucks","Небольшое описание партнера символов на 75!","С нами с 01.01.2020","-20%",R.drawable.starbucks));
+        bonuses.add(new Bonuses("Nike","Небольшое описание партнера символов на 75!","С нами с 01.01.2020","-10%","http://mega.kz/media/shops/UP1M/1517855940dsynj.jpg"));
+        bonuses.add(new Bonuses("Спортмастер","Небольшое описание партнера символов на 75!","С нами с 01.01.2020","-15%","http://mega.kz/media/shops/r3Gt7/15166355196WkVV.png"));
+        bonuses.add(new Bonuses("Халык Банк","Небольшое описание партнера символов на 75!","С нами с 01.01.2020","-10%","http://mega.kz/media/shops/QFFuT6/1522139793hgt2Q.png"));
+        bonuses.add(new Bonuses("7 cups coffee","Небольшое описание партнера символов на 75!","С нами с 01.01.2020","-20%","http://mega.kz/media/shops/nr/1517906497r4kff.jpg"));
+        bonuses.add(new Bonuses("Burger King","Небольшое описание партнера символов на 75!","С нами с 01.01.2020","-5%","http://mega.kz/media/shops/v5HyA/1516635909Hp3Gz.png"));
+        bonuses.add(new Bonuses("Costa Coffee","Небольшое описание партнера символов на 75!","С нами с 01.01.2020","-30%","http://mega.kz/media/shops/AUnAM/1516033578vrfx4.png"));
+        bonuses.add(new Bonuses("KFC","Небольшое описание партнера символов на 75!","С нами с 01.01.2020","-10%","http://mega.kz/media/shops/wu3Bq/1516636228dxrCG.png"));
         BonusAdapter adapter = new BonusAdapter(getContext(),bonuses);
         bonus_recycler.setAdapter(adapter);
         adapter.setClickListener(new BonusAdapter.ItemClickListener() {

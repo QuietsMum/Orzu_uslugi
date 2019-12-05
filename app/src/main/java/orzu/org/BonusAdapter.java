@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
+import android.text.TextPaint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,17 @@ public class BonusAdapter extends RecyclerView.Adapter<BonusAdapter.MyViewHolder
         }else{
             holder.logo.setImageResource(maps.get(position).getLogos());
         }
+        holder.percent.setTextColor(Color.parseColor("#fe8c00"));
+        holder.percent.setText(maps.get(position).getPercentage());
+        TextPaint paint = holder.percent.getPaint();
+        float width = paint.measureText(maps.get(position).getPercentage());
+        Shader textShader = new LinearGradient(0, 0, width, holder.percent.getTextSize(),
+                new int[]{
+                        Color.parseColor("#fe8c00"),
+                        Color.parseColor("#f83600"),
+                }, null, Shader.TileMode.CLAMP);
+        holder.percent.getPaint().setShader(textShader);
+
 
 
     }
@@ -61,11 +73,8 @@ public class BonusAdapter extends RecyclerView.Adapter<BonusAdapter.MyViewHolder
             logo = itemView.findViewById(R.id.logo_of_partner);
             percent = itemView.findViewById(R.id.percent);
 
-            percent= new TextView(context);
-            Shader textShader=new LinearGradient(0, 0, 0, 20,
-                    new int[]{R.color.colorOrangeOnly, R.color.colorOrangeRed},
-                    new float[]{0, 1}, Shader.TileMode.CLAMP);
-            percent.getPaint().setShader(textShader);
+            percent= itemView.findViewById(R.id.percentage);
+
 
 
             itemView.setOnClickListener(this);
