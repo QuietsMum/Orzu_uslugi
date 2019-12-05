@@ -19,7 +19,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <ImageView
@@ -27,6 +27,7 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:scaleType="centerCrop"
+            android:layout_margin="4dp"
             android:background="@drawable/starbucks"/>
 
 
@@ -66,18 +67,43 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-        <TextView
-            android:id="@+id/description_of_partner"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/layout_desc_and_perc"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            android:text="Небольшое описание партнера символов на 75!"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorPrimary"
+            android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/name_of_partner" />
+            app:layout_constraintTop_toBottomOf="@+id/name_of_partner" >
+
+            <TextView
+                android:id="@+id/description_of_partner"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_marginTop="8dp"
+                android:text="Небольшое описание партнера символов на 75!"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorTextDark" />
+
+            <TextView
+                android:id="@+id/procent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="end"
+                android:layout_marginTop="8dp"
+                android:text="-20%"
+                android:textColor="@color/colorOrangeRed"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/description_of_partner"
+                app:layout_constraintTop_toBottomOf="@+id/name_of_partner" />
+
+        </LinearLayout>
+
 
 
         <TextView
@@ -91,7 +117,7 @@
             android:text="С нами с 01.01.2020"
             android:textColor="@color/colorTextDark"
             android:textSize="14sp"
-            app:layout_constraintTop_toBottomOf="@+id/description_of_partner" />
+            app:layout_constraintTop_toBottomOf="@+id/layout_desc_and_perc" />
 
 
 

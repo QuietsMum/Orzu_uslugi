@@ -2,6 +2,9 @@ package orzu.org;
 
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +50,7 @@ public class BonusAdapter extends RecyclerView.Adapter<BonusAdapter.MyViewHolder
         return maps.size();
     }
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView name,description,date;
+        TextView name,description,date, percent;
         ImageView logo;
 
         MyViewHolder(View itemView) {
@@ -56,6 +59,15 @@ public class BonusAdapter extends RecyclerView.Adapter<BonusAdapter.MyViewHolder
             description = itemView.findViewById(R.id.description_of_partner);
             date = itemView.findViewById(R.id.date_of_partner);
             logo = itemView.findViewById(R.id.logo_of_partner);
+            percent = itemView.findViewById(R.id.percent);
+
+            percent= new TextView(context);
+            Shader textShader=new LinearGradient(0, 0, 0, 20,
+                    new int[]{R.color.colorOrangeOnly, R.color.colorOrangeRed},
+                    new float[]{0, 1}, Shader.TileMode.CLAMP);
+            percent.getPaint().setShader(textShader);
+
+
             itemView.setOnClickListener(this);
         }
 
