@@ -13,6 +13,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.JsonReader;
 import android.util.JsonToken;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +25,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
@@ -56,6 +59,8 @@ import java.util.Scanner;
 import java.util.Set;
 import javax.net.ssl.HttpsURLConnection;
 import orzu.org.ui.login.model;
+
+import static com.yandex.runtime.Runtime.getApplicationContext;
 
 public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     String filter = "";
@@ -122,6 +127,10 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         final View view = inflater.inflate(R.layout.fragment_main, container, false);
         prefs = getActivity().getSharedPreferences(" ", Context.MODE_PRIVATE);
         Common.city = prefs.getString("UserCityPref","");
+        if(Common.referrer.length()!=0){
+            Toast.makeText(getContext(), Common.referrer+"", Toast.LENGTH_SHORT).show();
+        }
+
         if(prefs.getString("UserCityPref","").equals("")){
             Intent intent = new Intent(getActivity(),RegistCity.class);
             startActivity(intent);

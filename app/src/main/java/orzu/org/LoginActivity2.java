@@ -50,7 +50,7 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import static orzu.org.MessageReceiver.extra;
+
 
 public class LoginActivity2 extends AppCompatActivity implements View.OnClickListener {
     EditText name;
@@ -97,20 +97,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
         cardview.setBackgroundResource(R.drawable.shape_card_topcorners);
         IntentFilter filter = new IntentFilter();
         filter.addAction("service.to.activity.transfer");
-        otp = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (!extra.equals("")) {
-                    String substr = extra.substring(extra.indexOf(" ") + 1);
-                    input.setText(substr);
-                    extra = "";
-                    final SharedPreferences prefs = getSharedPreferences("", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putString("Username", name.getText().toString());
-                    editor.apply();
-                }
-            }
-        };
+
         registerReceiver(otp, filter);
         progressBar = findViewById(R.id.progressBarLogin_reg);
         progressBar.setVisibility(View.INVISIBLE);

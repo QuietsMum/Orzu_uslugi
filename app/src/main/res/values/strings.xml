@@ -90,6 +90,7 @@
     <string name="something_text">Безопасная оплата картой и гарантия возврата денег. Компенсация в случае морального ущерба.</string>
     <string name="forgot_pwd"> <u>Забыли пароль?</u></string>
     <string name="registration"><u>Зарегистрироваться </u></string>
+    <string name="bonus">Бонусы</string>
 
     <string-array name="datecreatelist">
         <item>В любое время</item>

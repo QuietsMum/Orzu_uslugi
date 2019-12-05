@@ -9,18 +9,23 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
 import org.jetbrains.annotations.NotNull;
+
 import java.util.Random;
 
 public class NotificationsMessagingService extends FirebaseMessagingService {
     Context context = this;
     DBHelper dbHelper;
     SharedPreferences prefs;
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onMessageReceived(@NotNull RemoteMessage remoteMessage) {
@@ -28,17 +33,27 @@ public class NotificationsMessagingService extends FirebaseMessagingService {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("New_task", remoteMessage.getData() + "");
         editor.apply();
-        if(remoteMessage.getData().containsKey("ID")){
+        if (remoteMessage.getData().containsKey("ID")) {
             showNotification(remoteMessage);
         }
     }
+
     private void showNotification(@NotNull RemoteMessage remoteMessage) {
+        String[] ar = remoteMessage.getData().get("ID").split(".");
         Intent intent = new Intent(this, TaskViewMain.class);
+        ;
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("idd", remoteMessage.getData().get("ID"));
+        String id;
+        if (ar.length >= 2) {
+            editor.putString("mytask", "my");
+            id = ar[1];
+        } else {
+            editor.putString("mytask", "not");
+            id = ar[0];
+        }
+        editor.putString("idd", id);
         editor.putString("New_task", remoteMessage.getData() + "");
         editor.putString("opt", "view");
-        editor.putString("mytask", "not");
         editor.putBoolean("notif", true);
         editor.apply();
         PendingIntent activity = PendingIntent.getActivity(this, 0, intent, 0);
@@ -63,6 +78,7 @@ public class NotificationsMessagingService extends FirebaseMessagingService {
                 .setContentIntent(activity);
         notificationManager.notify(new Random().nextInt(), notificationBuilder.build());
     }
+
     @Override
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);

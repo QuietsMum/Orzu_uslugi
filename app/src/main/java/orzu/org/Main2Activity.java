@@ -415,6 +415,9 @@ public class Main2Activity extends AppCompatActivity
                     mFiName = jsonObject.getString("fname");
                     image = jsonObject.getString("avatar");
                     city = jsonObject.getString("city");
+                    Common.sad = jsonObject.getString("city");
+                    Common.neutral = jsonObject.getString("city");
+                    Common.happy = jsonObject.getString("city");
                     if (mFiName.equals("null")) {
                         text = mName;
                     } else text = mName + "\n" + mFiName;

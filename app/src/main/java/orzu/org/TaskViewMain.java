@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.viewpager.widget.ViewPager;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -32,14 +33,17 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.squareup.picasso.Picasso;
 import com.viewpagerindicator.CirclePageIndicator;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,7 +59,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
 import javax.net.ssl.HttpsURLConnection;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -165,6 +171,12 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             id = "" + intent.getStringExtra("id");
             opt = intent.getStringExtra("opt");
             myTask = intent.getStringExtra("mytask");
+            sad = findViewById(R.id.textSad);
+            sad.setText(Common.neutral);
+            nat = findViewById(R.id.textNatural);
+            nat.setText(Common.sad);
+            hap = findViewById(R.id.textHappy);
+            hap.setText(Common.happy);
         }
         if (prefs.getBoolean("notif", false)) {
             id = prefs.getString("idd", "");
@@ -184,7 +196,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 deleteTask(id);
-                                Intent returnIntent = new Intent(TaskViewMain.this,Main2Activity.class);
+                                Intent returnIntent = new Intent(TaskViewMain.this, Main2Activity.class);
                                 startActivity(returnIntent);
                                 finish();
                                 dialog.dismiss();
@@ -339,6 +351,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             circleIndicator.setViewPager(viewPager);
         }
     }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -368,13 +381,16 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+
     class AsyncOrzuTask extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {
         final HttpsURLConnection[] myConnection = new HttpsURLConnection[1];
         final URL[] orzuEndpoint = new URL[1];
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
         }
+
         @Override
         protected ArrayList<Map<String, Object>> doInBackground(String... strings) {
             m = new HashMap<>();
@@ -429,6 +445,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             }
             return null;
         }
+
         protected void onPostExecute(ArrayList<Map<String, Object>> result) {
             super.onPostExecute(result);
             try {
@@ -478,6 +495,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
+
     private Map<String, Object> readMessage(JsonReader reader) throws IOException {
         long id = 1;
         long userid = 1;
@@ -524,7 +542,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                 case "user_id":
                     if (reader.peek() != JsonToken.NULL) {
                         userid = reader.nextLong();
-                        if(idUser.equals(userid+"")){
+                        if (idUser.equals(userid + "")) {
                             TaskViewMain.this.runOnUiThread(new Runnable() {
                                 public void run() {
                                     delete.setVisibility(View.VISIBLE);
@@ -620,14 +638,17 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         reader.endObject();
         return m;
     }
+
     @Override
     public void onBackPressed() {
         finish();
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -638,6 +659,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                 return super.onOptionsItemSelected(item);
         }
     }
+
     public String parseDateToddMMyyyy(String time) {
         String inputPattern = "yyyy-MM-dd HH:mm:ss";
         String outputPattern = "EEE, d MMMM yyyy HH:mm:ss";
@@ -667,6 +689,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         }
         return str;
     }
+
     public void getUserResponse() throws IOException {
         String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + m.get(useridList);
         OkHttpClient client = new OkHttpClient();
@@ -705,6 +728,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                     }
                 });
             }
+
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 mMessage = response.body().string();
@@ -741,6 +765,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
+
     public void getCreateResponse() throws IOException {
         progressBar.setVisibility(View.VISIBLE);
         // DATE TYPE
@@ -827,6 +852,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                     }
                 });
             }
+
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String[] mMessage = response.body().string().split(":");
@@ -852,6 +878,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
+
     public boolean getEditAvatarResponse(String id) throws IOException {
         if (count >= Common.values.size()) {
             TaskViewMain.this.runOnUiThread(new Runnable() {
@@ -914,6 +941,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                     }
                 });
             }
+
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 count++;
@@ -929,8 +957,9 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         });
         return true;
     }
+
     private void deleteTask(String id) {
-        String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=all&userid="+idUser+"&delete=" + id;
+        String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=all&userid=" + idUser + "&delete=" + id;
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

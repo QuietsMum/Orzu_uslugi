@@ -29,5 +29,9 @@ public class Common {
     static HashMap<Integer,String> values = new HashMap<>();
     static HashMap<String, Map<Integer,Integer>> subFilter = new HashMap<>();
     static String city1 = "";
+    static String referrer = "";
+    static String sad = "";
+    static String neutral = "";
+    static String happy = "";
 
 }

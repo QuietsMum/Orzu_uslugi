@@ -52,7 +52,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import static orzu.org.MessageReceiver.extra;
 
 public class ForgotPasswordActivity extends AppCompatActivity implements View.OnClickListener {
     EditText phon;
@@ -94,19 +93,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
         cardview.setBackgroundResource(R.drawable.shape_card_topcorners);
         IntentFilter filter = new IntentFilter();
         filter.addAction("service.to.activity.transfer");
-        otp = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (!extra.equals("")) {
 
-                    String substr = extra.substring(extra.indexOf(" ") + 1);
-                    input.setText(substr);
-                    extra = "";
-
-                }
-            }
-        };
-        registerReceiver(otp, filter);
 
         progressBar = findViewById(R.id.progressBarLogin_reg_forgot);
         progressBar.setVisibility(View.INVISIBLE);
