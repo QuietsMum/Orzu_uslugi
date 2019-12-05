@@ -19,7 +19,7 @@ public class ViewpagerStart extends AppCompatActivity implements View.OnClickLis
     private static final String[] TEXT= {"Создайте задачу" , "Выберите исполнителя", "Задача выполнена"};
     private static final String[] TEXT2= {
             "Расскажите нам, что нужно для вас сделать.\n Укажите время, место и описание.",
-            "Предлоежение от доверенных исполнителей.\n Выберите подходящего человека по отзывам и цене для работы.",
+            "Предложение от доверенных исполнителей.\n Выберите подходящего человека по отзывам и цене для работы.",
             "Ваш исполнитель прибывает и выполняет свою работу.\n Оплачивайте через безопасную сделку."};
     private ArrayList<Integer> ImagesArray = new ArrayList<Integer>();
     private ArrayList<Integer> ImagesArrayBack = new ArrayList<Integer>();
