@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="false"
@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ForgotPasswordActivity"/>
+        <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".FullScreenImageActivity" />
         <activity
             android:name=".ItemSubsNews"
@@ -29,7 +29,8 @@
             android:name=".NotificationSettings"
             android:screenOrientation="portrait" />
 
-        <service android:name=".NotificationsMessagingService"
+        <service
+            android:name=".NotificationsMessagingService"
             android:exported="false">
             <intent-filter android:priority="1">
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -117,21 +118,27 @@
             android:name=".ViewpagerStart"
             android:screenOrientation="portrait" />
 
-        <receiver android:name=".Tracker" android:exported="true">
+        <receiver
+            android:name=".Tracker"
+            android:exported="true">
             <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER"/>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
+        <receiver
+            android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
-        <service android:name="com.google.android.gms.analytics.CampaignTrackingService"
+
+        <service
+            android:name="com.google.android.gms.analytics.CampaignTrackingService"
             android:enabled="true"
             android:exported="false" />
+
         <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
@@ -145,9 +152,9 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="https"
                     android:host="orzu.org"
-                    android:pathPattern="/orzu" />
+                    android:pathPattern="/orzu"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
         <activity
@@ -169,6 +176,7 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

@@ -16,14 +16,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/bonus_back"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_arrow_back_white_48pt_3x"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/linear_for_name_tast"
@@ -39,24 +31,24 @@
             android:layout_weight="1"
             android:background="@android:color/transparent">
 
-            <TextView
-                android:id="@+id/name_of_subcategory_view"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="70dp"
-                android:layout_marginTop="18dp"
-                android:text="Бонусы"
-                android:textColor="@color/colorBackLight"
-                android:textSize="24sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent="0.5"/>
+<!--            <TextView-->
+<!--                android:id="@+id/name_of_subcategory_view"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="70dp"-->
+<!--                android:layout_marginTop="18dp"-->
+<!--                android:text="Бонусы"-->
+<!--                android:textColor="@color/colorBackLight"-->
+<!--                android:textSize="24sp"-->
+<!--                app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintWidth_percent="0.5"/>-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/card_of_city_view"
+            android:id="@+id/card_of_partner"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="top"
@@ -85,11 +77,15 @@
                     app:srcCompat="@color/colorPrimaryGrey" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/result_city"
+                    android:id="@+id/bonus_recycler"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:clipToPadding="false"
-                    android:padding="8dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/imageView2" />
@@ -98,6 +94,7 @@
                 <ProgressBar
                     android:id="@+id/progrescity"
                     android:layout_width="match_parent"
+                    android:visibility="invisible"
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

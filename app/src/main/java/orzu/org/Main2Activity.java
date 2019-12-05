@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -194,10 +195,14 @@ public class Main2Activity extends AppCompatActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container, new Fragment4()).commit();
             navigationView.setCheckedItem(R.id.third);
-        } else {
+        } else if(index == 2){
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container, new Fragment2()).commit();
             navigationView.setCheckedItem(R.id.fourth);
+        }else {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.container, new Fragment5()).commit();
+            navigationView.setCheckedItem(R.id.fifth);
         }
     }
 
@@ -236,7 +241,7 @@ public class Main2Activity extends AppCompatActivity
         Intercom.initialize(getApplication(), "android_sdk-805f0d44d62fbc8e72058b9c8eee61c94c43c874", "p479kps8");
         intercomBtn = findViewById(R.id.techsupp);
         intercomBtn.setOnClickListener(this);
-       drawer = findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -281,6 +286,7 @@ public class Main2Activity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (id == R.id.first) {
             index = 1;
             fragmentClass = Fragment1.class;
@@ -339,8 +345,19 @@ public class Main2Activity extends AppCompatActivity
             item.setChecked(true);
             // Выводим выбранный пункт в заголовке
             setTitle(item.getTitle());
+        } else if (id == R.id.fifth) {
+            index = 5;
+            toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
+            toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorBackgrndFrg));
+            // Вставляем фрагмент, заменяя текущий фрагмент
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.container, new Fragment5()).commit();
+            // Выделяем выбранный пункт меню в шторке
+            item.setChecked(true);
+            // Выводим выбранный пункт в заголовке
+            setTitle(item.getTitle());
         }
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
