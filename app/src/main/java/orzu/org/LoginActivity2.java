@@ -334,7 +334,6 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(otp);
     }
     public void verifyCode() {
         String code = input.getText().toString();

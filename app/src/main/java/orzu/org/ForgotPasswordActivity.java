@@ -406,7 +406,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(otp);
     }
 
     public void verifyCode() {
@@ -416,6 +415,4 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
                 PhoneAuthProvider.getCredential(phoneVerificationId, code);
         signInWithPhoneAuthCredential(credential);
     }
-
-
 }

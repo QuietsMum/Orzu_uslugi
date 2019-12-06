@@ -27,6 +27,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
@@ -111,7 +112,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
     private List<category_model> subcategories = new ArrayList<>();
     private NestedScrollView scroll_of_fragment1;
     private ProgressBar progress_loading;
-    Context con = getContext();
+    Context con ;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -460,33 +461,35 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 e.printStackTrace();
             } catch (IOException e) {
                 if (status != 200) {
-                    Fragment1.this.getActivity().runOnUiThread(new Runnable() {
-                        public void run() {
-                            imagenotask.setVisibility(View.VISIBLE);
-                            textnotask.setVisibility(View.VISIBLE);
-                            dialog = new Dialog(Fragment1.this.getActivity(), android.R.style.Theme_Material_Light_NoActionBar);
-                            dialog.setContentView(R.layout.dialog_no_internet);
-                            Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
-                            // if button is clicked, close the custom dialog
-                            dialogButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    catTask = new AsyncOrzuTasksMain();
-                                    catTask.execute();
-                                    dialog.dismiss();
-                                    imagenotask.setVisibility(View.INVISIBLE);
-                                    textnotask.setVisibility(View.INVISIBLE);
-                                }
-                            });
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    dialog.show();
-                                }
-                            }, 500);
-                            catTask.cancel(true);
-                        }
-                    });
+                    if (getActivity() != null) {
+                        Fragment1.this.getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                imagenotask.setVisibility(View.VISIBLE);
+                                textnotask.setVisibility(View.VISIBLE);
+                                dialog = new Dialog(Fragment1.this.getActivity(), android.R.style.Theme_Material_Light_NoActionBar);
+                                dialog.setContentView(R.layout.dialog_no_internet);
+                                Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                                // if button is clicked, close the custom dialog
+                                dialogButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        catTask = new AsyncOrzuTasksMain();
+                                        catTask.execute();
+                                        dialog.dismiss();
+                                        imagenotask.setVisibility(View.INVISIBLE);
+                                        textnotask.setVisibility(View.INVISIBLE);
+                                    }
+                                });
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        dialog.show();
+                                    }
+                                }, 500);
+                                catTask.cancel(true);
+                            }
+                        });
+                    }
                 }
                 e.printStackTrace();
             }
@@ -905,6 +908,13 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             }
         }
     }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.con = context;
+    }
+
     class AsyncOrzuTasksGetCity extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {
         String result;
         @Override
@@ -1173,6 +1183,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     @Override
                     public void onClick(View v) {
                         getAll();
+                        Log.wtf("asdsad","asdasd");
                         dialog.dismiss();
                     }
                 });
@@ -1184,9 +1195,11 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 }, 500);
             }
         });
-        Volley.newRequestQueue(Objects.requireNonNull(getContext())).add(stringRequest);
+        Volley.newRequestQueue(Objects.requireNonNull(con)).add(stringRequest);
     }
     private void getAll() {
+        imagenotask.setVisibility(View.INVISIBLE);
+        textnotask.setVisibility(View.INVISIBLE);
         clickedCategory = false;
         getSubCategories("1");
         getCategories();
@@ -1264,7 +1277,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 }, 500);
             }
         });
-        Volley.newRequestQueue(Objects.requireNonNull(getContext())).add(stringRequest);
+        Volley.newRequestQueue(Objects.requireNonNull(con)).add(stringRequest);
     }
 }
 
