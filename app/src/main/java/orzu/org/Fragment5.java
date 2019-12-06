@@ -1,17 +1,18 @@
 package orzu.org;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,15 +25,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Fragment5 extends Fragment implements View.OnClickListener {
 
@@ -94,35 +97,96 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
         texts.add("Вы получили 1000fi");
         texts.add("Вы получили 1000fi");
 
-
         LvAdapterBonuses lvAdapter = new LvAdapterBonuses(getContext(), texts);
         bonus_recycler_qr.setAdapter(lvAdapter);
-        BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-        Bitmap bitmap = null;
-        try {
-            bitmap = barcodeEncoder.encodeBitmap("https://play.google.com/store/apps/details?id=orzu.org&referrer=" + Common.userId, BarcodeFormat.QR_CODE, 400, 400);
-        } catch (WriterException e) {
-            e.printStackTrace();
-        }
-        qr_code.setImageBitmap(bitmap);
-        Bitmap finalBitmap = bitmap;
+
+        Bitmap overlay = BitmapFactory.decodeResource(getResources(), R.drawable.logo_in_desktop);
+
+        Bitmap finalOverlay = overlayBitmap(overlay);
+        qr_code.setImageBitmap(finalOverlay);
         export.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 ImagePath = MediaStore.Images.Media.insertImage(
                         getActivity().getContentResolver(),
-                        finalBitmap,
+                        finalOverlay,
                         "OrzuQrCode",
                         "Qr код для получения бонусов"
                 );
-
                 URI = Uri.parse(ImagePath);
-
                 Toast.makeText(getActivity(), "Картинка успешно сохранена", Toast.LENGTH_LONG).show();
             }
         });
+
         return v;
+    }
+    public static Bitmap overlayBitmap(Bitmap overlay) {
+        BitMatrix matrix = null;
+        QRCodeWriter writer = new QRCodeWriter();
+
+        Map<EncodeHintType,  Object> hints;
+
+        hints = new HashMap<EncodeHintType, Object>();
+        hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+
+        //create qr code matrix
+        writer = new  QRCodeWriter();
+        try {
+            matrix = writer.encode("https://play.google.com/store/apps/details?id=orzu.org&referrer="+ Common.userId,
+                    BarcodeFormat.QR_CODE,
+                    400,
+                    400,
+                    hints);
+        } catch (WriterException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        Bitmap image = toBitmapColour(matrix,R.color.colorAccentLight);
+        int height = image.getHeight();
+        int width = image.getWidth();
+
+        Bitmap combined = Bitmap.createBitmap(width, height, image.getConfig());
+
+        Canvas canvas = new Canvas(combined);
+        int canvasWidth = canvas.getWidth();
+        int canvasHeight = canvas.getHeight();
+
+        canvas.drawBitmap(image, new Matrix(), null);
+        Bitmap resizeLogo = Bitmap.createScaledBitmap(overlay, canvasWidth / 5, canvasHeight / 5, true);
+        int centreX = (canvasWidth  - resizeLogo.getWidth()) /2;
+        int centreY = (canvasHeight - resizeLogo.getHeight()) /2 ;
+
+        canvas.drawBitmap(resizeLogo, centreX, centreY, null);
+
+        return combined;
+    }
+
+
+    public static Bitmap toBitmapColour(BitMatrix matrix, int colour){
+        int height = matrix.getHeight();
+        int width = matrix.getWidth();
+        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+        for (int x = 0; x < width; x++){
+            for (int y = 0; y < height; y++){
+                bmp.setPixel(x, y, matrix.get(x,y) ? colour : Color.WHITE);
+            }
+        }
+        return bmp;
+    }
+
+    public Bitmap mergeBitmaps(Bitmap logo, Bitmap qrcode) {
+        Bitmap combined = Bitmap.createBitmap(qrcode.getWidth(), qrcode.getHeight(), qrcode.getConfig());
+        Canvas canvas = new Canvas(combined);
+        int canvasWidth = canvas.getWidth();
+        int canvasHeight = canvas.getHeight();
+        canvas.drawBitmap(qrcode, new Matrix(), null);
+
+        Bitmap resizeLogo = Bitmap.createScaledBitmap(logo, canvasWidth / 5, canvasHeight / 5, true);
+        int centreX = (canvasWidth - resizeLogo.getWidth()) / 2;
+        int centreY = (canvasHeight - resizeLogo.getHeight()) / 2;
+        canvas.drawBitmap(resizeLogo, centreX, centreY, null);
+        return combined;
     }
 
     @Override
@@ -142,4 +206,5 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
                 break;
         }
     }
+
 }
