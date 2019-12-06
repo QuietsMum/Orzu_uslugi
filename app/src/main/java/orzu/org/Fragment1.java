@@ -111,7 +111,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
     private List<category_model> subcategories = new ArrayList<>();
     private NestedScrollView scroll_of_fragment1;
     private ProgressBar progress_loading;
-
+    Context con = getContext();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -1165,7 +1165,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 error.printStackTrace(); //log the error resulting from the request for diagnosis/debugging
                 imagenotask.setVisibility(View.VISIBLE);
                 textnotask.setVisibility(View.VISIBLE);
-                dialog = new Dialog(Fragment1.this.getActivity(), android.R.style.Theme_Material_Light_NoActionBar);
+                dialog = new Dialog(con, android.R.style.Theme_Material_Light_NoActionBar);
                 dialog.setContentView(R.layout.dialog_no_internet);
                 Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
                 // if button is clicked, close the custom dialog
@@ -1245,7 +1245,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 error.printStackTrace(); //log the error resulting from the request for diagnosis/debugging
                 imagenotask.setVisibility(View.VISIBLE);
                 textnotask.setVisibility(View.VISIBLE);
-                dialog = new Dialog(Fragment1.this.getActivity(), android.R.style.Theme_Material_Light_NoActionBar);
+                dialog = new Dialog(con, android.R.style.Theme_Material_Light_NoActionBar);
                 dialog.setContentView(R.layout.dialog_no_internet);
                 Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
                 // if button is clicked, close the custom dialog

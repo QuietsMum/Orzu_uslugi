@@ -26,18 +26,20 @@ import java.util.List;
 
 public class Fragment5 extends Fragment implements View.OnClickListener {
 
-    RecyclerView bonus_recycler;
+    RecyclerView bonus_recycler, bonus_recycler_qr;
     List<Bonuses> bonuses = new ArrayList<>();
     CardView cardView;
-    TextView bonus_left,bonus_right;
-    ImageView tri_left,tri_right,qr_code;
-    ConstraintLayout bonus_left_const,bonus_right_const;
+    TextView bonus_left, bonus_right;
+    ImageView tri_left, tri_right, qr_code;
+    ConstraintLayout bonus_left_const, bonus_right_const;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_main_5,container,false);
+        View v = inflater.inflate(R.layout.fragment_main_5, container, false);
 
         bonus_recycler = v.findViewById(R.id.bonus_recycler);
+        bonus_recycler_qr = v.findViewById(R.id.bonus_recycler_qr);
         cardView = v.findViewById(R.id.card_of_partner);
         bonus_left = v.findViewById(R.id.bonus_left);
         bonus_right = v.findViewById(R.id.bonus_right);
@@ -46,6 +48,7 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
         qr_code = v.findViewById(R.id.qr_code);
         bonus_left_const = v.findViewById(R.id.bonus_left_const);
         bonus_right_const = v.findViewById(R.id.bonus_right_const);
+
         bonus_left.setOnClickListener(this);
         bonus_right.setOnClickListener(this);
         cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
@@ -53,15 +56,21 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
         bonus_recycler.setNestedScrollingEnabled(false);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         bonus_recycler.setLayoutManager(llm);
-        bonuses.add(new Bonuses("Starbucks","Небольшое описание партнера символов на 75!","С нами с 01.01.2020","-20%",R.drawable.starbucks));
-        bonuses.add(new Bonuses("Nike","Небольшое описание партнера символов на 75!","С нами с 01.01.2020","-10%","http://mega.kz/media/shops/UP1M/1517855940dsynj.jpg"));
-        bonuses.add(new Bonuses("Спортмастер","Небольшое описание партнера символов на 75!","С нами с 01.01.2020","-15%","http://mega.kz/media/shops/r3Gt7/15166355196WkVV.png"));
-        bonuses.add(new Bonuses("Халык Банк","Небольшое описание партнера символов на 75!","С нами с 01.01.2020","-10%","http://mega.kz/media/shops/QFFuT6/1522139793hgt2Q.png"));
-        bonuses.add(new Bonuses("7 cups coffee","Небольшое описание партнера символов на 75!","С нами с 01.01.2020","-20%","http://mega.kz/media/shops/nr/1517906497r4kff.jpg"));
-        bonuses.add(new Bonuses("Burger King","Небольшое описание партнера символов на 75!","С нами с 01.01.2020","-5%","http://mega.kz/media/shops/v5HyA/1516635909Hp3Gz.png"));
-        bonuses.add(new Bonuses("Costa Coffee","Небольшое описание партнера символов на 75!","С нами с 01.01.2020","-30%","http://mega.kz/media/shops/AUnAM/1516033578vrfx4.png"));
-        bonuses.add(new Bonuses("KFC","Небольшое описание партнера символов на 75!","С нами с 01.01.2020","-10%","http://mega.kz/media/shops/wu3Bq/1516636228dxrCG.png"));
-        BonusAdapter adapter = new BonusAdapter(getContext(),bonuses);
+        bonus_recycler_qr.setHasFixedSize(true);
+        bonus_recycler_qr.setNestedScrollingEnabled(false);
+        LinearLayoutManager llm2 = new LinearLayoutManager(getContext());
+        bonus_recycler_qr.setLayoutManager(llm2);
+
+        bonuses.add(new Bonuses("Starbucks", "Небольшое описание партнера символов на 75!", "С нами с 01.01.2020", "-20%", R.drawable.starbucks));
+        bonuses.add(new Bonuses("Nike", "Небольшое описание партнера символов на 75!", "С нами с 01.01.2020", "-10%", "http://mega.kz/media/shops/UP1M/1517855940dsynj.jpg"));
+        bonuses.add(new Bonuses("Спортмастер", "Небольшое описание партнера символов на 75!", "С нами с 01.01.2020", "-15%", "http://mega.kz/media/shops/r3Gt7/15166355196WkVV.png"));
+        bonuses.add(new Bonuses("Халык Банк", "Небольшое описание партнера символов на 75!", "С нами с 01.01.2020", "-10%", "http://mega.kz/media/shops/QFFuT6/1522139793hgt2Q.png"));
+        bonuses.add(new Bonuses("7 cups coffee", "Небольшое описание партнера символов на 75!", "С нами с 01.01.2020", "-20%", "http://mega.kz/media/shops/nr/1517906497r4kff.jpg"));
+        bonuses.add(new Bonuses("Burger King", "Небольшое описание партнера символов на 75!", "С нами с 01.01.2020", "-5%", "http://mega.kz/media/shops/v5HyA/1516635909Hp3Gz.png"));
+        bonuses.add(new Bonuses("Costa Coffee", "Небольшое описание партнера символов на 75!", "С нами с 01.01.2020", "-30%", "http://mega.kz/media/shops/AUnAM/1516033578vrfx4.png"));
+        bonuses.add(new Bonuses("KFC", "Небольшое описание партнера символов на 75!", "С нами с 01.01.2020", "-10%", "http://mega.kz/media/shops/wu3Bq/1516636228dxrCG.png"));
+
+        BonusAdapter adapter = new BonusAdapter(getContext(), bonuses);
         bonus_recycler.setAdapter(adapter);
         adapter.setClickListener(new BonusAdapter.ItemClickListener() {
             @Override
@@ -72,7 +81,7 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
         BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
         Bitmap bitmap = null;
         try {
-            bitmap = barcodeEncoder.encodeBitmap("HelloMazafaka", BarcodeFormat.QR_CODE, 400, 400);
+            bitmap = barcodeEncoder.encodeBitmap("https://play.google.com/store/apps/details?id=orzu.org&referrer=" + Common.userId, BarcodeFormat.QR_CODE, 400, 400);
         } catch (WriterException e) {
             e.printStackTrace();
         }
@@ -82,7 +91,7 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.bonus_left:
                 tri_right.setVisibility(View.INVISIBLE);
                 tri_left.setVisibility(View.VISIBLE);
