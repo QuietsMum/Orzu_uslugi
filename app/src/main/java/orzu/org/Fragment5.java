@@ -113,8 +113,8 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
                 ImagePath = MediaStore.Images.Media.insertImage(
                         getActivity().getContentResolver(),
                         finalBitmap,
-                        "demo_image",
-                        "demo_image"
+                        "OrzuQrCode",
+                        "Qr код для получения бонусов"
                 );
 
                 URI = Uri.parse(ImagePath);
