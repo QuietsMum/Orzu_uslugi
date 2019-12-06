@@ -92,6 +92,7 @@
     <string name="registration"><u>Зарегистрироваться </u></string>
     <string name="bonus">Бонусы</string>
     <string name="uchastnik">Стать участником</string>
+    <string name="partners">Наши партнеры</string>
 
     <string-array name="datecreatelist">
         <item>В любое время</item>

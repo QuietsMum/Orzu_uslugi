@@ -1,13 +1,19 @@
 package orzu.org;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,33 +27,40 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Fragment5 extends Fragment implements View.OnClickListener {
 
-    RecyclerView bonus_recycler, bonus_recycler_qr;
-    List<Bonuses> bonuses = new ArrayList<>();
+    private List<Bonuses> bonuses = new ArrayList<>();
+    private List<String> texts = new ArrayList<>();
     CardView cardView;
-    TextView bonus_left, bonus_right;
-    ImageView tri_left, tri_right, qr_code;
-    ConstraintLayout bonus_left_const, bonus_right_const;
+    private ImageView tri_left;
+    private ImageView tri_right;
+    private ConstraintLayout bonus_left_const, bonus_right_const;
+    private String ImagePath;
+    private Uri URI;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_main_5, container, false);
 
-        bonus_recycler = v.findViewById(R.id.bonus_recycler);
-        bonus_recycler_qr = v.findViewById(R.id.bonus_recycler_qr);
+        RecyclerView bonus_recycler = v.findViewById(R.id.bonus_recycler);
+        ListView bonus_recycler_qr = v.findViewById(R.id.bonus_recycler_qr);
         cardView = v.findViewById(R.id.card_of_partner);
-        bonus_left = v.findViewById(R.id.bonus_left);
-        bonus_right = v.findViewById(R.id.bonus_right);
+        TextView bonus_left = v.findViewById(R.id.bonus_left);
+        TextView bonus_right = v.findViewById(R.id.bonus_right);
         tri_left = v.findViewById(R.id.bonus_tri_left);
         tri_right = v.findViewById(R.id.bonus_tri_right);
-        qr_code = v.findViewById(R.id.qr_code);
+        ImageView qr_code = v.findViewById(R.id.qr_code);
         bonus_left_const = v.findViewById(R.id.bonus_left_const);
         bonus_right_const = v.findViewById(R.id.bonus_right_const);
+        TextView export = v.findViewById(R.id.export);
 
         bonus_left.setOnClickListener(this);
         bonus_right.setOnClickListener(this);
@@ -56,10 +69,7 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
         bonus_recycler.setNestedScrollingEnabled(false);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         bonus_recycler.setLayoutManager(llm);
-        bonus_recycler_qr.setHasFixedSize(true);
         bonus_recycler_qr.setNestedScrollingEnabled(false);
-        LinearLayoutManager llm2 = new LinearLayoutManager(getContext());
-        bonus_recycler_qr.setLayoutManager(llm2);
 
         bonuses.add(new Bonuses("Starbucks", "Небольшое описание партнера символов на 75!", "С нами с 01.01.2020", "-20%", R.drawable.starbucks));
         bonuses.add(new Bonuses("Nike", "Небольшое описание партнера символов на 75!", "С нами с 01.01.2020", "-10%", "http://mega.kz/media/shops/UP1M/1517855940dsynj.jpg"));
@@ -78,6 +88,15 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
 
             }
         });
+
+        texts.add("Вы получили 1000fi");
+        texts.add("Вы получили 1000fi");
+        texts.add("Вы получили 1000fi");
+        texts.add("Вы получили 1000fi");
+
+
+        LvAdapterBonuses lvAdapter = new LvAdapterBonuses(getContext(), texts);
+        bonus_recycler_qr.setAdapter(lvAdapter);
         BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
         Bitmap bitmap = null;
         try {
@@ -86,6 +105,23 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
             e.printStackTrace();
         }
         qr_code.setImageBitmap(bitmap);
+        Bitmap finalBitmap = bitmap;
+        export.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                ImagePath = MediaStore.Images.Media.insertImage(
+                        getActivity().getContentResolver(),
+                        finalBitmap,
+                        "demo_image",
+                        "demo_image"
+                );
+
+                URI = Uri.parse(ImagePath);
+
+                Toast.makeText(getActivity(), "Картинка успешно сохранена", Toast.LENGTH_LONG).show();
+            }
+        });
         return v;
     }
 
