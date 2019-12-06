@@ -31,19 +31,81 @@
             android:layout_weight="1"
             android:background="@android:color/transparent">
 
-<!--            <TextView-->
-<!--                android:id="@+id/name_of_subcategory_view"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="70dp"-->
-<!--                android:layout_marginTop="18dp"-->
-<!--                android:text="Бонусы"-->
-<!--                android:textColor="@color/colorBackLight"-->
-<!--                android:textSize="24sp"-->
-<!--                app:layout_constraintLeft_toLeftOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent"-->
-<!--                app:layout_constraintWidth_percent="0.5"/>-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="14dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <TextView
+                    android:id="@+id/bonus_left"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/uchastnik"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/bonus_right"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/period"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/bonus_tri_left"
+                        android:layout_width="23dp"
+                        android:layout_height="10dp"
+                        android:background="@drawable/card_corner_triangle"
+                        android:outlineSpotShadowColor="@android:color/white"
+                        android:visibility="visible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/bonus_tri_right"
+                        android:layout_width="23dp"
+                        android:layout_height="10dp"
+                        android:background="@drawable/card_corner_triangle"
+                        android:outlineSpotShadowColor="@android:color/white"
+                        android:visibility="invisible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -55,6 +117,7 @@
             android:layout_weight="5">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/bonus_left_const"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -63,11 +126,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_margin="20dp"
-                    android:text="Наши партнеры:"
                     android:gravity="center_vertical"
+                    android:text="Наши партнеры:"
                     android:textColor="@color/colorTextDark"
                     android:textSize="16sp"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <ImageView
                     android:id="@+id/imageView2"
                     android:layout_width="match_parent"
@@ -82,8 +146,8 @@
                     android:layout_height="0dp"
                     android:clipToPadding="false"
                     android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
                     android:paddingTop="8dp"
+                    android:paddingRight="8dp"
                     android:paddingBottom="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -94,11 +158,24 @@
                 <ProgressBar
                     android:id="@+id/progrescity"
                     android:layout_width="match_parent"
-                    android:visibility="invisible"
                     android:layout_height="wrap_content"
+                    android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/bonus_right_const"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/qr_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>

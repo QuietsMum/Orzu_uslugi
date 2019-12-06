@@ -91,6 +91,7 @@
     <string name="forgot_pwd"> <u>Забыли пароль?</u></string>
     <string name="registration"><u>Зарегистрироваться </u></string>
     <string name="bonus">Бонусы</string>
+    <string name="uchastnik">Стать участником</string>
 
     <string-array name="datecreatelist">
         <item>В любое время</item>
