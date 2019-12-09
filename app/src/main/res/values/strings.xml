@@ -88,8 +88,8 @@
     <string name="new_password">Новый пароль</string>
     <string name="new_password_re">Повторите пароль</string>
     <string name="something_text">Безопасная оплата картой и гарантия возврата денег. Компенсация в случае морального ущерба.</string>
-    <string name="forgot_pwd"> <u>Забыли пароль?</u></string>
-    <string name="registration"><u>Зарегистрироваться </u></string>
+    <string name="forgot_pwd"> Забыли пароль?</string>
+    <string name="registration">Зарегистрироваться </string>
     <string name="bonus">Бонусы</string>
     <string name="uchastnik">Стать участником</string>
     <string name="partners">Наши партнеры</string>

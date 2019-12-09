@@ -2,6 +2,7 @@ package orzu.org;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -21,12 +22,16 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.rilixtech.Country;
 import com.rilixtech.CountryCodePicker;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -68,14 +73,14 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
         phone = (EditText) findViewById(R.id.editTextPhone);
         phoneCount = (EditText) findViewById(R.id.editTextPhoneCountry);
         password = (EditText) findViewById(R.id.editTextPassword);
-        button =  findViewById(R.id.button_change_pwd);
+        button = findViewById(R.id.button_change_pwd);
         cardView = findViewById(R.id.constrlog2);
         cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
         forgot_pwd = findViewById(R.id.forgot_pwd);
         forgot_pwd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(PhoneLoginActivity.this,ForgotPasswordActivity.class);
+                Intent intent = new Intent(PhoneLoginActivity.this, ForgotPasswordActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -116,6 +121,7 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
         button.setOnClickListener(this);
         regist.setOnClickListener(this);
     }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -140,6 +146,7 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
                 break;
         }
     }
+
     public void getHttpResponse() throws IOException {
         String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_auth&phone=" + ccp.getFullNumberWithPlus() + phone.getText() + "&password=" + mPassword;
         OkHttpClient client = new OkHttpClient();
@@ -179,6 +186,7 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
                     }
                 });
             }
+
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 mMessage = response.body().string();
@@ -187,6 +195,13 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
                     PhoneLoginActivity.this.runOnUiThread(new Runnable() {
                         public void run() {
                             Toast.makeText(PhoneLoginActivity.this, "Не правильный логин или пароль", Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.INVISIBLE);
+                        }
+                    });
+                } else if (mMessage.contains("API not correct request")) {
+                    PhoneLoginActivity.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(PhoneLoginActivity.this, "Пользователя с таким номером не существует", Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.INVISIBLE);
                         }
                     });
@@ -220,6 +235,7 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
             }
         });
     }
+
     public static boolean performClick(View view) {
         return view.isEnabled() && view.isClickable() && view.performClick();
     }
