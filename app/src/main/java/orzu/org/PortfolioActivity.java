@@ -1,19 +1,29 @@
 package orzu.org;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class PortfolioActivity extends AppCompatActivity implements View.OnClickListener {
 
     ImageView backAct;
-
+    CardView cardView;
+    RecyclerView rv;
+    List<String> list = new ArrayList<>();
+    TextView ok_portfolio,name,description;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,9 +32,31 @@ public class PortfolioActivity extends AppCompatActivity implements View.OnClick
         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
         setContentView(R.layout.activity_portfolio);
 
-        backAct = findViewById(R.id.image_back_partner);
-        backAct.setOnClickListener(this);
 
+        list.add("Cappuccino -10%");
+        list.add("Espresso -10%");
+        list.add("Long Black -10%");
+        list.add("Macchiato  -10%");
+        list.add("Latte -10%");
+        list.add("Флэт уайт -10%");
+        list.add("Кофе с молоком -10%");
+        list.add("Piccolo Latte -10%");
+        rv = findViewById(R.id.rv_portfolio);
+        ok_portfolio = findViewById(R.id.ok_portfolio);
+        ok_portfolio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        rv.setLayoutManager(llm);
+        AdapterCityFilter adapter = new AdapterCityFilter(this,list);
+        cardView = findViewById(R.id.card_of_portfolio);
+        cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
+        backAct = findViewById(R.id.create_amount_back);
+        backAct.setOnClickListener(this);
+        rv.setAdapter(adapter);
     }
 
     @Override
