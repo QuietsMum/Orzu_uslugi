@@ -1,5 +1,6 @@
 package orzu.org;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -88,14 +89,17 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
         adapter.setClickListener(new BonusAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-
+                Intent intent = new Intent(getActivity(), PortfolioActivity.class);
+                Map<String, Object> map;
+                intent.putExtra("idpartner", "12");
+                startActivity(intent);
             }
         });
 
-        texts.add("Вы получили 1000fi");
-        texts.add("Вы получили 1000fi");
-        texts.add("Вы получили 1000fi");
-        texts.add("Вы получили 1000fi");
+        texts.add("Вы получили 1000 Ni");
+        texts.add("Вы получили 1000 Ni");
+        texts.add("Вы получили 1000 Ni");
+        texts.add("Вы получили 1000 Ni");
 
         LvAdapterBonuses lvAdapter = new LvAdapterBonuses(getContext(), texts);
         bonus_recycler_qr.setAdapter(lvAdapter);

@@ -21,6 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".PortfolioActivity"></activity>
         <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".FullScreenImageActivity" />
         <activity
