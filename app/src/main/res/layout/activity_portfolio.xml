@@ -46,12 +46,10 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="5"
+            app:cardCornerRadius="64dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-
-
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -79,12 +77,13 @@
                         android:src="@drawable/starbucks" />
                 </RelativeLayout>
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/texthisprice"
+                        android:id="@+id/partnerName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -93,25 +92,49 @@
                         android:textColor="@android:color/black"
                         android:textSize="16sp" />
 
-                </RelativeLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="Описание:"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/partnerDis"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="Кофейня старбакс работает с 1972 года и с 2004 на територии всего мира, дааная сеть предлагает самый популярный кофе с богатым выбором сортов и добавок, а также вкусные печеньки!"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp" />
+
+                    <ListView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
 
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/createAmout"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="bottom"
-                android:layout_margin="32dp"
-                android:background="@drawable/gradient_of_next_button"
-                android:gravity="center"
-                android:text="@string/next_button"
-                android:textColor="@color/colorBackgrndFrg"
-                android:textSize="16sp" />
 
         </androidx.cardview.widget.CardView>
     </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/createAmout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:layout_margin="32dp"
+        android:background="@drawable/gradient_of_next_button"
+        android:gravity="center"
+        android:text="@string/next_button"
+        android:textColor="@color/colorBackgrndFrg"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
