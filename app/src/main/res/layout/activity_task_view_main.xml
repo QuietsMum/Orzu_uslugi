@@ -39,6 +39,19 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/task_view_main_back"/>
 
+    <TextView
+        android:id="@+id/task_view_main_coins"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="1000 Ni \n -100 Ni"
+        android:textColor="@color/colorPrimaryLight"
+        android:layout_marginRight="16dp"
+        android:textSize="16sp"
+        app:layout_constraintTop_toTopOf="@id/task_view_main_back"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/task_view_main_back"/>
+
 
     <LinearLayout
         android:id="@+id/linear_for_name_tast"
@@ -52,7 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@android:color/transparent"></androidx.constraintlayout.widget.ConstraintLayout>
+            android:background="@android:color/transparent"/>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_of_task_view"

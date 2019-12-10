@@ -384,6 +384,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
     }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
         inflater.inflate(R.menu.up_menu, menu);
         Drawable drawable = menu.findItem(R.id.new_game).getIcon();
         drawable = DrawableCompat.wrap(drawable);

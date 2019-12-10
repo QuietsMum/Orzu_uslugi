@@ -12,10 +12,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextPaint;
 import android.util.JsonReader;
 import android.util.JsonToken;
 import android.view.Menu;
@@ -106,6 +110,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
     TextView sad;
     TextView nat;
     TextView hap;
+    TextView textcoins;
     ImageView taskMaketBack;
     ImageView taskMaketView;
     String mMessage;
@@ -232,6 +237,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         taskAmtTo = findViewById(R.id.taskMoney);
         taskNarr = findViewById(R.id.taskNarr);
         taskOpen = findViewById(R.id.taskOpen);
+        textcoins = findViewById(R.id.task_view_main_coins);
         nav_user = findViewById(R.id.taskCreator);
         taskMaketBack = findViewById(R.id.maket_task_white);
         taskMaketView = findViewById(R.id.imageback_new);
@@ -289,6 +295,15 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             taskMaketView.setVisibility(View.INVISIBLE);
             taskMaketBack.setVisibility(View.INVISIBLE);
             shim.setVisibility(View.INVISIBLE);
+            textcoins.setVisibility(View.VISIBLE);
+//            TextPaint paint = textcoins.getPaint();
+//            float width = paint.measureText(String.valueOf(textcoins));
+//            Shader textShader = new LinearGradient(0, 0, width, textcoins.getTextSize(),
+//                    new int[]{
+//                            Color.parseColor("#fe8c00"),
+//                            Color.parseColor("#f83600"),
+//                    }, null, Shader.TileMode.CLAMP);
+//            textcoins.getPaint().setShader(textShader);
             TranslateAnimation animationn = new TranslateAnimation(0.0f, 0.0f,
                     1500.0f, 0.0f);
             animationn.setDuration(500);
