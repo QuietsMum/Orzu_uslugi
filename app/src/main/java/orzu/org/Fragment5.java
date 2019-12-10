@@ -6,10 +6,16 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -21,6 +27,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,6 +55,12 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
     private ConstraintLayout bonus_left_const, bonus_right_const;
     private String ImagePath;
     private Uri URI;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Nullable
     @Override
@@ -190,6 +204,26 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
         int centreY = (canvasHeight - resizeLogo.getHeight()) / 2;
         canvas.drawBitmap(resizeLogo, centreX, centreY, null);
         return combined;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.bonus_menu, menu);
+        menu.findItem(R.id.new_coin);
+        SpannableString s = new SpannableString("1000 Ni");
+        s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s.length(), 0);
+        menu.findItem(R.id.new_coin).setTitle(s);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.new_coin) {
+
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
