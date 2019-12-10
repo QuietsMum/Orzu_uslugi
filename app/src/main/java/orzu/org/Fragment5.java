@@ -1,6 +1,7 @@
 package orzu.org;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -8,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.SpannableString;
@@ -27,6 +29,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
@@ -55,6 +58,7 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
     private ConstraintLayout bonus_left_const, bonus_right_const;
     private String ImagePath;
     private Uri URI;
+    private static final int PERMISSION_REQUEST_CODE = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -124,32 +128,80 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
         export.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImagePath = MediaStore.Images.Media.insertImage(
-                        getActivity().getContentResolver(),
-                        finalOverlay,
-                        "OrzuQrCode",
-                        "Qr код для получения бонусов"
-                );
-                URI = Uri.parse(ImagePath);
-                Toast.makeText(getActivity(), "Картинка успешно сохранена", Toast.LENGTH_LONG).show();
+                if (Build.VERSION.SDK_INT >= 23) {
+                    if (checkPermission()) {
+                        ImagePath = MediaStore.Images.Media.insertImage(
+                                getActivity().getContentResolver(),
+                                finalOverlay,
+                                "OrzuQrCode",
+                                "Qr код для получения бонусов"
+                        );
+                        URI = Uri.parse(ImagePath);
+                        Toast.makeText(getActivity(), "Картинка успешно сохранена", Toast.LENGTH_LONG).show();
+                    } else {
+                        requestPermission(); // Code for permission
+                    }
+                } else {
+                    ImagePath = MediaStore.Images.Media.insertImage(
+                            getActivity().getContentResolver(),
+                            finalOverlay,
+                            "OrzuQrCode",
+                            "Qr код для получения бонусов"
+                    );
+                    URI = Uri.parse(ImagePath);
+                    Toast.makeText(getActivity(), "Картинка успешно сохранена", Toast.LENGTH_LONG).show();
+                }
+
             }
         });
 
         return v;
     }
+
+    private boolean checkPermission() {
+        int result = ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (result == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void requestPermission() {
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            Toast.makeText(getContext(), "Write External Storage permission allows us to do store images. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
+        } else {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getContext(), "Разрешено", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Запрещено", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+    }
+
     public static Bitmap overlayBitmap(Bitmap overlay) {
         BitMatrix matrix = null;
         QRCodeWriter writer = new QRCodeWriter();
 
-        Map<EncodeHintType,  Object> hints;
+        Map<EncodeHintType, Object> hints;
 
         hints = new HashMap<EncodeHintType, Object>();
         hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
 
         //create qr code matrix
-        writer = new  QRCodeWriter();
+        writer = new QRCodeWriter();
         try {
-            matrix = writer.encode("https://play.google.com/store/apps/details?id=orzu.org&referrer="+ Common.userId,
+            matrix = writer.encode("https://play.google.com/store/apps/details?id=orzu.org&referrer=" + Common.userId,
                     BarcodeFormat.QR_CODE,
                     400,
                     400,
@@ -159,7 +211,7 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
             e.printStackTrace();
         }
 
-        Bitmap image = toBitmapColour(matrix,R.color.colorAccentLight);
+        Bitmap image = toBitmapColour(matrix, R.color.colorAccentLight);
         int height = image.getHeight();
         int width = image.getWidth();
 
@@ -171,8 +223,8 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
 
         canvas.drawBitmap(image, new Matrix(), null);
         Bitmap resizeLogo = Bitmap.createScaledBitmap(overlay, canvasWidth / 5, canvasHeight / 5, true);
-        int centreX = (canvasWidth  - resizeLogo.getWidth()) /2;
-        int centreY = (canvasHeight - resizeLogo.getHeight()) /2 ;
+        int centreX = (canvasWidth - resizeLogo.getWidth()) / 2;
+        int centreY = (canvasHeight - resizeLogo.getHeight()) / 2;
 
         canvas.drawBitmap(resizeLogo, centreX, centreY, null);
 
@@ -180,13 +232,13 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
     }
 
 
-    public static Bitmap toBitmapColour(BitMatrix matrix, int colour){
+    public static Bitmap toBitmapColour(BitMatrix matrix, int colour) {
         int height = matrix.getHeight();
         int width = matrix.getWidth();
         Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-        for (int x = 0; x < width; x++){
-            for (int y = 0; y < height; y++){
-                bmp.setPixel(x, y, matrix.get(x,y) ? colour : Color.WHITE);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                bmp.setPixel(x, y, matrix.get(x, y) ? colour : Color.WHITE);
             }
         }
         return bmp;
@@ -216,6 +268,7 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
         menu.findItem(R.id.new_coin).setTitle(s);
         super.onCreateOptionsMenu(menu, inflater);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();

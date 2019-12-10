@@ -11,11 +11,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
@@ -87,6 +90,7 @@ public class Main2Activity extends AppCompatActivity
     ActionBarDrawerToggle toggle;
     int index = 1;
     DrawerLayout drawer;
+    Drawable drawable ;
     private void setupBeams() {
         PushNotifications.start(getApplicationContext(), "e33cda0a-16d0-41cd-a5c9-8ae60b9b7042");
         PushNotifications.clearDeviceInterests();
@@ -180,12 +184,8 @@ public class Main2Activity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.container, new Fragment3()).commit();
             navigationView.setCheckedItem(R.id.menu_none);
         } else if (index == 1) {
-            drawer = findViewById(R.id.drawer_layout);
-            toggle = new ActionBarDrawerToggle(
-                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
             toolbar = findViewById(R.id.toolbar);
             toolbar.setBackgroundColor(getResources().getColor(R.color.back_for_feed));
-            toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorTextDark));
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryGrey));
             setTitle("Найти задания");
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -245,11 +245,22 @@ public class Main2Activity extends AppCompatActivity
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
-        toggle.setHomeAsUpIndicator(R.drawable.filter);
-        toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorTextDark));
+        toggle.setDrawerIndicatorEnabled(false);
+        drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_menu, getApplication().getTheme());
+        toggle.setHomeAsUpIndicator(drawable);
         toggle.syncState();
         View header = navigationView.getHeaderView(0);
         img = header.findViewById(R.id.textView);
+        toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (drawer.isDrawerVisible(GravityCompat.START)) {
+                    drawer.closeDrawer(GravityCompat.START);
+                } else {
+                    drawer.openDrawer(GravityCompat.START);
+                }
+            }
+        });
         try {
             getUserResponse();
         } catch (IOException e) {
@@ -297,8 +308,26 @@ public class Main2Activity extends AppCompatActivity
             }
             toolbar.setBackgroundColor(getResources().getColor(R.color.back_for_feed));
             toolbar.setTitleTextColor(getResources().getColor(R.color.colorTextDark));
-            toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorTextDark));
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryGrey));
+
+
+            toggle.setDrawerIndicatorEnabled(false);
+            drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_menu2, getApplication().getTheme());
+            toggle.setHomeAsUpIndicator(drawable);
+            toggle.syncState();
+            toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (drawer.isDrawerVisible(GravityCompat.START)) {
+                        drawer.closeDrawer(GravityCompat.START);
+                    } else {
+                        drawer.openDrawer(GravityCompat.START);
+                    }
+                }
+            });
+
+
+
             // Вставляем фрагмент, заменяя текущий фрагмент
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
@@ -315,7 +344,24 @@ public class Main2Activity extends AppCompatActivity
             toolbar.setBackgroundColor(getResources().getColor(R.color.back_for_feed));
             toolbar.setTitleTextColor(getResources().getColor(R.color.colorTextDark));
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryGrey));
-            toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorTextDark));
+
+
+            toggle.setDrawerIndicatorEnabled(false);
+            drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_menu2, getApplication().getTheme());
+            toggle.setHomeAsUpIndicator(drawable);
+            toggle.syncState();
+            toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (drawer.isDrawerVisible(GravityCompat.START)) {
+                        drawer.closeDrawer(GravityCompat.START);
+                    } else {
+                        drawer.openDrawer(GravityCompat.START);
+                    }
+                }
+            });
+
+
             fragmentClass = Fragment4.class;
             try {
                 fragment = (Fragment) fragmentClass.newInstance();
@@ -334,7 +380,23 @@ public class Main2Activity extends AppCompatActivity
             toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
             toolbar.setTitleTextColor(getResources().getColor(R.color.colorPrimaryLight));
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
-            toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorBackgrndFrg));
+
+            toggle.setDrawerIndicatorEnabled(false);
+            drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_menu, getApplication().getTheme());
+            toggle.setHomeAsUpIndicator(drawable);
+            toggle.syncState();
+            toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (drawer.isDrawerVisible(GravityCompat.START)) {
+                        drawer.closeDrawer(GravityCompat.START);
+                    } else {
+                        drawer.openDrawer(GravityCompat.START);
+                    }
+                }
+            });
+
+
             fragmentClass = Fragment2.class;
             try {
                 fragment = (Fragment) fragmentClass.newInstance();
@@ -353,7 +415,24 @@ public class Main2Activity extends AppCompatActivity
             toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
             toolbar.setTitleTextColor(getResources().getColor(R.color.colorPrimaryLight));
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
-            toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorBackgrndFrg));
+
+            toggle.setDrawerIndicatorEnabled(false);
+            drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_menu, getApplication().getTheme());
+            toggle.setHomeAsUpIndicator(drawable);
+            toggle.syncState();
+            toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (drawer.isDrawerVisible(GravityCompat.START)) {
+                        drawer.closeDrawer(GravityCompat.START);
+                    } else {
+                        drawer.openDrawer(GravityCompat.START);
+                    }
+                }
+            });
+
+
+
             // Вставляем фрагмент, заменяя текущий фрагмент
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container, new Fragment5()).commit();
@@ -500,7 +579,23 @@ public class Main2Activity extends AppCompatActivity
                 }
                 toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
                 getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
-                toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorBackgrndFrg));
+
+                toggle.setDrawerIndicatorEnabled(false);
+                drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_menu, getApplication().getTheme());
+                toggle.setHomeAsUpIndicator(drawable);
+                toggle.syncState();
+                toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (drawer.isDrawerVisible(GravityCompat.START)) {
+                            drawer.closeDrawer(GravityCompat.START);
+                        } else {
+                            drawer.openDrawer(GravityCompat.START);
+                        }
+                    }
+                });
+
+
                 // Вставляем фрагмент, заменяя текущий фрагмент
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.container, fragment, "fragment3").commit();
