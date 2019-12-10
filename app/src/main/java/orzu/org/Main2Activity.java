@@ -296,6 +296,7 @@ public class Main2Activity extends AppCompatActivity
                 e.printStackTrace();
             }
             toolbar.setBackgroundColor(getResources().getColor(R.color.back_for_feed));
+            toolbar.setTitleTextColor(getResources().getColor(R.color.colorTextDark));
             toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorTextDark));
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryGrey));
             // Вставляем фрагмент, заменяя текущий фрагмент
@@ -312,6 +313,7 @@ public class Main2Activity extends AppCompatActivity
         } else if (id == R.id.third) {
             index = 3;
             toolbar.setBackgroundColor(getResources().getColor(R.color.back_for_feed));
+            toolbar.setTitleTextColor(getResources().getColor(R.color.colorTextDark));
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryGrey));
             toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorTextDark));
             fragmentClass = Fragment4.class;
@@ -330,6 +332,7 @@ public class Main2Activity extends AppCompatActivity
         } else if (id == R.id.fourth) {
             index = 4;
             toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
+            toolbar.setTitleTextColor(getResources().getColor(R.color.colorPrimaryLight));
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
             toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorBackgrndFrg));
             fragmentClass = Fragment2.class;
@@ -348,6 +351,7 @@ public class Main2Activity extends AppCompatActivity
         } else if (id == R.id.fifth) {
             index = 5;
             toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
+            toolbar.setTitleTextColor(getResources().getColor(R.color.colorPrimaryLight));
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
             toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorBackgrndFrg));
             // Вставляем фрагмент, заменяя текущий фрагмент
@@ -432,9 +436,9 @@ public class Main2Activity extends AppCompatActivity
                     mFiName = jsonObject.getString("fname");
                     image = jsonObject.getString("avatar");
                     city = jsonObject.getString("city");
-                    Common.sad = jsonObject.getString("city");
-                    Common.neutral = jsonObject.getString("city");
-                    Common.happy = jsonObject.getString("city");
+                    Common.sad = jsonObject.getString("sad");
+                    Common.neutral = jsonObject.getString("neutral");
+                    Common.happy = jsonObject.getString("happy");
                     if (mFiName.equals("null")) {
                         text = mName;
                     } else text = mName + "\n" + mFiName;
