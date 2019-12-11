@@ -5,21 +5,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.Window;
@@ -28,7 +27,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.FirebaseException;
@@ -41,10 +42,13 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.rilixtech.Country;
 import com.rilixtech.CountryCodePicker;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -69,7 +73,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
     ProgressBar progressBar;
     JSONObject obj;
     CountryCodePicker ccp;
-    BroadcastReceiver otp;
+    Dialog dialog;
     EditText input;
     DBHelper dbHelper;
     CardView cardview;
@@ -78,6 +82,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
     private PhoneAuthProvider.ForceResendingToken resendToken;
     private FirebaseAuth fbAuth;
     private String phoneVerificationId;
+    CountDownTimer timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,10 +100,6 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
         }
         cardview = findViewById(R.id.card_of_registr);
         cardview.setBackgroundResource(R.drawable.shape_card_topcorners);
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("service.to.activity.transfer");
-
-        registerReceiver(otp, filter);
         progressBar = findViewById(R.id.progressBarLogin_reg);
         progressBar.setVisibility(View.INVISIBLE);
         name = (EditText) findViewById(R.id.editTextNameUser);
@@ -125,7 +126,9 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
         phonCount.setText(code);
         button.setOnClickListener(this);
     }
+
     private static final int MY_REQUEST = 0;
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -138,6 +141,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
             }
         }
     }
+
     @Override
     public void onClick(View view) {
         View arv = view;
@@ -147,18 +151,19 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
             mName = name.getText().toString();
             mPassword = pass.getText().toString();
             sendCode();
-            final Dialog dialog = new Dialog(this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
+             dialog = new Dialog(this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
             dialog.setContentView(R.layout.alert_dialog);
             input = dialog.findViewById(R.id.editTextSms);
             Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
             // if button is clicked, close the cust
             TextView textView = dialog.findViewById(R.id.count);
             TextView btn = dialog.findViewById(R.id.btn);
-            CountDownTimer timer = new CountDownTimer(60000, 1000) {
+            timer = new CountDownTimer(60000, 1000) {
                 @SuppressLint("SetTextI18n")
                 public void onTick(long millisUntilFinished) {
                     textView.setText("" + millisUntilFinished / 1000);
                 }
+
                 public void onFinish() {
                     textView.setVisibility(View.INVISIBLE);
                     btn.setVisibility(View.VISIBLE);
@@ -170,14 +175,18 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                     btn.setVisibility(View.INVISIBLE);
                     textView.setVisibility(View.VISIBLE);
                     timer.start();
+                    sendCode();
                 }
             });
             timer.start();
             dialogButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    verifyCode();
-                    dialog.dismiss();
+                    if (!input.getText().toString().isEmpty()) {
+                        verifyCode();
+                    }else{
+                        Toast.makeText(LoginActivity2.this, "Введите код", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
             dialog.show();
@@ -185,6 +194,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
             Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show();
         }
     }
+
     public void getHttpResponse() throws IOException {
         String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=register_user&phone="
                 + mPhone
@@ -228,10 +238,11 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                     }, 500);
                 }
             }
+
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 mMessage = response.body().string();
-                if(mMessage.equals("\"This user alreday registered\"")){
+                if (mMessage.equals("\"This user alreday registered\"")) {
                     LoginActivity2.this.runOnUiThread(new Runnable() {
                         public void run() {
                             Toast.makeText(LoginActivity2.this, "Этот номер уже зарегистрирован", Toast.LENGTH_SHORT).show();
@@ -264,6 +275,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
             }
         });
     }
+
     public void sendCode() {
         setUpVerificatonCallbacks();
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
@@ -273,40 +285,52 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                 this,               // Activity (for callback binding)
                 verificationCallbacks);
     }
+
     private void setUpVerificatonCallbacks() {
         verificationCallbacks =
                 new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                     @Override
                     public void onVerificationCompleted(
                             PhoneAuthCredential credential) {
-                        signInWithPhoneAuthCredential(credential);
-                        Toast.makeText(LoginActivity2.this, "Success", Toast.LENGTH_SHORT).show();
+
+                        Toast.makeText(LoginActivity2.this, "Успешно доставлен", Toast.LENGTH_SHORT).show();
                     }
+
                     @Override
                     public void onVerificationFailed(FirebaseException e) {
                         if (e instanceof FirebaseAuthInvalidCredentialsException) {
                             // Invalid request
-                            Toast.makeText(LoginActivity2.this, "Invalid request", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity2.this, "Не правильный номер", Toast.LENGTH_SHORT).show();
                         } else if (e instanceof FirebaseTooManyRequestsException) {
                             // SMS quota exceeded
-                            Toast.makeText(LoginActivity2.this, "SMS quota exceeded", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                            progressBar.setVisibility(View.INVISIBLE);
+                            Toast.makeText(LoginActivity2.this, "На сегодня ваш лимит исчерпан. Повторите позже", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(LoginActivity2.this,PhoneLoginActivity.class));
+                            finish();
+                        }else{
+                            Toast.makeText(LoginActivity2.this, "Нету интернет подключения", Toast.LENGTH_SHORT).show();
+                            timer.onFinish();
                         }
                     }
+
                     @Override
                     public void onCodeSent(String verificationId,
                                            PhoneAuthProvider.ForceResendingToken token) {
                         phoneVerificationId = verificationId;
                         resendToken = token;
-                        Toast.makeText(LoginActivity2.this, "Code sented", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity2.this, "Код отправлен", Toast.LENGTH_SHORT).show();
                     }
                 };
     }
+
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
         fbAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            dialog.dismiss();
                             FirebaseUser user = task.getResult().getUser();
                             try {
                                 getHttpResponse();
@@ -316,25 +340,25 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                         } else {
                             if (task.getException() instanceof
                                     FirebaseAuthInvalidCredentialsException) {
-                                Toast.makeText(LoginActivity2.this, "The verification code entered was invalid", Toast.LENGTH_SHORT).show();
+                                //dialog.dismiss();
+                                Toast.makeText(LoginActivity2.this, "Код не правильный", Toast.LENGTH_SHORT).show();
                                 // The verification code entered was invalid
                             }
                         }
                     }
                 });
     }
+
     @Override
     protected void onResume() {
         super.onResume();
-//        register broadcast receiver
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("android.provider.Telephony.SMS_RECEIVED");
-        registerReceiver(otp, filter);
     }
+
     @Override
     protected void onPause() {
         super.onPause();
     }
+
     public void verifyCode() {
         String code = input.getText().toString();
         PhoneAuthCredential credential =

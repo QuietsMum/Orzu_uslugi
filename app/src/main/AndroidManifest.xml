@@ -120,21 +120,6 @@
             android:name=".ViewpagerStart"
             android:screenOrientation="portrait" />
 
-        <receiver
-            android:name=".Tracker"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
 
         <service
             android:name="com.google.android.gms.analytics.CampaignTrackingService"
@@ -161,13 +146,15 @@
         </activity>
         <activity
             android:name=".LoginActivity2"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
             android:name=".SubCategoryView2"
             android:screenOrientation="portrait" />
         <activity
             android:name=".PhoneLoginActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
             android:name=".ui.login.LoginActivity"
             android:label="@string/title_activity_login"

@@ -9,15 +9,12 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -62,17 +59,19 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
     String code;
     ProgressBar progressBar;
     CountryCodePicker ccp;
-    BroadcastReceiver otp;
+
     EditText input;
     DBHelper dbHelper;
     CardView cardview;
     EditText pass;
-
+    Dialog dialog;
+    CountDownTimer timer;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks
             verificationCallbacks;
 
     private FirebaseAuth fbAuth;
     private String phoneVerificationId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,7 +98,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
         progressBar.setVisibility(View.INVISIBLE);
         phon = (EditText) findViewById(R.id.editTextPhone_reg_forgot);
         phonCount = (EditText) findViewById(R.id.editTextPhoneCountry_forgot);
-        button =  findViewById(R.id.button_phone_login_forgot);
+        button = findViewById(R.id.button_phone_login_forgot);
 
         ccp = (CountryCodePicker) findViewById(R.id.ccp_reg_forgot);
         ccp.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
@@ -133,7 +132,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
     public void onClick(View view) {
 
 
-        if (phon.getText().length() != 0&pass.getText().length()!=0) {
+        if (phon.getText().length() != 0 & pass.getText().length() != 0) {
             mPhone = phonCount.getText() + phon.getText().toString();
             try {
                 checkPhone();
@@ -148,7 +147,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
 
     public void changePassoword() throws IOException {
         // api?appid=&opt=register_user&phone=&password=&name=
-        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=forget_password&phone="+mPhone+"&password="+pass.getText();
+        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=forget_password&phone=" + mPhone + "&password=" + pass.getText();
 
 
         OkHttpClient client = new OkHttpClient();
@@ -198,16 +197,17 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 
                 mMessage = Objects.requireNonNull(response.body()).string();
-                if(mMessage.equals("\"password changed\"")){
-                    Intent intent = new Intent(ForgotPasswordActivity.this,PhoneLoginActivity.class);
+                if (mMessage.equals("\"password changed\"")) {
+                    Intent intent = new Intent(ForgotPasswordActivity.this, PhoneLoginActivity.class);
                     startActivity(intent);
                     finish();
-                }else{
-                    Toast.makeText(ForgotPasswordActivity.this, "Password is not changed", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ForgotPasswordActivity.this, "Пароль не изменен", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
+
     public void checkPhone() throws IOException {
         // api?appid=&opt=register_user&phone=&password=&name=
         String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=check_phone&phone="
@@ -226,7 +226,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 mMessage = e.getMessage();
                 if (Objects.equals(mMessage, "noAuth")) {
-                    Toast.makeText(getApplicationContext(), "No registered user!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Пользователь не зарегестрирован", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getApplicationContext(), LoginActivity2.class);
                     startActivity(intent);
                 } else {
@@ -273,7 +273,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
                     ForgotPasswordActivity.this.runOnUiThread(new Runnable() {
                         public void run() {
 
-                            final Dialog dialog = new Dialog(ForgotPasswordActivity.this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
+                            dialog = new Dialog(ForgotPasswordActivity.this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
                             dialog.setContentView(R.layout.alert_dialog);
 
                             // set the custom dialog components - text, image and button
@@ -284,7 +284,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
                             // if button is clicked, close the cust
                             TextView textView = dialog.findViewById(R.id.count);
                             TextView btn = dialog.findViewById(R.id.btn);
-                            CountDownTimer timer = new CountDownTimer(60000, 1000) {
+                            timer = new CountDownTimer(60000, 1000) {
 
                                 @SuppressLint("SetTextI18n")
                                 public void onTick(long millisUntilFinished) {
@@ -313,8 +313,11 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
                                 @Override
                                 public void onClick(View v) {
 
-                                    verifyCode();
-
+                                    if (!input.getText().toString().isEmpty()) {
+                                        verifyCode();
+                                    } else {
+                                        Toast.makeText(ForgotPasswordActivity.this, "Введите код", Toast.LENGTH_SHORT).show();
+                                    }
 
                                     dialog.dismiss();
                                 }
@@ -344,52 +347,60 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
     private void setUpVerificatonCallbacks() {
         verificationCallbacks =
                 new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-
                     @Override
                     public void onVerificationCompleted(
-                            @NotNull PhoneAuthCredential credential) {
+                            PhoneAuthCredential credential) {
 
-                        signInWithPhoneAuthCredential(credential);
-                        Toast.makeText(ForgotPasswordActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ForgotPasswordActivity.this, "Успешно доставлен", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
-                    public void onVerificationFailed(@NotNull FirebaseException e) {
-
+                    public void onVerificationFailed(FirebaseException e) {
                         if (e instanceof FirebaseAuthInvalidCredentialsException) {
                             // Invalid request
+                            Toast.makeText(ForgotPasswordActivity.this, "Не правильный номер", Toast.LENGTH_SHORT).show();
                         } else if (e instanceof FirebaseTooManyRequestsException) {
                             // SMS quota exceeded
-
+                            dialog.dismiss();
+                            progressBar.setVisibility(View.INVISIBLE);
+                            Toast.makeText(ForgotPasswordActivity.this, "На сегодня ваш лимит исчерпан. Повторите позжеjh", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(ForgotPasswordActivity.this,PhoneLoginActivity.class));
+                            finish();
+                        } else {
+                            Toast.makeText(ForgotPasswordActivity.this, "Нету интернет подключения", Toast.LENGTH_SHORT).show();
+                            timer.onFinish();
                         }
                     }
 
                     @Override
-                    public void onCodeSent(@NotNull String verificationId,
-                                           @NotNull PhoneAuthProvider.ForceResendingToken token) {
-
+                    public void onCodeSent(String verificationId,
+                                           PhoneAuthProvider.ForceResendingToken token) {
                         phoneVerificationId = verificationId;
-
+                        Toast.makeText(ForgotPasswordActivity.this, "Код отправлен", Toast.LENGTH_SHORT).show();
                     }
                 };
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-
         fbAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
-                            FirebaseUser user = Objects.requireNonNull(task.getResult()).getUser();
+                            dialog.dismiss();
+                            FirebaseUser user = task.getResult().getUser();
                             try {
                                 changePassoword();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
                         } else {
-                            task.getException();// The verification code entered was invalid
+                            if (task.getException() instanceof
+                                    FirebaseAuthInvalidCredentialsException) {
+                                //dialog.dismiss();
+                                Toast.makeText(ForgotPasswordActivity.this, "Код не правильный", Toast.LENGTH_SHORT).show();
+                                // The verification code entered was invalid
+                            }
                         }
                     }
                 });
@@ -398,9 +409,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
     @Override
     protected void onResume() {
         super.onResume();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("android.provider.Telephony.SMS_RECEIVED");
-        registerReceiver(otp, filter);
     }
 
     @Override

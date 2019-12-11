@@ -37,15 +37,18 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.facebook.shimmer.ShimmerFrameLayout;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -58,7 +61,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
+
 import javax.net.ssl.HttpsURLConnection;
+
 import orzu.org.ui.login.model;
 
 import static com.yandex.runtime.Runtime.getApplicationContext;
@@ -112,7 +117,9 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
     private List<category_model> subcategories = new ArrayList<>();
     private NestedScrollView scroll_of_fragment1;
     private ProgressBar progress_loading;
-    Context con ;
+    private ProgressBar progress_for_task;
+    Context con;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,27 +129,28 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
     DBHelper dbHelper;
     String idUser;
     SharedPreferences prefs;
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstantState) {
         final View view = inflater.inflate(R.layout.fragment_main, container, false);
         prefs = getActivity().getSharedPreferences(" ", Context.MODE_PRIVATE);
-        Common.city = prefs.getString("UserCityPref","");
-        if(Common.referrer.length()!=0){
-            Toast.makeText(getContext(), Common.referrer+"", Toast.LENGTH_SHORT).show();
+        Common.city = prefs.getString("UserCityPref", "");
+        if (Common.referrer.length() != 0) {
+            Toast.makeText(getContext(), Common.referrer + "", Toast.LENGTH_SHORT).show();
         }
 
-        if(prefs.getString("UserCityPref","").equals("")){
-            Intent intent = new Intent(getActivity(),RegistCity.class);
+        if (prefs.getString("UserCityPref", "").equals("")) {
+            Intent intent = new Intent(getActivity(), RegistCity.class);
             startActivity(intent);
             getActivity().finish();
         }
         if (!Common.allCity) {
-            Common.URL = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&city=" + prefs.getString("UserCityPref","")+ "&page=";
+            Common.URL = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&city=" + prefs.getString("UserCityPref", "") + "&page=";
             getCategories();
             getSubCategories("1");
         } else {
-            Common.city1 ="";
+            Common.city1 = "";
             Common.URL = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&requests=no&page=";
             getCategories();
             getSubCategories("1");
@@ -166,15 +174,19 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         category_rv.setLayoutManager(layoutManager);
         subcategory_rv.setLayoutManager(layoutManager_sub);
         progress_loading = view.findViewById(R.id.progress_loading);
+        progress_for_task = view.findViewById(R.id.progress_for_task);
+        progress_for_task.setVisibility(View.VISIBLE);
         create_task_main = view.findViewById(R.id.create_task_main);
         editFind = view.findViewById(R.id.editFind);
         editFind.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
                 noTasksYet = false;
@@ -254,10 +266,12 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 Common.city1 = "";
                 count = 1;
                 truedata.clear();
+                progress_for_task.setVisibility(View.VISIBLE);
                 idOfSub = subcategories.get(position).getId();
                 getFilteredSubs = new AsyncOrzuTasksGetSubs();
                 getFilteredSubs.execute();
             }
+
             @Override
             public void onClick(View view) {
             }
@@ -268,6 +282,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 filter = "";
                 if (position == 0) {
                     noTasksYet = false;
+                    progress_for_task.setVisibility(View.VISIBLE);
                     swipeLayout.setRefreshing(false);
                     catTaskRef = new AsyncOrzuTasksMainRefresh();
                     catTaskRef.execute();
@@ -275,11 +290,14 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     clickedCategory = false;
                 } else {
                     clickedCategory = true;
+                    progress_for_task.setVisibility(View.VISIBLE);
                     truedata.clear();
                     getSubCategories(categories.get(position).getId());
+
                 }
                 adapter_category.changeColor(position);
             }
+
             @Override
             public void onClick(View view) {
 
@@ -287,6 +305,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         });
         return view;
     }
+
     private Map<String, Object> readMessage(JsonReader reader) throws IOException {
         long id = 1;
         String text = null;
@@ -378,10 +397,12 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         reader.endObject();
         return m;
     }
+
     @Override
     public void onDetach() {
         super.onDetach();
     }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
@@ -392,6 +413,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         menu.findItem(R.id.new_game).setIcon(drawable);
         super.onCreateOptionsMenu(menu, inflater);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -405,12 +427,14 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
     class AsyncOrzuTasksMain extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {
         String result;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             imagenotask.setVisibility(View.INVISIBLE);
             textnotask.setVisibility(View.INVISIBLE);
         }
+
         @Override
         protected ArrayList<Map<String, Object>> doInBackground(String... strings) {
             URL orzuEndpoint = null;
@@ -447,6 +471,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                         Fragment1.this.getActivity().runOnUiThread(new Runnable() {
                             public void run() {
                                 progress_loading.setVisibility(View.GONE);
+                                progress_for_task.setVisibility(View.GONE);
                             }
                         });
                     }
@@ -505,12 +530,14 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             }
             return null;
         }
+
         protected void onPostExecute(ArrayList<Map<String, Object>> result) {
             super.onPostExecute(result);
             count++;
             adapter = new RVAdapter(getContext(), truedata);
             rv.setAdapter(adapter);
             progress_loading.setVisibility(View.GONE);
+            progress_for_task.setVisibility(View.GONE);
             RVAdapter.setSelect(new MainItemSelect() {
                 @Override
                 public void onItemSelectedListener(View view, int position) {
@@ -522,6 +549,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     intent.putExtra("mytask", "not");
                     startActivity(intent);
                 }
+
                 @Override
                 public void onClick(View view) {
                 }
@@ -534,9 +562,10 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             }
         }
     }
+
     @Override
     public void onRefresh() {
-        Common.URL = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&city=" + prefs.getString("UserCityPref","")+ "&page=";
+        Common.URL = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&city=" + prefs.getString("UserCityPref", "") + "&page=";
         adapter_category.changeColor(0);
         category_rv.scrollToPosition(0);
         subcategory_rv.scrollToPosition(0);
@@ -554,16 +583,19 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         catTaskRef = new AsyncOrzuTasksMainRefresh();
         catTaskRef.execute();
     }
+
     class AsyncOrzuTasksMainRefresh extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {
         final HttpsURLConnection[] myConnection = new HttpsURLConnection[1];
         final URL[] orzuEndpoint = new URL[1];
         String result;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             imagenotask.setVisibility(View.INVISIBLE);
             textnotask.setVisibility(View.INVISIBLE);
         }
+
         @Override
         protected ArrayList<Map<String, Object>> doInBackground(String... strings) {
             orzuEndpoint[0] = null;
@@ -627,6 +659,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             myConnection[0].disconnect();
             return null;
         }
+
         protected void onPostExecute(ArrayList<Map<String, Object>> result) {
             super.onPostExecute(result);
             try {
@@ -650,14 +683,17 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             }
         }
     }
+
     class AsyncOrzuTasksGetSubs extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {
         String result;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             imagenotask.setVisibility(View.INVISIBLE);
             textnotask.setVisibility(View.INVISIBLE);
         }
+
         @Override
         protected ArrayList<Map<String, Object>> doInBackground(String... strings) {
             URL orzuEndpoint = null;
@@ -695,6 +731,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     Fragment1.this.getActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             progress_loading.setVisibility(View.GONE);
+                            progress_for_task.setVisibility(View.GONE);
                         }
                     });
                 } else {
@@ -751,12 +788,14 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             }
             return null;
         }
+
         protected void onPostExecute(ArrayList<Map<String, Object>> result) {
             super.onPostExecute(result);
             count++;
             adapter = new RVAdapter(getContext(), truedata);
             rv.setAdapter(adapter);
             progress_loading.setVisibility(View.GONE);
+            progress_for_task.setVisibility(View.GONE);
             RVAdapter.setSelect(new MainItemSelect() {
                 @Override
                 public void onItemSelectedListener(View view, int position) {
@@ -768,6 +807,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     intent.putExtra("mytask", "not");
                     startActivity(intent);
                 }
+
                 @Override
                 public void onClick(View view) {
                 }
@@ -780,14 +820,17 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             }
         }
     }
+
     class AsyncOrzuTasksGetSubsFiltered extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {
         String result;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             imagenotask.setVisibility(View.INVISIBLE);
             textnotask.setVisibility(View.INVISIBLE);
         }
+
         @Override
         protected ArrayList<Map<String, Object>> doInBackground(String... strings) {
             URL orzuEndpoint = null;
@@ -825,6 +868,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     Fragment1.this.getActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             progress_loading.setVisibility(View.GONE);
+                            progress_for_task.setVisibility(View.GONE);
                         }
                     });
                 } else {
@@ -885,12 +929,14 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             }
             return null;
         }
+
         protected void onPostExecute(ArrayList<Map<String, Object>> result) {
             super.onPostExecute(result);
             count++;
             adapter = new RVAdapter(getContext(), truedata);
             rv.setAdapter(adapter);
             progress_loading.setVisibility(View.GONE);
+            progress_for_task.setVisibility(View.GONE);
             RVAdapter.setSelect(new MainItemSelect() {
                 @Override
                 public void onItemSelectedListener(View view, int position) {
@@ -902,6 +948,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     intent.putExtra("mytask", "not");
                     startActivity(intent);
                 }
+
                 @Override
                 public void onClick(View view) {
                 }
@@ -915,6 +962,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         }
     }
 
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -923,12 +971,14 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
     class AsyncOrzuTasksGetCity extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {
         String result;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             imagenotask.setVisibility(View.INVISIBLE);
             textnotask.setVisibility(View.INVISIBLE);
         }
+
         @Override
         protected ArrayList<Map<String, Object>> doInBackground(String... strings) {
             URL orzuEndpoint = null;
@@ -966,8 +1016,10 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     Fragment1.this.getActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             progress_loading.setVisibility(View.GONE);
+                            progress_for_task.setVisibility(View.GONE);
                         }
                     });
+
                 } else {
                     noTasksYet = false;
                     jsonReader.beginArray(); // Start processing the JSON object
@@ -1020,12 +1072,14 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             }
             return null;
         }
+
         protected void onPostExecute(ArrayList<Map<String, Object>> result) {
             super.onPostExecute(result);
             count++;
             adapter = new RVAdapter(getContext(), truedata);
             rv.setAdapter(adapter);
             progress_loading.setVisibility(View.GONE);
+            progress_for_task.setVisibility(View.GONE);
             RVAdapter.setSelect(new MainItemSelect() {
                 @Override
                 public void onItemSelectedListener(View view, int position) {
@@ -1037,6 +1091,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     intent.putExtra("mytask", "not");
                     startActivity(intent);
                 }
+
                 @Override
                 public void onClick(View view) {
                 }
@@ -1049,9 +1104,11 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             }
         }
     }
+
     class AsyncOrzuTasksFind extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {
         final HttpsURLConnection[] myConnection = new HttpsURLConnection[1];
         final URL[] orzuEndpoint = new URL[1];
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -1060,6 +1117,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             truedata = new ArrayList<>();
             adapter.notifyDataSetChanged();
         }
+
         @Override
         protected ArrayList<Map<String, Object>> doInBackground(String... strings) {
             orzuEndpoint[0] = null;
@@ -1127,6 +1185,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             myConnection[0].disconnect();
             return null;
         }
+
         protected void onPostExecute(ArrayList<Map<String, Object>> result) {
             super.onPostExecute(result);
             adapter = new RVAdapter(getContext(), truedata);
@@ -1143,6 +1202,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     intent.putExtra("mytask", "not");
                     startActivity(intent);
                 }
+
                 @Override
                 public void onClick(View view) {
                 }
@@ -1154,6 +1214,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             }
         }
     }
+
     private void getCategories() {
         String requestUrl = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_parent";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, requestUrl, new Response.Listener<String>() {
@@ -1189,7 +1250,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     @Override
                     public void onClick(View v) {
                         getAll();
-                        Log.wtf("asdsad","asdasd");
+                        Log.wtf("asdsad", "asdasd");
                         dialog.dismiss();
                     }
                 });
@@ -1203,6 +1264,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         });
         Volley.newRequestQueue(Objects.requireNonNull(con)).add(stringRequest);
     }
+
     private void getAll() {
         imagenotask.setVisibility(View.INVISIBLE);
         textnotask.setVisibility(View.INVISIBLE);
@@ -1212,6 +1274,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         catTask = new AsyncOrzuTasksMain();
         catTask.execute();
     }
+
     private void getSubCategories(String id) {
         subcategories.clear();
         String requestUrl = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_subcat&id=" + id;

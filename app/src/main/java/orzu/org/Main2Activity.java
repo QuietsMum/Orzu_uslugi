@@ -149,18 +149,20 @@ public class Main2Activity extends AppCompatActivity
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String mMessage = response.body().string();
-                subsServer = new ArrayList<>();
-                try {
-                    JSONObject jsonObject = new JSONObject(mMessage);
-                    Iterator<String> iter = jsonObject.keys();
-                    while (iter.hasNext()) {
-                        String key = iter.next();
-                        subsServer.add(key);
+                Log.wtf("asdasd", mMessage);
+                if (!mMessage.equals("\"No subscribe categories\"")) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(mMessage);
+                        Iterator<String> iter = jsonObject.keys();
+                        while (iter.hasNext()) {
+                            String key = iter.next();
+                            subsServer.add(key);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    setupBeams();
                 }
-                setupBeams();
             }
         });
     }
@@ -181,7 +183,7 @@ public class Main2Activity extends AppCompatActivity
         });
         if (index == 0) {
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.container, new Fragment3()).commit();
+            fragmentManager.beginTransaction().replace(R.id.container, new Fragment3(),"fragment3").commit();
             navigationView.setCheckedItem(R.id.menu_none);
         } else if (index == 1) {
             toolbar = findViewById(R.id.toolbar);
