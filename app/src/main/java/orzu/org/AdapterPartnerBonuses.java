@@ -6,42 +6,38 @@ import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.text.TextPaint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.List;
 
-public class BonusAdapter extends RecyclerView.Adapter<BonusAdapter.MyViewHolder>{
+public class AdapterPartnerBonuses extends RecyclerView.Adapter<AdapterPartnerBonuses.MyViewHolder> {
     List<Bonuses> maps;
     Context context;
     private ItemClickListener mClickListener;
-    BonusAdapter(Context context, List<Bonuses> maps) {
+
+    AdapterPartnerBonuses(Context context, List<Bonuses> maps) {
         this.context = context;
         this.maps = maps;
     }
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.bonus_item, parent,false);
+        View v = LayoutInflater.from(context).inflate(R.layout.partner_item, parent, false);
         return new MyViewHolder(v);
     }
+
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        holder.name.setText(maps.get(position).getName());
-        if(maps.get(position).getLogo()!=null){
-            Picasso.get().load(maps.get(position).getLogo()).into(holder.logo);
-        }else{
-            holder.logo.setImageResource(maps.get(position).getLogos());
-        }
-        holder.percent.setTextColor(Color.parseColor("#fe8c00"));
+        holder.header.setText(maps.get(position).getName());
         holder.percent.setText(maps.get(position).getPercentage());
         TextPaint paint = holder.percent.getPaint();
         float width = paint.measureText(maps.get(position).getPercentage());
@@ -51,26 +47,21 @@ public class BonusAdapter extends RecyclerView.Adapter<BonusAdapter.MyViewHolder
                         Color.parseColor("#f83600"),
                 }, null, Shader.TileMode.CLAMP);
         holder.percent.getPaint().setShader(textShader);
-
-
-
     }
+
     @Override
     public int getItemCount() {
         return maps.size();
     }
+
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView name, percent;
-        ImageView logo;
+        TextView header;
+        TextView percent;
 
         MyViewHolder(View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.name_of_partner);
-            logo = itemView.findViewById(R.id.logo_of_partner);
-            percent= itemView.findViewById(R.id.percentage);
-
-
-
+            header = itemView.findViewById(R.id.city_text);
+            percent = itemView.findViewById(R.id.item_percentage);
             itemView.setOnClickListener(this);
         }
 
@@ -79,9 +70,11 @@ public class BonusAdapter extends RecyclerView.Adapter<BonusAdapter.MyViewHolder
             if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
         }
     }
+
     void setClickListener(ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
+
     public interface ItemClickListener {
         void onItemClick(View view, int position);
     }

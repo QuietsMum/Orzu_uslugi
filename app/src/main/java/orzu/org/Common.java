@@ -22,6 +22,7 @@ public class Common {
     static String birth;
     static String about;
     static String sex;
+    static String wallet;
     static String nameOfChat;
     static String chatId;
     static String taskName;

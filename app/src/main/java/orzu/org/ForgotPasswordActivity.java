@@ -201,8 +201,9 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
                     Intent intent = new Intent(ForgotPasswordActivity.this, PhoneLoginActivity.class);
                     startActivity(intent);
                     finish();
+                    Toast.makeText(ForgotPasswordActivity.this, "Пароль изменен", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(ForgotPasswordActivity.this, "Пароль не изменен", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ForgotPasswordActivity.this, "Произошла ошибка. Повторите занова", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -359,6 +360,8 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
                         if (e instanceof FirebaseAuthInvalidCredentialsException) {
                             // Invalid request
                             Toast.makeText(ForgotPasswordActivity.this, "Не правильный номер", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(ForgotPasswordActivity.this,PhoneLoginActivity.class));
+                            finish();
                         } else if (e instanceof FirebaseTooManyRequestsException) {
                             // SMS quota exceeded
                             dialog.dismiss();
@@ -370,6 +373,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
                             Toast.makeText(ForgotPasswordActivity.this, "Нету интернет подключения", Toast.LENGTH_SHORT).show();
                             timer.onFinish();
                         }
+
                     }
 
                     @Override

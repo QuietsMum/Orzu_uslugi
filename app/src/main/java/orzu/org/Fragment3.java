@@ -95,6 +95,8 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
     private ImageView statusImg;
     private ImageView imageViewName;
     private ArrayList<String> returnValue = new ArrayList<>();
+    TextView wallet;
+    String wallet_of_str;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -137,6 +139,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         noReviews = view.findViewById(R.id.no_reviewsmy);
         devider = view.findViewById(R.id.divider_viewmy);
         image_back = view.findViewById(R.id.img_back);
+        wallet = view.findViewById(R.id.wallet);
         shim = (ShimmerFrameLayout) view.findViewById(R.id.userviewShimmerLayoutmy);
         shim.startShimmer();
         CardView cardView = view.findViewById(R.id.card_of_user_view);
@@ -244,7 +247,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
     }
 
     private void getUserResponse() throws IOException {
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + idUser + "&param=more";
+        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + idUser + "&param=more";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
@@ -299,6 +302,8 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                     mNarr = jsonObject.getString("about");
                     Common.about = mNarr;
                     mStatus = jsonObject.getString("status");
+                    wallet_of_str = jsonObject.getString("wallet")+" Ni";
+                    Common.wallet = jsonObject.getString("wallet");
                     if (mSex.equals("male")) {
                         mSex = "мужской";
                     } else mSex = "женский";
@@ -311,6 +316,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                     Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            wallet.setText(wallet_of_str);
                             nameUser.setText(text);
                             taskCountReq.setText(mCountReq);
                             taskCount.setText(mCount);

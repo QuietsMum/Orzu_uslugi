@@ -1,7 +1,10 @@
 package orzu.org;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -11,6 +14,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -20,6 +24,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -42,11 +49,24 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.squareup.picasso.Picasso;
 
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class Fragment5 extends Fragment implements View.OnClickListener {
 
@@ -58,6 +78,10 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
     private ConstraintLayout bonus_left_const, bonus_right_const;
     private String ImagePath;
     private Uri URI;
+    Menu menuOfBonus;
+    String idUser;
+    MenuInflater inflater;
+    MenuItem menuItem;
     private static final int PERMISSION_REQUEST_CODE = 1;
 
     @Override
@@ -71,6 +95,16 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_main_5, container, false);
 
+        DBHelper dbHelper = new DBHelper(getContext());
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor c = db.query("orzutable", null, null, null, null, null, null);
+        c.moveToFirst();
+        int idColIndex = c.getColumnIndex("id");
+        int tokenColIndex = c.getColumnIndex("token");
+        idUser = c.getString(idColIndex);
+        c.moveToFirst();
+        c.close();
+        db.close();
         RecyclerView bonus_recycler = v.findViewById(R.id.bonus_recycler);
         ListView bonus_recycler_qr = v.findViewById(R.id.bonus_recycler_qr);
         cardView = v.findViewById(R.id.card_of_partner);
@@ -92,14 +126,14 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
         bonus_recycler.setLayoutManager(llm);
         bonus_recycler_qr.setNestedScrollingEnabled(false);
 
-        bonuses.add(new Bonuses("Starbucks", "Небольшое описание партнера символов на 75!", "С нами с 01.01.2020", "-20%", R.drawable.starbucks));
-        bonuses.add(new Bonuses("Nike", "Небольшое описание партнера символов на 75!", "С нами с 01.01.2020", "-10%", "http://mega.kz/media/shops/UP1M/1517855940dsynj.jpg"));
-        bonuses.add(new Bonuses("Спортмастер", "Небольшое описание партнера символов на 75!", "С нами с 01.01.2020", "-15%", "http://mega.kz/media/shops/r3Gt7/15166355196WkVV.png"));
-        bonuses.add(new Bonuses("Халык Банк", "Небольшое описание партнера символов на 75!", "С нами с 01.01.2020", "-10%", "http://mega.kz/media/shops/QFFuT6/1522139793hgt2Q.png"));
-        bonuses.add(new Bonuses("7 cups coffee", "Небольшое описание партнера символов на 75!", "С нами с 01.01.2020", "-20%", "http://mega.kz/media/shops/nr/1517906497r4kff.jpg"));
-        bonuses.add(new Bonuses("Burger King", "Небольшое описание партнера символов на 75!", "С нами с 01.01.2020", "-5%", "http://mega.kz/media/shops/v5HyA/1516635909Hp3Gz.png"));
-        bonuses.add(new Bonuses("Costa Coffee", "Небольшое описание партнера символов на 75!", "С нами с 01.01.2020", "-30%", "http://mega.kz/media/shops/AUnAM/1516033578vrfx4.png"));
-        bonuses.add(new Bonuses("KFC", "Небольшое описание партнера символов на 75!", "С нами с 01.01.2020", "-10%", "http://mega.kz/media/shops/wu3Bq/1516636228dxrCG.png"));
+        bonuses.add(new Bonuses("Starbucks",  "-20%", R.drawable.starbucks));
+        bonuses.add(new Bonuses("Nike", "-10%", "http://mega.kz/media/shops/UP1M/1517855940dsynj.jpg"));
+        bonuses.add(new Bonuses("Спортмастер","-15%", "http://mega.kz/media/shops/r3Gt7/15166355196WkVV.png"));
+        bonuses.add(new Bonuses("Халык Банк", "-10%", "http://mega.kz/media/shops/QFFuT6/1522139793hgt2Q.png"));
+        bonuses.add(new Bonuses("7 cups coffee", "-20%", "http://mega.kz/media/shops/nr/1517906497r4kff.jpg"));
+        bonuses.add(new Bonuses("Burger King",  "-5%", "http://mega.kz/media/shops/v5HyA/1516635909Hp3Gz.png"));
+        bonuses.add(new Bonuses("Costa Coffee",  "-30%", "http://mega.kz/media/shops/AUnAM/1516033578vrfx4.png"));
+        bonuses.add(new Bonuses("KFC",  "-10%", "http://mega.kz/media/shops/wu3Bq/1516636228dxrCG.png"));
 
         BonusAdapter adapter = new BonusAdapter(getContext(), bonuses);
         bonus_recycler.setAdapter(adapter);
@@ -154,7 +188,11 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
 
             }
         });
-
+        try {
+            getUserResponse();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return v;
     }
 
@@ -263,9 +301,11 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
         menu.clear();
         inflater.inflate(R.menu.bonus_menu, menu);
         menu.findItem(R.id.new_coin);
-        SpannableString s = new SpannableString("1000 Ni");
+        SpannableString s = new SpannableString("");
         s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s.length(), 0);
         menu.findItem(R.id.new_coin).setTitle(s);
+        this.menuOfBonus = menu;
+        this.menuItem = menu.findItem(R.id.new_coin);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -277,6 +317,65 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    private void getUserResponse() throws IOException {
+        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + idUser + "&param=more";
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Accept", "application/json")
+                .header("Content-Type", "application/json")
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                    public void run() {
+                        Dialog dialog = new Dialog(getContext(), android.R.style.Theme_Material_Light_NoActionBar);
+                        dialog.setContentView(R.layout.dialog_no_internet);
+                        Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                        // if button is clicked, close the custom dialog
+                        dialogButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                try {
+                                    getUserResponse();
+                                } catch (IOException e1) {
+                                    e1.printStackTrace();
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.show();
+                            }
+                        }, 500);
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+               String mMessage = Objects.requireNonNull(response.body()).string();
+                try {
+                    JSONObject jsonObject = new JSONObject(mMessage);
+
+                    Common.wallet = jsonObject.getString("wallet");
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            SpannableString s = new SpannableString(Common.wallet+" Ni");
+                            s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s.length(), 0);
+                            menuItem.setTitle(s);
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override

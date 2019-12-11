@@ -339,6 +339,13 @@ public class Main2Activity extends AppCompatActivity
             setTitle(item.getTitle());
         } else if (id == R.id.second) {
             index = 1;
+            toggle.setDrawerIndicatorEnabled(false);
+            drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_menu2, getApplication().getTheme());
+            toggle.setHomeAsUpIndicator(drawable);
+            toggle.syncState();
+            toolbar.setBackgroundColor(getResources().getColor(R.color.back_for_feed));
+            toolbar.setTitleTextColor(getResources().getColor(R.color.colorTextDark));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryGrey));
             Intent intent = new Intent(this, CreateTaskCategory.class);
             startActivity(intent);
         } else if (id == R.id.third) {
@@ -471,7 +478,7 @@ public class Main2Activity extends AppCompatActivity
         Common.utoken = c.getString(tokenColIndex);
         c.close();
         db.close();
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + idUser + "&param=more";
+        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + idUser + "&param=more";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
@@ -520,6 +527,7 @@ public class Main2Activity extends AppCompatActivity
                     Common.sad = jsonObject.getString("sad");
                     Common.neutral = jsonObject.getString("neutral");
                     Common.happy = jsonObject.getString("happy");
+                    Common.wallet = jsonObject.getString("wallet");
                     if (mFiName.equals("null")) {
                         text = mName;
                     } else text = mName + "\n" + mFiName;

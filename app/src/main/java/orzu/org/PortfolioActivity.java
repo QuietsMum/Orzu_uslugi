@@ -22,7 +22,7 @@ public class PortfolioActivity extends AppCompatActivity implements View.OnClick
     ImageView backAct;
     CardView cardView;
     RecyclerView rv;
-    List<String> list = new ArrayList<>();
+    List<Bonuses> list = new ArrayList<>();
     TextView ok_portfolio,name,description;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,14 +33,14 @@ public class PortfolioActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_portfolio);
 
 
-        list.add("Cappuccino -10%");
-        list.add("Espresso -10%");
-        list.add("Long Black -10%");
-        list.add("Macchiato  -10%");
-        list.add("Latte -10%");
-        list.add("Флэт уайт -10%");
-        list.add("Кофе с молоком -10%");
-        list.add("Piccolo Latte -10%");
+        list.add(new Bonuses("Cappuccino", "-10%"));
+        list.add(new Bonuses("Espresso","-10%"));
+        list.add(new Bonuses("Long Black","-10%"));
+        list.add(new Bonuses("Macchiato","-10%"));
+        list.add(new Bonuses("Latte","-10%"));
+        list.add(new Bonuses("Флэт уайт","-10%"));
+        list.add(new Bonuses("Кофе с молоком","-10%"));
+        list.add(new Bonuses("Piccolo Latte","-10%"));
         rv = findViewById(R.id.rv_portfolio);
         ok_portfolio = findViewById(R.id.ok_portfolio);
         ok_portfolio.setOnClickListener(new View.OnClickListener() {
@@ -51,9 +51,9 @@ public class PortfolioActivity extends AppCompatActivity implements View.OnClick
         });
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
-        AdapterCityFilter adapter = new AdapterCityFilter(this,list);
+        AdapterPartnerBonuses adapter = new AdapterPartnerBonuses(this,list);
         cardView = findViewById(R.id.card_of_portfolio);
-        cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
+        cardView.setBackgroundResource(R.drawable.shape_card_topcorners2);
         backAct = findViewById(R.id.create_amount_back);
         backAct.setOnClickListener(this);
         rv.setAdapter(adapter);

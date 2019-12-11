@@ -1,22 +1,23 @@
 package orzu.org;
 
 public class Bonuses {
-    String name,description,date,logo,percentage;
-    int logos;
+    private String name, logo, percentage;
+    private int logos;
 
-    public Bonuses(String name, String description, String date,String percentage, String logo) {
+    Bonuses(String name, String percentage, String logo) {
         this.name = name;
-        this.description = description;
-        this.date = date;
         this.logo = logo;
         this.percentage = percentage;
     }
 
-    public Bonuses(String name, String description, String date,String percentage, int logos) {
+    Bonuses(String name, String percentage, int logos) {
         this.name = name;
-        this.description = description;
-        this.date = date;
         this.logos = logos;
+        this.percentage = percentage;
+    }
+
+    Bonuses(String name, String percentage) {
+        this.name = name;
         this.percentage = percentage;
     }
 
@@ -28,23 +29,7 @@ public class Bonuses {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getLogo() {
+    String getLogo() {
         return logo;
     }
 
@@ -52,7 +37,7 @@ public class Bonuses {
         this.logo = logo;
     }
 
-    public int getLogos() {
+    int getLogos() {
         return logos;
     }
 
@@ -60,7 +45,7 @@ public class Bonuses {
         this.logos = logos;
     }
 
-    public String getPercentage() {
+    String getPercentage() {
         return percentage;
     }
 

@@ -138,6 +138,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
     String address = "";
     String narrative = "";
     String date = "";
+    String wallet = "";
     ImageView imageViewName;
     ImageView delete;
     int datetype;
@@ -296,6 +297,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             taskMaketBack.setVisibility(View.INVISIBLE);
             shim.setVisibility(View.INVISIBLE);
             textcoins.setVisibility(View.VISIBLE);
+            textcoins.setText(Common.wallet+" Ni\n-100 Ni");
 //            TextPaint paint = textcoins.getPaint();
 //            float width = paint.measureText(String.valueOf(textcoins));
 //            Shader textShader = new LinearGradient(0, 0, width, textcoins.getTextSize(),
@@ -755,6 +757,8 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                     String sadnum = String.valueOf(jsonObject.getLong("sad"));
                     String natnum = String.valueOf(jsonObject.getLong("neutral"));
                     String hapnum = String.valueOf(jsonObject.getLong("happy"));
+                    wallet = jsonObject.getString("wallet")+" Ni"+" \n -100 Ni";
+                    Common.wallet = jsonObject.getString("wallet");
                     if (mFiName.equals("null")) {
                         text = mName;
                     } else text = mName + " " + mFiName;
@@ -765,6 +769,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                             sad.setText(sadnum);
                             nat.setText(natnum);
                             hap.setText(hapnum);
+                            textcoins.setText(wallet);
                             Picasso.get().load("https://orzu.org" + image).fit().centerCrop().into(imageViewName);
                             Animation animZoomIn = AnimationUtils.loadAnimation(getApplicationContext(),
                                     R.anim.zoom_in);
