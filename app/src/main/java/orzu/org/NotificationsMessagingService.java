@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -39,9 +40,9 @@ public class NotificationsMessagingService extends FirebaseMessagingService {
     }
 
     private void showNotification(@NotNull RemoteMessage remoteMessage) {
+        Log.wtf("asdad",remoteMessage.getData()+"");
         String[] ar = remoteMessage.getData().get("ID").split(".");
         Intent intent = new Intent(this, TaskViewMain.class);
-        ;
         SharedPreferences.Editor editor = prefs.edit();
         String id;
         if (ar.length >= 2) {
@@ -49,7 +50,7 @@ public class NotificationsMessagingService extends FirebaseMessagingService {
             id = ar[1];
         } else {
             editor.putString("mytask", "not");
-            id = ar[0];
+            id = remoteMessage.getData().get("ID");
         }
         editor.putString("idd", id);
         editor.putString("New_task", remoteMessage.getData() + "");

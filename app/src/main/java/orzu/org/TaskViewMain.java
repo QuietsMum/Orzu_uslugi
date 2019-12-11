@@ -297,7 +297,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             taskMaketBack.setVisibility(View.INVISIBLE);
             shim.setVisibility(View.INVISIBLE);
             textcoins.setVisibility(View.VISIBLE);
-            textcoins.setText(Common.wallet+" Ni\n-100 Ni");
+            textcoins.setText(Common.wallet + " Ni\n-100 Ni");
 //            TextPaint paint = textcoins.getPaint();
 //            float width = paint.measureText(String.valueOf(textcoins));
 //            Shader textShader = new LinearGradient(0, 0, width, textcoins.getTextSize(),
@@ -374,10 +374,14 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()) {
             case R.id.button_gettask:
                 if (!opt.equals("view")) {
-                    try {
-                        getCreateResponse();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (Integer.parseInt(Common.wallet) >= 100) {
+                        try {
+                            getCreateResponse();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Toast.makeText(this, "Недостаточно баланса", Toast.LENGTH_SHORT).show();
                     }
                 } else if (myTask.equals("my")) {
                     Intent intent = new Intent(this, FeedbackTask.class);
@@ -708,7 +712,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
     }
 
     public void getUserResponse() throws IOException {
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + m.get(useridList);
+        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + m.get(useridList) + "&param=more";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
@@ -757,8 +761,10 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                     String sadnum = String.valueOf(jsonObject.getLong("sad"));
                     String natnum = String.valueOf(jsonObject.getLong("neutral"));
                     String hapnum = String.valueOf(jsonObject.getLong("happy"));
-                    wallet = jsonObject.getString("wallet")+" Ni"+" \n -100 Ni";
-                    Common.wallet = jsonObject.getString("wallet");
+                    if (myTask.equals("my")) {
+                        wallet = jsonObject.getString("wallet") + " Ni" + " \n -100 Ni";
+                        Common.wallet = jsonObject.getString("wallet");
+                    }
                     if (mFiName.equals("null")) {
                         text = mName;
                     } else text = mName + " " + mFiName;
@@ -769,7 +775,9 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                             sad.setText(sadnum);
                             nat.setText(natnum);
                             hap.setText(hapnum);
-                            textcoins.setText(wallet);
+                            if (myTask.equals("my")) {
+                                textcoins.setText(wallet);
+                            }
                             Picasso.get().load("https://orzu.org" + image).fit().centerCrop().into(imageViewName);
                             Animation animZoomIn = AnimationUtils.loadAnimation(getApplicationContext(),
                                     R.anim.zoom_in);
@@ -894,6 +902,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                         CreateTaskSubCategory.fa.finish();
                     }
                 }
+                minusBalance();
                 progressBar.setVisibility(View.INVISIBLE);
             }
         });
@@ -996,6 +1005,40 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onClick(View v) {
                         deleteTask(id);
+                        dialog.dismiss();
+                    }
+                });
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.show();
+                    }
+                }, 500);
+            }
+        });
+//make the request to your server as indicated in your request url
+        Volley.newRequestQueue(this).add(stringRequest);
+    }
+
+    private void minusBalance() {
+        String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=edit_bonus_minus&userid=" + idUser + "&utoken=" + tokenUser;
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Common.wallet = response;
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace(); //log the error resulting from the request for diagnosis/debugging
+                Dialog dialog = new Dialog(TaskViewMain.this, android.R.style.Theme_Material_Light_NoActionBar);
+                dialog.setContentView(R.layout.dialog_no_internet);
+                Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        minusBalance();
                         dialog.dismiss();
                     }
                 });
