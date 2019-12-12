@@ -294,7 +294,7 @@ public class Main2Activity extends AppCompatActivity
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
+                Common.referrer = "";
             }
         }, new com.android.volley.Response.ErrorListener() {
             @Override
