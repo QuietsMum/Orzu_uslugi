@@ -286,6 +286,7 @@ public class Main2Activity extends AppCompatActivity
 
         if (Common.referrer.length() > 0) {
             plusBalance();
+            Toast.makeText(this, "Бонусы будут зашитаны: "+Common.referrer, Toast.LENGTH_SHORT).show();
         }
     }
 
