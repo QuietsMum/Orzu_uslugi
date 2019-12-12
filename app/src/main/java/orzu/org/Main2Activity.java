@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,6 +14,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,6 +28,10 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.android.gms.analytics.CampaignTrackingReceiver;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.MaterialShapeDrawable;
@@ -45,6 +51,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -79,6 +86,7 @@ public class Main2Activity extends AppCompatActivity
     String mFiName;
     String text;
     String idUser;
+    String token;
     DBHelper dbHelper;
     NavigationView navigationView;
     LinearLayout intercomBtn;
@@ -90,7 +98,8 @@ public class Main2Activity extends AppCompatActivity
     ActionBarDrawerToggle toggle;
     int index = 1;
     DrawerLayout drawer;
-    Drawable drawable ;
+    Drawable drawable;
+
     private void setupBeams() {
         PushNotifications.start(getApplicationContext(), "e33cda0a-16d0-41cd-a5c9-8ae60b9b7042");
         PushNotifications.clearDeviceInterests();
@@ -112,7 +121,9 @@ public class Main2Activity extends AppCompatActivity
         Cursor c = db.query("orzutable", null, null, null, null, null, null);
         c.moveToFirst();
         int idColIndex = c.getColumnIndex("id");
+        int tokenColIndex = c.getColumnIndex("token");
         idUser = c.getString(idColIndex);
+        token = c.getString(tokenColIndex);
         c.close();
         db.close();
         String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_user&user_cat=" + idUser;
@@ -183,7 +194,7 @@ public class Main2Activity extends AppCompatActivity
         });
         if (index == 0) {
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.container, new Fragment3(),"fragment3").commit();
+            fragmentManager.beginTransaction().replace(R.id.container, new Fragment3(), "fragment3").commit();
             navigationView.setCheckedItem(R.id.menu_none);
         } else if (index == 1) {
             toolbar = findViewById(R.id.toolbar);
@@ -197,11 +208,11 @@ public class Main2Activity extends AppCompatActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container, new Fragment4()).commit();
             navigationView.setCheckedItem(R.id.third);
-        } else if(index == 2){
+        } else if (index == 2) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container, new Fragment2()).commit();
             navigationView.setCheckedItem(R.id.fourth);
-        }else {
+        } else {
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container, new Fragment5()).commit();
             navigationView.setCheckedItem(R.id.fifth);
@@ -235,6 +246,7 @@ public class Main2Activity extends AppCompatActivity
         int idColIndex = c.getColumnIndex("id");
         int tokenColIndex = c.getColumnIndex("token");
         idUser = c.getString(idColIndex);
+        token = c.getString(tokenColIndex);
         Common.userId = idUser;
         Common.utoken = c.getString(tokenColIndex);
         c.close();
@@ -270,6 +282,45 @@ public class Main2Activity extends AppCompatActivity
         }
         navigationView.setNavigationItemSelectedListener(this);
         onNavigationItemSelected(navigationView.getMenu().getItem(0));
+
+
+        if (Common.referrer.length() > 0) {
+            plusBalance();
+        }
+    }
+
+    private void plusBalance() {
+        String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=edit_bonus_plus&userid=" + Common.referrer + "&utoken=" + token;
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace(); //log the error resulting from the request for diagnosis/debugging
+                Dialog dialog = new Dialog(Main2Activity.this, android.R.style.Theme_Material_Light_NoActionBar);
+                dialog.setContentView(R.layout.dialog_no_internet);
+                Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        plusBalance();
+                        dialog.dismiss();
+                    }
+                });
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.show();
+                    }
+                }, 500);
+            }
+        });
+//make the request to your server as indicated in your request url
+        Volley.newRequestQueue(this).add(stringRequest);
     }
 
     @Override
@@ -327,7 +378,6 @@ public class Main2Activity extends AppCompatActivity
                     }
                 }
             });
-
 
 
             // Вставляем фрагмент, заменяя текущий фрагмент
@@ -439,7 +489,6 @@ public class Main2Activity extends AppCompatActivity
                     }
                 }
             });
-
 
 
             // Вставляем фрагмент, заменяя текущий фрагмент
