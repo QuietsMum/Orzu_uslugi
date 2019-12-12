@@ -292,7 +292,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                     @Override
                     public void onVerificationCompleted(
                             PhoneAuthCredential credential) {
-
+                        signInWithPhoneAuthCredential(credential);
                         Toast.makeText(LoginActivity2.this, "Успешно доставлен", Toast.LENGTH_SHORT).show();
                     }
 

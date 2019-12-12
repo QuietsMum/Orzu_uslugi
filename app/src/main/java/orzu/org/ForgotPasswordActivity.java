@@ -198,10 +198,14 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
 
                 mMessage = Objects.requireNonNull(response.body()).string();
                 if (mMessage.equals("\"password changed\"")) {
+                    ForgotPasswordActivity.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(ForgotPasswordActivity.this, "Пароль изменен", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     Intent intent = new Intent(ForgotPasswordActivity.this, PhoneLoginActivity.class);
                     startActivity(intent);
                     finish();
-                    Toast.makeText(ForgotPasswordActivity.this, "Пароль изменен", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(ForgotPasswordActivity.this, "Произошла ошибка. Повторите занова", Toast.LENGTH_SHORT).show();
                 }
@@ -270,7 +274,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
 
                     sendCode();
 
-
                     ForgotPasswordActivity.this.runOnUiThread(new Runnable() {
                         public void run() {
 
@@ -306,7 +309,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
                                     textView.setVisibility(View.VISIBLE);
                                     timer.start();
 
-
                                 }
                             });
                             timer.start();
@@ -319,15 +321,12 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
                                     } else {
                                         Toast.makeText(ForgotPasswordActivity.this, "Введите код", Toast.LENGTH_SHORT).show();
                                     }
-
                                     dialog.dismiss();
                                 }
                             });
                             dialog.show();
                         }
                     });
-
-
                 }
             }
         });
@@ -351,7 +350,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
                     @Override
                     public void onVerificationCompleted(
                             PhoneAuthCredential credential) {
-
+                        signInWithPhoneAuthCredential(credential);
                         Toast.makeText(ForgotPasswordActivity.this, "Успешно доставлен", Toast.LENGTH_SHORT).show();
                     }
 
