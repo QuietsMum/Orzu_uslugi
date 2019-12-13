@@ -284,45 +284,10 @@ public class Main2Activity extends AppCompatActivity
         onNavigationItemSelected(navigationView.getMenu().getItem(0));
 
 
-        if (Common.referrer.length() > 0) {
-            plusBalance();
-            Toast.makeText(this, "Бонусы будут зашитаны: "+Common.referrer, Toast.LENGTH_SHORT).show();
-        }
+
     }
 
-    private void plusBalance() {
-        String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=edit_bonus_plus&userid=" + Common.referrer + "&utoken=" + token;
-        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Common.referrer = "";
-            }
-        }, new com.android.volley.Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace(); //log the error resulting from the request for diagnosis/debugging
-                Dialog dialog = new Dialog(Main2Activity.this, android.R.style.Theme_Material_Light_NoActionBar);
-                dialog.setContentView(R.layout.dialog_no_internet);
-                Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
-                // if button is clicked, close the custom dialog
-                dialogButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        plusBalance();
-                        dialog.dismiss();
-                    }
-                });
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        dialog.show();
-                    }
-                }, 500);
-            }
-        });
-//make the request to your server as indicated in your request url
-        Volley.newRequestQueue(this).add(stringRequest);
-    }
+
 
     @Override
     protected void onNewIntent(Intent intent) {

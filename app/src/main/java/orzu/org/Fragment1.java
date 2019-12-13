@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -112,6 +114,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
     private NestedScrollView nestshimmer;
     private EditText editFind;
     private String edittextFind;
+    private String tokenUser;
     private String idOfSub;
     private List<category_model> categories = new ArrayList<>();
     private List<category_model> subcategories = new ArrayList<>();
@@ -134,10 +137,22 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstantState) {
         final View view = inflater.inflate(R.layout.fragment_main, container, false);
+        dbHelper = new DBHelper(getContext());
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor c = db.query("orzutable", null, null, null, null, null, null);
+        c.moveToFirst();
+        int idColIndex = c.getColumnIndex("id");
+        int tokenColIndex = c.getColumnIndex("token");
+        idUser = c.getString(idColIndex);
+        tokenUser = c.getString(tokenColIndex);
+        c.moveToFirst();
+        c.close();
+        db.close();
         prefs = getActivity().getSharedPreferences(" ", Context.MODE_PRIVATE);
         Common.city = prefs.getString("UserCityPref", "");
-        if (Common.referrer.length() != 0) {
-            Toast.makeText(getContext(), Common.referrer + "", Toast.LENGTH_SHORT).show();
+        if (Common.referrer.length() > 0) {
+            plusBalance();
+            Toast.makeText(getContext(), "Бонусы будут зашитаны: " + Common.referrer, Toast.LENGTH_SHORT).show();
         }
 
         if (prefs.getString("UserCityPref", "").equals("")) {
@@ -304,6 +319,46 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             }
         });
         return view;
+    }
+
+    private void plusBalance() {
+        String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=edit_bonus_plus&userid=" + idUser + "&utoken=" + tokenUser+"&useridTo="+Common.referrer;
+        Log.wtf("asdsa",requestUrl);
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.wtf("sadas", response);
+                Common.referrer = "";
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace(); //log the error resulting from the request for diagnosis/debugging
+                Fragment1.this.getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        Dialog dialog = new Dialog(getContext(), android.R.style.Theme_Material_Light_NoActionBar);
+                        dialog.setContentView(R.layout.dialog_no_internet);
+                        Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                        // if button is clicked, close the custom dialog
+                        dialogButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                plusBalance();
+                                dialog.dismiss();
+                            }
+                        });
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.show();
+                            }
+                        }, 500);
+                    }
+                });
+            }
+        });
+//make the request to your server as indicated in your request url
+        Volley.newRequestQueue(getActivity()).add(stringRequest);
     }
 
     private Map<String, Object> readMessage(JsonReader reader) throws IOException {
@@ -1013,13 +1068,17 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     if (count != 1) {
                         getFilteredCity.cancel(true);
                     }
-                    Fragment1.this.getActivity().runOnUiThread(new Runnable() {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
                         public void run() {
-                            progress_loading.setVisibility(View.GONE);
-                            progress_for_task.setVisibility(View.GONE);
+                            Fragment1.this.getActivity().runOnUiThread(new Runnable() {
+                                public void run() {
+                                    progress_loading.setVisibility(View.GONE);
+                                    progress_for_task.setVisibility(View.GONE);
+                                }
+                            });
                         }
-                    });
-
+                    }, 500);
                 } else {
                     noTasksYet = false;
                     jsonReader.beginArray(); // Start processing the JSON object

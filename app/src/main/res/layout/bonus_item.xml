@@ -56,26 +56,26 @@
                 android:textSize="22sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Скидка от партнеров"
                 android:textSize="10sp"
-                app:layout_constraintTop_toBottomOf="@id/name_of_partner"
-                app:layout_constraintLeft_toLeftOf="@id/name_of_partner"/>
+                app:layout_constraintLeft_toLeftOf="@id/name_of_partner"
+                app:layout_constraintTop_toBottomOf="@id/name_of_partner" />
 
             <TextView
                 android:id="@+id/percentage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 android:text="10-20%"
-                android:textStyle="bold"
                 android:textColor="@android:color/holo_green_light"
-                android:textSize="20sp"/>
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
