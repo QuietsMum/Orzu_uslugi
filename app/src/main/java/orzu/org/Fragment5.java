@@ -18,6 +18,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -52,6 +53,7 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -72,6 +74,7 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
 
     private List<Bonuses> bonuses = new ArrayList<>();
     private List<String> texts = new ArrayList<>();
+    private List<BonusList> bonusLists = new ArrayList<>();
     CardView cardView;
     private ImageView tri_left;
     private ImageView tri_right;
@@ -81,6 +84,7 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
     Menu menuOfBonus;
     String idUser;
     MenuInflater inflater;
+    LvAdapterBonuses lvAdapter;
     MenuItem menuItem;
     private static final int PERMISSION_REQUEST_CODE = 1;
 
@@ -126,14 +130,22 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
         bonus_recycler.setLayoutManager(llm);
         bonus_recycler_qr.setNestedScrollingEnabled(false);
 
-        bonuses.add(new Bonuses("Starbucks",  "-20%", R.drawable.starbucks));
+
+        try {
+            getBonusList();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        bonuses.add(new Bonuses("Starbucks", "-20%", R.drawable.starbucks));
         bonuses.add(new Bonuses("Nike", "-10%", "http://mega.kz/media/shops/UP1M/1517855940dsynj.jpg"));
-        bonuses.add(new Bonuses("Спортмастер","-15%", "http://mega.kz/media/shops/r3Gt7/15166355196WkVV.png"));
+        bonuses.add(new Bonuses("Спортмастер", "-15%", "http://mega.kz/media/shops/r3Gt7/15166355196WkVV.png"));
         bonuses.add(new Bonuses("Халык Банк", "-10%", "http://mega.kz/media/shops/QFFuT6/1522139793hgt2Q.png"));
         bonuses.add(new Bonuses("7 cups coffee", "-20%", "http://mega.kz/media/shops/nr/1517906497r4kff.jpg"));
-        bonuses.add(new Bonuses("Burger King",  "-5%", "http://mega.kz/media/shops/v5HyA/1516635909Hp3Gz.png"));
-        bonuses.add(new Bonuses("Costa Coffee",  "-30%", "http://mega.kz/media/shops/AUnAM/1516033578vrfx4.png"));
-        bonuses.add(new Bonuses("KFC",  "-10%", "http://mega.kz/media/shops/wu3Bq/1516636228dxrCG.png"));
+        bonuses.add(new Bonuses("Burger King", "-5%", "http://mega.kz/media/shops/v5HyA/1516635909Hp3Gz.png"));
+        bonuses.add(new Bonuses("Costa Coffee", "-30%", "http://mega.kz/media/shops/AUnAM/1516033578vrfx4.png"));
+        bonuses.add(new Bonuses("KFC", "-10%", "http://mega.kz/media/shops/wu3Bq/1516636228dxrCG.png"));
 
         BonusAdapter adapter = new BonusAdapter(getContext(), bonuses);
         bonus_recycler.setAdapter(adapter);
@@ -147,12 +159,8 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
             }
         });
 
-        texts.add("Вы получили 1000 Ni");
-        texts.add("Вы получили 1000 Ni");
-        texts.add("Вы получили 1000 Ni");
-        texts.add("Вы получили 1000 Ni");
 
-        LvAdapterBonuses lvAdapter = new LvAdapterBonuses(getContext(), texts);
+        lvAdapter = new LvAdapterBonuses(getContext(), bonusLists);
         bonus_recycler_qr.setAdapter(lvAdapter);
 
         Bitmap overlay = BitmapFactory.decodeResource(getResources(), R.drawable.logo_in_desktop);
@@ -318,6 +326,7 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void getUserResponse() throws IOException {
         String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + idUser + "&param=more";
         OkHttpClient client = new OkHttpClient();
@@ -358,7 +367,7 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-               String mMessage = Objects.requireNonNull(response.body()).string();
+                String mMessage = Objects.requireNonNull(response.body()).string();
                 try {
                     JSONObject jsonObject = new JSONObject(mMessage);
 
@@ -366,9 +375,68 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            SpannableString s = new SpannableString(Common.wallet+" Ni");
+                            SpannableString s = new SpannableString(Common.wallet + " Ni");
                             s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s.length(), 0);
                             menuItem.setTitle(s);
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void getBonusList() throws IOException {
+        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=bonus_list&userid=" + idUser;
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Accept", "application/json")
+                .header("Content-Type", "application/json")
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                    public void run() {
+                        Dialog dialog = new Dialog(getContext(), android.R.style.Theme_Material_Light_NoActionBar);
+                        dialog.setContentView(R.layout.dialog_no_internet);
+                        Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                        // if button is clicked, close the custom dialog
+                        dialogButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                try {
+                                    getUserResponse();
+                                } catch (IOException e1) {
+                                    e1.printStackTrace();
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.show();
+                            }
+                        }, 500);
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String mMessage = Objects.requireNonNull(response.body()).string();
+                try {
+                    JSONArray jsonObject = new JSONArray(mMessage);
+                    for(int i=jsonObject.length()-1;i>=0;i--){
+                        JSONObject object = jsonObject.getJSONObject(i);
+                        bonusLists.add(new BonusList(object.getString("idUser"),object.getString("date"),object.getString("value"),object.getString("reason")));
+                    }
+                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                        public void run() {
+                            lvAdapter.notifyDataSetChanged();
                         }
                     });
                 } catch (JSONException e) {

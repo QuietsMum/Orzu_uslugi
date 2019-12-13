@@ -12,10 +12,10 @@ import java.util.List;
 
 public class LvAdapterBonuses extends BaseAdapter {
     Context context;
-    List<String> list;
+    List<BonusList> list;
     LayoutInflater inflater;
 
-    public LvAdapterBonuses(Context context, List<String> list) {
+    public LvAdapterBonuses(Context context, List<BonusList> list) {
         this.context = context;
         this.list = list;
     }
@@ -39,7 +39,23 @@ public class LvAdapterBonuses extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         View v = inflater.from(context).inflate(R.layout.item_bonuses_qr,null);
         TextView text = v.findViewById(R.id.text);
-        text.setText(list.get(i));
+        TextView wallet = v.findViewById(R.id.wallet_cost);
+        TextView date_bonus = v.findViewById(R.id.date_bonus);
+        text.setText(list.get(i).getReason());
+        if(list.get(i).getReason().equals("регистрация друга")) {
+            wallet.setText("+"+list.get(i).getValue());
+        }else{
+            wallet.setText("-"+list.get(i).getValue());
+        }
+        if(i!=0){
+            if(!list.get(i-1).date.equals(list.get(i).getDate())){
+                date_bonus.setText(list.get(i).getDate());
+                date_bonus.setVisibility(View.VISIBLE);
+            }
+        }else{
+            date_bonus.setText(list.get(i).getDate());
+            date_bonus.setVisibility(View.VISIBLE);
+        }
         return v;
     }
 }

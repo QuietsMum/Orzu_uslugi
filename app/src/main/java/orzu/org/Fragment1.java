@@ -323,11 +323,9 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
     private void plusBalance() {
         String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=edit_bonus_plus&userid=" + idUser + "&utoken=" + tokenUser+"&useridTo="+Common.referrer;
-        Log.wtf("asdsa",requestUrl);
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.wtf("sadas", response);
                 Common.referrer = "";
             }
         }, new com.android.volley.Response.ErrorListener() {
@@ -596,7 +594,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             RVAdapter.setSelect(new MainItemSelect() {
                 @Override
                 public void onItemSelectedListener(View view, int position) {
-                    Intent intent = new Intent(getActivity(), TaskViewMain.class);
+                    Intent intent = new Intent(getContext(), TaskViewMain.class);
                     Map<String, Object> map;
                     map = truedata.get(position);
                     intent.putExtra("id", map.get(idList).toString());
