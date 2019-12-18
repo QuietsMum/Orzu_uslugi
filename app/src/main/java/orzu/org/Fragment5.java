@@ -40,8 +40,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.zxing.BarcodeFormat;
@@ -70,15 +72,14 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class Fragment5 extends Fragment implements View.OnClickListener {
+public class Fragment5 extends Fragment {
 
     private List<Bonuses> bonuses = new ArrayList<>();
     private List<String> texts = new ArrayList<>();
     private List<BonusList> bonusLists = new ArrayList<>();
     CardView cardView;
-    private ImageView tri_left;
-    private ImageView tri_right;
-    private ConstraintLayout bonus_left_const, bonus_right_const;
+    private ConstraintLayout three_index, zero_index;
+    private NestedScrollView one_index;
     private String ImagePath;
     private Uri URI;
     Menu menuOfBonus;
@@ -86,7 +87,11 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
     MenuInflater inflater;
     LvAdapterBonuses lvAdapter;
     MenuItem menuItem;
+    RecyclerView bonus_rec;
+    BonusProgrammAdapter adapter_category;
     private static final int PERMISSION_REQUEST_CODE = 1;
+
+    private List<String> categories = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -112,17 +117,11 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
         RecyclerView bonus_recycler = v.findViewById(R.id.bonus_recycler);
         ListView bonus_recycler_qr = v.findViewById(R.id.bonus_recycler_qr);
         cardView = v.findViewById(R.id.card_of_partner);
-        TextView bonus_left = v.findViewById(R.id.bonus_left);
-        TextView bonus_right = v.findViewById(R.id.bonus_right);
-        tri_left = v.findViewById(R.id.bonus_tri_left);
-        tri_right = v.findViewById(R.id.bonus_tri_right);
         ImageView qr_code = v.findViewById(R.id.qr_code);
-        bonus_left_const = v.findViewById(R.id.bonus_left_const);
-        bonus_right_const = v.findViewById(R.id.bonus_right_const);
+        one_index = v.findViewById(R.id.one_index);
+        three_index = v.findViewById(R.id.three_index);
         TextView export = v.findViewById(R.id.export);
 
-        bonus_left.setOnClickListener(this);
-        bonus_right.setOnClickListener(this);
         cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
         bonus_recycler.setHasFixedSize(true);
         bonus_recycler.setNestedScrollingEnabled(false);
@@ -131,6 +130,15 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
         bonus_recycler_qr.setNestedScrollingEnabled(false);
 
 
+        zero_index = v.findViewById(R.id.zero_index);
+
+        bonus_rec = v.findViewById(R.id.bonus_rec);
+        categories.add("Программа Партнерская");
+        categories.add("Программа Бонусная");
+        categories.add("Стать Участником");
+        categories.add("Наши партнеры");
+        adapter_category = new BonusProgrammAdapter(getContext(), categories);
+        onSetRecyclerView();
         try {
             getBonusList();
         } catch (IOException e) {
@@ -211,6 +219,57 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
         } else {
             return false;
         }
+    }
+
+    private void onSetRecyclerView() {
+
+        CenterZoomLayoutManager layoutManager =
+                new CenterZoomLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        bonus_rec.setLayoutManager(layoutManager);
+        bonus_rec.setAdapter(adapter_category);
+        // Wait until the RecyclerView is laid out.
+        bonus_rec.post(new Runnable() {
+            @Override
+            public void run() {
+                // Shift the view to snap  near the center of the screen.
+                // This does not have to be precise.
+                int dx = (bonus_rec.getWidth() - bonus_rec.getChildAt(0).getWidth()) / 2;
+                bonus_rec.scrollBy(-dx, 0);
+                // Assign the LinearSnapHelper that will initially snap the near-center view.
+                LinearSnapHelper snapHelper = new LinearSnapHelper();
+                snapHelper.attachToRecyclerView(bonus_rec);
+                bonus_rec.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+                    @Override
+                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                        super.onScrollStateChanged(recyclerView, newState);
+                        int currentFirstVisible = layoutManager.findFirstCompletelyVisibleItemPosition();
+                        switch (currentFirstVisible){
+                            case 0:
+                                zero_index.setVisibility(View.VISIBLE);
+                                one_index.setVisibility(View.GONE);
+                                three_index.setVisibility(View.GONE);
+                                break;
+                            case 1:
+                                zero_index.setVisibility(View.GONE);
+                                one_index.setVisibility(View.VISIBLE);
+                                three_index.setVisibility(View.GONE);
+                                break;
+                            case 2:
+                                zero_index.setVisibility(View.GONE);
+                                one_index.setVisibility(View.GONE);
+                                three_index.setVisibility(View.GONE);
+                                break;
+                            case 3:
+                                zero_index.setVisibility(View.GONE);
+                                one_index.setVisibility(View.GONE);
+                                three_index.setVisibility(View.VISIBLE);
+                                break;
+                        }
+                    }
+                });
+            }
+        });
     }
 
     private void requestPermission() {
@@ -430,9 +489,9 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
                 String mMessage = Objects.requireNonNull(response.body()).string();
                 try {
                     JSONArray jsonObject = new JSONArray(mMessage);
-                    for(int i=jsonObject.length()-1;i>=0;i--){
+                    for (int i = jsonObject.length() - 1; i >= 0; i--) {
                         JSONObject object = jsonObject.getJSONObject(i);
-                        bonusLists.add(new BonusList(object.getString("idUser"),object.getString("date"),object.getString("value"),object.getString("reason")));
+                        bonusLists.add(new BonusList(object.getString("idUser"), object.getString("date"), object.getString("value"), object.getString("reason")));
                     }
                     Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                         public void run() {
@@ -446,22 +505,5 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
         });
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.bonus_left:
-                tri_right.setVisibility(View.INVISIBLE);
-                tri_left.setVisibility(View.VISIBLE);
-                bonus_left_const.setVisibility(View.VISIBLE);
-                bonus_right_const.setVisibility(View.GONE);
-                break;
-            case R.id.bonus_right:
-                tri_left.setVisibility(View.INVISIBLE);
-                tri_right.setVisibility(View.VISIBLE);
-                bonus_left_const.setVisibility(View.GONE);
-                bonus_right_const.setVisibility(View.VISIBLE);
-                break;
-        }
-    }
 
 }

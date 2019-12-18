@@ -107,6 +107,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
     TextView taskNarr;
     TextView taskOpen;
     TextView nav_user;
+    TextView taskId;
     TextView sad;
     TextView nat;
     TextView hap;
@@ -191,6 +192,8 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             editor.putBoolean("notif", false);
             editor.apply();
         }
+        taskId = findViewById(R.id.taskId);
+        taskId.setText(id);
         delete = findViewById(R.id.task_view_main_delete);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override

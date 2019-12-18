@@ -46,13 +46,17 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -65,6 +69,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
 
 import io.intercom.android.sdk.Intercom;
 import io.intercom.android.sdk.UserAttributes;
@@ -89,6 +95,7 @@ public class Main2Activity extends AppCompatActivity
     String token;
     DBHelper dbHelper;
     NavigationView navigationView;
+    NavigationView nav_right;
     LinearLayout intercomBtn;
     ImageView img;
     RelativeLayout userviewBtn;
@@ -99,7 +106,10 @@ public class Main2Activity extends AppCompatActivity
     int index = 1;
     DrawerLayout drawer;
     Drawable drawable;
-
+    List<category_model> categories = new ArrayList<>();
+    private List<category_model> subcategories = new ArrayList<>();
+    Spinner category_right_side;
+    Spinner subcategory_right_side;
     private void setupBeams() {
         PushNotifications.start(getApplicationContext(), "e33cda0a-16d0-41cd-a5c9-8ae60b9b7042");
         PushNotifications.clearDeviceInterests();
@@ -228,6 +238,14 @@ public class Main2Activity extends AppCompatActivity
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         navigationView = findViewById(R.id.nav_view);
+        nav_right = findViewById(R.id.nav_view2);
+        category_right_side = findViewById(R.id.category_right_side);
+        subcategory_right_side = findViewById(R.id.subcategory_right_side);
+        getCategories();
+
+
+
+
         navigationView.setItemIconTintList(null);
         MaterialShapeDrawable navViewBackground = (MaterialShapeDrawable) navigationView.getBackground();
         navViewBackground.setShapeAppearanceModel(
@@ -251,7 +269,6 @@ public class Main2Activity extends AppCompatActivity
         Common.utoken = c.getString(tokenColIndex);
         c.close();
         requestSubsServerMain();
-
         Intercom.initialize(getApplication(), "android_sdk-805f0d44d62fbc8e72058b9c8eee61c94c43c874", "p479kps8");
         intercomBtn = findViewById(R.id.techsupp);
         intercomBtn.setOnClickListener(this);
@@ -685,5 +702,117 @@ public class Main2Activity extends AppCompatActivity
     public void changeImage() {
         nav_user.setImageDrawable(Common.d);
         nav_user_name.setText(Common.name);
+    }
+    private void getCategories() {
+        String requestUrl = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_parent";
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray j = new JSONArray(response);
+                    String[] cities = new String[j.length()];
+                    for (int i = 0; i < j.length(); i++) {
+                        try {
+                            JSONObject object = j.getJSONObject(i);
+                            categories.add(new category_model(object.getString("id"), object.getString("name"), object.getString("parent_id")));
+                            cities[i] = object.getString("name");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(Main2Activity.this,
+                            android.R.layout.simple_spinner_dropdown_item, cities);
+                    category_right_side.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                    category_right_side.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                            getSubCategories(categories.get(i).getId());
+                        }
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
+
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace(); //log the error resulting from the request for diagnosis/debugging
+                Dialog dialog = new Dialog(Main2Activity.this, android.R.style.Theme_Material_Light_NoActionBar);
+                dialog.setContentView(R.layout.dialog_no_internet);
+                Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getCategories();
+                        dialog.dismiss();
+                    }
+                });
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.show();
+                    }
+                }, 500);
+            }
+        });
+        Volley.newRequestQueue(Objects.requireNonNull(this)).add(stringRequest);
+    }
+    private void getSubCategories(String id) {
+        subcategories.clear();
+        String requestUrl = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_subcat&id=" + id;
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray j = new JSONArray(response);
+                    String[] cities = new String[j.length()];
+                    for (int i = 0; i < j.length(); i++) {
+                        try {
+                            JSONObject object = j.getJSONObject(i);
+                            subcategories.add(new category_model(object.getString("id"), object.getString("name"), object.getString("parent_id")));
+                            cities[i] = object.getString("name");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(Main2Activity.this,
+                            android.R.layout.simple_spinner_dropdown_item, cities);
+                    subcategory_right_side.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace(); //log the error resulting from the request for diagnosis/debugging
+                Dialog dialog = new Dialog(Main2Activity.this, android.R.style.Theme_Material_Light_NoActionBar);
+                dialog.setContentView(R.layout.dialog_no_internet);
+                Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getSubCategories(id);
+                        dialog.dismiss();
+                    }
+                });
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.show();
+                    }
+                }, 500);
+            }
+        });
+        Volley.newRequestQueue(Objects.requireNonNull(Main2Activity.this)).add(stringRequest);
     }
 }

@@ -44,6 +44,8 @@ public class LvAdapterBonuses extends BaseAdapter {
         text.setText(list.get(i).getReason());
         if(list.get(i).getReason().equals("регистрация друга")) {
             wallet.setText("+"+list.get(i).getValue());
+        }else if (list.get(i).getReason().equals("Отзыв")){
+            wallet.setText("+"+list.get(i).getValue());
         }else{
             wallet.setText("-"+list.get(i).getValue());
         }
