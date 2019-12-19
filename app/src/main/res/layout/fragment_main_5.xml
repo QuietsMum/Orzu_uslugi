@@ -31,7 +31,81 @@
             android:layout_weight="1"
             android:background="@android:color/transparent">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="14dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent">
 
+                <TextView
+                    android:id="@+id/bonus_left"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Наши программы"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/bonus_right"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/partners"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/bonus_tri_left"
+                        android:layout_width="23dp"
+                        android:layout_height="10dp"
+                        android:background="@drawable/card_corner_triangle"
+                        android:outlineSpotShadowColor="@android:color/white"
+                        android:visibility="visible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/bonus_tri_right"
+                        android:layout_width="23dp"
+                        android:layout_height="10dp"
+                        android:background="@drawable/card_corner_triangle"
+                        android:outlineSpotShadowColor="@android:color/white"
+                        android:visibility="invisible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.cardview.widget.CardView
@@ -46,235 +120,244 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/bonus_rec"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/zero_index"
+                    android:id="@+id/left_bonus"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/bonus_rec">
+                    android:layout_height="match_parent">
 
-                    <TextView
-                        android:id="@+id/uroven"
-                        android:layout_width="wrap_content"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/bonus_rec"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Уровень"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginTop="30dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:orientation="horizontal"
-                        android:weightSum="3"
-                        app:layout_constraintTop_toBottomOf="@id/uroven">
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="0dp"
-                            android:layout_height="100dp"
-                            android:layout_weight="1"
-                            android:paddingLeft="10dp"
-                            android:paddingRight="10dp">
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:src="@drawable/gradient_of_next_button_calendar" />
-
-                            <TextView
-                                android:id="@+id/vp1"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:padding="7dp"
-                                android:text="VIP"
-                                android:textColor="@android:color/white"
-                                android:textSize="13sp"
-                                android:textStyle="bold"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                android:id="@+id/vp21"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:padding="7dp"
-                                android:text="Скидки до 50%"
-                                android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:textStyle="bold"
-                                app:layout_constraintTop_toBottomOf="@id/vp1" />
-
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="0dp"
-                            android:layout_height="100dp"
-                            android:layout_weight="1"
-                            android:paddingLeft="10dp"
-                            android:paddingRight="10dp">
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:src="@drawable/gradient_of_next_button_calendar" />
-
-                            <TextView
-                                android:id="@+id/vp2"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:padding="7dp"
-                                android:text="Стандарт"
-                                android:textColor="@android:color/white"
-                                android:textSize="13sp"
-                                android:textStyle="bold"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                android:id="@+id/vp22"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:padding="7dp"
-                                android:text="Скидки до 50%"
-                                android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:textStyle="bold"
-                                app:layout_constraintTop_toBottomOf="@id/vp2" />
-
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="0dp"
-                            android:layout_height="100dp"
-                            android:layout_weight="1"
-                            android:paddingLeft="10dp"
-                            android:paddingRight="10dp">
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:src="@drawable/gradient_of_next_button_calendar" />
-
-                            <TextView
-                                android:id="@+id/vp3"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:padding="7dp"
-                                android:text="Новичок"
-                                android:textColor="@android:color/white"
-                                android:textSize="13sp"
-                                android:textStyle="bold"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                android:id="@+id/vp23"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:padding="7dp"
-                                android:text="Скидки до 50%"
-                                android:textColor="@android:color/white"
-                                android:textSize="11sp"
-                                android:textStyle="bold"
-                                app:layout_constraintTop_toBottomOf="@id/vp3" />
-
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-                    </LinearLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-                <androidx.core.widget.NestedScrollView
-                    android:id="@+id/one_index"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:fillViewport="true"
-                    android:visibility="visible"
-                    android:clipToPadding="false"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/bonus_rec">
-
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/zero_index"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:visibility="visible">
-
-
-                        <ImageView
-                            android:id="@+id/qr_code"
-                            android:layout_width="0dp"
-                            android:layout_height="200dp"
-                            android:layout_marginTop="20dp"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintWidth_percent="0.5" />
+                        android:layout_height="0dp"
+                        android:layout_marginTop="10dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/bonus_rec">
 
                         <TextView
-                            android:id="@+id/export"
-                            android:layout_width="0dp"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="20dp"
-                            android:background="@drawable/gradient_of_next_button"
-                            android:gravity="center"
-                            android:padding="4dp"
-                            android:text="Экспортировать"
-                            android:textAlignment="center"
-                            android:textColor="@android:color/white"
-                            android:textSize="17sp"
-                            android:textStyle="bold"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/qr_code"
-                            app:layout_constraintWidth_percent="0.6" />
-
-                        <TextView
-                            android:id="@+id/text_bonus"
+                            android:id="@+id/uroven"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_margin="20dp"
-                            android:text="Накоплено бонусов:"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/export" />
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/bonus_recycler_qr"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:clipToPadding="false"
-                            android:paddingLeft="8dp"
-                            android:paddingTop="8dp"
-                            android:paddingRight="8dp"
-                            android:paddingBottom="10dp"
-                            app:layout_constraintEnd_toEndOf="parent"
+                            android:text="Уровень"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/text_bonus" />
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:orientation="horizontal"
+                            android:weightSum="3"
+                            app:layout_constraintTop_toBottomOf="@id/uroven">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="0dp"
+                                android:layout_height="100dp"
+                                android:layout_weight="1"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:src="@drawable/gradient_of_next_button_calendar" />
+
+                                <TextView
+                                    android:id="@+id/vp1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="7dp"
+                                    android:text="VIP"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/vp21"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="7dp"
+                                    android:text="Скидки до 50%"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintTop_toBottomOf="@id/vp1" />
+
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="0dp"
+                                android:layout_height="100dp"
+                                android:layout_weight="1"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:src="@drawable/gradient_of_next_button_calendar" />
+
+                                <TextView
+                                    android:id="@+id/vp2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="7dp"
+                                    android:text="Стандарт"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/vp22"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="7dp"
+                                    android:text="Скидки до 50%"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintTop_toBottomOf="@id/vp2" />
+
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="0dp"
+                                android:layout_height="100dp"
+                                android:layout_weight="1"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:src="@drawable/gradient_of_next_button_calendar" />
+
+                                <TextView
+                                    android:id="@+id/vp3"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="7dp"
+                                    android:text="Новичок"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/vp23"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="7dp"
+                                    android:text="Скидки до 50%"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintTop_toBottomOf="@id/vp3" />
+
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+                        </LinearLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
-                </androidx.core.widget.NestedScrollView>
+
+
+                    <androidx.core.widget.NestedScrollView
+                        android:id="@+id/one_index"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:clipToPadding="false"
+                        android:fillViewport="true"
+                        android:visibility="visible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/bonus_rec">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:visibility="visible">
+
+
+                            <ImageView
+                                android:id="@+id/qr_code"
+                                android:layout_width="0dp"
+                                android:layout_height="200dp"
+                                android:layout_marginTop="20dp"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintRight_toRightOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintWidth_percent="0.5" />
+
+                            <TextView
+                                android:id="@+id/export"
+                                android:layout_width="0dp"
+                                android:layout_height="40dp"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="20dp"
+                                android:background="@drawable/gradient_of_next_button"
+                                android:gravity="center"
+                                android:padding="4dp"
+                                android:text="Экспортировать"
+                                android:textAlignment="center"
+                                android:textColor="@android:color/white"
+                                android:textSize="17sp"
+                                android:textStyle="bold"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintRight_toRightOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/qr_code"
+                                app:layout_constraintWidth_percent="0.6" />
+
+                            <TextView
+                                android:id="@+id/text_bonus"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="20dp"
+                                android:text="Накоплено бонусов:"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/export" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/bonus_recycler_qr"
+                                android:layout_width="match_parent"
+                                android:layout_height="220dp"
+                                android:clipToPadding="false"
+                                android:paddingLeft="8dp"
+                                android:paddingTop="8dp"
+                                android:paddingRight="8dp"
+                                android:paddingBottom="10dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/text_bonus" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.core.widget.NestedScrollView>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/three_index"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="match_parent"
                     android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/bonus_rec">
+                    app:layout_constraintBottom_toBottomOf="parent">
 
                     <TextView
                         android:id="@+id/all_city_text_in_filter"
@@ -292,13 +375,14 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/bonus_recycler"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
                         android:layout_marginTop="10dp"
                         android:clipToPadding="false"
                         android:paddingLeft="8dp"
                         android:paddingTop="8dp"
                         android:paddingRight="8dp"
                         android:paddingBottom="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/all_city_text_in_filter" />
@@ -314,7 +398,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

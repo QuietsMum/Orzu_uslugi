@@ -72,16 +72,20 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class Fragment5 extends Fragment {
+public class Fragment5 extends Fragment implements View.OnClickListener {
 
     private List<Bonuses> bonuses = new ArrayList<>();
     private List<String> texts = new ArrayList<>();
     private List<BonusList> bonusLists = new ArrayList<>();
     CardView cardView;
-    private ConstraintLayout three_index, zero_index;
+    private ConstraintLayout three_index, zero_index,left_bonus;
     private NestedScrollView one_index;
     private String ImagePath;
     private Uri URI;
+
+    private ImageView tri_left;
+    private ImageView tri_right;
+
     Menu menuOfBonus;
     String idUser;
     MenuInflater inflater;
@@ -114,6 +118,10 @@ public class Fragment5 extends Fragment {
         c.moveToFirst();
         c.close();
         db.close();
+
+        TextView bonus_left = v.findViewById(R.id.bonus_left);
+        TextView bonus_right = v.findViewById(R.id.bonus_right);
+
         RecyclerView bonus_recycler = v.findViewById(R.id.bonus_recycler);
         RecyclerView bonus_recycler_qr = v.findViewById(R.id.bonus_recycler_qr);
         cardView = v.findViewById(R.id.card_of_partner);
@@ -121,6 +129,13 @@ public class Fragment5 extends Fragment {
         one_index = v.findViewById(R.id.one_index);
         three_index = v.findViewById(R.id.three_index);
         TextView export = v.findViewById(R.id.export);
+
+        left_bonus = v.findViewById(R.id.left_bonus);
+        tri_left = v.findViewById(R.id.bonus_tri_left);
+        tri_right = v.findViewById(R.id.bonus_tri_right);
+
+        bonus_left.setOnClickListener(this);
+        bonus_right.setOnClickListener(this);
 
         cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
         bonus_recycler.setHasFixedSize(true);
@@ -138,9 +153,16 @@ public class Fragment5 extends Fragment {
         bonus_rec = v.findViewById(R.id.bonus_rec);
         categories.add("Программа Партнерская");
         categories.add("Программа Бонусная");
-        categories.add("Стать Участником");
-        categories.add("Наши партнеры");
         adapter_category = new BonusProgrammAdapter(getContext(), categories);
+        adapter_category.setClickListener(new BonusProgrammAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                if(position==0){
+                    Intent intent = new Intent(getActivity(),PartnerDetails.class);
+                    startActivity(intent);
+                }
+            }
+        });
         onSetRecyclerView();
         try {
             getBonusList();
@@ -262,11 +284,6 @@ public class Fragment5 extends Fragment {
                                 zero_index.setVisibility(View.GONE);
                                 one_index.setVisibility(View.GONE);
                                 three_index.setVisibility(View.GONE);
-                                break;
-                            case 3:
-                                zero_index.setVisibility(View.GONE);
-                                one_index.setVisibility(View.GONE);
-                                three_index.setVisibility(View.VISIBLE);
                                 break;
                         }
                     }
@@ -494,7 +511,7 @@ public class Fragment5 extends Fragment {
                     JSONArray jsonObject = new JSONArray(mMessage);
                     for (int i = jsonObject.length() - 1; i >= 0; i--) {
                         JSONObject object = jsonObject.getJSONObject(i);
-                        bonusLists.add(new BonusList(object.getString("idUser"), object.getString("date"), object.getString("value"), object.getString("reason")));
+                        bonusLists.add(new BonusList(object.getString("idUser"), object.getString("date"), object.getString("value"), object.getString("reason"),object.getString("pl_mn")));
                     }
                     Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                         public void run() {
@@ -508,5 +525,21 @@ public class Fragment5 extends Fragment {
         });
     }
 
-
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.bonus_left:
+                tri_right.setVisibility(View.INVISIBLE);
+                tri_left.setVisibility(View.VISIBLE);
+                three_index.setVisibility(View.GONE);
+                left_bonus.setVisibility(View.VISIBLE);
+                break;
+            case R.id.bonus_right:
+                tri_left.setVisibility(View.INVISIBLE);
+                tri_right.setVisibility(View.VISIBLE);
+                left_bonus.setVisibility(View.GONE);
+                three_index.setVisibility(View.VISIBLE);
+                break;
+        }
+    }
 }

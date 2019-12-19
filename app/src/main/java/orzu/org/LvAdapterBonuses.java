@@ -32,19 +32,17 @@ public class LvAdapterBonuses extends RecyclerView.Adapter<LvAdapterBonuses.MyVi
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int i) {
         holder.text.setText(list.get(i).getReason());
-        if(list.get(i).getReason().equals("регистрация друга")) {
-            holder.wallet.setText("+"+list.get(i).getValue());
-        }else if (list.get(i).getReason().equals("Отзыв")){
-            holder.wallet.setText("+"+list.get(i).getValue());
-        }else{
-            holder.wallet.setText("-"+list.get(i).getValue());
+        if (list.get(i).getPlmn().equals("+")) {
+            holder.wallet.setText("+" + list.get(i).getValue());
+        } else {
+            holder.wallet.setText("-" + list.get(i).getValue());
         }
-        if(i!=0){
-            if(!list.get(i-1).date.equals(list.get(i).getDate())){
+        if (i != 0) {
+            if (!list.get(i - 1).date.equals(list.get(i).getDate())) {
                 holder.date_bonus.setText(list.get(i).getDate());
                 holder.date_bonus.setVisibility(View.VISIBLE);
             }
-        }else{
+        } else {
             holder.date_bonus.setText(list.get(i).getDate());
             holder.date_bonus.setVisibility(View.VISIBLE);
         }
@@ -59,6 +57,7 @@ public class LvAdapterBonuses extends RecyclerView.Adapter<LvAdapterBonuses.MyVi
         TextView text;
         TextView wallet;
         TextView date_bonus;
+
         MyViewHolder(View itemView) {
             super(itemView);
             text = itemView.findViewById(R.id.text);

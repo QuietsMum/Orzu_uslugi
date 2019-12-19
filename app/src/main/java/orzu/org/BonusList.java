@@ -1,13 +1,14 @@
 package orzu.org;
 
 public class BonusList {
-    String idUser, date, value, reason;
+    String idUser, date, value, reason,plmn;
 
-    public BonusList(String idUser, String date, String value, String reason) {
+    public BonusList(String idUser, String date, String value, String reason,String plmn) {
         this.idUser = idUser;
         this.date = date;
         this.value = value;
         this.reason = reason;
+        this.plmn = plmn;
     }
 
     public String getIdUser() {
@@ -40,5 +41,13 @@ public class BonusList {
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public String getPlmn() {
+        return plmn;
+    }
+
+    public void setPlmn(String plmn) {
+        this.plmn = plmn;
     }
 }

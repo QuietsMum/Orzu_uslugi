@@ -21,7 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".PortfolioActivity"></activity>
+        <activity android:name=".CreatePartnerSale"></activity>
+        <activity android:name=".PartnerDetails" />
+        <activity android:name=".PortfolioActivity" />
         <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".FullScreenImageActivity" />
         <activity
@@ -120,7 +122,6 @@
             android:name=".ViewpagerStart"
             android:screenOrientation="portrait" />
 
-
         <service
             android:name="com.google.android.gms.analytics.CampaignTrackingService"
             android:enabled="true"
@@ -179,7 +180,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name="orzu.org.Receiver"
+            android:name=".Receiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

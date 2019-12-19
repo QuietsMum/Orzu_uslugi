@@ -106,8 +106,8 @@ public class Main2Activity extends AppCompatActivity
     int index = 1;
     DrawerLayout drawer;
     Drawable drawable;
-    List<category_model> categories = new ArrayList<>();
-    private List<category_model> subcategories = new ArrayList<>();
+    static List<category_model> categories = new ArrayList<>();
+    static List<category_model> subcategories = new ArrayList<>();
     Spinner category_right_side;
     Spinner subcategory_right_side;
     private void setupBeams() {

@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -160,8 +161,118 @@ public class AddFeedback extends AppCompatActivity implements View.OnClickListen
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                if(like==0){
+                    sendMinusFeedback();
+                }else{
+                    sendPlusFeedback();
+                }
+            }
+        });
+    }
+    public void sendMinusFeedback() throws IOException {
+
+        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param" +
+                "&act=edit_bonus_feedback_minus" +
+                "&userid=" + idUser +
+                "&useridTo=" + idUserTo+
+                "&utoken=" + tokenUser;
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Accept", "application/json")
+                .header("Content-Type", "application/json")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                AddFeedback.this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Dialog dialog = new Dialog(AddFeedback.this, android.R.style.Theme_Material_Light_NoActionBar);
+                        dialog.setContentView(R.layout.dialog_no_internet);
+                        Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                        // if button is clicked, close the custom dialog
+                        dialogButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                try {
+                                    sendMinusFeedback();
+                                } catch (IOException e1) {
+                                    e1.printStackTrace();
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.show();
+                            }
+                        }, 500);
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 
                 String mMessage = Objects.requireNonNull(response.body()).string();
+                Log.wtf("asdasd",mMessage);
+                finish();
+            }
+        });
+    }
+    public void sendPlusFeedback() throws IOException {
+
+        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param" +
+                "&act=edit_bonus_feedback_plus" +
+                "&userid=" + idUser +
+                "&useridTo=" + idUserTo+
+                "&utoken=" + tokenUser;
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Accept", "application/json")
+                .header("Content-Type", "application/json")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                AddFeedback.this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Dialog dialog = new Dialog(AddFeedback.this, android.R.style.Theme_Material_Light_NoActionBar);
+                        dialog.setContentView(R.layout.dialog_no_internet);
+                        Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                        // if button is clicked, close the custom dialog
+                        dialogButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                try {
+                                    sendPlusFeedback();
+                                } catch (IOException e1) {
+                                    e1.printStackTrace();
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.show();
+                            }
+                        }, 500);
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+
+                String mMessage = Objects.requireNonNull(response.body()).string();
+                Log.wtf("asdasd",mMessage);
                 finish();
             }
         });
