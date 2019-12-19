@@ -115,7 +115,7 @@ public class Fragment5 extends Fragment {
         c.close();
         db.close();
         RecyclerView bonus_recycler = v.findViewById(R.id.bonus_recycler);
-        ListView bonus_recycler_qr = v.findViewById(R.id.bonus_recycler_qr);
+        RecyclerView bonus_recycler_qr = v.findViewById(R.id.bonus_recycler_qr);
         cardView = v.findViewById(R.id.card_of_partner);
         ImageView qr_code = v.findViewById(R.id.qr_code);
         one_index = v.findViewById(R.id.one_index);
@@ -128,6 +128,9 @@ public class Fragment5 extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         bonus_recycler.setLayoutManager(llm);
         bonus_recycler_qr.setNestedScrollingEnabled(false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        bonus_recycler_qr.setLayoutManager(layoutManager);
+        bonus_recycler_qr.setNestedScrollingEnabled(true);
 
 
         zero_index = v.findViewById(R.id.zero_index);
