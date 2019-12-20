@@ -86,7 +86,7 @@
                                 android:layout_height="75dp"
                                 android:layout_gravity="center"
                                 android:layout_margin="4dp"
-                                android:background="@drawable/starbucks"
+                                android:background="@drawable/logo_in_desktop"
                                 android:scaleType="centerCrop" />
 
 

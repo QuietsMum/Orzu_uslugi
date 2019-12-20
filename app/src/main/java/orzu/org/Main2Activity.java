@@ -111,6 +111,9 @@ public class Main2Activity extends AppCompatActivity
     List<category_model> subcategories = new ArrayList<>();
     Spinner category_right_side;
     Spinner subcategory_right_side;
+    TextView next_right_side;
+    FragmentManager fm;
+    List<Bonuses> bonuses = new ArrayList<>();
     private void setupBeams() {
         PushNotifications.start(getApplicationContext(), "e33cda0a-16d0-41cd-a5c9-8ae60b9b7042");
         PushNotifications.clearDeviceInterests();
@@ -124,6 +127,13 @@ public class Main2Activity extends AppCompatActivity
         cv.put("idUser", "1231234");
         cv.put("message", "123123123");
         db.insert("orzunotif", null, cv);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        fm = getSupportFragmentManager();
+        Log.wtf("asdasds","asdas");
     }
 
     public void requestSubsServerMain() {
@@ -225,7 +235,7 @@ public class Main2Activity extends AppCompatActivity
             navigationView.setCheckedItem(R.id.fourth);
         } else {
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.container, new Fragment5()).commit();
+            fragmentManager.beginTransaction().replace(R.id.container, new Fragment5(),"Fragment5").commit();
             navigationView.setCheckedItem(R.id.fifth);
         }
     }
@@ -242,6 +252,13 @@ public class Main2Activity extends AppCompatActivity
         nav_right = findViewById(R.id.nav_view2);
         category_right_side = findViewById(R.id.category_right_side);
         subcategory_right_side = findViewById(R.id.subcategory_right_side);
+        next_right_side = findViewById(R.id.next_right_side);
+        next_right_side.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getAllPartnersSorted(subcategories.get(subcategory_right_side.getSelectedItemPosition()).getId(),"Алматы","DESC");
+            }
+        });
         getCategories();
 
 
@@ -274,6 +291,7 @@ public class Main2Activity extends AppCompatActivity
         intercomBtn = findViewById(R.id.techsupp);
         intercomBtn.setOnClickListener(this);
         drawer = findViewById(R.id.drawer_layout);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, findViewById(R.id.nav_view2));
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -336,6 +354,7 @@ public class Main2Activity extends AppCompatActivity
         int id = item.getItemId();
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (id == R.id.first) {
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, findViewById(R.id.nav_view2));
             index = 1;
             fragmentClass = Fragment1.class;
             try {
@@ -372,6 +391,7 @@ public class Main2Activity extends AppCompatActivity
             // Выводим выбранный пункт в заголовке
             setTitle(item.getTitle());
         } else if (id == R.id.second) {
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, findViewById(R.id.nav_view2));
             index = 1;
             toggle.setDrawerIndicatorEnabled(false);
             drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_menu2, getApplication().getTheme());
@@ -383,6 +403,7 @@ public class Main2Activity extends AppCompatActivity
             Intent intent = new Intent(this, CreateTaskCategory.class);
             startActivity(intent);
         } else if (id == R.id.third) {
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, findViewById(R.id.nav_view2));
             index = 3;
             toolbar.setBackgroundColor(getResources().getColor(R.color.back_for_feed));
             toolbar.setTitleTextColor(getResources().getColor(R.color.colorTextDark));
@@ -419,6 +440,7 @@ public class Main2Activity extends AppCompatActivity
             // Выводим выбранный пункт в заголовке
             setTitle(item.getTitle());
         } else if (id == R.id.fourth) {
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, findViewById(R.id.nav_view2));
             index = 4;
             toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
             toolbar.setTitleTextColor(getResources().getColor(R.color.colorPrimaryLight));
@@ -454,6 +476,7 @@ public class Main2Activity extends AppCompatActivity
             // Выводим выбранный пункт в заголовке
             setTitle(item.getTitle());
         } else if (id == R.id.fifth) {
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, findViewById(R.id.nav_view2));
             index = 5;
             toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
             toolbar.setTitleTextColor(getResources().getColor(R.color.colorPrimaryLight));
@@ -477,7 +500,8 @@ public class Main2Activity extends AppCompatActivity
 
             // Вставляем фрагмент, заменяя текущий фрагмент
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.container, new Fragment5()).commit();
+            fm = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.container, new Fragment5(),"Fragment5").commit();
             // Выделяем выбранный пункт меню в шторке
             item.setChecked(true);
             // Выводим выбранный пункт в заголовке
@@ -498,6 +522,55 @@ public class Main2Activity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.container, new Fragment1()).commit();
         }
     }
+
+    private void getAllPartnersSorted(String catid,String city,String sort) {
+        String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=partners_list_sort" +
+                "&catid=" +catid+
+                "&city="+city +
+                "&sort="+sort;
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray j = new JSONArray(response);
+                    for (int i = 0; i < j.length(); i++) {
+                        JSONObject object = j.getJSONObject(i);
+                        bonuses.add(new Bonuses(object.getString("id"), object.getString("name"), object.getString("percent"), object.getString("logo"), object.getString("discription")));
+                    }
+
+                    Fragment5 fragment5 = (Fragment5) fm.findFragmentByTag("Fragment5");
+                    fragment5.sortIsPressed(bonuses);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace(); //log the error resulting from the request for diagnosis/debugging
+                Dialog dialog = new Dialog(Main2Activity.this, android.R.style.Theme_Material_Light_NoActionBar);
+                dialog.setContentView(R.layout.dialog_no_internet);
+                Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getAllPartnersSorted(catid,city,sort);
+                        dialog.dismiss();
+                    }
+                });
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.show();
+                    }
+                }, 500);
+            }
+        });
+        Volley.newRequestQueue(Main2Activity.this).add(stringRequest);
+    }
+
 
     public void getUserResponse() throws IOException {
         dbHelper = new DBHelper(this);
@@ -652,6 +725,7 @@ public class Main2Activity extends AppCompatActivity
                 break;
         }
     }
+
 
     private class DownloadImage extends AsyncTask<String, Void, Bitmap> {
         private String TAG = "DownloadImage";

@@ -36,11 +36,7 @@ public class BonusAdapter extends RecyclerView.Adapter<BonusAdapter.MyViewHolder
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         holder.name.setText(maps.get(position).getName());
-        if(maps.get(position).getLogo()!=null){
-            Picasso.get().load(maps.get(position).getLogo()).into(holder.logo);
-        }else{
-            holder.logo.setImageResource(maps.get(position).getLogos());
-        }
+        Picasso.get().load("https://projectapi.pw/"+maps.get(position).getLogo()).into(holder.logo);
         holder.percent.setTextColor(Color.parseColor("#fe8c00"));
         holder.percent.setText(maps.get(position).getPercentage());
         TextPaint paint = holder.percent.getPaint();
@@ -51,8 +47,6 @@ public class BonusAdapter extends RecyclerView.Adapter<BonusAdapter.MyViewHolder
                         Color.parseColor("#f83600"),
                 }, null, Shader.TileMode.CLAMP);
         holder.percent.getPaint().setShader(textShader);
-
-
 
     }
     @Override
@@ -68,8 +62,6 @@ public class BonusAdapter extends RecyclerView.Adapter<BonusAdapter.MyViewHolder
             name = itemView.findViewById(R.id.name_of_partner);
             logo = itemView.findViewById(R.id.logo_of_partner);
             percent= itemView.findViewById(R.id.percentage);
-
-
 
             itemView.setOnClickListener(this);
         }

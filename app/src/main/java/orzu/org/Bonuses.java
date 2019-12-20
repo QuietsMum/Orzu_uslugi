@@ -1,17 +1,24 @@
 package orzu.org;
 
 public class Bonuses {
-    private String name, logo, percentage;
+    private String name, logo, percentage,id,descrip;
     private int logos;
 
-    Bonuses(String name, String percentage, String logo) {
+    Bonuses(String id,String name, String percentage, String logo,String descrip) {
         this.name = name;
-        this.logo = logo;
+        this.id = id;
+        if(logo.equals("null")){
+            this.logo = "images/logoNew.png";
+        }else{
+            this.logo = logo;
+        }
         this.percentage = percentage;
+        this.descrip = descrip;
     }
 
-    Bonuses(String name, String percentage, int logos) {
+    Bonuses(String id,String name, String percentage, int logos) {
         this.name = name;
+        this.id = id;
         this.logos = logos;
         this.percentage = percentage;
     }
@@ -51,5 +58,21 @@ public class Bonuses {
 
     public void setPercentage(String percentage) {
         this.percentage = percentage;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getDescrip() {
+        return descrip;
+    }
+
+    public void setDescrip(String descrip) {
+        this.descrip = descrip;
     }
 }
