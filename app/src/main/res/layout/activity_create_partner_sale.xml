@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/create_name_back"
+        android:id="@+id/sale_back"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_margin="16dp"
@@ -40,7 +40,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/card_of_name_partner"
+            android:id="@+id/card_of_name_sale"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="bottom"
@@ -64,7 +64,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="@string/step_1_5"
+                        android:text="Шаг 2 из 3"
                         android:textColor="@android:color/darker_gray" />
 
 
@@ -73,24 +73,6 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:padding="8dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="18dp"
-                            android:layout_marginTop="10dp"
-                            android:text="Опишите вашу скидуку"
-                            android:textColor="@android:color/darker_gray"
-                            android:textSize="12sp" />
-
-                        <EditText
-                            android:id="@+id/sale_name"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="#f83600"
-                            android:hint="Называние скидки"
-                            android:padding="10dp"
-                            android:textColorHint="@android:color/black" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -126,7 +108,7 @@
                                     android:layout_height="30dp"
                                     android:layout_gravity="center"
                                     android:layout_margin="16dp"
-                                    android:text="Добавить логотип компаний"
+                                    android:text="Добавить логотип скидки"
                                     android:textColor="@color/colorAccent" />
 
 
@@ -134,16 +116,36 @@
 
                         </RelativeLayout>
 
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="18dp"
+                            android:layout_marginTop="10dp"
+                            android:text="Опишите вашу скидуку"
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="12sp" />
+
+                        <EditText
+                            android:id="@+id/sale_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#f83600"
+                            android:hint="Называние скидки"
+                            android:padding="10dp"
+                            android:textColorHint="@android:color/black" />
+
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="18dp"
                             android:layout_marginTop="10dp"
                             android:text="Выбрать категорию"
+                            android:textColor="@android:color/darker_gray"
                             android:textSize="11sp" />
 
                         <Spinner
-                            android:id="@+id/category_right_side"
+                            android:id="@+id/category_sale"
                             style="@style/Widget.AppCompat.Spinner.Underlined"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
@@ -155,12 +157,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="18dp"
                             android:layout_marginTop="10dp"
                             android:text="Выбрать подкатегорию"
+                            android:textColor="@android:color/darker_gray"
                             android:textSize="11sp" />
 
                         <Spinner
-                            android:id="@+id/subcategory_right_side"
+                            android:id="@+id/subcategory_sale"
                             style="@style/Widget.AppCompat.Spinner.Underlined"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
@@ -174,7 +178,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="18dp"
                             android:layout_marginTop="10dp"
-                            android:text="Чем компания занимается?"
+                            android:text="Чем ваша скидка хороша?"
                             android:textColor="@android:color/darker_gray"
                             android:textSize="12sp" />
 
@@ -183,7 +187,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:backgroundTint="#f83600"
-                            android:hint="Описание компаний"
+                            android:hint="Описание скидки"
                             android:padding="10dp"
                             android:textColorHint="@android:color/black" />
 
@@ -196,7 +200,7 @@
             </androidx.core.widget.NestedScrollView>
 
             <TextView
-                android:id="@+id/createNamePartner"
+                android:id="@+id/createNameSale"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_gravity="bottom"

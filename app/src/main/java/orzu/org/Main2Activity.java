@@ -106,8 +106,9 @@ public class Main2Activity extends AppCompatActivity
     int index = 1;
     DrawerLayout drawer;
     Drawable drawable;
+    static String[] category;
     static List<category_model> categories = new ArrayList<>();
-    static List<category_model> subcategories = new ArrayList<>();
+    List<category_model> subcategories = new ArrayList<>();
     Spinner category_right_side;
     Spinner subcategory_right_side;
     private void setupBeams() {
@@ -710,19 +711,19 @@ public class Main2Activity extends AppCompatActivity
             public void onResponse(String response) {
                 try {
                     JSONArray j = new JSONArray(response);
-                    String[] cities = new String[j.length()];
+                    category = new String[j.length()];
                     for (int i = 0; i < j.length(); i++) {
                         try {
                             JSONObject object = j.getJSONObject(i);
                             categories.add(new category_model(object.getString("id"), object.getString("name"), object.getString("parent_id")));
-                            cities[i] = object.getString("name");
+                            category[i] = object.getString("name");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
 
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(Main2Activity.this,
-                            android.R.layout.simple_spinner_dropdown_item, cities);
+                            android.R.layout.simple_spinner_dropdown_item, category);
                     category_right_side.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                     category_right_side.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

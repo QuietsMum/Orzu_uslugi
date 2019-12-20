@@ -21,7 +21,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".CreatePartnerSale"></activity>
+        <activity android:name=".LastPageSale"></activity>
+        <activity android:name=".CreatePartnerSale" />
         <activity android:name=".PartnerDetails" />
         <activity android:name=".PortfolioActivity" />
         <activity android:name=".ForgotPasswordActivity" />
