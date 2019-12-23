@@ -246,6 +246,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                     LoginActivity2.this.runOnUiThread(new Runnable() {
                         public void run() {
                             Toast.makeText(LoginActivity2.this, "Этот номер уже зарегистрирован", Toast.LENGTH_SHORT).show();
+                            Common.referrer="";
                         }
                     });
                     Intent intent = new Intent(getApplicationContext(), PhoneLoginActivity.class);
@@ -294,6 +295,8 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                             PhoneAuthCredential credential) {
                         signInWithPhoneAuthCredential(credential);
                         Toast.makeText(LoginActivity2.this, "Успешно доставлен", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(LoginActivity2.this,PhoneLoginActivity.class));
+                        finish();
                     }
 
                     @Override

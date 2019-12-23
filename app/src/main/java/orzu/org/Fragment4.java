@@ -411,9 +411,9 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
             adapter = new RVAdapter(getContext(), truedata);
             rv.setAdapter(adapter);
             adapter.notifyDataSetChanged();
-            RVAdapter.setSelect(new MainItemSelect() {
+            adapter.setClickListener(new RVAdapter.ItemClickListener() {
                 @Override
-                public void onItemSelectedListener(View view, int position) {
+                public void onItemClick(View view, int position) {
                     Intent intent = new Intent(getActivity(), TaskViewMain.class);
                     Map<String, Object> map;
                     map = truedata.get(position);
@@ -421,10 +421,6 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
                     intent.putExtra("opt", "view");
                     intent.putExtra("mytask", "my");
                     startActivity(intent);
-                }
-
-                @Override
-                public void onClick(View view) {
                 }
             });
             noTasks = false;

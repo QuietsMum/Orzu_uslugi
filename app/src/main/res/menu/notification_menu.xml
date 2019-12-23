@@ -12,12 +12,12 @@
         android:id="@+id/feedback_notif"
         android:icon="@drawable/ic_notif"
         android:iconTint="@android:color/holo_orange_light"
-        android:title="Отзывы"
+        android:title="Отклики"
         app:showAsAction="ifRoom"></item>
     <item
         android:id="@+id/system_notif"
         android:icon="@drawable/ic_notif"
         android:iconTint="@android:color/holo_green_light"
-        android:title="Системные уведомления"
+        android:title="Задания"
         app:showAsAction="ifRoom"></item>
 </menu>

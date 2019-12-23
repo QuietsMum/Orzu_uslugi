@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 import java.util.List;
 import orzu.org.R;
 
@@ -56,6 +58,9 @@ public class AdapterDifferentLayout extends RecyclerView.Adapter {
     public int getItemViewType(int position) {
         return logos.get(position).getType();
     }
+
+
+
     // total number of rows
     @Override
     public int getItemCount() {
@@ -87,22 +92,21 @@ public class AdapterDifferentLayout extends RecyclerView.Adapter {
         }
     }
     class ViewHolder2 extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ImageView imageViewOtziv;
-        TextView feedback_name, narrFeedback, countFeedback;
+        TextView feedback_name, narrFeedback,cena,createdAt;
         ViewHolder2(View itemView) {
             super(itemView);
-            imageViewOtziv = itemView.findViewById(R.id.imageViewOtziv);
             feedback_name = itemView.findViewById(R.id.feedback_name);
             narrFeedback = itemView.findViewById(R.id.narrFeedback);
-            countFeedback = itemView.findViewById(R.id.countFeedback);
+            cena = itemView.findViewById(R.id.cena);
+            createdAt = itemView.findViewById(R.id.createdAt);
             itemView.setOnClickListener(this);
         }
         void bindView(int position) {
             feedbackItem feed = (feedbackItem) logos.get(position);
-            imageViewOtziv.setImageResource(feed.getImage());
             feedback_name.setText(feed.getName());
             narrFeedback.setText(feed.getFeed_desc());
-            countFeedback.setText(feed.getCount());
+            cena.setText(feed.getMoney());
+            createdAt.setText(feed.getCount());
         }
         @Override
         public void onClick(View view) {

@@ -15,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -264,7 +265,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 
                 mMessage = Objects.requireNonNull(response.body()).string();
-
+                Log.wtf("asdasd",mMessage);
                 if (mMessage.equals("\"phone exists\"")) {
                     ForgotPasswordActivity.this.runOnUiThread(new Runnable() {
                         public void run() {

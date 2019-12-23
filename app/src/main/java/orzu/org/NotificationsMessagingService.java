@@ -1,57 +1,83 @@
 package orzu.org;
 
+import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Objects;
 import java.util.Random;
 
 public class NotificationsMessagingService extends FirebaseMessagingService {
     Context context = this;
     DBHelper dbHelper;
     SharedPreferences prefs;
+    String type,taskId;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onMessageReceived(@NotNull RemoteMessage remoteMessage) {
         prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
+        dbHelper = new DBHelper(this);
         editor.putString("New_task", remoteMessage.getData() + "");
         editor.apply();
         if (remoteMessage.getData().containsKey("ID")) {
             showNotification(remoteMessage);
         }
+        Log.wtf("asdads", remoteMessage.getData() + "");
     }
 
     private void showNotification(@NotNull RemoteMessage remoteMessage) {
-        Log.wtf("asdad",remoteMessage.getData()+"");
-        String[] ar = remoteMessage.getData().get("ID").split(".");
+        Log.wtf("asdad", remoteMessage.getData() + "");
+        String[] ar = remoteMessage.getData().get("ID").split("[, ?.@]+");
         Intent intent = new Intent(this, TaskViewMain.class);
         SharedPreferences.Editor editor = prefs.edit();
         String id;
+        Log.wtf("sadsas",ar.length+"");
         if (ar.length >= 2) {
             editor.putString("mytask", "my");
+            type = "my";
             id = ar[1];
+            getFeedback(ar[1]);
         } else {
             editor.putString("mytask", "not");
             id = remoteMessage.getData().get("ID");
+            type = "not";
+            getTask(id);
         }
+        taskId = id;
         editor.putString("idd", id);
         editor.putString("New_task", remoteMessage.getData() + "");
         editor.putString("opt", "view");
@@ -78,6 +104,124 @@ public class NotificationsMessagingService extends FirebaseMessagingService {
                 .setContentInfo("Info")
                 .setContentIntent(activity);
         notificationManager.notify(new Random().nextInt(), notificationBuilder.build());
+    }
+
+    public void getTask(String id) {
+        String requestUrl = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=" + id;
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.wtf("hello", response+  "  "+id);
+                try {
+                    JSONArray j = new JSONArray(response);
+                    JSONArray task_detail_arr = j.getJSONArray(0);
+                    JSONObject task_detail = task_detail_arr.getJSONObject(0);
+                    String task = task_detail.getString("task");
+                    String created_at = task_detail.getString("created_at");
+                    String id = task_detail.getString("id");
+
+
+                    JSONArray arr = j.getJSONArray(1);
+                    String city = arr.getJSONObject(0).getString("value");
+                    String work_with = arr.getJSONObject(4).getString("value");
+                    Log.wtf("asdas", city + " " + task);
+
+                    SQLiteDatabase db = dbHelper.getWritableDatabase();
+                    ContentValues cv = new ContentValues();
+                    cv.put("created_at", created_at);
+                    cv.put("type", type);
+                    cv.put("id", id);
+                    cv.put("title", task);
+                    cv.put("city", city);
+                    cv.put("work_with", work_with);
+                    db.insert("orzunotif", null, cv);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace(); //log the error resulting from the request for diagnosis/debugging
+                Dialog dialog = new Dialog(context, android.R.style.Theme_Material_Light_NoActionBar);
+                dialog.setContentView(R.layout.dialog_no_internet);
+                Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getTask(id);
+                        dialog.dismiss();
+                    }
+                });
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.show();
+                    }
+                }, 500);
+            }
+        });
+        Volley.newRequestQueue(Objects.requireNonNull(this)).add(stringRequest);
+    }
+
+    public void getFeedback(String id) {
+        String requestUrl = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=task_requests&act=view&task_id=" + id;
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.wtf("hello", response);
+                try {
+                    JSONArray j = new JSONArray(response);
+                    int index =j.length()-1;
+                    JSONObject object = j.getJSONObject(index);
+                    Date date = Calendar.getInstance().getTime();
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+                    String strDate = dateFormat.format(date);
+
+                    String created_at = strDate;
+                    String username = object.getString("username");
+                    String narrative = object.getString("narrative");
+                    String amount = object.getString("amount");
+                    String current = object.getString("current");
+
+                    SQLiteDatabase db = dbHelper.getWritableDatabase();
+                    ContentValues cv = new ContentValues();
+                    cv.put("created_at", created_at);
+                    cv.put("type", "my");
+                    cv.put("id", taskId);
+                    cv.put("title", username);
+                    cv.put("city", amount+" "+current);
+                    cv.put("work_with", narrative);
+                    db.insert("orzunotif", null, cv);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace(); //log the error resulting from the request for diagnosis/debugging
+                Dialog dialog = new Dialog(context, android.R.style.Theme_Material_Light_NoActionBar);
+                dialog.setContentView(R.layout.dialog_no_internet);
+                Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getTask(id);
+                        dialog.dismiss();
+                    }
+                });
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.show();
+                    }
+                }, 500);
+            }
+        });
+        Volley.newRequestQueue(Objects.requireNonNull(this)).add(stringRequest);
     }
 
     @Override

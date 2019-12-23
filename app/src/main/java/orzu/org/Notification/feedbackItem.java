@@ -1,45 +1,65 @@
 package orzu.org.Notification;
 
 public class feedbackItem implements Literature {
-    private int image;
-    private String name, count, feed_img, feed_desc;
-    public feedbackItem(int image, String name, String count, String feed_img, String feed_desc) {
-        this.image = image;
+    private String name, count, feed_desc, money, id, type_of_task;
+
+    public feedbackItem(String name, String count, String feed_desc, String money, String id, String typs_of_task) {
         this.name = name;
         this.count = count;
-        this.feed_img = feed_img;
         this.feed_desc = feed_desc;
+        this.money = money;
+        this.id = id;
+        this.type_of_task = typs_of_task;
     }
-    public int getImage() {
-        return image;
-    }
-    public void setImage(int image) {
-        this.image = image;
-    }
+
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public String getCount() {
         return count;
     }
+
     public void setCount(String count) {
         this.count = count;
     }
-    public String getFeed_img() {
-        return feed_img;
-    }
-    public void setFeed_img(String feed_img) {
-        this.feed_img = feed_img;
-    }
+
     public String getFeed_desc() {
         return feed_desc;
     }
+
     public void setFeed_desc(String feed_desc) {
         this.feed_desc = feed_desc;
     }
+
+    public String getMoney() {
+        return money;
+    }
+
+    public void setMoney(String money) {
+        this.money = money;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getType_of_task() {
+        return type_of_task;
+    }
+
+    public void setType_of_task(String type_of_task) {
+        this.type_of_task = type_of_task;
+    }
+
     @Override
     public int getType() {
         return Literature.TYPE_MAGAZINE;

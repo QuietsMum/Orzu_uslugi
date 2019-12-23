@@ -591,9 +591,9 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             rv.setAdapter(adapter);
             progress_loading.setVisibility(View.GONE);
             progress_for_task.setVisibility(View.GONE);
-            RVAdapter.setSelect(new MainItemSelect() {
+            adapter.setClickListener(new RVAdapter.ItemClickListener() {
                 @Override
-                public void onItemSelectedListener(View view, int position) {
+                public void onItemClick(View view, int position) {
                     Intent intent = new Intent(getContext(), TaskViewMain.class);
                     Map<String, Object> map;
                     map = truedata.get(position);
@@ -601,10 +601,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     intent.putExtra("opt", "view");
                     intent.putExtra("mytask", "not");
                     startActivity(intent);
-                }
-
-                @Override
-                public void onClick(View view) {
                 }
             });
             noTasks = false;
@@ -849,9 +845,9 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             rv.setAdapter(adapter);
             progress_loading.setVisibility(View.GONE);
             progress_for_task.setVisibility(View.GONE);
-            RVAdapter.setSelect(new MainItemSelect() {
+            adapter.setClickListener(new RVAdapter.ItemClickListener() {
                 @Override
-                public void onItemSelectedListener(View view, int position) {
+                public void onItemClick(View view, int position) {
                     Intent intent = new Intent(getActivity(), TaskViewMain.class);
                     Map<String, Object> map;
                     map = truedata.get(position);
@@ -859,10 +855,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     intent.putExtra("opt", "view");
                     intent.putExtra("mytask", "not");
                     startActivity(intent);
-                }
-
-                @Override
-                public void onClick(View view) {
                 }
             });
             noTasks = false;
@@ -990,9 +982,9 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             rv.setAdapter(adapter);
             progress_loading.setVisibility(View.GONE);
             progress_for_task.setVisibility(View.GONE);
-            RVAdapter.setSelect(new MainItemSelect() {
+            adapter.setClickListener(new RVAdapter.ItemClickListener() {
                 @Override
-                public void onItemSelectedListener(View view, int position) {
+                public void onItemClick(View view, int position) {
                     Intent intent = new Intent(getContext(), TaskViewMain.class);
                     Map<String, Object> map;
                     map = truedata.get(position);
@@ -1000,10 +992,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     intent.putExtra("opt", "view");
                     intent.putExtra("mytask", "not");
                     startActivity(intent);
-                }
-
-                @Override
-                public void onClick(View view) {
                 }
             });
             noTasks = false;
@@ -1137,9 +1125,9 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             rv.setAdapter(adapter);
             progress_loading.setVisibility(View.GONE);
             progress_for_task.setVisibility(View.GONE);
-            RVAdapter.setSelect(new MainItemSelect() {
+            adapter.setClickListener(new RVAdapter.ItemClickListener() {
                 @Override
-                public void onItemSelectedListener(View view, int position) {
+                public void onItemClick(View view, int position) {
                     Intent intent = new Intent(getActivity(), TaskViewMain.class);
                     Map<String, Object> map;
                     map = truedata.get(position);
@@ -1147,10 +1135,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     intent.putExtra("opt", "view");
                     intent.putExtra("mytask", "not");
                     startActivity(intent);
-                }
-
-                @Override
-                public void onClick(View view) {
                 }
             });
             noTasks = false;
@@ -1248,9 +1232,9 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             adapter = new RVAdapter(getContext(), truedata);
             rv.setAdapter(adapter);
             adapter.notifyDataSetChanged();
-            RVAdapter.setSelect(new MainItemSelect() {
+            adapter.setClickListener(new RVAdapter.ItemClickListener() {
                 @Override
-                public void onItemSelectedListener(View view, int position) {
+                public void onItemClick(View view, int position) {
                     Intent intent = new Intent(getActivity(), TaskViewMain.class);
                     Map<String, Object> map;
                     map = truedata.get(position);
@@ -1258,10 +1242,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     intent.putExtra("opt", "view");
                     intent.putExtra("mytask", "not");
                     startActivity(intent);
-                }
-
-                @Override
-                public void onClick(View view) {
                 }
             });
             if (adapter.getItemCount() == 0) {

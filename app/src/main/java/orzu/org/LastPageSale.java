@@ -129,14 +129,16 @@ public class LastPageSale extends AppCompatActivity {
                 "&utoken="+utoken +
                 "&partnersdisc="+Partner_Desc+
                 "&city="+Partner_City+
-                "&subcatid="+Partner_SubCat;
+                "&subcatid="+Partner_SubCat+
+                "&percent="+types[index];
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.wtf("createP",response);
                 if(Partner_Logo.length()!=0){
                     try {
-                        addPartnerLogo();
+                        String [] id_of_partner = response.split(":");
+                        addPartnerLogo(id_of_partner[1]);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -242,11 +244,7 @@ public class LastPageSale extends AppCompatActivity {
                         dialogButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                try {
-                                    addPartnerLogo();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
+                                addSaleLogo(id);
                                 dialog.dismiss();
                             }
                         });
@@ -274,7 +272,7 @@ public class LastPageSale extends AppCompatActivity {
         });
     }
 
-    public void addPartnerLogo() throws IOException {
+    public void addPartnerLogo(String id) throws IOException {
         String url = "https://projectapi.pw/api/avatar";
         OkHttpClient client = new OkHttpClient();
         File myFile = new File(Uri.parse(Partner_Logo).getPath());
@@ -300,7 +298,7 @@ public class LastPageSale extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 try {
-                                    addPartnerLogo();
+                                    addPartnerLogo(id);
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }

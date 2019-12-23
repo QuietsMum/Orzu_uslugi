@@ -23,16 +23,11 @@ class DBHelper extends SQLiteOpenHelper {
 
         db.execSQL("create table orzunotif ("
                 + "type,"
-                + "idUser,"
-                + "nameUser,"
+                + "id,"
                 + "title,"
-                + "narr,"
-                + "amout,"
-                + "date,"
                 + "city,"
-                + "emoji,"
-                + "emojicount,"
-                + "message" + ");");
+                + "created_at,"
+                + "work_with" + ");");
 
         db.execSQL("create table orzuchat ("
                 + "id,"

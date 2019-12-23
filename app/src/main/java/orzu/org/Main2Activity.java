@@ -122,11 +122,6 @@ public class Main2Activity extends AppCompatActivity
         for (int i = 0; i < subsServer.size(); i++) {
             PushNotifications.addDeviceInterest("cat_" + subsServer.get(i));
         }
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("idUser", "1231234");
-        cv.put("message", "123123123");
-        db.insert("orzunotif", null, cv);
     }
 
     @Override
@@ -229,7 +224,7 @@ public class Main2Activity extends AppCompatActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container, new Fragment4()).commit();
             navigationView.setCheckedItem(R.id.third);
-        } else if (index == 2) {
+        } else if (index == 4) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container, new Fragment2()).commit();
             navigationView.setCheckedItem(R.id.fourth);

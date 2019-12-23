@@ -22,6 +22,7 @@ import android.os.Handler;
 import android.text.TextPaint;
 import android.util.JsonReader;
 import android.util.JsonToken;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -178,6 +179,8 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             id = "" + intent.getStringExtra("id");
             opt = intent.getStringExtra("opt");
             myTask = intent.getStringExtra("mytask");
+            Log.wtf("asd",myTask);
+            Log.wtf("asd",id);
             sad = findViewById(R.id.textSad);
             sad.setText(Common.neutral);
             nat = findViewById(R.id.textNatural);
