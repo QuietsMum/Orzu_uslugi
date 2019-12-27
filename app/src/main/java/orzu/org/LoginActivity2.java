@@ -295,8 +295,6 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                             PhoneAuthCredential credential) {
                         signInWithPhoneAuthCredential(credential);
                         Toast.makeText(LoginActivity2.this, "Успешно доставлен", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(LoginActivity2.this,PhoneLoginActivity.class));
-                        finish();
                     }
 
                     @Override

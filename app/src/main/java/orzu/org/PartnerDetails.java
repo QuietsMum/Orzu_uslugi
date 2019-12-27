@@ -2,6 +2,8 @@ package orzu.org;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -12,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
@@ -43,6 +46,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import orzu.org.models.MyTaskApi;
+import orzu.org.models.NetworkService;
+import retrofit2.Retrofit;
+
 public class PartnerDetails extends AppCompatActivity implements View.OnClickListener {
 
 
@@ -54,8 +65,12 @@ public class PartnerDetails extends AppCompatActivity implements View.OnClickLis
     ArrayList<String> returnValue = new ArrayList<>();
     Spinner cat_spin;
     Spinner subcat_spin;
+    Spinner city_partner;
     public static Activity fa;
     List<category_model> subcategories = new ArrayList<>();
+    List<Bonuses> bonuses = new ArrayList<>();
+    RecyclerView recyclerView;
+    BonusAdapter adapter;
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -90,6 +105,13 @@ public class PartnerDetails extends AppCompatActivity implements View.OnClickLis
         subcat_spin = findViewById(R.id.subcategory_partner);
         //Custom Path For Image Storage
 
+        recyclerView = findViewById(R.id.other_partners);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setNestedScrollingEnabled(false);
+        city_partner = findViewById(R.id.city_partner);
+
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(PartnerDetails.this,
                 android.R.layout.simple_spinner_dropdown_item, Main2Activity.category);
         cat_spin.setAdapter(adapter);
@@ -106,7 +128,35 @@ public class PartnerDetails extends AppCompatActivity implements View.OnClickLis
         });
         adapter.notifyDataSetChanged();
         getSubCategories(Main2Activity.categories.get(0).getId());
+        getConcurents("2", Common.city);
 
+        subcat_spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (subcategories.size() != 0) {
+
+                    getConcurents(subcategories.get(i).getId(), city_partner.getSelectedItem().toString());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        city_partner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (subcategories.size() != 0) {
+                    getConcurents(subcategories.get(subcat_spin.getSelectedItemPosition()).getId(), city_partner.getItemAtPosition(i).toString());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         pluslinearyimages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,7 +164,7 @@ public class PartnerDetails extends AppCompatActivity implements View.OnClickLis
                 logoPartner.setVisibility(View.VISIBLE);
                 Options options = Options.init()
                         .setRequestCode(100)                                                 //Request code for activity results
-                        .setCount(6)                                                         //Number of images to restict selection count
+                        .setCount(1)                                                         //Number of images to restict selection count
                         .setFrontfacing(false)                                                //Front Facing camera on start
                         .setImageQuality(ImageQuality.HIGH)                                  //Image Quality
                         .setPreSelectedUrls(returnValue)                                     //Pre selected Image Urls
@@ -138,6 +188,7 @@ public class PartnerDetails extends AppCompatActivity implements View.OnClickLis
                 Pix.start(PartnerDetails.this, options);
             }
         });
+
 
         createNamePartner.setOnClickListener(this);
 
@@ -174,7 +225,7 @@ public class PartnerDetails extends AppCompatActivity implements View.OnClickLis
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("Partner_Name", String.valueOf(partner_name.getText()));
             editor.putString("Partner_Desc", String.valueOf(partner_desc.getText()));
-            editor.putString("Partner_City", "Алматы");
+            editor.putString("Partner_City", city_partner.getSelectedItem().toString());
             editor.putString("Partner_SubCat", subcategories.get(subcat_spin.getSelectedItemPosition()).getId());
             if (returnValue.size() != 0) {
                 editor.putString("Partner_Logo", String.valueOf(returnValue.get(0)));
@@ -185,6 +236,60 @@ public class PartnerDetails extends AppCompatActivity implements View.OnClickLis
         } else {
             Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void getConcurents(String catid, String city) {
+        bonuses.clear();
+        String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=partners_list_sort" +
+                "&catid=" + catid +
+                "&city=" + city +
+                "&sort=" + "DESC";
+        Log.wtf("asdas", requestUrl);
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response.equals("\"\\u041d\\u0435\\u0442 \\u043f\\u0430\\u0440\\u0442\\u043d\\u0451\\u0440\\u043e\\u0432 \\u0432 \\u0434\\u0430\\u043d\\u043d\\u043e\\u0439 \\u043a\\u0430\\u0442\\u0435\\u0433\\u043e\\u0440\\u0438\\u0438\"")) {
+                    bonuses.add(new Bonuses("0", "Нету партнеров", "", "", ""));
+                } else {
+                    try {
+                        JSONArray j = new JSONArray(response);
+                        for (int i = 0; i < j.length(); i++) {
+                            JSONObject object = j.getJSONObject(i);
+                            bonuses.add(new Bonuses(object.getString("id"), object.getString("name"), object.getString("percent"), object.getString("logo"), object.getString("discription")));
+                            Log.wtf("asdasd",bonuses.get(i).getName());
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                adapter = new BonusAdapter(PartnerDetails.this, bonuses);
+                recyclerView.setAdapter(adapter);
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace(); //log the error resulting from the request for diagnosis/debugging
+                Dialog dialog = new Dialog(PartnerDetails.this, android.R.style.Theme_Material_Light_NoActionBar);
+                dialog.setContentView(R.layout.dialog_no_internet);
+                Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getConcurents(catid, city);
+                        dialog.dismiss();
+                    }
+                });
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.show();
+                    }
+                }, 500);
+            }
+        });
+        Volley.newRequestQueue(PartnerDetails.this).add(stringRequest);
     }
 
     private void getSubCategories(String id) {

@@ -20,6 +20,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,6 +57,7 @@ public class LastPageSale extends AppCompatActivity {
     String id,utoken,Partner_Name,Partner_City,Partner_Desc,Partner_SubCat,Partner_Logo,Sale_Name,Sale_Logo,Sale_Desc,Sale_Cat,Sale_SubCat;
     String [] types = {"50","30","15"};
     int index = 0;
+    ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +69,8 @@ public class LastPageSale extends AppCompatActivity {
         cardView = findViewById(R.id.card_of_perc_sale);
         cardView.setBackgroundResource(R.drawable.shape_card_topcorners2);
 
+        progressBar = findViewById(R.id.progress_of_last_page);
+
         list.add(new category_model("VIP", "asdkasdadladas", "50%"));
         list.add(new category_model("Standard", "asdkasdadladas", "30%"));
         list.add(new category_model("Beginner", "asdkasdadladas", "15%"));
@@ -75,6 +79,7 @@ public class LastPageSale extends AppCompatActivity {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
                 createPartner();
             }
         });

@@ -91,19 +91,19 @@ public class PortfolioActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onResponse(String response) {
                 try {
-                    JSONArray j = new JSONArray(response);
-                    for(int i = 0;i<j.length();i++){
-                        JSONObject object = j.getJSONObject(i);
-                        list.add(new Bonuses(object.getString("sale_name"),object.getString("sale_percent")+"%"));
-                    }
-                    if(j.length()==0){
+                    if (response.equals("\"\\u041d\\u0435\\u0442 \\u043f\\u0430\\u0440\\u0442\\u043d\\u0451\\u0440\\u043e\\u0432 \\u0432 \\u0434\\u0430\\u043d\\u043d\\u043e\\u0439 \\u043a\\u0430\\u0442\\u0435\\u0433\\u043e\\u0440\\u0438\\u0438\"")) {
                         list.add(new Bonuses("Список пуст",""));
+                    }else {
+                        JSONArray j = new JSONArray(response);
+                        for (int i = 0; i < j.length(); i++) {
+                            JSONObject object = j.getJSONObject(i);
+                            list.add(new Bonuses(object.getString("sale_name"), object.getString("sale_percent") + "%"));
+                        }
+                        AdapterPartnerBonuses adapter = new AdapterPartnerBonuses(PortfolioActivity.this, list);
+                        rv.setAdapter(adapter);
                     }
-                    AdapterPartnerBonuses adapter = new AdapterPartnerBonuses(PortfolioActivity.this,list);
-                    rv.setAdapter(adapter);
                 } catch (JSONException e) {
                     e.printStackTrace();
-
                 }
             }
         }, new com.android.volley.Response.ErrorListener() {

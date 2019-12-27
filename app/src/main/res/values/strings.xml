@@ -110,9 +110,9 @@
 
     <string-array name="citylist">
         <item>Душанбе</item>
-        <item>Худжанд</item>
-        <item>Кулоб</item>
         <item>Алматы</item>
+        <item>Бишкек</item>
+        <item>Ташкент</item>
     </string-array>
 
 </resources>

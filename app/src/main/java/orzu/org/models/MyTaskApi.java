@@ -21,4 +21,5 @@ public interface MyTaskApi {
 
     @GET("/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=partners_list_all")
     Observable<List<Bonuses>> getAllPartners();
+
 }

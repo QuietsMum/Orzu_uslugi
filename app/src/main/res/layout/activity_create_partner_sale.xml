@@ -134,6 +134,23 @@
                             android:padding="10dp"
                             android:textColorHint="@android:color/black" />
 
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="18dp"
+                            android:layout_marginTop="10dp"
+                            android:text="Чем ваша скидка хороша?"
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="12sp" />
+
+                        <EditText
+                            android:id="@+id/sale_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#f83600"
+                            android:hint="Описание скидки"
+                            android:padding="10dp"
+                            android:textColorHint="@android:color/black" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -173,23 +190,24 @@
                             android:entries="@array/citylist"
                             android:textSize="20sp" />
 
+
                         <TextView
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="18dp"
                             android:layout_marginTop="10dp"
-                            android:text="Чем ваша скидка хороша?"
+                            android:text="Другие скидки"
                             android:textColor="@android:color/darker_gray"
-                            android:textSize="12sp" />
+                            android:textSize="11sp" />
 
-                        <EditText
-                            android:id="@+id/sale_description"
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/other_sale"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:backgroundTint="#f83600"
-                            android:hint="Описание скидки"
-                            android:padding="10dp"
-                            android:textColorHint="@android:color/black" />
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/circle_shape_intro_white"
+                            android:paddingBottom="90dp"
+                            android:textSize="20sp" />
 
                     </LinearLayout>
 

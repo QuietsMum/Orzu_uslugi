@@ -2,6 +2,8 @@ package orzu.org;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -11,6 +13,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
@@ -49,7 +52,9 @@ public class CreatePartnerSale extends AppCompatActivity implements View.OnClick
     ArrayList<String> returnValue = new ArrayList<>();
     Spinner category_sale, subcategory_sale;
     List<category_model> subcategories = new ArrayList<>();
-
+    RecyclerView recyclerView;
+    List<Bonuses> list = new ArrayList<>();
+    String Partner_City;
     public static Activity fa;
 
     @Override
@@ -77,6 +82,14 @@ public class CreatePartnerSale extends AppCompatActivity implements View.OnClick
         subcategory_sale = findViewById(R.id.subcategory_sale);
         category_sale = findViewById(R.id.category_sale);
 
+        recyclerView =findViewById(R.id.other_sale);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setNestedScrollingEnabled(false);
+
+        final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
+        Partner_City = prefs.getString("Partner_City","");
+
         logoSale = findViewById(R.id.logoSale);
         sale_name = findViewById(R.id.sale_name);
         sale_desc = findViewById(R.id.sale_description);
@@ -100,7 +113,6 @@ public class CreatePartnerSale extends AppCompatActivity implements View.OnClick
             }
         });
 
-
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(CreatePartnerSale.this,
                 android.R.layout.simple_spinner_dropdown_item, Main2Activity.category);
         category_sale.setAdapter(adapter);
@@ -110,12 +122,26 @@ public class CreatePartnerSale extends AppCompatActivity implements View.OnClick
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 getSubCategories(Main2Activity.categories.get(i).getId());
             }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        subcategory_sale.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(list.size()!=0){
+                    Log.wtf("sadasd","sasd");
+                    getPartnersSales(subcategories.get(i).getId(),Partner_City);
+                }
+            }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
         });
+        getPartnersSales("2",Partner_City);
         getSubCategories(Main2Activity.categories.get(0).getId());
         logoSale.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,6 +157,7 @@ public class CreatePartnerSale extends AppCompatActivity implements View.OnClick
                 Pix.start(CreatePartnerSale.this, options);
             }
         });
+
         createNameSale.setOnClickListener(this);
 
         back = findViewById(R.id.sale_back);
@@ -144,7 +171,7 @@ public class CreatePartnerSale extends AppCompatActivity implements View.OnClick
         TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f,
                 1500.0f, 0.0f);
         animation.setDuration(500);
-        //animation.setFillAfter(true);
+
         cardView.startAnimation(animation);
         sale_name.startAnimation(animation);
         sale_desc.startAnimation(animation);
@@ -158,6 +185,59 @@ public class CreatePartnerSale extends AppCompatActivity implements View.OnClick
             }
         }, animation.getDuration());
     }
+
+    private void getPartnersSales(String id,String city) {
+        list.clear();
+        String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=sales_list_sort&catid="+id+"&city="+city+"&sort=DESC";
+        Log.wtf("sadads",requestUrl);
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.wtf("sadads",response);
+                if (response.equals("\"\\u041d\\u0435\\u0442 \\u043f\\u0430\\u0440\\u0442\\u043d\\u0451\\u0440\\u043e\\u0432 \\u0432 \\u0434\\u0430\\u043d\\u043d\\u043e\\u0439 \\u043a\\u0430\\u0442\\u0435\\u0433\\u043e\\u0440\\u0438\\u0438\"")) {
+                    list.add(new Bonuses("Список пуст",""));
+                } else {
+                    try {
+                        JSONArray j = new JSONArray(response);
+                        for(int i = 0;i<j.length();i++){
+                            JSONObject object = j.getJSONObject(i);
+                            list.add(new Bonuses(object.getString("sale_name"),object.getString("sale_percent")+"%"));
+                            Log.wtf("asdsad",list.get(i).getName());
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                AdapterPartnerBonuses adapter = new AdapterPartnerBonuses(CreatePartnerSale.this,list);
+                recyclerView.setAdapter(adapter);
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace(); //log the error resulting from the request for diagnosis/debugging
+                Dialog dialog = new Dialog(CreatePartnerSale.this, android.R.style.Theme_Material_Light_NoActionBar);
+                dialog.setContentView(R.layout.dialog_no_internet);
+                Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getPartnersSales(id,city);
+                        dialog.dismiss();
+                    }
+                });
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.show();
+                    }
+                }, 500);
+            }
+        });
+        Volley.newRequestQueue(Objects.requireNonNull(this)).add(stringRequest);
+    }
+
 
     @Override
     public void onClick(View view) {

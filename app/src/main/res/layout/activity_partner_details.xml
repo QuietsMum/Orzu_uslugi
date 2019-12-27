@@ -163,7 +163,7 @@
                             android:textSize="11sp" />
 
                         <Spinner
-                            android:id="@+id/subcategory_right_side"
+                            android:id="@+id/city_partner"
                             style="@style/Widget.AppCompat.Spinner.Underlined"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
@@ -171,6 +171,7 @@
                             android:background="@drawable/circle_shape_intro_white"
                             android:entries="@array/citylist"
                             android:textSize="20sp" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -207,6 +208,24 @@
                             android:layout_marginTop="5dp"
                             android:background="@drawable/circle_shape_intro_white"
                             android:entries="@array/citylist"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="18dp"
+                            android:layout_marginTop="10dp"
+                            android:text="Другие партнеры"
+                            android:textColor="@android:color/darker_gray"
+                            android:textSize="11sp" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/other_partners"
+                            android:paddingBottom="90dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/circle_shape_intro_white"
                             android:textSize="20sp" />
                     </LinearLayout>
 
