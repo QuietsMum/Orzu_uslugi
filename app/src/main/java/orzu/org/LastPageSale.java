@@ -54,10 +54,11 @@ public class LastPageSale extends AppCompatActivity {
     SaleAdapter adapter;
     List<category_model> list = new ArrayList<>();
     TextView btn_save;
-    String id,utoken,Partner_Name,Partner_City,Partner_Desc,Partner_SubCat,Partner_Logo,Sale_Name,Sale_Logo,Sale_Desc,Sale_Cat,Sale_SubCat;
-    String [] types = {"50","30","15"};
+    String Uid, utoken, Partner_Name, Partner_City, Partner_Desc, Partner_SubCat, Partner_Logo, Sale_Name, Sale_Logo, Sale_Desc, Sale_Cat, Sale_SubCat;
+    String[] types = {"50", "30", "15"};
     int index = 0;
     ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,41 +115,42 @@ public class LastPageSale extends AppCompatActivity {
 
     private void initiateStrings() {
         final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
-        id = Common.userId;
+        Uid = Common.userId;
         utoken = Common.utoken;
-        Partner_Name = prefs.getString("Partner_Name","");
-        Partner_City = prefs.getString("Partner_City","");
-        Partner_Logo = prefs.getString("Partner_Logo","");
-        Partner_Desc = prefs.getString("Partner_Desc","");
-        Partner_SubCat = prefs.getString("Partner_SubCat","");
-        Sale_Name = prefs.getString("Sale_Name","");
-        Sale_Logo = prefs.getString("Sale_Logo","");
-        Sale_Desc = prefs.getString("Sale_Desc","");
-        Sale_Cat = prefs.getString("Sale_Cat","");
-        Sale_SubCat = prefs.getString("Sale_SubCat","");
+        Partner_Name = prefs.getString("Partner_Name", "");
+        Partner_City = prefs.getString("Partner_City", "");
+        Partner_Logo = prefs.getString("Partner_Logo", "");
+        Partner_Desc = prefs.getString("Partner_Desc", "");
+        Partner_SubCat = prefs.getString("Partner_SubCat", "");
+        Sale_Name = prefs.getString("Sale_Name", "");
+        Sale_Logo = prefs.getString("Sale_Logo", "");
+        Sale_Desc = prefs.getString("Sale_Desc", "");
+        Sale_Cat = prefs.getString("Sale_Cat", "");
+        Sale_SubCat = prefs.getString("Sale_SubCat", "");
     }
 
     private void createPartner() {
-        String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=create_partner&userid=" +id+
-                "&name=" +Partner_Name+
-                "&utoken="+utoken +
-                "&partnersdisc="+Partner_Desc+
-                "&city="+Partner_City+
-                "&subcatid="+Partner_SubCat+
-                "&percent="+types[index];
+        String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=create_partner&userid=" + Uid +
+                "&name=" + Partner_Name +
+                "&utoken=" + utoken +
+                "&partnersdisc=" + Partner_Desc +
+                "&city=" + Partner_City +
+                "&subcatid=" + Partner_SubCat +
+                "&percent=" + types[index];
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.wtf("createP",response);
-                if(Partner_Logo.length()!=0){
+                Log.wtf("createP", response);
+                if (Partner_Logo.length() != 0) {
                     try {
-                        String [] id_of_partner = response.split(":");
+                        String[] id_of_partner = response.split(":");
                         addPartnerLogo(id_of_partner[1]);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }else{
-                    createSale();
+                } else {
+                    String[] id_of_partner = response.split(":");
+                    createSale(id_of_partner[1]);
                 }
             }
         }, new com.android.volley.Response.ErrorListener() {
@@ -177,24 +179,30 @@ public class LastPageSale extends AppCompatActivity {
         Volley.newRequestQueue(Objects.requireNonNull(LastPageSale.this)).add(stringRequest);
     }
 
-    private void createSale() {
+    private void createSale(String id) {
+        Log.wtf("asdasdd",id);
+        id = id.replace("\"","");
         String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=create_partners_sale" +
-                "&idPartner="+id+
-                "&namePartner="+Partner_Name +
-                "&utoken="+utoken +
-                "&sale_name="+Sale_Name +
-                "&description="+Sale_Desc +
-                "&partner_city="+Partner_City +
-                "&partners_cat="+Sale_Cat +
-                "&partners_subcat="+Sale_SubCat +
-                "&sale_percent="+types[index];
+                "&idPartner=" + id +
+                "&namePartner=" + Partner_Name +
+                "&utoken=" + utoken +
+                "&sale_name=" + Sale_Name +
+                "&description=" + Sale_Desc +
+                "&partner_city=" + Partner_City +
+                "&partners_cat=" + Sale_Cat +
+                "&partners_subcat=" + Sale_SubCat +
+                "&sale_percent=" + types[index] +
+                "&idUser=" + Uid;
+        String finalId = id;
+        Log.wtf("asdsdas",finalId);
+        Log.wtf("asdsdas",requestUrl);
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.wtf("createS",response);
-                if(Sale_Logo.length()!=0){
-                    addSaleLogo(response);
-                    Log.wtf("asd",response);
+                Log.wtf("createPS", response);
+                if (Sale_Logo.length() != 0) {
+                    String[] id_of_partner = response.split(":");
+                    addSaleLogo(id_of_partner[1]);
                 }
             }
         }, new com.android.volley.Response.ErrorListener() {
@@ -208,7 +216,7 @@ public class LastPageSale extends AppCompatActivity {
                 dialogButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        createPartner();
+                        createSale(finalId);
                         dialog.dismiss();
                     }
                 });
@@ -226,12 +234,12 @@ public class LastPageSale extends AppCompatActivity {
     private void addSaleLogo(String id) {
         String url = "https://projectapi.pw/api/avatar";
         OkHttpClient client = new OkHttpClient();
-        String [] log = id.split(":");
         File myFile = new File(Uri.parse(Sale_Logo).getPath());
+        Log.wtf("asdasd", id);
         RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart("file", myFile.getName(),
                         RequestBody.create(MediaType.parse("text/csv"), myFile))
-                .addFormDataPart("sale_id", log[1])
+                .addFormDataPart("sale_id", id)
                 .build();
         Request request = new Request.Builder()
                 .url(url)
@@ -262,9 +270,10 @@ public class LastPageSale extends AppCompatActivity {
                     }
                 });
             }
+
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.wtf("createLS",response+"");
+                Log.wtf("createLS", response + "");
                 LastPageSale.this.runOnUiThread(new Runnable() {
                     public void run() {
                         Toast.makeText(LastPageSale.this, "Все изменения добавлены", Toast.LENGTH_SHORT).show();
@@ -319,12 +328,13 @@ public class LastPageSale extends AppCompatActivity {
                     }
                 });
             }
+
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.wtf("createLP",response+"");
+                Log.wtf("createLP", response + "");
                 LastPageSale.this.runOnUiThread(new Runnable() {
                     public void run() {
-                        createSale();
+                        createSale(id);
                     }
                 });
             }

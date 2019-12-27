@@ -102,8 +102,7 @@ public class CreatePartnerSale extends AppCompatActivity implements View.OnClick
                 pluslinearyimages.setVisibility(View.GONE);
                 logoSale.setVisibility(View.VISIBLE);
                 Options options = Options.init()
-                        .setRequestCode(100)                                                 //Request code for activity results
-                        .setCount(6)                                                         //Number of images to restict selection count
+                        .setRequestCode(100)                                                 //Request code for activity results// Number of images to restict selection count
                         .setFrontfacing(false)                                                //Front Facing camera on start
                         .setImageQuality(ImageQuality.HIGH)                                  //Image Quality
                         .setPreSelectedUrls(returnValue)                                     //Pre selected Image Urls
@@ -147,8 +146,7 @@ public class CreatePartnerSale extends AppCompatActivity implements View.OnClick
             @Override
             public void onClick(View view) {
                 Options options = Options.init()
-                        .setRequestCode(100)                                                 //Request code for activity results
-                        .setCount(6)                                                         //Number of images to restict selection count
+                        .setRequestCode(100)                                                 //Request code for activity results//Number of images to restict selection count
                         .setFrontfacing(false)                                               //Front Facing camera on start
                         .setImageQuality(ImageQuality.HIGH)                                  //Image Quality
                         .setPreSelectedUrls(returnValue)                                     //Pre selected Image Urls

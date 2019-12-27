@@ -163,8 +163,7 @@ public class PartnerDetails extends AppCompatActivity implements View.OnClickLis
                 pluslinearyimages.setVisibility(View.GONE);
                 logoPartner.setVisibility(View.VISIBLE);
                 Options options = Options.init()
-                        .setRequestCode(100)                                                 //Request code for activity results
-                        .setCount(1)                                                         //Number of images to restict selection count
+                        .setRequestCode(100)                                                 //Request code for activity results//Number of images to restict selection count
                         .setFrontfacing(false)                                                //Front Facing camera on start
                         .setImageQuality(ImageQuality.HIGH)                                  //Image Quality
                         .setPreSelectedUrls(returnValue)                                     //Pre selected Image Urls
@@ -178,8 +177,7 @@ public class PartnerDetails extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onClick(View view) {
                 Options options = Options.init()
-                        .setRequestCode(100)                                                 //Request code for activity results
-                        .setCount(6)                                                         //Number of images to restict selection count
+                        .setRequestCode(100)                                                 //Request code for activity results                         //Number of images to restict selection count
                         .setFrontfacing(false)                                               //Front Facing camera on start
                         .setImageQuality(ImageQuality.HIGH)                                  //Image Quality
                         .setPreSelectedUrls(returnValue)                                     //Pre selected Image Urls
