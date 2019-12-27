@@ -114,7 +114,7 @@ public class AddFeedback extends AppCompatActivity implements View.OnClickListen
 
     public void sendFeedback() throws IOException {
 
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=reviews" +
+        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=reviews" +
                 "&act=input" +
                 "&userid=" + idUser +
                 "&narrative=" + editNarr.getText() +

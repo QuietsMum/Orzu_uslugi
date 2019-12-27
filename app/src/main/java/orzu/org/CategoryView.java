@@ -116,7 +116,7 @@ public class CategoryView extends AppCompatActivity {
                 JsonReader[] jsonReader = new JsonReader[1];
 
                 try {
-                    orzuEndpoint[0] = new URL("https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_parent");
+                    orzuEndpoint[0] = new URL("https://projectapi.pw/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_parent");
 
 
                     myConnection[0] =

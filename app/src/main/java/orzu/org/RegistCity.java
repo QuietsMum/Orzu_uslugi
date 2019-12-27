@@ -53,7 +53,7 @@ public class RegistCity extends AppCompatActivity {
         });
     }
     public void requestCity() {
-        String url = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=getOther&get=cities";
+        String url = "https://projectapi.pw/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=getOther&get=cities";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)

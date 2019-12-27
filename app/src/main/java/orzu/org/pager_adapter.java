@@ -36,12 +36,12 @@ public class pager_adapter extends PagerAdapter {
         View view = LayoutInflater.from(context).inflate(R.layout.pager_item, null);
         ImageView imageView = view.findViewById(R.id.image);
         if(!imgs.isEmpty()) {
-            Picasso.get().load("https://projectapi.pw/" + imgs.get(position)).into(imageView);
+            Picasso.get().load("https://projectapi.pw/" + imgs.get(position).replaceAll("\\\\","")).into(imageView);
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, FullScreenImageActivity.class);
-                    intent.setData(Uri.parse("https://projectapi.pw/" + imgs.get(position)));
+                    intent.setData(Uri.parse("https://projectapi.pw/" + imgs.get(position).replaceAll("\\\\","")));
                     context.startActivity(intent);
                 }
             });

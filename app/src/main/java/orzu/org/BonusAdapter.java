@@ -38,9 +38,12 @@ public class BonusAdapter extends RecyclerView.Adapter<BonusAdapter.MyViewHolder
         holder.name.setText(maps.get(position).getName());
         Picasso.get().load("https://projectapi.pw/"+maps.get(position).getLogo()).into(holder.logo);
         holder.percent.setTextColor(Color.parseColor("#fe8c00"));
-        holder.percent.setText(maps.get(position).getPercentage());
+        holder.percent.setText(maps.get(position).getPercent());
         TextPaint paint = holder.percent.getPaint();
-        float width = paint.measureText(maps.get(position).getPercentage());
+        float width = 0;
+        if(maps.get(position).getPercent()!=null) {
+            width = paint.measureText(maps.get(position).getPercent());
+        }
         Shader textShader = new LinearGradient(0, 0, width, holder.percent.getTextSize(),
                 new int[]{
                         Color.parseColor("#fe8c00"),

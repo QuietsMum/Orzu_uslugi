@@ -179,8 +179,8 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             id = "" + intent.getStringExtra("id");
             opt = intent.getStringExtra("opt");
             myTask = intent.getStringExtra("mytask");
-            Log.wtf("asd",myTask);
-            Log.wtf("asd",id);
+            Log.wtf("asd", myTask);
+            Log.wtf("asd", id);
             sad = findViewById(R.id.textSad);
             sad.setText(Common.neutral);
             nat = findViewById(R.id.textNatural);
@@ -304,14 +304,14 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             shim.setVisibility(View.INVISIBLE);
             textcoins.setVisibility(View.VISIBLE);
             textcoins.setText(Common.wallet + " Ni\n-100 Ni");
-//            TextPaint paint = textcoins.getPaint();
-//            float width = paint.measureText(String.valueOf(textcoins));
-//            Shader textShader = new LinearGradient(0, 0, width, textcoins.getTextSize(),
-//                    new int[]{
-//                            Color.parseColor("#fe8c00"),
-//                            Color.parseColor("#f83600"),
-//                    }, null, Shader.TileMode.CLAMP);
-//            textcoins.getPaint().setShader(textShader);
+            TextPaint paint = textcoins.getPaint();
+            float width = paint.measureText(String.valueOf(textcoins));
+            Shader textShader = new LinearGradient(0, 0, width, textcoins.getTextSize(),
+                    new int[]{
+                            Color.parseColor("#fe8c00"),
+                            Color.parseColor("#f83600"),
+                    }, null, Shader.TileMode.CLAMP);
+            textcoins.getPaint().setShader(textShader);
             TranslateAnimation animationn = new TranslateAnimation(0.0f, 0.0f,
                     1500.0f, 0.0f);
             animationn.setDuration(500);
@@ -430,7 +430,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             orzuEndpoint[0] = null;
             JsonReader[] jsonReader = new JsonReader[1];
             try {
-                orzuEndpoint[0] = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=" + id);
+                orzuEndpoint[0] = new URL("https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=" + id);
                 myConnection[0] =
                         (HttpsURLConnection) orzuEndpoint[0].openConnection();
                 if (myConnection[0].getResponseCode() == 200) {
@@ -784,7 +784,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                             if (myTask.equals("my")) {
                                 textcoins.setText(wallet);
                             }
-                            Picasso.get().load("https://orzu.org" + image).fit().centerCrop().into(imageViewName);
+                            Picasso.get().load("https://projectapi.pw" + image.replaceAll("\\\\","")).fit().centerCrop().into(imageViewName);
                             Animation animZoomIn = AnimationUtils.loadAnimation(getApplicationContext(),
                                     R.anim.zoom_in);
                             buttonGettask.startAnimation(animZoomIn);

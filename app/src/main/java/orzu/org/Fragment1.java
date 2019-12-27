@@ -66,7 +66,15 @@ import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
+import orzu.org.models.MyTaskApi;
+import orzu.org.models.MyTasks;
+import orzu.org.models.NetworkService;
 import orzu.org.ui.login.model;
+import retrofit2.Retrofit;
 
 import static com.yandex.runtime.Runtime.getApplicationContext;
 
@@ -150,11 +158,21 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         db.close();
         prefs = getActivity().getSharedPreferences(" ", Context.MODE_PRIVATE);
         Common.city = prefs.getString("UserCityPref", "");
+        nestshimmer = view.findViewById(R.id.nestshimmer);
+        shim = (ShimmerFrameLayout) view.findViewById(R.id.parentShimmerLayout);
+        shim.startShimmer();
+        imagenotask = view.findViewById(R.id.imageNoTask);
+        textnotask = view.findViewById(R.id.textViewNoTask);
+        category_rv = view.findViewById(R.id.category_main_rv);
+        subcategory_rv = view.findViewById(R.id.subcategory_main_rv);
+        progress_loading = view.findViewById(R.id.progress_loading);
+        progress_for_task = view.findViewById(R.id.progress_for_task);
+        create_task_main = view.findViewById(R.id.create_task_main);
+        editFind = view.findViewById(R.id.editFind);
         if (Common.referrer.length() > 0) {
             plusBalance();
             Toast.makeText(getContext(), "Бонусы будут зашитаны: " + Common.referrer, Toast.LENGTH_SHORT).show();
         }
-
         if (prefs.getString("UserCityPref", "").equals("")) {
             Intent intent = new Intent(getActivity(), RegistCity.class);
             startActivity(intent);
@@ -170,7 +188,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             getCategories();
             getSubCategories("1");
         }
-        nestshimmer = view.findViewById(R.id.nestshimmer);
         Set<String> keys = Common.subFilter.keySet();
         for (String key : keys) {
             Set<Integer> key_of_value = Common.subFilter.get(key).keySet();
@@ -178,21 +195,16 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 filter = filter + "catid[]=" + Common.subFilter.get(key).get(keyV) + "&";
             }
         }
-        imagenotask = view.findViewById(R.id.imageNoTask);
-        textnotask = view.findViewById(R.id.textViewNoTask);
-        category_rv = view.findViewById(R.id.category_main_rv);
-        subcategory_rv = view.findViewById(R.id.subcategory_main_rv);
+
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         LinearLayoutManager layoutManager_sub
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         category_rv.setLayoutManager(layoutManager);
         subcategory_rv.setLayoutManager(layoutManager_sub);
-        progress_loading = view.findViewById(R.id.progress_loading);
-        progress_for_task = view.findViewById(R.id.progress_for_task);
+
         progress_for_task.setVisibility(View.VISIBLE);
-        create_task_main = view.findViewById(R.id.create_task_main);
-        editFind = view.findViewById(R.id.editFind);
+
         editFind.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -211,8 +223,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             }
         });
         scroll_of_fragment1 = view.findViewById(R.id.scroll_of_fragment1);
-        shim = (ShimmerFrameLayout) view.findViewById(R.id.parentShimmerLayout);
-        shim.startShimmer();
+
         rv = view.findViewById(R.id.rv);
         rv.setHasFixedSize(true);
         rv.setNestedScrollingEnabled(false);
@@ -322,7 +333,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
     }
 
     private void plusBalance() {
-        String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=edit_bonus_plus&userid=" + idUser + "&utoken=" + tokenUser+"&useridTo="+Common.referrer;
+        String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=edit_bonus_plus&userid=" + idUser + "&utoken=" + tokenUser + "&useridTo=" + Common.referrer;
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -1164,7 +1175,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             orzuEndpoint[0] = null;
             JsonReader[] jsonReader = new JsonReader[1];
             try {
-                orzuEndpoint[0] = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&search=" + edittextFind);
+                orzuEndpoint[0] = new URL("https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&search=" + edittextFind);
                 myConnection[0] =
                         (HttpsURLConnection) orzuEndpoint[0].openConnection();
                 if (myConnection[0].getResponseCode() == 200) {
@@ -1252,31 +1263,22 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         }
     }
 
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
+
     private void getCategories() {
-        String requestUrl = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_parent";
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, requestUrl, new Response.Listener<String>() {
+        Retrofit retrofit = NetworkService.getClient();
+        MyTaskApi api = retrofit.create(MyTaskApi.class);
+        compositeDisposable.add(api.getCategories().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableObserver<List<category_model>>() {
             @Override
-            public void onResponse(String response) {
-                try {
-                    JSONArray j = new JSONArray(response);
-                    for (int i = 0; i < j.length(); i++) {
-                        try {
-                            JSONObject object = j.getJSONObject(i);
-                            categories.add(new category_model(object.getString("id"), object.getString("name"), object.getString("parent_id")));
-                            adapter_category = new MainCategoryAdapter(getContext(), categories);
-                            category_rv.setAdapter(adapter_category);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            public void onNext(List<category_model> category_models) {
+                categories = category_models;
+                categories.add(0, new category_model("0", "Все категорий", "0"));
+                adapter_category = new MainCategoryAdapter(getContext(), categories);
+                category_rv.setAdapter(adapter_category);
             }
-        }, new Response.ErrorListener() {
+
             @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace(); //log the error resulting from the request for diagnosis/debugging
+            public void onError(Throwable e) {
                 imagenotask.setVisibility(View.VISIBLE);
                 textnotask.setVisibility(View.VISIBLE);
                 dialog = new Dialog(con, android.R.style.Theme_Material_Light_NoActionBar);
@@ -1298,8 +1300,59 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     }
                 }, 500);
             }
-        });
-        Volley.newRequestQueue(Objects.requireNonNull(con)).add(stringRequest);
+
+            @Override
+            public void onComplete() {
+
+            }
+        }));
+//        String requestUrl = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_parent";
+//        StringRequest stringRequest = new StringRequest(Request.Method.GET, requestUrl, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                try {
+//                    JSONArray j = new JSONArray(response);
+//                    for (int i = 0; i < j.length(); i++) {
+//                        try {
+//                            JSONObject object = j.getJSONObject(i);
+//                            categories.add(new category_model(object.getString("id"), object.getString("name"), object.getString("parent_id")));
+//                            adapter_category = new MainCategoryAdapter(getContext(), categories);
+//                            category_rv.setAdapter(adapter_category);
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                error.printStackTrace(); //log the error resulting from the request for diagnosis/debugging
+//                imagenotask.setVisibility(View.VISIBLE);
+//                textnotask.setVisibility(View.VISIBLE);
+//                dialog = new Dialog(con, android.R.style.Theme_Material_Light_NoActionBar);
+//                dialog.setContentView(R.layout.dialog_no_internet);
+//                Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+//                // if button is clicked, close the custom dialog
+//                dialogButton.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        getAll();
+//                        Log.wtf("asdsad", "asdasd");
+//                        dialog.dismiss();
+//                    }
+//                });
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        dialog.show();
+//                    }
+//                }, 500);
+//            }
+//        });
+//        Volley.newRequestQueue(Objects.requireNonNull(con)).add(stringRequest);
     }
 
     private void getAll() {
@@ -1314,7 +1367,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
     private void getSubCategories(String id) {
         subcategories.clear();
-        String requestUrl = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_subcat&id=" + id;
+        String requestUrl = "https://projectapi.pw/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_subcat&id=" + id;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, requestUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

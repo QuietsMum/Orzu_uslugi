@@ -189,7 +189,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
     }
 
     public void getEditAvatarResponse() throws IOException {
-        String url = "https://orzu.org/api/avatar";
+        String url = "https://projectapi.pw/api/avatar";
         OkHttpClient client = new OkHttpClient();
         File myFile = new File(Objects.requireNonNull(Uri.parse(returnValue.get(0)).getPath()));
         RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
@@ -396,7 +396,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
     }
 
     private void requestFeedbackMy() {
-        String url = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=reviews&act=view&userid=" + idUser + "&sort=all";
+        String url = "https://projectapi.pw/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=reviews&act=view&userid=" + idUser + "&sort=all";
         OkHttpClient client = new OkHttpClient();
         final String[] name = new String[2];
         final String[] narr = new String[2];
@@ -520,7 +520,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                                         feedbackname1.setText(name[0]);
                                         feedbacknarr1.setText(narr[0]);
                                         feedbackcat1.setText(date[0]);
-                                        Picasso.get().load("https://orzu.org" + image1).into(feedbackimgUser1);
+                                        Picasso.get().load("https://projectapi.pw" + image1.replaceAll("\\\\","")).into(feedbackimgUser1);
                                     }
                                 });
                             } else {
@@ -560,7 +560,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                                         feedbackname2.setText(name[1]);
                                         feedbacknarr2.setText(narr[1]);
                                         feedbackcat2.setText(date[1]);
-                                        Picasso.get().load("https://orzu.org" + image2).into(feedbackimgUser2);
+                                        Picasso.get().load("https://projectapi.pw" + image2.replaceAll("\\\\","")).into(feedbackimgUser2);
                                     }
                                 });
                             }

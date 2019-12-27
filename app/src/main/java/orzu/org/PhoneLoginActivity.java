@@ -148,7 +148,7 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
     }
 
     public void getHttpResponse() throws IOException {
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_auth&phone=" + ccp.getFullNumberWithPlus() + phone.getText() + "&password=" + mPassword;
+        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_auth&phone=" + ccp.getFullNumberWithPlus() + phone.getText() + "&password=" + mPassword;
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)

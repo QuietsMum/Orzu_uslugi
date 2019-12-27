@@ -1,8 +1,17 @@
 package orzu.org;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class category_model  {
+    @SerializedName("id")
+    @Expose
     String id;
+    @SerializedName("name")
+    @Expose
     String name;
+    @SerializedName("parent_id")
+    @Expose
     private String parent_id;
     String color = "1";
 

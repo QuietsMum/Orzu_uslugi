@@ -1,78 +1,144 @@
 package orzu.org;
 
-public class Bonuses {
-    private String name, logo, percentage,id,descrip;
-    private int logos;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
-    Bonuses(String id,String name, String percentage, String logo,String descrip) {
-        this.name = name;
-        this.id = id;
-        if(logo.equals("null")){
-            this.logo = "images/logoNew.png";
-        }else{
-            this.logo = logo;
-        }
-        this.percentage = percentage;
-        this.descrip = descrip;
+public class Bonuses {
+    @SerializedName("id")
+    @Expose
+    private String id;
+    @SerializedName("userid")
+    @Expose
+    private String userid;
+    @SerializedName("name")
+    @Expose
+    private String name;
+    @SerializedName("discription")
+    @Expose
+    private String discription;
+    @SerializedName("images")
+    @Expose
+    private String images;
+    @SerializedName("logo")
+    @Expose
+    private String logo;
+    @SerializedName("city")
+    @Expose
+    private String city;
+    @SerializedName("catid")
+    @Expose
+    private String catid;
+    @SerializedName("percent")
+    @Expose
+    private String percent ="0";
+    @SerializedName("date")
+    @Expose
+    private String date;
+
+    public Bonuses() {
     }
 
-    Bonuses(String id,String name, String percentage, int logos) {
+    Bonuses(String id, String name, String percent, String logo, String discription) {
         this.name = name;
         this.id = id;
-        this.logos = logos;
-        this.percentage = percentage;
+        if (logo.equals("null")) {
+            this.logo = "images/logoNew.png";
+        } else {
+            this.logo = logo;
+        }
+        this.percent = percent;
+        this.discription = discription;
     }
 
     Bonuses(String name, String percentage) {
         this.name = name;
-        this.percentage = percentage;
+        this.percent = percentage;
+    }
+
+
+    // Getter Methods
+
+    public String getId() {
+        return id;
+    }
+
+    public String getUserid() {
+        return userid;
     }
 
     public String getName() {
         return name;
     }
 
+    public String getDiscription() {
+        return discription;
+    }
+
+    public String getImages() {
+        return images;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getCatid() {
+        return catid;
+    }
+
+    public String getPercent() {
+        return percent;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    // Setter Methods
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
-    String getLogo() {
-        return logo;
+    public void setDiscription(String discription) {
+        this.discription = discription;
+    }
+
+    public void setImages(String images) {
+        this.images = images;
     }
 
     public void setLogo(String logo) {
         this.logo = logo;
     }
 
-    int getLogos() {
-        return logos;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public void setLogos(int logos) {
-        this.logos = logos;
+    public void setCatid(String catid) {
+        this.catid = catid;
     }
 
-    String getPercentage() {
-        return percentage;
+    public void setPercent(String percent) {
+        this.percent = percent;
     }
 
-    public void setPercentage(String percentage) {
-        this.percentage = percentage;
+    public void setDate(String date) {
+        this.date = date;
     }
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getDescrip() {
-        return descrip;
-    }
-
-    public void setDescrip(String descrip) {
-        this.descrip = descrip;
-    }
 }

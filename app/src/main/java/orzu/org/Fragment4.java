@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.JsonReader;
 import android.util.JsonToken;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
@@ -38,13 +40,28 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
+import orzu.org.models.MyTaskApi;
+import orzu.org.models.MyTasks;
+import orzu.org.models.NetworkService;
 import orzu.org.ui.login.model;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
@@ -120,6 +137,7 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
         truedata = new ArrayList<>();
         count = 1;
         int countItem = 1;
+
         catTask = new AsyncOrzuTasksMy();
         catTask.execute();
         scroll_of_fragment4 = view.findViewById(R.id.scroll_of_fragment4);
@@ -278,7 +296,7 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
             JsonReader[] jsonReader = new JsonReader[1];
             String result = "";
             try {
-                orzuEndpoint[0] = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=all&userid= " + idUser + "&page=" + count);
+                orzuEndpoint[0] = new URL("https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=all&userid= " + idUser + "&page=" + count);
                 myConnection[0] =
                         (HttpsURLConnection) orzuEndpoint[0].openConnection();
                 if (myConnection[0].getResponseCode() == 200) {
@@ -449,7 +467,7 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
             orzuEndpoint[0] = null;
             JsonReader[] jsonReader = new JsonReader[1];
             try {
-                orzuEndpoint[0] = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=all&userid= " + idUser + "&page=0");
+                orzuEndpoint[0] = new URL("https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=all&userid= " + idUser + "&page=0");
                 myConnection[0] =
                         (HttpsURLConnection) orzuEndpoint[0].openConnection();
                 if (myConnection[0].getResponseCode() == 200) {

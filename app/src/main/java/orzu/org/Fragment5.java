@@ -72,11 +72,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import orzu.org.models.MyTaskApi;
+import orzu.org.models.NetworkService;
+import retrofit2.Retrofit;
 
 public class Fragment5 extends Fragment implements View.OnClickListener {
 
@@ -101,7 +110,7 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
     RecyclerView bonus_recycler;
     RecyclerView bonus_recycler_qr;
     private static final int PERMISSION_REQUEST_CODE = 1;
-
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
     private List<String> categories = new ArrayList<>();
     Context context;
 
@@ -116,6 +125,7 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
+
     BonusAdapter adapter;
 
     @Nullable
@@ -185,25 +195,25 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
             e.printStackTrace();
         }
 
-        getAllPartners();
-
 
         lvAdapter = new LvAdapterBonuses(getContext(), bonusLists);
         bonus_recycler_qr.setAdapter(lvAdapter);
-        adapter = new BonusAdapter(getContext(), bonuses);
+
         bonus_recycler.setAdapter(adapter);
+        adapter = new BonusAdapter(getContext(), bonuses);
         adapter.setClickListener(new BonusAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(getActivity(), PortfolioActivity.class);
                 intent.putExtra("idpartner", bonuses.get(position).getId());
                 intent.putExtra("logopartner", bonuses.get(position).getLogo());
-                intent.putExtra("descpartner", bonuses.get(position).getDescrip());
+                intent.putExtra("descpartner", bonuses.get(position).getDiscription());
                 intent.putExtra("namepartner", bonuses.get(position).getName());
                 Log.wtf("Asdas", bonuses.get(position).getId());
                 startActivity(intent);
             }
         });
+        getAllPartners();
         Bitmap overlay = BitmapFactory.decodeResource(getResources(), R.drawable.logo_in_desktop);
 
         Bitmap finalOverlay = overlayBitmap(overlay);
@@ -535,26 +545,32 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
     }
 
     private void getAllPartners() {
-        String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=partners_list_all";
-        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
+        Retrofit retrofit = NetworkService.getClient();
+        MyTaskApi api = retrofit.create(MyTaskApi.class);
+        api.getAllPartners().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<List<Bonuses>>() {
             @Override
-            public void onResponse(String response) {
+            public void onSubscribe(Disposable d) {
 
-                try {
-                    JSONArray j = new JSONArray(response);
-                    for (int i = 0; i < j.length(); i++) {
-                        JSONObject object = j.getJSONObject(i);
-                        bonuses.add(new Bonuses(object.getString("id"), object.getString("name"), object.getString("percent"), object.getString("logo"), object.getString("discription")));
-                    }
-                    adapter.notifyDataSetChanged();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
             }
-        }, new com.android.volley.Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace(); //log the error resulting from the request for diagnosis/debugging
+            public void onNext(List<Bonuses> bonusesList) {
+                adapter = new BonusAdapter(getContext(), bonusesList);
+                bonus_recycler.setAdapter(adapter);
+                adapter.setClickListener(new BonusAdapter.ItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(getActivity(), PortfolioActivity.class);
+                        intent.putExtra("idpartner", bonusesList.get(position).getId());
+                        intent.putExtra("logopartner", bonusesList.get(position).getLogo());
+                        intent.putExtra("descpartner", bonusesList.get(position).getDiscription());
+                        intent.putExtra("namepartner", bonusesList.get(position).getName());
+                        Log.wtf("Asdas", bonusesList.get(position).getId());
+                        startActivity(intent);
+                    }
+                });
+            }
+            @Override
+            public void onError(Throwable e) {
                 Dialog dialog = new Dialog(getContext(), android.R.style.Theme_Material_Light_NoActionBar);
                 dialog.setContentView(R.layout.dialog_no_internet);
                 Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
@@ -573,8 +589,11 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
                     }
                 }, 500);
             }
+            @Override
+            public void onComplete() {
+
+            }
         });
-        Volley.newRequestQueue(Objects.requireNonNull(getActivity())).add(stringRequest);
     }
 
     @Override
@@ -594,6 +613,7 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
                 break;
         }
     }
+
     public void sortIsPressed(List<Bonuses> bonuses) {
         adapter = new BonusAdapter(getContext(), bonuses);
         bonus_recycler.setAdapter(adapter);
@@ -603,11 +623,14 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
                 Intent intent = new Intent(getActivity(), PortfolioActivity.class);
                 intent.putExtra("idpartner", bonuses.get(position).getId());
                 intent.putExtra("logopartner", bonuses.get(position).getLogo());
-                intent.putExtra("descpartner", bonuses.get(position).getDescrip());
+                intent.putExtra("descpartner", bonuses.get(position).getDiscription());
                 intent.putExtra("namepartner", bonuses.get(position).getName());
                 Log.wtf("Asdas", bonuses.get(position).getId());
                 startActivity(intent);
             }
         });
+        if (bonuses.size() == 0) {
+            Toast.makeText(getContext(), "Нет партнёров в данной категории", Toast.LENGTH_SHORT).show();
+        }
     }
 }

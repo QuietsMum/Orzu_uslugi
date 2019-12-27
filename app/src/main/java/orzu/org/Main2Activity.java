@@ -114,6 +114,7 @@ public class Main2Activity extends AppCompatActivity
     TextView next_right_side;
     FragmentManager fm;
     List<Bonuses> bonuses = new ArrayList<>();
+
     private void setupBeams() {
         PushNotifications.start(getApplicationContext(), "e33cda0a-16d0-41cd-a5c9-8ae60b9b7042");
         PushNotifications.clearDeviceInterests();
@@ -128,7 +129,7 @@ public class Main2Activity extends AppCompatActivity
     protected void onPause() {
         super.onPause();
         fm = getSupportFragmentManager();
-        Log.wtf("asdasds","asdas");
+        Log.wtf("asdasds", "asdas");
     }
 
     public void requestSubsServerMain() {
@@ -142,7 +143,7 @@ public class Main2Activity extends AppCompatActivity
         token = c.getString(tokenColIndex);
         c.close();
         db.close();
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_user&user_cat=" + idUser;
+        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_user&user_cat=" + idUser;
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
@@ -230,7 +231,7 @@ public class Main2Activity extends AppCompatActivity
             navigationView.setCheckedItem(R.id.fourth);
         } else {
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.container, new Fragment5(),"Fragment5").commit();
+            fragmentManager.beginTransaction().replace(R.id.container, new Fragment5(), "Fragment5").commit();
             navigationView.setCheckedItem(R.id.fifth);
         }
     }
@@ -251,12 +252,10 @@ public class Main2Activity extends AppCompatActivity
         next_right_side.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getAllPartnersSorted(subcategories.get(subcategory_right_side.getSelectedItemPosition()).getId(),"Алматы","DESC");
+                getAllPartnersSorted(subcategories.get(subcategory_right_side.getSelectedItemPosition()).getId(), "Алматы", "DESC");
             }
         });
         getCategories();
-
-
 
 
         navigationView.setItemIconTintList(null);
@@ -315,9 +314,7 @@ public class Main2Activity extends AppCompatActivity
         onNavigationItemSelected(navigationView.getMenu().getItem(0));
 
 
-
     }
-
 
 
     @Override
@@ -496,7 +493,7 @@ public class Main2Activity extends AppCompatActivity
             // Вставляем фрагмент, заменяя текущий фрагмент
             FragmentManager fragmentManager = getSupportFragmentManager();
             fm = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.container, new Fragment5(),"Fragment5").commit();
+            fragmentManager.beginTransaction().replace(R.id.container, new Fragment5(), "Fragment5").commit();
             // Выделяем выбранный пункт меню в шторке
             item.setChecked(true);
             // Выводим выбранный пункт в заголовке
@@ -518,26 +515,33 @@ public class Main2Activity extends AppCompatActivity
         }
     }
 
-    private void getAllPartnersSorted(String catid,String city,String sort) {
+    private void getAllPartnersSorted(String catid, String city, String sort) {
+        bonuses.clear();
         String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=partners_list_sort" +
-                "&catid=" +catid+
-                "&city="+city +
-                "&sort="+sort;
+                "&catid=" + catid +
+                "&city=" + city +
+                "&sort=" + sort;
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                try {
-                    JSONArray j = new JSONArray(response);
-                    for (int i = 0; i < j.length(); i++) {
-                        JSONObject object = j.getJSONObject(i);
-                        bonuses.add(new Bonuses(object.getString("id"), object.getString("name"), object.getString("percent"), object.getString("logo"), object.getString("discription")));
-                    }
-
+                if (response.equals("\"\\u041d\\u0435\\u0442 \\u043f\\u0430\\u0440\\u0442\\u043d\\u0451\\u0440\\u043e\\u0432 \\u0432 \\u0434\\u0430\\u043d\\u043d\\u043e\\u0439 \\u043a\\u0430\\u0442\\u0435\\u0433\\u043e\\u0440\\u0438\\u0438\"")) {
                     Fragment5 fragment5 = (Fragment5) fm.findFragmentByTag("Fragment5");
                     fragment5.sortIsPressed(bonuses);
+                } else {
+                    try {
+                        Log.wtf("sadas", response);
+                        JSONArray j = new JSONArray(response);
+                        for (int i = 0; i < j.length(); i++) {
+                            JSONObject object = j.getJSONObject(i);
+                            bonuses.add(new Bonuses(object.getString("id"), object.getString("name"), object.getString("percent"), object.getString("logo"), object.getString("discription")));
+                        }
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                        Fragment5 fragment5 = (Fragment5) fm.findFragmentByTag("Fragment5");
+                        fragment5.sortIsPressed(bonuses);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }, new com.android.volley.Response.ErrorListener() {
@@ -551,7 +555,7 @@ public class Main2Activity extends AppCompatActivity
                 dialogButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        getAllPartnersSorted(catid,city,sort);
+                        getAllPartnersSorted(catid, city, sort);
                         dialog.dismiss();
                     }
                 });
@@ -654,7 +658,7 @@ public class Main2Activity extends AppCompatActivity
                             Common.name_only = mName;
                             userviewBtn.setOnClickListener(Main2Activity.this);
                             Common.fragmentshimmer = true;
-                            new DownloadImage().execute("https://orzu.org" + image);
+                            new DownloadImage().execute("https://projectapi.pw" + image);
                         }
                     });
                 } catch (JSONException e) {
@@ -743,6 +747,7 @@ public class Main2Activity extends AppCompatActivity
         }
 
         protected void onPostExecute(Bitmap result) {
+            Log.wtf("sadasd", "sadsad");
             saveImage(getApplicationContext(), result, "my_image.jpeg");
         }
     }
@@ -773,8 +778,9 @@ public class Main2Activity extends AppCompatActivity
         nav_user.setImageDrawable(Common.d);
         nav_user_name.setText(Common.name);
     }
+
     private void getCategories() {
-        String requestUrl = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_parent";
+        String requestUrl = "https://projectapi.pw/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_parent";
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -800,6 +806,7 @@ public class Main2Activity extends AppCompatActivity
                         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                             getSubCategories(categories.get(i).getId());
                         }
+
                         @Override
                         public void onNothingSelected(AdapterView<?> adapterView) {
 
@@ -834,9 +841,10 @@ public class Main2Activity extends AppCompatActivity
         });
         Volley.newRequestQueue(Objects.requireNonNull(this)).add(stringRequest);
     }
+
     private void getSubCategories(String id) {
         subcategories.clear();
-        String requestUrl = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_subcat&id=" + id;
+        String requestUrl = "https://projectapi.pw/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_subcat&id=" + id;
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

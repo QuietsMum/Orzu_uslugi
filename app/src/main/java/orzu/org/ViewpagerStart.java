@@ -14,7 +14,7 @@ public class ViewpagerStart extends AppCompatActivity implements View.OnClickLis
     private static ViewPager mPager;
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
-    private static final Integer[] IMAGES= {R.drawable.f3, R.drawable.f1, R.drawable.f2};
+    private static final Integer[] IMAGES= {R.drawable.f1, R.drawable.f1, R.drawable.f2};
     private static final Integer[] IMAGESBACK= {R.drawable.ic_intro_back_1, R.drawable.ic_intro_back_2, R.drawable.ic_intro_back_3};
     private static final String[] TEXT= {"Создайте задачу" , "Выберите исполнителя", "Задача выполнена"};
     private static final String[] TEXT2= {

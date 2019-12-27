@@ -38,9 +38,9 @@ public class AdapterPartnerBonuses extends RecyclerView.Adapter<AdapterPartnerBo
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         holder.header.setText(maps.get(position).getName());
-        holder.percent.setText(maps.get(position).getPercentage());
+        holder.percent.setText(maps.get(position).getPercent());
         TextPaint paint = holder.percent.getPaint();
-        float width = paint.measureText(maps.get(position).getPercentage());
+        float width = paint.measureText(maps.get(position).getPercent());
         Shader textShader = new LinearGradient(0, 0, width, holder.percent.getTextSize(),
                 new int[]{
                         Color.parseColor("#fe8c00"),
