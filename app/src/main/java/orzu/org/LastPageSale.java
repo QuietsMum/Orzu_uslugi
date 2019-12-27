@@ -130,7 +130,8 @@ public class LastPageSale extends AppCompatActivity {
     }
 
     private void createPartner() {
-        String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=create_partner&userid=" + Uid +
+        String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=create_partner&" +
+                "userid=" + Uid +
                 "&name=" + Partner_Name +
                 "&utoken=" + utoken +
                 "&partnersdisc=" + Partner_Desc +
