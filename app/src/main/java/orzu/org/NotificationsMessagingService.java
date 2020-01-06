@@ -56,16 +56,13 @@ public class NotificationsMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().containsKey("ID")) {
             showNotification(remoteMessage);
         }
-        Log.wtf("asdads", remoteMessage.getData() + "");
     }
 
     private void showNotification(@NotNull RemoteMessage remoteMessage) {
-        Log.wtf("asdad", remoteMessage.getData() + "");
         String[] ar = remoteMessage.getData().get("ID").split("[, ?.@]+");
         Intent intent = new Intent(this, TaskViewMain.class);
         SharedPreferences.Editor editor = prefs.edit();
         String id;
-        Log.wtf("sadsas",ar.length+"");
         if (ar.length >= 2) {
             editor.putString("mytask", "my");
             type = "my";
@@ -111,7 +108,6 @@ public class NotificationsMessagingService extends FirebaseMessagingService {
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.wtf("hello", response+  "  "+id);
                 try {
                     JSONArray j = new JSONArray(response);
                     JSONArray task_detail_arr = j.getJSONArray(0);
@@ -124,7 +120,6 @@ public class NotificationsMessagingService extends FirebaseMessagingService {
                     JSONArray arr = j.getJSONArray(1);
                     String city = arr.getJSONObject(0).getString("value");
                     String work_with = arr.getJSONObject(4).getString("value");
-                    Log.wtf("asdas", city + " " + task);
 
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     ContentValues cv = new ContentValues();
@@ -170,7 +165,6 @@ public class NotificationsMessagingService extends FirebaseMessagingService {
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.wtf("hello", response);
                 try {
                     JSONArray j = new JSONArray(response);
                     int index =j.length()-1;

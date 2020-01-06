@@ -242,7 +242,6 @@ public class PartnerDetails extends AppCompatActivity implements View.OnClickLis
                 "&catid=" + catid +
                 "&city=" + city +
                 "&sort=" + "DESC";
-        Log.wtf("asdas", requestUrl);
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -254,7 +253,6 @@ public class PartnerDetails extends AppCompatActivity implements View.OnClickLis
                         for (int i = 0; i < j.length(); i++) {
                             JSONObject object = j.getJSONObject(i);
                             bonuses.add(new Bonuses(object.getString("id"), object.getString("name"), object.getString("percent"), object.getString("logo"), object.getString("discription")));
-                            Log.wtf("asdasd",bonuses.get(i).getName());
                         }
 
                     } catch (JSONException e) {

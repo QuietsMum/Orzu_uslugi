@@ -211,7 +211,6 @@ public class Fragment2 extends Fragment {
                 int created_atIndex = c.getColumnIndex("created_at");
                 int work_withIndex = c.getColumnIndex("work_with");
                 idtask = c.getString(idColIndex);
-                Log.wtf("asdsad", idtask);
                 String header;
                 String title = c.getString(mesColIndex);
                 String city = c.getString(cityIndex);

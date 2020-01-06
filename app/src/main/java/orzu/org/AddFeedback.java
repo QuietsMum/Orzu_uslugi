@@ -218,7 +218,6 @@ public class AddFeedback extends AppCompatActivity implements View.OnClickListen
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 
                 String mMessage = Objects.requireNonNull(response.body()).string();
-                Log.wtf("asdasd",mMessage);
                 finish();
             }
         });
@@ -272,7 +271,6 @@ public class AddFeedback extends AppCompatActivity implements View.OnClickListen
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 
                 String mMessage = Objects.requireNonNull(response.body()).string();
-                Log.wtf("asdasd",mMessage);
                 finish();
             }
         });

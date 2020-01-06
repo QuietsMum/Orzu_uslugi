@@ -1289,7 +1289,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     @Override
                     public void onClick(View v) {
                         getAll();
-                        Log.wtf("asdsad", "asdasd");
                         dialog.dismiss();
                     }
                 });

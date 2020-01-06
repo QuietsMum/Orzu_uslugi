@@ -1,6 +1,7 @@
 package orzu.org;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
@@ -10,6 +11,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -134,8 +136,8 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
         switch (requestCode) {
             case MY_REQUEST: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Ok", Toast.LENGTH_SHORT).show();
-                } else {
+                    Toast.makeText(this, "Хорошо", Toast.LENGTH_SHORT).show();
+                }else {
                     Toast.makeText(this, "Напишите код вручную", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -245,34 +247,45 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                 if (mMessage.equals("\"This user alreday registered\"")) {
                     LoginActivity2.this.runOnUiThread(new Runnable() {
                         public void run() {
-                            Toast.makeText(LoginActivity2.this, "Этот номер уже зарегистрирован", Toast.LENGTH_SHORT).show();
+                            AlertDialog alertDialog = new AlertDialog.Builder(LoginActivity2.this).create();
+                            alertDialog.setTitle("");
+                            alertDialog.setMessage("Этот номер уже зарегистрирован");
+                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Готова",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                            Intent intent = new Intent(getApplicationContext(), PhoneLoginActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    });
+                            alertDialog.show();
+                            Toast.makeText(LoginActivity2.this, "", Toast.LENGTH_SHORT).show();
                             Common.referrer="";
                         }
                     });
-                    Log.e("ERRORRR", mMessage);
-                    Intent intent = new Intent(getApplicationContext(), PhoneLoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-                try {
-                    obj = new JSONObject(mMessage);
-                    Log.e("ERRORRR", mMessage);
-                    mToken = obj.getString("_token");
-                    mID = obj.getLong("id");
-                    SQLiteDatabase db = dbHelper.getWritableDatabase();
-                    ContentValues cv = new ContentValues();
-                    cv.put("id", mID);
-                    cv.put("token", mToken);
-                    cv.put("name", mName);
-                    db.insert("orzutable", null, cv);
-                    db.close();
-                    dbHelper.close();
-                    Intent intent = new Intent(getApplicationContext(), RegistCity.class);
-                    startActivity(intent);
-                    progressBar.setVisibility(View.INVISIBLE);
-                    finish();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+
+                }else {
+                    try {
+                        obj = new JSONObject(mMessage);
+                        mStatus = obj.getString("auth_status");
+                        mToken = obj.getString("_token");
+                        mID = obj.getLong("id");
+                        SQLiteDatabase db = dbHelper.getWritableDatabase();
+                        ContentValues cv = new ContentValues();
+                        cv.put("id", mID);
+                        cv.put("token", mToken);
+                        cv.put("name", mName);
+                        db.insert("orzutable", null, cv);
+                        db.close();
+                        dbHelper.close();
+                        Intent intent = new Intent(getApplicationContext(), RegistCity.class);
+                        startActivity(intent);
+                        progressBar.setVisibility(View.INVISIBLE);
+                        finish();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -302,17 +315,44 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                     public void onVerificationFailed(FirebaseException e) {
                         if (e instanceof FirebaseAuthInvalidCredentialsException) {
                             // Invalid request
-                            Toast.makeText(LoginActivity2.this, "Не правильный номер", Toast.LENGTH_SHORT).show();
+                            AlertDialog alertDialog = new AlertDialog.Builder(LoginActivity2.this).create();
+                            alertDialog.setTitle("");
+                            alertDialog.setMessage("Не правильный номер");
+                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Готова",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            alertDialog.dismiss();
+                                            dialog.dismiss();
+                                        }
+                                    });
+                            alertDialog.show();
                         } else if (e instanceof FirebaseTooManyRequestsException) {
-                            // SMS quota exceeded
-                            dialog.dismiss();
-                            progressBar.setVisibility(View.INVISIBLE);
-                            Toast.makeText(LoginActivity2.this, "На сегодня ваш лимит исчерпан. Повторите позже", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(LoginActivity2.this,PhoneLoginActivity.class));
-                            finish();
+                            AlertDialog alertDialog = new AlertDialog.Builder(LoginActivity2.this).create();
+                            alertDialog.setTitle("");
+                            alertDialog.setMessage("На сегодня ваш лимит исчерпан. Повторите позже");
+                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Готова",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                            alertDialog.dismiss();
+                                            progressBar.setVisibility(View.INVISIBLE);
+                                            startActivity(new Intent(LoginActivity2.this,PhoneLoginActivity.class));
+                                            finish();
+                                        }
+                                    });
+                            alertDialog.show();
                         }else{
-                            Toast.makeText(LoginActivity2.this, "Нету интернет подключения", Toast.LENGTH_SHORT).show();
-                            timer.onFinish();
+                            AlertDialog alertDialog = new AlertDialog.Builder(LoginActivity2.this).create();
+                            alertDialog.setTitle("");
+                            alertDialog.setMessage("Нету интернет подключения");
+                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Готова",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            timer.onFinish();
+                                            alertDialog.dismiss();
+                                        }
+                                    });
+                            alertDialog.show();
                         }
                     }
 

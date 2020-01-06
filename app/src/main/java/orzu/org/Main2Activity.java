@@ -129,7 +129,6 @@ public class Main2Activity extends AppCompatActivity
     protected void onPause() {
         super.onPause();
         fm = getSupportFragmentManager();
-        Log.wtf("asdasds", "asdas");
     }
 
     public void requestSubsServerMain() {
@@ -177,7 +176,6 @@ public class Main2Activity extends AppCompatActivity
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String mMessage = response.body().string();
-                Log.wtf("asdasd", mMessage);
                 if (!mMessage.equals("\"No subscribe categories\"")) {
                     try {
                         JSONObject jsonObject = new JSONObject(mMessage);
@@ -529,7 +527,6 @@ public class Main2Activity extends AppCompatActivity
                     fragment5.sortIsPressed(bonuses);
                 } else {
                     try {
-                        Log.wtf("sadas", response);
                         JSONArray j = new JSONArray(response);
                         for (int i = 0; i < j.length(); i++) {
                             JSONObject object = j.getJSONObject(i);
@@ -747,7 +744,6 @@ public class Main2Activity extends AppCompatActivity
         }
 
         protected void onPostExecute(Bitmap result) {
-            Log.wtf("sadasd", "sadsad");
             saveImage(getApplicationContext(), result, "my_image.jpeg");
         }
     }

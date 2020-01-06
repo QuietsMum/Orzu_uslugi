@@ -209,7 +209,6 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
                 intent.putExtra("logopartner", bonuses.get(position).getLogo());
                 intent.putExtra("descpartner", bonuses.get(position).getDiscription());
                 intent.putExtra("namepartner", bonuses.get(position).getName());
-                Log.wtf("Asdas", bonuses.get(position).getId());
                 startActivity(intent);
             }
         });
@@ -564,7 +563,6 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
                         intent.putExtra("logopartner", bonusesList.get(position).getLogo());
                         intent.putExtra("descpartner", bonusesList.get(position).getDiscription());
                         intent.putExtra("namepartner", bonusesList.get(position).getName());
-                        Log.wtf("Asdas", bonusesList.get(position).getId());
                         startActivity(intent);
                     }
                 });
@@ -625,7 +623,6 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
                 intent.putExtra("logopartner", bonuses.get(position).getLogo());
                 intent.putExtra("descpartner", bonuses.get(position).getDiscription());
                 intent.putExtra("namepartner", bonuses.get(position).getName());
-                Log.wtf("Asdas", bonuses.get(position).getId());
                 startActivity(intent);
             }
         });

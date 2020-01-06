@@ -179,8 +179,6 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             id = "" + intent.getStringExtra("id");
             opt = intent.getStringExtra("opt");
             myTask = intent.getStringExtra("mytask");
-            Log.wtf("asd", myTask);
-            Log.wtf("asd", id);
             sad = findViewById(R.id.textSad);
             sad.setText(Common.neutral);
             nat = findViewById(R.id.textNatural);

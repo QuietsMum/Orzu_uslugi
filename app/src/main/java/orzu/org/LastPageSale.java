@@ -141,7 +141,6 @@ public class LastPageSale extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.wtf("createP", response);
                 if (Partner_Logo.length() != 0) {
                     try {
                         String[] id_of_partner = response.split(":");
@@ -181,7 +180,6 @@ public class LastPageSale extends AppCompatActivity {
     }
 
     private void createSale(String id) {
-        Log.wtf("asdasdd",id);
         id = id.replace("\"","");
         String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=create_partners_sale" +
                 "&idPartner=" + id +
@@ -195,12 +193,9 @@ public class LastPageSale extends AppCompatActivity {
                 "&sale_percent=" + types[index] +
                 "&idUser=" + Uid;
         String finalId = id;
-        Log.wtf("asdsdas",finalId);
-        Log.wtf("asdsdas",requestUrl);
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.wtf("createPS", response);
                 if (Sale_Logo.length() != 0) {
                     String[] id_of_partner = response.split(":");
                     addSaleLogo(id_of_partner[1]);
@@ -236,7 +231,6 @@ public class LastPageSale extends AppCompatActivity {
         String url = "https://projectapi.pw/api/avatar";
         OkHttpClient client = new OkHttpClient();
         File myFile = new File(Uri.parse(Sale_Logo).getPath());
-        Log.wtf("asdasd", id);
         RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart("file", myFile.getName(),
                         RequestBody.create(MediaType.parse("text/csv"), myFile))
@@ -274,7 +268,6 @@ public class LastPageSale extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.wtf("createLS", response + "");
                 LastPageSale.this.runOnUiThread(new Runnable() {
                     public void run() {
                         Toast.makeText(LastPageSale.this, "Все изменения добавлены", Toast.LENGTH_SHORT).show();
@@ -332,7 +325,6 @@ public class LastPageSale extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.wtf("createLP", response + "");
                 LastPageSale.this.runOnUiThread(new Runnable() {
                     public void run() {
                         createSale(id);

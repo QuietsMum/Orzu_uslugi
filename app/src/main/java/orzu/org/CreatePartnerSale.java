@@ -130,7 +130,6 @@ public class CreatePartnerSale extends AppCompatActivity implements View.OnClick
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if(list.size()!=0){
-                    Log.wtf("sadasd","sasd");
                     getPartnersSales(subcategories.get(i).getId(),Partner_City);
                 }
             }
@@ -187,11 +186,9 @@ public class CreatePartnerSale extends AppCompatActivity implements View.OnClick
     private void getPartnersSales(String id,String city) {
         list.clear();
         String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=sales_list_sort&catid="+id+"&city="+city+"&sort=DESC";
-        Log.wtf("sadads",requestUrl);
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.wtf("sadads",response);
                 if (response.equals("\"\\u041d\\u0435\\u0442 \\u043f\\u0430\\u0440\\u0442\\u043d\\u0451\\u0440\\u043e\\u0432 \\u0432 \\u0434\\u0430\\u043d\\u043d\\u043e\\u0439 \\u043a\\u0430\\u0442\\u0435\\u0433\\u043e\\u0440\\u0438\\u0438\"")) {
                     list.add(new Bonuses("Список пуст",""));
                 } else {
@@ -200,7 +197,6 @@ public class CreatePartnerSale extends AppCompatActivity implements View.OnClick
                         for(int i = 0;i<j.length();i++){
                             JSONObject object = j.getJSONObject(i);
                             list.add(new Bonuses(object.getString("sale_name"),object.getString("sale_percent")+"%"));
-                            Log.wtf("asdsad",list.get(i).getName());
                         }
 
                     } catch (JSONException e) {

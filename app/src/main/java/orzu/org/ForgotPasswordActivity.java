@@ -265,7 +265,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 
                 mMessage = Objects.requireNonNull(response.body()).string();
-                Log.wtf("asdasd",mMessage);
                 if (mMessage.equals("\"phone exists\"")) {
                     ForgotPasswordActivity.this.runOnUiThread(new Runnable() {
                         public void run() {
