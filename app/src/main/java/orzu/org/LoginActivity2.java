@@ -249,13 +249,14 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                             Common.referrer="";
                         }
                     });
+                    Log.e("ERRORRR", mMessage);
                     Intent intent = new Intent(getApplicationContext(), PhoneLoginActivity.class);
                     startActivity(intent);
                     finish();
                 }
                 try {
                     obj = new JSONObject(mMessage);
-                    mStatus = obj.getString("auth_status");
+                    Log.e("ERRORRR", mMessage);
                     mToken = obj.getString("_token");
                     mID = obj.getLong("id");
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
