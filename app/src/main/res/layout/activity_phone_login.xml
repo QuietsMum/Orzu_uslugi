@@ -214,6 +214,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="12dp"
                     android:layout_marginBottom="12dp"
@@ -223,29 +224,31 @@
                     <TextView
                         android:id="@+id/forgot_pwd"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.9"
-                        android:background="@drawable/login_btn_back"
+                        android:layout_height="30dp"
+                        android:layout_weight="0.6"
+                        android:background="@drawable/circle_button_center"
                         android:padding="3dp"
+                        android:gravity="center"
                         android:text="@string/forgot_pwd"
                         android:textAlignment="center"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@color/colorOrangeRed" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.2" />
+                        android:layout_weight="0.8" />
 
                     <TextView
                         android:id="@+id/button_phone_regist"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.9"
-                        android:background="@drawable/login_btn_back"
+                        android:layout_height="30dp"
+                        android:layout_weight="0.6"
+                        android:background="@drawable/gradient_of_next_button_calendar"
                         android:padding="3dp"
                         android:text="@string/registration"
                         android:textAlignment="center"
-                        android:textColor="@android:color/black" />
+                        android:gravity="center"
+                        android:textColor="@android:color/white" />
                 </LinearLayout>
 
             </LinearLayout>

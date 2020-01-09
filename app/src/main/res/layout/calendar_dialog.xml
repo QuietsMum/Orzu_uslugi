@@ -57,6 +57,7 @@
                 android:background="@drawable/gradient_of_next_button_calendar"
                 android:gravity="center"
                 android:text="Далее"
+                android:textColor="@android:color/white"
                 android:textAlignment="center" />
         </LinearLayout>
 

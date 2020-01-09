@@ -197,6 +197,14 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(getApplicationContext(), PhoneLoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     public void getHttpResponse() throws IOException {
         String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=register_user&phone="
                 + mPhone
@@ -250,9 +258,9 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                             AlertDialog alertDialog = new AlertDialog.Builder(LoginActivity2.this).create();
                             alertDialog.setTitle("");
                             alertDialog.setMessage("Этот номер уже зарегистрирован");
-                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Готова",
+                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Готово",
                                     new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
+                                        public void onClick(DialogInterface dialog1, int which) {
                                             dialog.dismiss();
                                             Intent intent = new Intent(getApplicationContext(), PhoneLoginActivity.class);
                                             startActivity(intent);
@@ -318,11 +326,12 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                             AlertDialog alertDialog = new AlertDialog.Builder(LoginActivity2.this).create();
                             alertDialog.setTitle("");
                             alertDialog.setMessage("Не правильный номер");
-                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Готова",
+                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Готово",
                                     new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            alertDialog.dismiss();
+                                        public void onClick(DialogInterface dialog1, int which) {
                                             dialog.dismiss();
+                                            progressBar.setVisibility(View.INVISIBLE);
+                                            alertDialog.dismiss();
                                         }
                                     });
                             alertDialog.show();
@@ -330,9 +339,9 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                             AlertDialog alertDialog = new AlertDialog.Builder(LoginActivity2.this).create();
                             alertDialog.setTitle("");
                             alertDialog.setMessage("На сегодня ваш лимит исчерпан. Повторите позже");
-                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Готова",
+                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Готово",
                                     new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
+                                        public void onClick(DialogInterface dialog1, int which) {
                                             dialog.dismiss();
                                             alertDialog.dismiss();
                                             progressBar.setVisibility(View.INVISIBLE);
@@ -345,10 +354,11 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                             AlertDialog alertDialog = new AlertDialog.Builder(LoginActivity2.this).create();
                             alertDialog.setTitle("");
                             alertDialog.setMessage("Нету интернет подключения");
-                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Готова",
+                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Готово",
                                     new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
+                                        public void onClick(DialogInterface dialog1, int which) {
                                             timer.onFinish();
+                                            progressBar.setVisibility(View.INVISIBLE);
                                             alertDialog.dismiss();
                                         }
                                     });

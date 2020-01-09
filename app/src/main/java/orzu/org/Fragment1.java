@@ -15,7 +15,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.JsonReader;
 import android.util.JsonToken;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,7 +30,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.widget.NestedScrollView;
@@ -71,12 +69,11 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import orzu.org.models.MyTaskApi;
-import orzu.org.models.MyTasks;
 import orzu.org.models.NetworkService;
 import orzu.org.ui.login.model;
 import retrofit2.Retrofit;
 
-import static com.yandex.runtime.Runtime.getApplicationContext;
+
 
 public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     String filter = "";
@@ -366,7 +363,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 });
             }
         });
-//make the request to your server as indicated in your request url
         Volley.newRequestQueue(getActivity()).add(stringRequest);
     }
 
