@@ -56,6 +56,7 @@ public class NotificationsMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().containsKey("ID")) {
             showNotification(remoteMessage);
         }
+        Log.wtf("asasdas",remoteMessage.getData()+"");
     }
 
     private void showNotification(@NotNull RemoteMessage remoteMessage) {
@@ -170,7 +171,7 @@ public class NotificationsMessagingService extends FirebaseMessagingService {
                     int index =j.length()-1;
                     JSONObject object = j.getJSONObject(index);
                     Date date = Calendar.getInstance().getTime();
-                    DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                     String strDate = dateFormat.format(date);
 
                     String created_at = strDate;

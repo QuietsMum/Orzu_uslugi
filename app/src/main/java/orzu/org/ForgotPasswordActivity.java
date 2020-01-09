@@ -1,6 +1,7 @@
 package orzu.org;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
@@ -9,6 +10,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -201,14 +203,37 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
                 if (mMessage.equals("\"password changed\"")) {
                     ForgotPasswordActivity.this.runOnUiThread(new Runnable() {
                         public void run() {
-                            Toast.makeText(ForgotPasswordActivity.this, "Пароль изменен", Toast.LENGTH_SHORT).show();
+                            AlertDialog alertDialog = new AlertDialog.Builder(ForgotPasswordActivity.this).create();
+                            alertDialog.setTitle("");
+                            alertDialog.setMessage("Пароль изменен");
+                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Готово",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog1, int which) {
+                                            dialog.dismiss();
+                                            progressBar.setVisibility(View.INVISIBLE);
+                                            alertDialog.dismiss();
+                                            Intent intent = new Intent(ForgotPasswordActivity.this, PhoneLoginActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    });
+                            alertDialog.show();
                         }
                     });
-                    Intent intent = new Intent(ForgotPasswordActivity.this, PhoneLoginActivity.class);
-                    startActivity(intent);
-                    finish();
+
                 } else {
-                    Toast.makeText(ForgotPasswordActivity.this, "Произошла ошибка. Повторите занова", Toast.LENGTH_SHORT).show();
+                    AlertDialog alertDialog = new AlertDialog.Builder(ForgotPasswordActivity.this).create();
+                    alertDialog.setTitle("");
+                    alertDialog.setMessage("Произошла ошибка. Повторите занова");
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Готово",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog1, int which) {
+                                    dialog.dismiss();
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                    alertDialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
                 }
             }
         });
@@ -232,9 +257,21 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 mMessage = e.getMessage();
                 if (Objects.equals(mMessage, "noAuth")) {
-                    Toast.makeText(getApplicationContext(), "Пользователь не зарегестрирован", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity2.class);
-                    startActivity(intent);
+                    AlertDialog alertDialog = new AlertDialog.Builder(ForgotPasswordActivity.this).create();
+                    alertDialog.setTitle("");
+                    alertDialog.setMessage("Пользователь не зарегестрирован");
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Готово",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog1, int which) {
+                                    dialog.dismiss();
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                    alertDialog.dismiss();
+                                    Intent intent = new Intent(getApplicationContext(), PhoneLoginActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            });
+                    alertDialog.show();
                 } else {
                     Dialog dialog = new Dialog(ForgotPasswordActivity.this, android.R.style.Theme_Material_Light_NoActionBar);
                     dialog.setContentView(R.layout.dialog_no_internet);
@@ -358,19 +395,47 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
                     public void onVerificationFailed(FirebaseException e) {
                         if (e instanceof FirebaseAuthInvalidCredentialsException) {
                             // Invalid request
-                            Toast.makeText(ForgotPasswordActivity.this, "Не правильный номер", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(ForgotPasswordActivity.this,PhoneLoginActivity.class));
-                            finish();
+                            AlertDialog alertDialog = new AlertDialog.Builder(ForgotPasswordActivity.this).create();
+                            alertDialog.setTitle("");
+                            alertDialog.setMessage("Не правильный номер");
+                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Готово",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog1, int which) {
+                                            dialog.dismiss();
+                                            progressBar.setVisibility(View.INVISIBLE);
+                                            alertDialog.dismiss();
+                                        }
+                                    });
+                            alertDialog.show();
                         } else if (e instanceof FirebaseTooManyRequestsException) {
                             // SMS quota exceeded
-                            dialog.dismiss();
-                            progressBar.setVisibility(View.INVISIBLE);
-                            Toast.makeText(ForgotPasswordActivity.this, "На сегодня ваш лимит исчерпан. Повторите позжеjh", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(ForgotPasswordActivity.this,PhoneLoginActivity.class));
-                            finish();
+                            AlertDialog alertDialog = new AlertDialog.Builder(ForgotPasswordActivity.this).create();
+                            alertDialog.setTitle("");
+                            alertDialog.setMessage("На сегодня ваш лимит исчерпан. Повторите позже");
+                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Готово",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog1, int which) {
+                                            dialog.dismiss();
+                                            alertDialog.dismiss();
+                                            progressBar.setVisibility(View.INVISIBLE);
+                                            startActivity(new Intent(ForgotPasswordActivity.this,PhoneLoginActivity.class));
+                                            finish();
+                                        }
+                                    });
+                            alertDialog.show();
                         } else {
-                            Toast.makeText(ForgotPasswordActivity.this, "Нету интернет подключения", Toast.LENGTH_SHORT).show();
-                            timer.onFinish();
+                            AlertDialog alertDialog = new AlertDialog.Builder(ForgotPasswordActivity.this).create();
+                            alertDialog.setTitle("");
+                            alertDialog.setMessage("Нету интернет подключения");
+                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Готово",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog1, int which) {
+                                            timer.onFinish();
+                                            progressBar.setVisibility(View.INVISIBLE);
+                                            alertDialog.dismiss();
+                                        }
+                                    });
+                            alertDialog.show();
                         }
 
                     }

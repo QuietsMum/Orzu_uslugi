@@ -73,6 +73,8 @@ public class UserSettings extends AppCompatActivity implements View.OnClickListe
                                 DBHelper dbHelper = new DBHelper(UserSettings.this);
                                 SQLiteDatabase db = dbHelper.getWritableDatabase();
                                 db.execSQL("delete from " + "orzutable");
+                                db.execSQL("delete from " + "orzunotif");
+                                db.close();
                                 final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = prefs.edit();
                                 editor.clear();

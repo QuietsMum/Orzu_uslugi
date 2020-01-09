@@ -82,7 +82,7 @@ public class Fragment2 extends Fragment {
         cardView.setBackgroundResource(R.drawable.shape_card_topcorners);
         BottomNavigationView navigationView = view.findViewById(R.id.navigation);
         navigationView.setSelectedItemId(R.id.all_notif);
-
+        navigationView.setItemIconTintList(null);
         ProgressBar progressBar = view.findViewById(R.id.progressBarMain2);
         progressBar.setVisibility(View.INVISIBLE);
         no_task = view.findViewById(R.id.imageNoTask);

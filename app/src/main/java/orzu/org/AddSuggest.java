@@ -15,6 +15,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +40,7 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
     String idTask;
     TextView username;
     ImageView person_logo_sugg2,suggest_back;
-
+    ProgressBar progress_suggest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +61,7 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
         db.close();
         final SharedPreferences prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
         nameUser = prefs.getString(Util.TASK_USERNAME, "");
-
+        progress_suggest = findViewById(R.id.progress_suggest);
 
         suggest_back = findViewById(R.id.suggest_back);
         suggest_back.setOnClickListener(new View.OnClickListener() {
@@ -90,7 +91,7 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
     }
 
     public void sendSuggest() throws IOException {
-
+        progress_suggest.setVisibility(View.VISIBLE);
         String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=task_requests" +
                 "&act=input" +
                 "&task_id=" + idTask +
@@ -111,6 +112,7 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
             public void onFailure(@NotNull Call call, IOException e) {
                 AddSuggest.this.runOnUiThread(new Runnable() {
                     public void run() {
+                        progress_suggest.setVisibility(View.INVISIBLE);
                         Dialog dialog = new Dialog(AddSuggest.this, android.R.style.Theme_Material_Light_NoActionBar);
                         dialog.setContentView(R.layout.dialog_no_internet);
                         Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
