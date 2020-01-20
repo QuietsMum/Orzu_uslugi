@@ -1,6 +1,7 @@
 package orzu.org;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -11,15 +12,20 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -30,6 +36,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -45,10 +54,16 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.rilixtech.Country;
 import com.rilixtech.CountryCodePicker;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -86,6 +101,8 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
     private String phoneVerificationId;
     CountDownTimer timer;
 
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +117,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS}, MY_REQUEST);
             }
         }
+
         cardview = findViewById(R.id.card_of_registr);
         cardview.setBackgroundResource(R.drawable.shape_card_topcorners);
         progressBar = findViewById(R.id.progressBarLogin_reg);
@@ -124,9 +142,14 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                 phonCount.setText(code);
             }
         });
+        if (Common.countryCode.length() != 0) {
+            ccp.setCountryForNameCode(Common.countryCode.toUpperCase());
+
+        }
         code = ccp.getSelectedCountryCodeWithPlus();
         phonCount.setText(code);
         button.setOnClickListener(this);
+
     }
 
     private static final int MY_REQUEST = 0;
@@ -137,7 +160,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
             case MY_REQUEST: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this, "Хорошо", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     Toast.makeText(this, "Напишите код вручную", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -153,7 +176,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
             mName = name.getText().toString();
             mPassword = pass.getText().toString();
             sendCode();
-             dialog = new Dialog(this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
+            dialog = new Dialog(this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
             dialog.setContentView(R.layout.alert_dialog);
             input = dialog.findViewById(R.id.editTextSms);
             Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
@@ -186,7 +209,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                 public void onClick(View v) {
                     if (!input.getText().toString().isEmpty()) {
                         verifyCode();
-                    }else{
+                    } else {
                         Toast.makeText(LoginActivity2.this, "Введите код", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -269,11 +292,11 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                                     });
                             alertDialog.show();
                             Toast.makeText(LoginActivity2.this, "", Toast.LENGTH_SHORT).show();
-                            Common.referrer="";
+                            Common.referrer = "";
                         }
                     });
 
-                }else {
+                } else {
                     try {
                         obj = new JSONObject(mMessage);
                         mStatus = obj.getString("auth_status");
@@ -298,6 +321,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
             }
         });
     }
+
 
     public void sendCode() {
         setUpVerificatonCallbacks();
@@ -345,12 +369,12 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                                             dialog.dismiss();
                                             alertDialog.dismiss();
                                             progressBar.setVisibility(View.INVISIBLE);
-                                            startActivity(new Intent(LoginActivity2.this,PhoneLoginActivity.class));
+                                            startActivity(new Intent(LoginActivity2.this, PhoneLoginActivity.class));
                                             finish();
                                         }
                                     });
                             alertDialog.show();
-                        }else{
+                        } else {
                             AlertDialog alertDialog = new AlertDialog.Builder(LoginActivity2.this).create();
                             alertDialog.setTitle("");
                             alertDialog.setMessage("Нету интернет подключения");
@@ -404,6 +428,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onResume() {
         super.onResume();
+
     }
 
     @Override

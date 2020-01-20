@@ -34,5 +34,5 @@ public class Common {
     static String sad = "";
     static String neutral = "";
     static String happy = "";
-
+    static String countryCode="";
 }
