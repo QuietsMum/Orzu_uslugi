@@ -225,8 +225,8 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
                         @Override
                         public void run() {
                             nameUser.setText(text);
-                            taskCountReq.setText(mCountReq);
-                            taskCount.setText(mCount);
+                            taskCountReq.setText(mCount);
+                            taskCount.setText(mCountReq);
                             userCity.setText(mCity);
                             userBday.setText(mBday);
                             userSex.setText(mSex);
