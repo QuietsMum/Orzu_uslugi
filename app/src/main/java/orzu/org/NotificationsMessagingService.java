@@ -56,7 +56,6 @@ public class NotificationsMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().containsKey("ID")) {
             showNotification(remoteMessage);
         }
-        Log.wtf("asasdas",remoteMessage.getData()+"");
     }
 
     private void showNotification(@NotNull RemoteMessage remoteMessage) {

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -230,7 +231,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
                             userBday.setText(mBday);
                             userSex.setText(mSex);
                             userNarr.setText(mNarr);
-                            Picasso.get().load("https://orzu.org" + image).fit().centerCrop().into(imageViewName);
+                            Picasso.get().load("https://projectapi.pw" + image).fit().centerCrop().into(imageViewName);
                         }
                     });
                 } catch (JSONException e) {
@@ -383,7 +384,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
                                         feedbackname1.setText(name[0]);
                                         feedbacknarr1.setText(narr[0]);
                                         feedbackcat1.setText(date[0]);
-                                        Picasso.get().load("https://orzu.org" + image1).into(feedbackimgUser1);
+                                        Picasso.get().load("https://projectapi.pw" + image1).into(feedbackimgUser1);
                                     }
                                 });
                             } else {
@@ -423,7 +424,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
                                         feedbackname2.setText(name[1]);
                                         feedbacknarr2.setText(narr[1]);
                                         feedbackcat2.setText(date[1]);
-                                        Picasso.get().load("https://orzu.org" + image2).into(feedbackimgUser2);
+                                        Picasso.get().load("https://projectapi.pw" + image2).into(feedbackimgUser2);
                                     }
                                 });
                             }

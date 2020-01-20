@@ -782,7 +782,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                             if (myTask.equals("my")) {
                                 textcoins.setText(wallet);
                             }
-                            Picasso.get().load("https://projectapi.pw" + image.replaceAll("\\\\","")).fit().centerCrop().into(imageViewName);
+                            Picasso.get().load("https://projectapi.pw" + image).fit().centerCrop().into(imageViewName);
                             Animation animZoomIn = AnimationUtils.loadAnimation(getApplicationContext(),
                                     R.anim.zoom_in);
                             buttonGettask.startAnimation(animZoomIn);
