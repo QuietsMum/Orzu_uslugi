@@ -22,11 +22,21 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".LastPageSale"></activity>
-        <activity android:name=".CreatePartnerSale" />
-        <activity android:name=".PartnerDetails" />
-        <activity android:name=".PortfolioActivity" />
-        <activity android:name=".ForgotPasswordActivity" />
-        <activity android:name=".FullScreenImageActivity" />
+        <activity
+            android:name=".CreatePartnerSale"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PartnerDetails"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PortfolioActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FullScreenImageActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ItemSubsNews"
             android:screenOrientation="portrait" />

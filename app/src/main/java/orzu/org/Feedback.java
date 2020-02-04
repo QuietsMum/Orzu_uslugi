@@ -63,6 +63,7 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
         getWindow().setStatusBarColor(getResources().getColor(R.color.back_for_feed));
         setContentView(R.layout.activity_feedback);
         idUser = Objects.requireNonNull(getIntent().getExtras()).getString("idUserFeedback");
+
         nameUserFeedbackto = getIntent().getExtras().getString("nameUserFeedbackto");
         sort = findViewById(R.id.sort);
         sort.setVisibility(View.INVISIBLE);
@@ -100,6 +101,9 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
                 startActivity(intent2);
             }
         });
+        if(idUser.equals(Common.userId)){
+
+        }
         requestFeedback();
     }
 

@@ -110,6 +110,7 @@ public class FeedbackTask extends AppCompatActivity implements MainItemSelect {
         String stars_hap = "Hap";
         String selected = "Select";
         String phone = "Phone";
+        String avatar = "Avatar";
         data = new ArrayList<>();
         TaskAdapter arrayAdapter1 = new TaskAdapter(this, data);
         arrayAdapter1.setClickListener(new TaskAdapter.ItemClickListener() {
@@ -182,6 +183,7 @@ public class FeedbackTask extends AppCompatActivity implements MainItemSelect {
                         m.put(stars_hap, jsonObject.getString("userstars_happy"));
                         m.put(selected, jsonObject.getString("selected"));
                         m.put(phone, jsonObject.getString("userphone"));
+                        m.put(avatar, jsonObject.getString("avatar"));
                         data.add(m);
                     }
                     runOnUiThread(new Runnable() {

@@ -70,12 +70,13 @@
                     android:id="@+id/expListView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingRight="10dp"
-                    android:paddingLeft="10dp"
+                    android:layout_marginLeft="26dp"
+                    android:layout_marginRight="26dp"
                     android:paddingBottom="85dp"
                     android:clipToPadding="false"
-                    android:paddingTop="8dp"
-                    android:groupIndicator="@drawable/group_indicator"></ExpandableListView>
+                    android:divider="@drawable/drwbl"
+                    android:scrollbars="none"
+                    android:paddingTop="8dp" />
 
                <androidx.constraintlayout.widget.ConstraintLayout
                    android:layout_width="match_parent"

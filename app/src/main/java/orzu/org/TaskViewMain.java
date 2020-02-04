@@ -268,22 +268,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         animation.setRepeatCount(Animation.INFINITE); //repeating indefinitely
         animation.setRepeatMode(Animation.REVERSE); //animation will start from end point once ended.
         if (myTask.equals("my")) {
-            buttonGettask.setText("Посмотреть отклики");
-            buttonGettaskShim.setText("Посмотреть отклики");
-            delete.setVisibility(View.VISIBLE);
-            TranslateAnimation animationn = new TranslateAnimation(0.0f, 0.0f,
-                    1500.0f, 0.0f);
-            animationn.setDuration(500);
-            cardView.startAnimation(animationn);
-            buttonGettask.setVisibility(View.GONE);
-            new Handler().postDelayed(new Runnable() {
-                public void run() {
-                    buttonGettask.setVisibility(View.VISIBLE);
-                    Animation animZoomIn = AnimationUtils.loadAnimation(getApplicationContext(),
-                            R.anim.zoom_in);
-                    buttonGettask.startAnimation(animZoomIn);
-                }
-            }, animationn.getDuration());
+            myTaskBaby();
         }
         if (opt.equals("view")) {
             task = new AsyncOrzuTask();
@@ -373,6 +358,25 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void myTaskBaby() {
+        buttonGettask.setText("Посмотреть отклики");
+        buttonGettaskShim.setText("Посмотреть отклики");
+        delete.setVisibility(View.VISIBLE);
+        TranslateAnimation animationn = new TranslateAnimation(0.0f, 0.0f,
+                1500.0f, 0.0f);
+        animationn.setDuration(500);
+        cardView.startAnimation(animationn);
+        buttonGettask.setVisibility(View.GONE);
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                buttonGettask.setVisibility(View.VISIBLE);
+                Animation animZoomIn = AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.zoom_in);
+                buttonGettask.startAnimation(animZoomIn);
+            }
+        }, animationn.getDuration());
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -400,6 +404,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.view_user_info:
+
                 Intent intent = new Intent(getApplication(), UserView.class);
                 intent.putExtra("idhis", m_new.get(useridList).toString());
                 startActivity(intent);
@@ -455,6 +460,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                     }
                     jsonReader[0].endArray();
                 }
+
                 jsonReader[0].endArray();
                 jsonReader[0].close();
                 myConnection[0].disconnect();
@@ -473,6 +479,10 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
 
         protected void onPostExecute(ArrayList<Map<String, Object>> result) {
             super.onPostExecute(result);
+            if(m_new.get(useridList).equals(Common.userId)){
+                myTask = "my";
+                myTaskBaby();
+            }
             try {
                 if (myConnection[0].getResponseCode() == 200) {
                     taskName.setText(m_new.get(taskList).toString());
@@ -571,6 +581,8 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                             TaskViewMain.this.runOnUiThread(new Runnable() {
                                 public void run() {
                                     delete.setVisibility(View.VISIBLE);
+                                    myTaskBaby();
+                                    myTask = "my";
                                 }
                             });
                         }
@@ -850,6 +862,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                 urlLocation +
                 urlPrice +
                 "&utoken=" + tokenUser;
+        Log.wtf("ASdsadsa",url);
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)

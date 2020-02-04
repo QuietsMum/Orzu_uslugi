@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -43,6 +44,7 @@ public class AddFeedback extends AppCompatActivity implements View.OnClickListen
     int like;
     TextView username;
     ImageView back;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,6 +131,7 @@ public class AddFeedback extends AppCompatActivity implements View.OnClickListen
                 .header("Content-Type", "application/json")
                 .build();
 
+
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -161,20 +164,21 @@ public class AddFeedback extends AppCompatActivity implements View.OnClickListen
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                if(like==0){
+                if (like == 0) {
                     sendMinusFeedback();
-                }else{
+                } else {
                     sendPlusFeedback();
                 }
             }
         });
     }
+
     public void sendMinusFeedback() throws IOException {
 
         String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param" +
                 "&act=edit_bonus_feedback_minus" +
                 "&userid=" + idUser +
-                "&useridTo=" + idUserTo+
+                "&useridTo=" + idUserTo +
                 "&utoken=" + tokenUser;
         OkHttpClient client = new OkHttpClient();
 
@@ -222,12 +226,13 @@ public class AddFeedback extends AppCompatActivity implements View.OnClickListen
             }
         });
     }
+
     public void sendPlusFeedback() throws IOException {
 
         String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param" +
                 "&act=edit_bonus_feedback_plus" +
                 "&userid=" + idUser +
-                "&useridTo=" + idUserTo+
+                "&useridTo=" + idUserTo +
                 "&utoken=" + tokenUser;
         OkHttpClient client = new OkHttpClient();
 
@@ -301,13 +306,16 @@ public class AddFeedback extends AppCompatActivity implements View.OnClickListen
                 like = 2;
                 break;
             case R.id.button_add_feed:
-                try {
-                    sendFeedback();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (idUser.equals(idUserTo)) {
+                    Toast.makeText(this, "Вы не можете оставлять отзывы себе", Toast.LENGTH_SHORT).show();
+                } else {
+                    try {
+                        sendFeedback();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    break;
                 }
-                break;
-
         }
     }
 }

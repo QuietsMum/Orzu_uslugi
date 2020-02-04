@@ -114,11 +114,13 @@ public class Main2Activity extends AppCompatActivity
     TextView next_right_side;
     FragmentManager fm;
     List<Bonuses> bonuses = new ArrayList<>();
-
+    SharedPreferences prefs;
     private void setupBeams() {
+        prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
         PushNotifications.start(getApplicationContext(), "e33cda0a-16d0-41cd-a5c9-8ae60b9b7042");
         PushNotifications.clearDeviceInterests();
         PushNotifications.addDeviceInterest("user_" + idUser);
+
         PushNotifications.getDeviceInterests();
         for (int i = 0; i < subsServer.size(); i++) {
             PushNotifications.addDeviceInterest("cat_" + subsServer.get(i));

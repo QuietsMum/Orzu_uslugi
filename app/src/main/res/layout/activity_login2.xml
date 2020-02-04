@@ -50,10 +50,12 @@
             android:layout_height="0dp"
             android:layout_marginEnd="16dp"
             android:textColor="@color/colorPrimaryLight"
+            android:scaleType="centerCrop"
             app:backgroundTint="@color/colorAccent"
+            app:maxImageSize="45dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view_for_btn2"
-            app:srcCompat="@drawable/baseline_keyboard_arrow_right_black_18dp"
+            app:srcCompat="@drawable/ic_keyboard"
             app:tint="@color/colorBackgrndFrg" />
 
         <LinearLayout
@@ -91,7 +93,8 @@
                     android:layout_marginLeft="12dp"
                     android:text="@string/new_name"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="55dp"/>
 
                 <EditText
                     android:id="@+id/editTextNameUser"

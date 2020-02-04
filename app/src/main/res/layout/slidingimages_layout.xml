@@ -2,30 +2,29 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:adjustViewBounds="true"
-        android:gravity="top"
-        android:background="@drawable/ic_intro_back_1"
-         />
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:background="@drawable/ic_intro_back_1"
+            android:gravity="top" />
+
         <ImageView
             android:id="@+id/image2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
             android:layout_marginTop="30dp"
+            android:adjustViewBounds="true"
             android:gravity="top"
-            app:layout_constraintTop_toTopOf="parent"
             android:src="@mipmap/ic_launcher"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,8 +45,8 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="8dp"
                 android:gravity="center"
-                android:textColor="@color/colorBackgrndFrg"
                 android:text="TextView"
+                android:textColor="@color/colorBackgrndFrg"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -56,13 +55,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="24dp"
                 android:layout_marginStart="22dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="22dp"
+                android:layout_marginBottom="24dp"
                 android:gravity="center"
-                android:textColor="@color/colorBackgrndFrg"
                 android:text="TextView"
+                android:textColor="@color/colorBackgrndFrg"
                 android:textSize="14sp" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

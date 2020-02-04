@@ -86,6 +86,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
         setContentView(R.layout.activity_user_view);
         nameUser = findViewById(R.id.name_fname_his);
         idUser = getIntent().getExtras().getString("idhis");
+
         feedbackButtun = findViewById(R.id.linear_feedback_click);
         feedbackButtunAdd = findViewById(R.id.linear_feedback_addto);
         feedbackButtun.setOnClickListener(this);
@@ -101,6 +102,9 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
                 finish();
             }
         });
+        if(idUser.equals(Common.userId)){
+            feedbackButtunAdd.setVisibility(View.GONE);
+        }
         imageView = findViewById(R.id.img);
         feedbackname1 = findViewById(R.id.userview_feedbackname);
         feedbackplus1 = findViewById(R.id.userview_feedbackplus);

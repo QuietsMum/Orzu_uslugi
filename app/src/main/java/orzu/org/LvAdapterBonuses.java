@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class LvAdapterBonuses extends RecyclerView.Adapter<LvAdapterBonuses.MyViewHolder> {
+public class  LvAdapterBonuses extends RecyclerView.Adapter<LvAdapterBonuses.MyViewHolder> {
     Context context;
     List<BonusList> list;
     LayoutInflater inflater;

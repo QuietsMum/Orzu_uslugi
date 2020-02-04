@@ -606,6 +606,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     map = truedata.get(position);
                     intent.putExtra("id", map.get(idList).toString());
                     intent.putExtra("opt", "view");
+
                     intent.putExtra("mytask", "not");
                     startActivity(intent);
                 }

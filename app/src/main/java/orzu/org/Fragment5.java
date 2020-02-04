@@ -291,6 +291,8 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
                             case 0:
                                 zero_index.setVisibility(View.VISIBLE);
                                 one_index.setVisibility(View.GONE);
+                                one_index.scrollTo(0,0);
+                                bonus_recycler_qr.scrollToPosition(0);
                                 three_index.setVisibility(View.GONE);
                                 break;
                             case 1:
@@ -598,10 +600,12 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bonus_left:
+                bonus_rec.smoothScrollToPosition(0);
                 tri_right.setVisibility(View.INVISIBLE);
                 tri_left.setVisibility(View.VISIBLE);
                 three_index.setVisibility(View.GONE);
                 left_bonus.setVisibility(View.VISIBLE);
+                bonus_recycler.smoothScrollToPosition(0);
                 break;
             case R.id.bonus_right:
                 tri_left.setVisibility(View.INVISIBLE);

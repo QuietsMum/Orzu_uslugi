@@ -50,11 +50,15 @@ public class NotificationsMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(@NotNull RemoteMessage remoteMessage) {
         prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        dbHelper = new DBHelper(this);
-        editor.putString("New_task", remoteMessage.getData() + "");
-        editor.apply();
-        if (remoteMessage.getData().containsKey("ID")) {
-            showNotification(remoteMessage);
+        Log.wtf("sdad",remoteMessage.getData().get("city"));
+        if(remoteMessage.getData().get("city").equals(prefs.getString("UserCityPref", ""))) {
+
+            dbHelper = new DBHelper(this);
+            editor.putString("New_task", remoteMessage.getData() + "");
+            editor.apply();
+            if (remoteMessage.getData().containsKey("ID")) {
+                showNotification(remoteMessage);
+            }
         }
     }
 

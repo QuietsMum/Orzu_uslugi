@@ -18,6 +18,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +60,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         holder.nat.setText(logos.get(position).get("Nat").toString());
         holder.happy.setText(logos.get(position).get("Hap").toString());
         holder.price.setText(logos.get(position).get("Цена").toString());
+        Picasso.get().load("https://projectapi.pw" + logos.get(position).get("Avatar").toString()).fit().centerCrop().into(holder.image);
         if (logos.get(position).get("Select").toString().equals("1")) {
             holder.button2.setVisibility(View.VISIBLE);
         }

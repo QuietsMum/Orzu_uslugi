@@ -116,7 +116,7 @@
                     android:background="@null"
                     android:gravity="top"
                     android:hint="Предложите цену"
-                    android:inputType="textNoSuggestions"
+                    android:inputType="numberDecimal"
                     android:padding="13dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"

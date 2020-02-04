@@ -9,8 +9,4 @@
     tools:showIn="@layout/app_bar_main2"
     android:id="@+id/container">
 
-
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout >
