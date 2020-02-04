@@ -308,7 +308,7 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
                 }
                 if (result.equals("\"Not tasks yet\"")) {
                     noTasksYet = true;
-                    Objects.requireNonNull(Fragment4.this.getActivity()).runOnUiThread(new Runnable() {
+                    requireActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             progress_loading.setVisibility(View.GONE);
                         }
@@ -389,7 +389,7 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
                 e.printStackTrace();
             } catch (IOException e) {
                 if (status != 200) {
-                    Objects.requireNonNull(Fragment4.this.getActivity()).runOnUiThread(new Runnable() {
+                    requireActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             imagenotask.setVisibility(View.VISIBLE);
                             textnotask.setVisibility(View.VISIBLE);
@@ -514,7 +514,7 @@ public class Fragment4 extends Fragment implements View.OnClickListener, SwipeRe
                 e.printStackTrace();
             } catch (IOException e) {
                 if (status != 200) {
-                    Objects.requireNonNull(Fragment4.this.getActivity()).runOnUiThread(new Runnable() {
+                    requireActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             imagenotask.setVisibility(View.VISIBLE);
                             textnotask.setVisibility(View.VISIBLE);

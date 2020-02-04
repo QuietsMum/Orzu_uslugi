@@ -206,7 +206,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                requireActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         Dialog dialog = new Dialog(Objects.requireNonNull(getContext()), android.R.style.Theme_Material_Light_NoActionBar);
                         dialog.setContentView(R.layout.dialog_no_internet);
@@ -237,7 +237,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if (getActivity() == null)
                     return;
-                getActivity().runOnUiThread(new Runnable() {
+                requireActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         Toast.makeText(getContext(), "Ваш профиль изменен", Toast.LENGTH_SHORT).show();
                     }
@@ -257,7 +257,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                requireActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         Dialog dialog = new Dialog(getContext(), android.R.style.Theme_Material_Light_NoActionBar);
                         dialog.setContentView(R.layout.dialog_no_internet);
@@ -313,7 +313,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                     if (mStatus.equals("false")) {
                         statusImg.setVisibility(View.INVISIBLE);
                     } else statusImg.setVisibility(View.VISIBLE);
-                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                    requireActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             wallet.setText(wallet_of_str);
@@ -408,7 +408,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, IOException e) {
-                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                requireActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         Dialog dialog = new Dialog(Objects.requireNonNull(getContext()), android.R.style.Theme_Material_Light_NoActionBar);
                         dialog.setContentView(R.layout.dialog_no_internet);
@@ -435,7 +435,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 final String mMessage = Objects.requireNonNull(response.body()).string();
                 if (mMessage.equals(Character.toString((char) dchar) + "No reviews yet" + Character.toString((char) dchar))) {
-                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                    requireActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             feedbackname1.setVisibility(View.GONE);
@@ -466,7 +466,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                         if (lenght > 1) {
                             lenght = 2;
                         } else if (lenght == 1) {
-                            Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                            requireActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     feedbackname2.setVisibility(View.GONE);
@@ -486,7 +486,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                             if (i == 0) {
                                 long like = jsonObject.getLong("like");
                                 if (like == 0L) {
-                                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                                    requireActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             feedbackplus1.setText("-1");
@@ -494,7 +494,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                                         }
                                     });
                                 } else if (like == 1L) {
-                                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                                    requireActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             feedbackplus1.setText("0");
@@ -502,7 +502,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                                         }
                                     });
                                 } else if (like == 2L) {
-                                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                                    requireActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             feedbackplus1.setText("+1");
@@ -514,7 +514,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                                 narr[0] = jsonObject.getString("narrative");
                                 date[0] = jsonObject.getString("datein");
                                 image1 = jsonObject.getString("avatar");
-                                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                                requireActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         feedbackname1.setText(name[0]);
@@ -526,7 +526,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                             } else {
                                 long like = jsonObject.getLong("like");
                                 if (like == 0L) {
-                                    getActivity().runOnUiThread(new Runnable() {
+                                    requireActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             feedbackplus2.setText("-1");
@@ -534,7 +534,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                                         }
                                     });
                                 } else if (like == 1L) {
-                                    getActivity().runOnUiThread(new Runnable() {
+                                    requireActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             feedbackplus2.setText("0");
@@ -542,7 +542,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                                         }
                                     });
                                 } else if (like == 2L) {
-                                    getActivity().runOnUiThread(new Runnable() {
+                                    requireActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             feedbackplus2.setText("+1");
@@ -554,7 +554,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                                 narr[1] = jsonObject.getString("narrative");
                                 date[1] = jsonObject.getString("datein");
                                 image2 = jsonObject.getString("avatar");
-                                getActivity().runOnUiThread(new Runnable() {
+                                requireActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         feedbackname2.setText(name[1]);

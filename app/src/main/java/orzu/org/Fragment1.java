@@ -166,7 +166,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         progress_for_task = view.findViewById(R.id.progress_for_task);
         create_task_main = view.findViewById(R.id.create_task_main);
         editFind = view.findViewById(R.id.editFind);
-        if (Common.referrer.length() > 0) {
+        if (Common.referrer.length() > 0&&!Common.referrer.contains("google")) {
             plusBalance();
             Toast.makeText(getContext(), "Бонусы будут зашитаны: " + Common.referrer, Toast.LENGTH_SHORT).show();
         }
@@ -340,7 +340,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace(); //log the error resulting from the request for diagnosis/debugging
-                Fragment1.this.getActivity().runOnUiThread(new Runnable() {
+                requireActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         Dialog dialog = new Dialog(getContext(), android.R.style.Theme_Material_Light_NoActionBar);
                         dialog.setContentView(R.layout.dialog_no_internet);
@@ -351,6 +351,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                             public void onClick(View v) {
                                 plusBalance();
                                 dialog.dismiss();
+
                             }
                         });
                         new Handler().postDelayed(new Runnable() {
@@ -528,7 +529,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     track = false;
                     if (count != 1) {
                         catTask.cancel(true);
-                        Fragment1.this.getActivity().runOnUiThread(new Runnable() {
+                        requireActivity().runOnUiThread(new Runnable() {
                             public void run() {
                                 progress_loading.setVisibility(View.GONE);
                                 progress_for_task.setVisibility(View.GONE);
@@ -553,7 +554,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             } catch (IOException e) {
                 if (status != 200) {
                     if (getActivity() != null) {
-                        Fragment1.this.getActivity().runOnUiThread(new Runnable() {
+                        requireActivity().runOnUiThread(new Runnable() {
                             public void run() {
                                 imagenotask.setVisibility(View.VISIBLE);
                                 textnotask.setVisibility(View.VISIBLE);
@@ -686,7 +687,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 e.printStackTrace();
             } catch (IOException e) {
                 if (status != 200) {
-                    Fragment1.this.getActivity().runOnUiThread(new Runnable() {
+                    requireActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             imagenotask.setVisibility(View.VISIBLE);
                             textnotask.setVisibility(View.VISIBLE);
@@ -785,7 +786,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     if (count != 1) {
                         getFilteredSubs.cancel(true);
                     }
-                    Fragment1.this.getActivity().runOnUiThread(new Runnable() {
+                    requireActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             progress_loading.setVisibility(View.GONE);
                             progress_for_task.setVisibility(View.GONE);
@@ -811,7 +812,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 }
             } catch (IOException e) {
                 if (status != 200) {
-                    Fragment1.this.getActivity().runOnUiThread(new Runnable() {
+                    requireActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             imagenotask.setVisibility(View.VISIBLE);
                             textnotask.setVisibility(View.VISIBLE);
@@ -918,7 +919,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     if (count != 1) {
                         getFilteredSubsFiltered.cancel(true);
                     }
-                    Fragment1.this.getActivity().runOnUiThread(new Runnable() {
+                    requireActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             progress_loading.setVisibility(View.GONE);
                             progress_for_task.setVisibility(View.GONE);
@@ -948,7 +949,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 e.printStackTrace();
             } catch (IOException e) {
                 if (status != 200) {
-                    Fragment1.this.getActivity().runOnUiThread(new Runnable() {
+                    requireActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             imagenotask.setVisibility(View.VISIBLE);
                             textnotask.setVisibility(View.VISIBLE);
@@ -1065,7 +1066,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            Fragment1.this.getActivity().runOnUiThread(new Runnable() {
+                            requireActivity().runOnUiThread(new Runnable() {
                                 public void run() {
                                     progress_loading.setVisibility(View.GONE);
                                     progress_for_task.setVisibility(View.GONE);
@@ -1091,7 +1092,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 e.printStackTrace();
             } catch (IOException e) {
                 if (status != 200) {
-                    Fragment1.this.getActivity().runOnUiThread(new Runnable() {
+                    requireActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             imagenotask.setVisibility(View.VISIBLE);
                             textnotask.setVisibility(View.VISIBLE);
@@ -1204,7 +1205,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 e.printStackTrace();
             } catch (IOException e) {
                 if (status != 200) {
-                    Fragment1.this.getActivity().runOnUiThread(new Runnable() {
+                    requireActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             imagenotask.setVisibility(View.VISIBLE);
                             textnotask.setVisibility(View.VISIBLE);
