@@ -112,7 +112,6 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
     TextView sad;
     TextView nat;
     TextView hap;
-    TextView textcoins;
     ImageView taskMaketBack;
     ImageView taskMaketView;
     String mMessage;
@@ -242,7 +241,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         taskAmtTo = findViewById(R.id.taskMoney);
         taskNarr = findViewById(R.id.taskNarr);
         taskOpen = findViewById(R.id.taskOpen);
-        textcoins = findViewById(R.id.task_view_main_coins);
+
         nav_user = findViewById(R.id.taskCreator);
         taskMaketBack = findViewById(R.id.maket_task_white);
         taskMaketView = findViewById(R.id.imageback_new);
@@ -285,16 +284,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             taskMaketView.setVisibility(View.INVISIBLE);
             taskMaketBack.setVisibility(View.INVISIBLE);
             shim.setVisibility(View.INVISIBLE);
-            textcoins.setVisibility(View.VISIBLE);
-            textcoins.setText(Common.wallet + " Ni\n-100 Ni");
-            TextPaint paint = textcoins.getPaint();
-            float width = paint.measureText(String.valueOf(textcoins));
-            Shader textShader = new LinearGradient(0, 0, width, textcoins.getTextSize(),
-                    new int[]{
-                            Color.parseColor("#fe8c00"),
-                            Color.parseColor("#f83600"),
-                    }, null, Shader.TileMode.CLAMP);
-            textcoins.getPaint().setShader(textShader);
+
             TranslateAnimation animationn = new TranslateAnimation(0.0f, 0.0f,
                     1500.0f, 0.0f);
             animationn.setDuration(500);
@@ -791,9 +781,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                             sad.setText(sadnum);
                             nat.setText(natnum);
                             hap.setText(hapnum);
-                            if (myTask.equals("my")) {
-                                textcoins.setText(wallet);
-                            }
+
                             Picasso.get().load("https://projectapi.pw" + image).fit().centerCrop().into(imageViewName);
                             Animation animZoomIn = AnimationUtils.loadAnimation(getApplicationContext(),
                                     R.anim.zoom_in);
@@ -919,7 +907,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                         CreateTaskSubCategory.fa.finish();
                     }
                 }
-                minusBalance();
+               // minusBalance();
                 progressBar.setVisibility(View.INVISIBLE);
             }
         });

@@ -18,6 +18,9 @@ public class Receiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         Common.referrer = intent.getStringExtra(PLAY_STORE_REFERRER_KEY);
+        if(Common.referrer!=null&&Common.referrer.length()>15){
+            Common.referrer = "";
+        }
         // Do something with the referrer.
         // When you're done, pass the intent to the Google Analytics Campaign Tracking Receiver.
         new CampaignTrackingReceiver().onReceive(context, intent);
