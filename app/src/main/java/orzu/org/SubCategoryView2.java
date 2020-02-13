@@ -134,7 +134,13 @@ public class SubCategoryView2 extends AppCompatActivity {
                             resultAdapter.notifyDataSetChanged();
                         }
                     });
-                    pr.setVisibility(View.INVISIBLE);
+                    SubCategoryView2.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            pr.setVisibility(View.INVISIBLE);
+                        }
+                    });
+
                     resultAdapter.setClickListener(new AdapterCityFilter.ItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {

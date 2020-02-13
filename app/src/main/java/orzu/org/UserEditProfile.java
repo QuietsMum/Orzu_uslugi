@@ -344,7 +344,13 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putString("UserCityPref",userCity.getSelectedItem().toString());
                     editor.apply();
-                    bar.setVisibility(View.INVISIBLE);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            bar.setVisibility(View.INVISIBLE);
+                        }
+                    });
+
                     Common.d = mAvatar.getDrawable();
                     Common.name = userName.getText() + " " + userFname.getText();
                     Common.birth = userDate.getText().toString();
@@ -379,7 +385,13 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                bar.setVisibility(View.INVISIBLE);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        bar.setVisibility(View.INVISIBLE);
+                    }
+                });
                 UserEditProfile.this.runOnUiThread(new Runnable() {
                     public void run() {
                         Dialog dialog = new Dialog(UserEditProfile.this, android.R.style.Theme_Material_Light_NoActionBar);
@@ -414,7 +426,12 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                         Toast.makeText(UserEditProfile.this, "Ваш профиль изменен", Toast.LENGTH_SHORT).show();
                     }
                 });
-                bar.setVisibility(View.INVISIBLE);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        bar.setVisibility(View.INVISIBLE);
+                    }
+                });
                 Common.d = mAvatar.getDrawable();
                 finish();
             }

@@ -362,6 +362,7 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
                                     progressBar.setVisibility(View.INVISIBLE);
                                 }
                             });
+                            Common.referrer = "";
                             finish();
                         }
                     } catch (JSONException e) {

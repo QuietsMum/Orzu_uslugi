@@ -302,7 +302,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                     mNarr = jsonObject.getString("about");
                     Common.about = mNarr;
                     mStatus = jsonObject.getString("status");
-                    wallet_of_str = jsonObject.getString("wallet")+" Ni";
+                    wallet_of_str = jsonObject.getString("wallet") + " Ni";
                     Common.wallet = jsonObject.getString("wallet");
                     if (mSex.equals("male")) {
                         mSex = "мужской";
@@ -311,8 +311,22 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                         text = mName;
                     } else text = mName + " " + mFiName;
                     if (mStatus.equals("false")) {
-                        statusImg.setVisibility(View.INVISIBLE);
-                    } else statusImg.setVisibility(View.VISIBLE);
+
+                        requireActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                statusImg.setVisibility(View.INVISIBLE);
+                            }
+                        });
+                    } else {
+                        requireActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                statusImg.setVisibility(View.VISIBLE);
+                            }
+                        });
+
+                    }
                     requireActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -520,7 +534,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                                         feedbackname1.setText(name[0]);
                                         feedbacknarr1.setText(narr[0]);
                                         feedbackcat1.setText(date[0]);
-                                        Picasso.get().load("https://orzu.org" + image1.replaceAll("\\\\","")).into(feedbackimgUser1);
+                                        Picasso.get().load("https://orzu.org" + image1.replaceAll("\\\\", "")).into(feedbackimgUser1);
                                     }
                                 });
                             } else {
@@ -560,7 +574,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                                         feedbackname2.setText(name[1]);
                                         feedbacknarr2.setText(narr[1]);
                                         feedbackcat2.setText(date[1]);
-                                        Picasso.get().load("https://orzu.org" + image2.replaceAll("\\\\","")).into(feedbackimgUser2);
+                                        Picasso.get().load("https://orzu.org" + image2.replaceAll("\\\\", "")).into(feedbackimgUser2);
                                     }
                                 });
                             }
@@ -568,8 +582,14 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    shim.setVisibility(View.INVISIBLE);
-                    image_back.setVisibility(View.INVISIBLE);
+                    requireActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            shim.setVisibility(View.INVISIBLE);
+                            image_back.setVisibility(View.INVISIBLE);
+                        }
+                    });
+
                 }
             }
         });

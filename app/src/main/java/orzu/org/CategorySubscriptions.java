@@ -261,8 +261,14 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
 
 
                     } else {
-                        shim.setVisibility(View.INVISIBLE);
-                        podstilka.setVisibility(View.INVISIBLE);
+                        CategorySubscriptions.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                shim.setVisibility(View.INVISIBLE);
+                                podstilka.setVisibility(View.INVISIBLE);
+                            }
+                        });
+
                     }
 
 
@@ -412,8 +418,14 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
             public void onResponse(Call call, Response response) throws IOException {
                 final String mMessage = response.body().string();
                 if (mMessage.equals(dm + "Success" + dm)) {
-                    pb.setVisibility(View.INVISIBLE);
-                    finish();
+                    CategorySubscriptions.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            pb.setVisibility(View.INVISIBLE);
+                            finish();
+                        }
+                    });
+
                 }
 
             }

@@ -40,16 +40,16 @@ public class CoreActivity extends AppCompatActivity {
 
 
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                final AnimatedVectorDrawableCompat anim = AnimatedVectorDrawableCompat.create(getApplication(), R.drawable.logo_animated);
-                logo.setImageDrawable(anim);
-                assert anim != null;
-                anim.start();
-            }
-        }, 500);
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                final AnimatedVectorDrawableCompat anim = AnimatedVectorDrawableCompat.create(getApplication(), R.drawable.vd_vector);
+//                logo.setImageDrawable(anim);
+//                assert anim != null;
+//                anim.start();
+//            }
+//        }, 500);
 
 
         new Handler().postDelayed(new Runnable() {

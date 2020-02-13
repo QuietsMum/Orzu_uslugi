@@ -375,6 +375,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
                                     });
                             alertDialog.show();
                         } else {
+
                             AlertDialog alertDialog = new AlertDialog.Builder(LoginActivity2.this).create();
                             alertDialog.setTitle("");
                             alertDialog.setMessage("Нету интернет подключения");

@@ -191,9 +191,10 @@ public class FeedbackTask extends AppCompatActivity implements MainItemSelect {
                         public void run() {
 
                             lvCat.setAdapter(arrayAdapter1);
+                            shim.setVisibility(View.INVISIBLE);
                         }
                     });
-                   shim.setVisibility(View.INVISIBLE);
+
                 } catch (JSONException e) {
                     e.printStackTrace(); }
             }

@@ -223,7 +223,13 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
                     } else text = mName + " " + mFiName;
 
                     if (mStatus.equals("false")) {
-                        statusImg.setVisibility(View.INVISIBLE);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                statusImg.setVisibility(View.INVISIBLE);
+                            }
+                        });
+
                     } else statusImg.setVisibility(View.VISIBLE);
                     runOnUiThread(new Runnable() {
                         @Override
@@ -436,8 +442,15 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    shim.setVisibility(View.INVISIBLE);
-                    imageView.setVisibility(View.INVISIBLE);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            shim.setVisibility(View.INVISIBLE);
+                            imageView.setVisibility(View.INVISIBLE);
+                        }
+                    });
+
                 }
             }
         });

@@ -788,9 +788,15 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                             buttonGettask.startAnimation(animZoomIn);
                         }
                     });
-                    taskMaketView.setVisibility(View.INVISIBLE);
-                    taskMaketBack.setVisibility(View.INVISIBLE);
-                    shim.setVisibility(View.INVISIBLE);
+                    TaskViewMain.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            taskMaketView.setVisibility(View.INVISIBLE);
+                            taskMaketBack.setVisibility(View.INVISIBLE);
+                            shim.setVisibility(View.INVISIBLE);
+                        }
+                    });
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -908,7 +914,13 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                     }
                 }
                // minusBalance();
-                progressBar.setVisibility(View.INVISIBLE);
+                TaskViewMain.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+                });
+
             }
         });
     }
