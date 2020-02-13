@@ -427,7 +427,7 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
     }
 
     private void getUserResponse() throws IOException {
-        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + idUser + "&param=more";
+        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + idUser + "&param=more";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
@@ -487,7 +487,7 @@ public class Fragment5 extends Fragment implements View.OnClickListener {
     }
 
     private void getBonusList() throws IOException {
-        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=bonus_list&userid=" + idUser;
+        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=bonus_list&userid=" + idUser;
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)

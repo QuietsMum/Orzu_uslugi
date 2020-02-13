@@ -423,7 +423,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             orzuEndpoint[0] = null;
             JsonReader[] jsonReader = new JsonReader[1];
             try {
-                orzuEndpoint[0] = new URL("https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=" + id);
+                orzuEndpoint[0] = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=" + id);
                 myConnection[0] =
                         (HttpsURLConnection) orzuEndpoint[0].openConnection();
                 if (myConnection[0].getResponseCode() == 200) {
@@ -718,7 +718,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
     }
 
     public void getUserResponse() throws IOException {
-        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + m.get(useridList) + "&param=more";
+        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + m.get(useridList) + "&param=more";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
@@ -782,7 +782,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                             nat.setText(natnum);
                             hap.setText(hapnum);
 
-                            Picasso.get().load("https://projectapi.pw" + image).fit().centerCrop().into(imageViewName);
+                            Picasso.get().load("https://orzu.org" + image).fit().centerCrop().into(imageViewName);
                             Animation animZoomIn = AnimationUtils.loadAnimation(getApplicationContext(),
                                     R.anim.zoom_in);
                             buttonGettask.startAnimation(animZoomIn);
@@ -840,7 +840,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         if (pricetype == 2) {
             urlPrice = "&price=wtasker";
         }
-        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
+        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
                 "&opt=input_task" +
                 "&task=" + name +
                 "&catid=" + catid +
@@ -934,7 +934,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
             CreateTaskSubCategory.fa.finish();
             return true;
         }
-        String url = "https://projectapi.pw/api/avatar";
+        String url = "https://orzu.org/api/avatar";
         OkHttpClient client = new OkHttpClient();
         File myFile = new File(Uri.parse(Common.values.get(count)).getPath());
         RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
@@ -993,7 +993,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
     }
 
     private void deleteTask(String id) {
-        String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=all&userid=" + idUser + "&delete=" + id;
+        String requestUrl = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=all&userid=" + idUser + "&delete=" + id;
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -1026,7 +1026,7 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
     }
 
     private void minusBalance() {
-        String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=edit_bonus_minus&userid=" + idUser + "&utoken=" + tokenUser;
+        String requestUrl = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=edit_bonus_minus&userid=" + idUser + "&utoken=" + tokenUser;
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

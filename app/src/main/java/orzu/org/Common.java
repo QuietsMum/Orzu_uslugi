@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Common {
-    static String URL = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&requests=no&page=";
+    static String URL = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&requests=no&page=";
     public static String userId = "";
     static Boolean allCity = false;
     static String taskId = "";

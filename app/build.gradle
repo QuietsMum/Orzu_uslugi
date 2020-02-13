@@ -64,6 +64,7 @@ dependencies {
     implementation 'com.jakewharton:butterknife:10.1.0'
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    implementation 'com.google.firebase:firebase-messaging:20.1.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
@@ -78,6 +79,7 @@ dependencies {
     implementation 'com.android.volley:volley:1.1.0'
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
     implementation 'com.google.android.gms:play-services-analytics:17.0.0'
+
     implementation 'com.google.zxing:core:3.3.0'
 
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
@@ -86,7 +88,6 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
-
 
 
     implementation('com.journeyapps:zxing-android-embedded:3.6.0') { transitive = false }

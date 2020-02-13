@@ -108,7 +108,7 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
     }
 
     public void requestFeedback() {
-        String url = "https://projectapi.pw/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=reviews&act=view&userid=" + idUser + "&sort=all";
+        String url = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=reviews&act=view&userid=" + idUser + "&sort=all";
         OkHttpClient client = new OkHttpClient();
         String cat = "Имена";
         String nar = "Описание";
@@ -170,7 +170,7 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
                             String str = Arrays.toString(splited);
 
                             try {
-                                Bitmap bitmap = Picasso.get().load("https://projectapi.pw" + str.substring(1, str.length() - 1)).get();
+                                Bitmap bitmap = Picasso.get().load("https://orzu.org" + str.substring(1, str.length() - 1)).get();
                                 m.put(avatar, bitmap);
                             } catch (Exception ex) {
                                 Bitmap icon = BitmapFactory.decodeResource(Feedback.this.getResources(), Common.drawable);

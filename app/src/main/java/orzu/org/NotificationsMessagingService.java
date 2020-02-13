@@ -108,7 +108,7 @@ public class NotificationsMessagingService extends FirebaseMessagingService {
     }
 
     public void getTask(String id) {
-        String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=" + id;
+        String requestUrl = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=" + id;
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -165,33 +165,35 @@ public class NotificationsMessagingService extends FirebaseMessagingService {
     }
 
     public void getFeedback(String id) {
-        String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=task_requests&act=view&task_id=" + id;
+        String requestUrl = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=task_requests&act=view&task_id=" + id;
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    JSONArray j = new JSONArray(response);
-                    int index =j.length()-1;
-                    JSONObject object = j.getJSONObject(index);
-                    Date date = Calendar.getInstance().getTime();
-                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                    String strDate = dateFormat.format(date);
+                    if(response.equals("\"No request yet\"")) {
+                        JSONArray j = new JSONArray(response);
+                        int index = j.length() - 1;
+                        JSONObject object = j.getJSONObject(index);
+                        Date date = Calendar.getInstance().getTime();
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                        String strDate = dateFormat.format(date);
 
-                    String created_at = strDate;
-                    String username = object.getString("username");
-                    String narrative = object.getString("narrative");
-                    String amount = object.getString("amount");
-                    String current = object.getString("current");
+                        String created_at = strDate;
+                        String username = object.getString("username");
+                        String narrative = object.getString("narrative");
+                        String amount = object.getString("amount");
+                        String current = object.getString("current");
 
-                    SQLiteDatabase db = dbHelper.getWritableDatabase();
-                    ContentValues cv = new ContentValues();
-                    cv.put("created_at", created_at);
-                    cv.put("type", "my");
-                    cv.put("id", taskId);
-                    cv.put("title", username);
-                    cv.put("city", amount+" "+current);
-                    cv.put("work_with", narrative);
-                    db.insert("orzunotif", null, cv);
+                        SQLiteDatabase db = dbHelper.getWritableDatabase();
+                        ContentValues cv = new ContentValues();
+                        cv.put("created_at", created_at);
+                        cv.put("type", "my");
+                        cv.put("id", taskId);
+                        cv.put("title", username);
+                        cv.put("city", amount + " " + current);
+                        cv.put("work_with", narrative);
+                        db.insert("orzunotif", null, cv);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

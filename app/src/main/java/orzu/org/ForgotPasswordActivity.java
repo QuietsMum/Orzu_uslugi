@@ -150,7 +150,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
 
     public void changePassoword() throws IOException {
         // api?appid=&opt=register_user&phone=&password=&name=
-        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=forget_password&phone=" + mPhone + "&password=" + pass.getText();
+        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=forget_password&phone=" + mPhone + "&password=" + pass.getText();
 
 
         OkHttpClient client = new OkHttpClient();
@@ -241,7 +241,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
 
     public void checkPhone() throws IOException {
         // api?appid=&opt=register_user&phone=&password=&name=
-        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=check_phone&phone="
+        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=check_phone&phone="
                 + mPhone;
 
         OkHttpClient client = new OkHttpClient();

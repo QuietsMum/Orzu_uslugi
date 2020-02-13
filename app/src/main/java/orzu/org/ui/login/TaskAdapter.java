@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +61,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         holder.nat.setText(logos.get(position).get("Nat").toString());
         holder.happy.setText(logos.get(position).get("Hap").toString());
         holder.price.setText(logos.get(position).get("Цена").toString());
-        Picasso.get().load("https://projectapi.pw" + logos.get(position).get("Avatar").toString()).fit().centerCrop().into(holder.image);
+        Picasso.get().load("https://orzu.org" + logos.get(position).get("Avatar").toString()).fit().centerCrop().into(holder.image);
         if (logos.get(position).get("Select").toString().equals("1")) {
             holder.button2.setVisibility(View.VISIBLE);
         }
@@ -88,12 +89,13 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         return logos.size();
     }
     private void chooseSuggester(Object id) {
-        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
+        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
                 "&opt=task_requests" +
                 "&act=selected" +
                 "&req_id=" + id +
                 "&userid=" + Common.userId +
                 "&utoken=" + Common.utoken;
+        Log.wtf("asdas",url);
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
@@ -124,6 +126,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
                 FeedbackTask.fa.finish();
                 Intent intent = new Intent(context2, FeedbackTask.class);
                 context2.startActivity(intent);
+
             }
         });
     }

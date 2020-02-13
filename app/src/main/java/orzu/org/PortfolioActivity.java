@@ -56,7 +56,7 @@ public class PortfolioActivity extends AppCompatActivity implements View.OnClick
         partnerDis = findViewById(R.id.partnerDis);
         logo_of_partner = findViewById(R.id.logo_of_partner);
 
-        Picasso.get().load("https://projectapi.pw/"+logoPartner).into(logo_of_partner);
+        Picasso.get().load("https://orzu.org/"+logoPartner).into(logo_of_partner);
         name_of_partner.setText(namePartner);
         partnerName.setText(namePartner);
         partnerDis.setText(descPartner);
@@ -86,7 +86,7 @@ public class PortfolioActivity extends AppCompatActivity implements View.OnClick
         finish();
     }
     private void getPartnersSales() {
-        String requestUrl = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=sales_list_my&id="+idOfPartner;
+        String requestUrl = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=sales_list_my&id="+idOfPartner;
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

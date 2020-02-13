@@ -110,7 +110,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
 
 
 
-        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
+        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
                 "&opt=user_param" +
                 "&act=edit_password" +
                 "&userid=" + idUser +

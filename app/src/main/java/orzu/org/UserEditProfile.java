@@ -211,7 +211,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         }
     }
     public void requestCity() {
-        String url = "https://projectapi.pw/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=getOther&get=cities";
+        String url = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=getOther&get=cities";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
@@ -284,7 +284,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         } else {
             gender = "female";
         }
-        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
+        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
                 "&opt=user_param" +
                 "&act=edit" +
                 "&userid=" + idUser +
@@ -362,7 +362,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         });
     }
     public void getEditAvatarResponse() throws IOException {
-        String url = "https://projectapi.pw/api/avatar";
+        String url = "https://orzu.org/api/avatar";
         OkHttpClient client = new OkHttpClient();
         File myFile = new File(Uri.parse(returnValue.get(0)).getPath());
         RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
@@ -432,7 +432,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
         c.moveToFirst();
         c.close();
         db.close();
-        String url = "https://projectapi.pw/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + idUser + "&param=more";
+        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + idUser + "&param=more";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
@@ -486,7 +486,7 @@ public class UserEditProfile extends AppCompatActivity implements View.OnClickLi
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Picasso.get().load("https://projectapi.pw" + mAvatarstr.replaceAll("\\\\","")).fit().centerCrop().into(mAvatar);
+                            Picasso.get().load("https://orzu.org" + mAvatarstr.replaceAll("\\\\","")).fit().centerCrop().into(mAvatar);
                             TranslateAnimation animationn = new TranslateAnimation(0.0f, 0.0f,
                                     1500.0f, 0.0f);
                             animationn.setDuration(200);
