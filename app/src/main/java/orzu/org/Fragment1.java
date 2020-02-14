@@ -1,5 +1,6 @@
 package orzu.org;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -875,7 +876,8 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         }
     }
 
-    class AsyncOrzuTasksGetSubsFiltered extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {
+    @SuppressLint("StaticFieldLeak")
+    private class AsyncOrzuTasksGetSubsFiltered extends AsyncTask<String, String, ArrayList<Map<String, Object>>> {
         String result;
 
         @Override
@@ -919,7 +921,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     if (count != 1) {
                         getFilteredSubsFiltered.cancel(true);
                     }
-                    requireActivity().runOnUiThread(new Runnable() {
+                    getActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             progress_loading.setVisibility(View.GONE);
                             progress_for_task.setVisibility(View.GONE);
@@ -1012,6 +1014,19 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         }
     }
 
+    @Override
+    public void onPause() {
+
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        if(catTask!=null) {
+            catTask.cancel(true);
+        }
+        super.onDestroy();
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {
