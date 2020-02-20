@@ -28,7 +28,7 @@ import okhttp3.Response;
 public class RegistCity extends AppCompatActivity {
 
     String[] cities;
-    ArrayAdapter<String> adapter;
+    SpinnerAdapterCustom adapter;
     Spinner spin;
     TextView regisCity;
 
@@ -98,10 +98,14 @@ public class RegistCity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            adapter = new ArrayAdapter<String>(RegistCity.this,
-                                    android.R.layout.simple_spinner_dropdown_item, cities);
+                           // adapter= new ArrayAdapter<String> (RegistCity.this,R.layout.city_regist_item);
+                           // adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+//                            adapter = new ArrayAdapter<String>(RegistCity.this,
+//                                    android.R.layout.simple_dropdown_item_1line, cities);
+                            adapter = new SpinnerAdapterCustom(RegistCity.this,R.layout.city_regist_item,cities);
+
                             spin.setAdapter(adapter);
-                            adapter.notifyDataSetChanged();
+                            spin.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                         }
                     });
                 } catch (JSONException e) {

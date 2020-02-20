@@ -31,9 +31,11 @@
                 android:layout_height="40dp"
                 android:layout_margin="16dp"
                 android:background="@drawable/circle_shape_intro_white"
-                android:entries="@array/citylist"
                 android:textSize="20sp"
                 android:textAlignment="center"
+                android:gravity="center"
+                android:singleLine="true"
+                android:maxLines="1"
                 app:layout_constraintLeft_toLeftOf="@id/place_txt"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/place_txt" />
