@@ -191,7 +191,7 @@
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="12dp"
                     android:background="@color/colorBackLight"
-                    android:hint="@string/shr_hint_password"
+                    android:hint="Пароль"
                     app:errorEnabled="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

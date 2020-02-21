@@ -16,6 +16,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.JsonReader;
 import android.util.JsonToken;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -73,7 +74,6 @@ import orzu.org.models.MyTaskApi;
 import orzu.org.models.NetworkService;
 import orzu.org.ui.login.model;
 import retrofit2.Retrofit;
-
 
 
 public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -167,9 +167,9 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         progress_for_task = view.findViewById(R.id.progress_for_task);
         create_task_main = view.findViewById(R.id.create_task_main);
         editFind = view.findViewById(R.id.editFind);
-        if (Common.referrer.length() > 0&&!Common.referrer.contains("google")) {
+        if (Common.referrer.length() > 0 && !Common.referrer.contains("google")) {
             plusBalance();
-            Toast.makeText(getContext(), "Бонусы будут зашитаны: " + Common.referrer, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Бонусы будут защитаны: " + Common.referrer, Toast.LENGTH_SHORT).show();
         }
         if (prefs.getString("UserCityPref", "").equals("")) {
             Intent intent = new Intent(getActivity(), RegistCity.class);
@@ -506,6 +506,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             final char dm = (char) 34;
             try {
                 orzuEndpoint = new URL(Common.URL + "" + count);
+                Log.wtf("url", orzuEndpoint + "");
                 myConnectiontrack =
                         (HttpsURLConnection) orzuEndpoint.openConnection();
                 if (myConnectiontrack.getResponseCode() == 200) {
@@ -526,6 +527,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 status = myConnection.getResponseCode();
                 myConnection.setInstanceFollowRedirects(true);
                 data = new ArrayList<>();
+                Log.wtf("result", result);
                 if (result.equals("\"Not tasks yet\"")) {
                     track = false;
                     if (count != 1) {
@@ -660,7 +662,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             orzuEndpoint[0] = null;
             JsonReader[] jsonReader = new JsonReader[1];
             try {
-                orzuEndpoint[0] = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=all&status=open&page=0");
+                orzuEndpoint[0] = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=all&status=open&requests=no&page=0");
                 myConnection[0] =
                         (HttpsURLConnection) orzuEndpoint[0].openConnection();
                 if (myConnection[0].getResponseCode() == 200) {
@@ -894,7 +896,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             HttpsURLConnection myConnection = null;
             HttpsURLConnection myConnectiontrack = null;
             try {
-                orzuEndpoint = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&" + filter + "page=" + count);
+                orzuEndpoint = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&request=no&city=" + Common.city1 + filter + "page=" + count);
                 myConnectiontrack =
                         (HttpsURLConnection) orzuEndpoint.openConnection();
                 if (myConnectiontrack.getResponseCode() == 200) {
@@ -1022,7 +1024,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
     @Override
     public void onDestroy() {
-        if(catTask!=null) {
+        if (catTask != null) {
             catTask.cancel(true);
         }
         super.onDestroy();
@@ -1379,7 +1381,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
     private void getSubCategories(String id) {
         subcategories.clear();
-        String requestUrl = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_subcat&id=" + id;
+        String requestUrl = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_subcat&requests=no&id=" + id;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, requestUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
