@@ -521,7 +521,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 }else{
                     catCity = Common.city;
                 }
-                Common.URL = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&city=" + catCity + "&page=";
+                Common.URL = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&city=" + catCity  + "&page=";
                 orzuEndpoint = new URL(Common.URL + "" + count);
                 Log.wtf("url", orzuEndpoint + "");
                 myConnectiontrack =
