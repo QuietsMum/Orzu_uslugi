@@ -328,7 +328,7 @@ public class Main2Activity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         onNavigationItemSelected(navigationView.getMenu().getItem(0));
 
-
+        Common.city1 = Common.city;
     }
 
 

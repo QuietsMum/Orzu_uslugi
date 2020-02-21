@@ -138,6 +138,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
     DBHelper dbHelper;
     String idUser;
     SharedPreferences prefs;
+    String catCity = "";
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -156,6 +157,11 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
         db.close();
         prefs = getActivity().getSharedPreferences(" ", Context.MODE_PRIVATE);
         Common.city = prefs.getString("UserCityPref", "");
+        if (Common.city1.length() > 0) {
+            catCity = Common.city1;
+        } else {
+            catCity = Common.city;
+        }
         nestshimmer = view.findViewById(R.id.nestshimmer);
         shim = (ShimmerFrameLayout) view.findViewById(R.id.parentShimmerLayout);
         shim.startShimmer();
@@ -287,7 +293,12 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 model.array = idArray;
                 Common.subFilter = new HashMap<>();
                 filter = "";
-                Common.city1 = "";
+                if (Common.city1.length() > 0) {
+                    catCity = Common.city1;
+                } else {
+                    catCity = Common.city;
+                }
+                //Common.city1 = "";
                 count = 1;
                 truedata.clear();
                 progress_for_task.setVisibility(View.VISIBLE);
@@ -505,6 +516,12 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             HttpsURLConnection myConnectiontrack = null;
             final char dm = (char) 34;
             try {
+                if(Common.city1.length()>0){
+                    catCity=Common.city1;
+                }else{
+                    catCity = Common.city;
+                }
+                Common.URL = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&city=" + catCity + "&page=";
                 orzuEndpoint = new URL(Common.URL + "" + count);
                 Log.wtf("url", orzuEndpoint + "");
                 myConnectiontrack =
@@ -626,7 +643,8 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
     @Override
     public void onRefresh() {
-        Common.URL = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&city=" + prefs.getString("UserCityPref", "") + "&page=";
+        catCity = Common.city;
+        Common.URL = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&city=" + catCity + "&page=";
         adapter_category.changeColor(0);
         category_rv.scrollToPosition(0);
         subcategory_rv.scrollToPosition(0);
@@ -762,7 +780,8 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             HttpsURLConnection myConnection = null;
             HttpsURLConnection myConnectiontrack = null;
             try {
-                orzuEndpoint = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&catid[]=" + idOfSub + "&page=" + count);
+                orzuEndpoint = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&citycat=" + catCity + "&requestscat=no&catid[]=" + idOfSub + "&page=" + count);
+                Log.wtf("sdasd", orzuEndpoint + "");
                 myConnectiontrack =
                         (HttpsURLConnection) orzuEndpoint.openConnection();
                 if (myConnectiontrack.getResponseCode() == 200) {
@@ -783,6 +802,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 status = myConnection.getResponseCode();
                 myConnection.setInstanceFollowRedirects(true);
                 data = new ArrayList<>();
+                Log.wtf("asdas", "asdasd");
                 if (result.equals("[[]]")) {
                     noTasksYet = true;
                     track = false;
@@ -896,7 +916,8 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             HttpsURLConnection myConnection = null;
             HttpsURLConnection myConnectiontrack = null;
             try {
-                orzuEndpoint = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&request=no&city=" + Common.city1 + filter + "page=" + count);
+                orzuEndpoint = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&requestscat=no&citycat=" + catCity + "&" + filter + "page=" + count);
+                Log.wtf("asdsad", orzuEndpoint + "");
                 myConnectiontrack =
                         (HttpsURLConnection) orzuEndpoint.openConnection();
                 if (myConnectiontrack.getResponseCode() == 200) {
@@ -1053,7 +1074,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             HttpsURLConnection myConnection = null;
             HttpsURLConnection myConnectiontrack = null;
             try {
-                orzuEndpoint = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&city=" + Common.city1 + "&page=" + count);
+                orzuEndpoint = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&city=" + catCity + "&page=" + count);
                 myConnectiontrack =
                         (HttpsURLConnection) orzuEndpoint.openConnection();
                 if (myConnectiontrack.getResponseCode() == 200) {
