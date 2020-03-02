@@ -89,7 +89,7 @@
                        android:layout_margin="32dp"
                        android:background="@drawable/gradient_of_next_button"
                        android:gravity="center"
-                       android:text="@string/next_button"
+                       android:text="Сохранить"
                        android:textColor="@color/colorBackgrndFrg"
                        android:textSize="16sp"
                        app:layout_constraintBottom_toBottomOf="parent" />

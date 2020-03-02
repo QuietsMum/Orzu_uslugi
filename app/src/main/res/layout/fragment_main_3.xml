@@ -61,7 +61,6 @@
             </androidx.cardview.widget.CardView>
 
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -306,6 +305,24 @@
                         android:layout_marginEnd="6dp"
                         android:text="Безопасная оплата картой и гарантия возврата денег. Компенсация в случае морального ущерба."
                         android:textColor="@color/colorTextDark" />
+
+
+                    <TextView
+                        android:id="@+id/subscribe"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_gravity="bottom"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp"
+                        android:background="@drawable/gradient_of_next_button"
+                        android:gravity="center"
+                        android:text="Подписка на задания"
+                        android:textColor="@color/colorBackgrndFrg"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
 
                     <TextView
                         android:layout_width="match_parent"
@@ -561,8 +578,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
                         android:layout_marginTop="8dp"
+                        android:layout_marginRight="8dp"
                         android:layout_marginBottom="18dp"
                         android:background="@drawable/gradient_of_next_button_calendar"
                         android:gravity="center"

@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.facebook.shimmer.ShimmerFrameLayout;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -387,7 +390,6 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
         Request request = new Request.Builder()
                 .url(url)
                 .build();
-
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -422,6 +424,7 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
                         @Override
                         public void run() {
                             pb.setVisibility(View.INVISIBLE);
+                            Toast.makeText(CategorySubscriptions.this,"Успешно Сохранено",Toast.LENGTH_SHORT).show();
                             finish();
                         }
                     });

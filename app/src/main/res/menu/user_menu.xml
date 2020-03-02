@@ -4,14 +4,6 @@
 
 
     <item
-        android:id="@+id/item_subscribe"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/sub_to_cat_icon"
-        android:iconTint="@color/colorTextDark"
-        android:title="@string/subscribes">
-    </item>
-
-    <item
         android:id="@+id/share_item"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_share_black_48dp"

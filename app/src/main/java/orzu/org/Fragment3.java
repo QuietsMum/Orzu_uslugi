@@ -155,6 +155,14 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         statusImg = view.findViewById(R.id.imageViewStatusMy);
         imageViewName = view.findViewById(R.id.imageViewName);
         imageViewName.setImageBitmap(Common.bitmap);
+        TextView subscribe = view.findViewById(R.id.subscribe);
+        subscribe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent2 = new Intent(getActivity(), CategorySubscriptions.class);
+                startActivity(intent2);
+            }
+        });
         imageViewName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -352,16 +360,16 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         inflater.inflate(R.menu.user_menu, menu);
         Drawable drawable = menu.findItem(R.id.share_item).getIcon();
         Drawable drawable2 = menu.findItem(R.id.settings_item).getIcon();
-        Drawable drawable3 = menu.findItem(R.id.item_subscribe).getIcon();
+       // Drawable drawable3 = menu.findItem(R.id.item_subscribe).getIcon();
         drawable = DrawableCompat.wrap(drawable);
         drawable2 = DrawableCompat.wrap(drawable2);
-        drawable3 = DrawableCompat.wrap(drawable3);
+        //drawable3 = DrawableCompat.wrap(drawable3);
         DrawableCompat.setTint(drawable, ContextCompat.getColor(Objects.requireNonNull(getActivity()), R.color.colorBackgrndFrg));
         DrawableCompat.setTint(drawable2, ContextCompat.getColor(getActivity(), R.color.colorBackgrndFrg));
-        DrawableCompat.setTint(drawable3, ContextCompat.getColor(getActivity(), R.color.colorBackgrndFrg));
+       // DrawableCompat.setTint(drawable3, ContextCompat.getColor(getActivity(), R.color.colorBackgrndFrg));
         menu.findItem(R.id.share_item).setIcon(drawable);
         menu.findItem(R.id.settings_item).setIcon(drawable2);
-        menu.findItem(R.id.item_subscribe).setIcon(drawable3);
+        //menu.findItem(R.id.item_subscribe).setIcon(drawable3);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -379,10 +387,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                 Intent intent = new Intent(getActivity(), UserSettings.class);
                 startActivity(intent);
                 return true;
-            case R.id.item_subscribe:
-                Intent intent2 = new Intent(getActivity(), CategorySubscriptions.class);
-                startActivity(intent2);
-                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
