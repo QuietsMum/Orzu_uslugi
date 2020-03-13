@@ -97,7 +97,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
     private ArrayList<String> returnValue = new ArrayList<>();
     TextView wallet;
     String wallet_of_str;
-
+    LinearLayout feedbackButtun;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,7 +121,7 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
         c.moveToFirst();
         c.close();
         db.close();
-        LinearLayout feedbackButtun = view.findViewById(R.id.linear_feed_click);
+        feedbackButtun= view.findViewById(R.id.linear_feed_click);
         feedbackButtun.setOnClickListener(this);
         nameUser = view.findViewById(R.id.name_fname);
         feedbackname1 = view.findViewById(R.id.userview_feedbacknamemy);
@@ -473,6 +473,8 @@ public class Fragment3 extends Fragment implements View.OnClickListener {
                             shim.setVisibility(View.INVISIBLE);
                             image_back.setVisibility(View.INVISIBLE);
                             noReviews.setVisibility(View.VISIBLE);
+                            feedbackButtun.setVisibility(View.INVISIBLE);
+
                         }
                     });
                 } else {

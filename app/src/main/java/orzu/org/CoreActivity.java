@@ -69,6 +69,7 @@ public class CoreActivity extends AppCompatActivity {
             }
         }, 2200);
         c.close();
+        db.close();
 
     }
 

@@ -95,7 +95,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
                 "&req_id=" + id +
                 "&userid=" + Common.userId +
                 "&utoken=" + Common.utoken;
-        Log.wtf("asdas",url);
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)

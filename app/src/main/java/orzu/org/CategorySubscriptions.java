@@ -2,6 +2,7 @@ package orzu.org;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.database.Cursor;
@@ -25,13 +26,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -128,8 +132,6 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
             }
         });
     }
-
-
 
 
     public void requestCategoryList() {
@@ -424,13 +426,11 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
                         @Override
                         public void run() {
                             pb.setVisibility(View.INVISIBLE);
-                            Toast.makeText(CategorySubscriptions.this,"Успешно Сохранено",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(CategorySubscriptions.this, "Успешно Сохранено", Toast.LENGTH_SHORT).show();
                             finish();
                         }
                     });
-
                 }
-
             }
         });
 

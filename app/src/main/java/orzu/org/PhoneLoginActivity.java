@@ -75,6 +75,8 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
     String lattitude, longitude;
     private static final int REQUEST_LOCATION = 1;
     String country_code;
+    Dialog dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +86,7 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_phone_login);
         dbHelper = new DBHelper(this);
         firsttime = false;
+        dialog = new Dialog(PhoneLoginActivity.this, android.R.style.Theme_Material_Light_NoActionBar);
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         progressBar = findViewById(R.id.progressBarLogin);
         progressBar.setVisibility(View.INVISIBLE);
@@ -233,7 +236,6 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace(); //log the error resulting from the request for diagnosis/debugging
-                Dialog dialog = new Dialog(PhoneLoginActivity.this, android.R.style.Theme_Material_Light_NoActionBar);
                 dialog.setContentView(R.layout.dialog_no_internet);
                 Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
                 // if button is clicked, close the custom dialog
@@ -247,7 +249,7 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        dialog.show();
+                       // dialog.show();
                     }
                 }, 500);
             }
@@ -263,6 +265,12 @@ public class PhoneLoginActivity extends AppCompatActivity implements View.OnClic
         } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             getLocation();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        dialog.dismiss();
+        super.onPause();
     }
 
     protected void buildAlertMessageNoGps() {

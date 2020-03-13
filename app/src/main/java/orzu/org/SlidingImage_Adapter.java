@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.viewpager.widget.PagerAdapter;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 public class SlidingImage_Adapter extends PagerAdapter {
@@ -35,6 +38,7 @@ public class SlidingImage_Adapter extends PagerAdapter {
     public int getCount() {
         return IMAGES.size();
     }
+    @NotNull
     @Override
     public Object instantiateItem(ViewGroup view, int position) {
         View imageLayout = inflater.inflate(R.layout.slidingimages_layout, view, false);

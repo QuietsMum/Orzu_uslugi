@@ -856,7 +856,6 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
                 urlLocation +
                 urlPrice +
                 "&utoken=" + tokenUser;
-        Log.wtf("ASdsadsa",url);
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)

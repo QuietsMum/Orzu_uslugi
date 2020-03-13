@@ -523,7 +523,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 }
                 Common.URL = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&city=" + catCity  + "&page=";
                 orzuEndpoint = new URL(Common.URL + "" + count);
-                Log.wtf("url", orzuEndpoint + "");
                 myConnectiontrack =
                         (HttpsURLConnection) orzuEndpoint.openConnection();
                 if (myConnectiontrack.getResponseCode() == 200) {
@@ -544,7 +543,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 status = myConnection.getResponseCode();
                 myConnection.setInstanceFollowRedirects(true);
                 data = new ArrayList<>();
-                Log.wtf("result", result);
                 if (result.equals("\"Not tasks yet\"")) {
                     track = false;
                     if (count != 1) {
@@ -781,7 +779,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             HttpsURLConnection myConnectiontrack = null;
             try {
                 orzuEndpoint = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&citycat=" + catCity + "&requestscat=no&catid[]=" + idOfSub + "&page=" + count);
-                Log.wtf("sdasd", orzuEndpoint + "");
                 myConnectiontrack =
                         (HttpsURLConnection) orzuEndpoint.openConnection();
                 if (myConnectiontrack.getResponseCode() == 200) {
@@ -802,7 +799,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 status = myConnection.getResponseCode();
                 myConnection.setInstanceFollowRedirects(true);
                 data = new ArrayList<>();
-                Log.wtf("asdas", "asdasd");
                 if (result.equals("[[]]")) {
                     noTasksYet = true;
                     track = false;
@@ -917,7 +913,6 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             HttpsURLConnection myConnectiontrack = null;
             try {
                 orzuEndpoint = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&requestscat=no&citycat=" + catCity + "&" + filter + "page=" + count);
-                Log.wtf("asdsad", orzuEndpoint + "");
                 myConnectiontrack =
                         (HttpsURLConnection) orzuEndpoint.openConnection();
                 if (myConnectiontrack.getResponseCode() == 200) {

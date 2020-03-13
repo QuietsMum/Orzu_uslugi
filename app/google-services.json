@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "566295266578-6mh0qmem4h9580pafuutfdamoa9h38le.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "orzu.org",
+            "certificate_hash": "5491a28d6af05eed491d113c27d4335a59e30d2f"
+          }
+        },
+        {
           "client_id": "566295266578-pc311p4t33f75lbeprncmbk444m96f1k.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -46,6 +54,13 @@
             {
               "client_id": "566295266578-en3g27ua3892i3mhihojnidpj3v1ui7r.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "566295266578-ckf141ulfcdn8q6u3blilti8ar7d7r06.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "apple.eldor.Test"
+              }
             }
           ]
         }
@@ -75,6 +90,13 @@
             {
               "client_id": "566295266578-en3g27ua3892i3mhihojnidpj3v1ui7r.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "566295266578-ckf141ulfcdn8q6u3blilti8ar7d7r06.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "apple.eldor.Test"
+              }
             }
           ]
         }
