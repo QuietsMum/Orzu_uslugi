@@ -372,14 +372,10 @@ public class TaskViewMain extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()) {
             case R.id.button_gettask:
                 if (!opt.equals("view")) {
-                    if (Integer.parseInt(Common.wallet) >= 100) {
-                        try {
-                            getCreateResponse();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        Toast.makeText(this, "Недостаточно баланса", Toast.LENGTH_SHORT).show();
+                    try {
+                        getCreateResponse();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 } else if (myTask.equals("my")) {
                     Intent intent = new Intent(this, FeedbackTask.class);

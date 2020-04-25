@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -100,7 +101,7 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
                 "&amount=" + editAmout.getText() +
                 "&utoken=" + tokenUser;
         OkHttpClient client = new OkHttpClient();
-
+        Log.wtf("asdas",url);
         Request request = new Request.Builder()
                 .url(url)
                 .header("Accept", "application/json")
@@ -142,6 +143,7 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 
                 String mMessage = Objects.requireNonNull(response.body()).string();
+                Log.wtf("asdasd",mMessage);
                 finish();
             }
         });

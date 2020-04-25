@@ -114,5 +114,5 @@
         <item>Бишкек</item>
         <item>Ташкент</item>
     </string-array>
-
+    <string name="facebook_app_id">829528237552045</string>
 </resources>
