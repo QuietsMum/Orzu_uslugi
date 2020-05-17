@@ -133,8 +133,8 @@
                         android:text="1000"
                         android:textColor="@color/colorTextDark"
                         android:textSize="14sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        android:padding="4dp"
                         app:layout_constraintTop_toTopOf="parent" />
 
                         <RelativeLayout
@@ -159,6 +159,27 @@
                                     android:layout_gravity="center"
                                     android:gravity="center"
                                     android:text="Позвонить исполнителю"
+                                    android:textColor="@color/colorBackgrndFrg"
+                                    android:textSize="14sp" />
+
+                            </LinearLayout>
+                            <LinearLayout
+                                android:id="@+id/button_callsugester2"
+                                android:layout_width="170dp"
+                                android:layout_height="30dp"
+                                android:foreground="?android:attr/selectableItemBackground"
+                                android:visibility="invisible"
+                                android:layout_below="@+id/button_callsugester"
+                                android:layout_marginTop="5dp"
+                                android:background="@drawable/button_background_new2"
+                                android:padding="4dp"  >
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:text="Отменить"
                                     android:textColor="@color/colorBackgrndFrg"
                                     android:textSize="14sp" />
 

@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -144,6 +145,12 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
 
                 String mMessage = Objects.requireNonNull(response.body()).string();
                 Log.wtf("asdasd",mMessage);
+                AddSuggest.this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(AddSuggest.this, mMessage, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
                 finish();
             }
         });

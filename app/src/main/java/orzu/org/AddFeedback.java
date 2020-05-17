@@ -165,7 +165,7 @@ public class AddFeedback extends AppCompatActivity implements View.OnClickListen
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if (like == 0) {
-                    sendMinusFeedback();
+                   // sendMinusFeedback();
                 } else {
                     sendPlusFeedback();
                 }

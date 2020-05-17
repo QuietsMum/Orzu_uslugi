@@ -64,11 +64,18 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         Picasso.get().load("https://orzu.org" + logos.get(position).get("Avatar").toString()).fit().centerCrop().into(holder.image);
         if (logos.get(position).get("Select").toString().equals("1")) {
             holder.button2.setVisibility(View.VISIBLE);
+            holder.button3.setVisibility(View.VISIBLE);
         }
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 chooseSuggester(logos.get(position).get("SugID"));
+            }
+        });
+        holder.button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cancelSuggester(logos.get(position).get("SugID"));
             }
         });
         holder.button2.setOnClickListener(new View.OnClickListener() {
@@ -129,12 +136,54 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
             }
         });
     }
+    private void cancelSuggester(Object id) {
+        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
+                "&opt=task_requests" +
+                "&act=cancel" +
+                "&req_id=" + id +
+                "&userid=" + Common.userId +
+                "&utoken=" + Common.utoken;
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Dialog dialog = new Dialog(context2, android.R.style.Theme_Material_Light_NoActionBar);
+                dialog.setContentView(R.layout.dialog_no_internet);
+                Button dialogButton = (Button) dialog.findViewById(R.id.buttonInter);
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        chooseSuggester(id);
+                        dialog.dismiss();
+                    }
+                });
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.show();
+                    }
+                }, 500);
+            }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                FeedbackTask.fa.finish();
+                Intent intent = new Intent(context2, FeedbackTask.class);
+                context2.startActivity(intent);
+
+            }
+        });
+    }
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView name;
         TextView desc, sad, nat, happy, price;
         LinearLayout button;
         LinearLayout button2;
+        LinearLayout button3;
         ImageView image;
         ViewHolder(View itemView) {
             super(itemView);
@@ -146,6 +195,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
             price = itemView.findViewById(R.id.amtFeedbackTask);
             button = itemView.findViewById(R.id.button_addsugester);
             button2 = itemView.findViewById(R.id.button_callsugester);
+            button3 = itemView.findViewById(R.id.button_callsugester2);
             image = itemView.findViewById(R.id.imageViewOtklik);
             for (int i = 0; i < logos.size(); i++) {
                 if (logos.get(i).get("Select").toString().equals("1")) {
