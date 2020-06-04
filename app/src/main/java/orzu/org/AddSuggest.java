@@ -147,7 +147,7 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
                 Log.wtf("asdasd",mMessage);
                 AddSuggest.this.runOnUiThread(new Runnable() {
                     public void run() {
-                        Toast.makeText(AddSuggest.this, mMessage, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddSuggest.this, "Отклик добавлен!", Toast.LENGTH_SHORT).show();
                     }
                 });
 
