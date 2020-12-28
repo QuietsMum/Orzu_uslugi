@@ -20,13 +20,13 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-
         android:usesCleartextTraffic="true">
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".LastPageSale"></activity>
+        <activity android:name=".LastPageSale" />
         <activity
             android:name=".CreatePartnerSale"
             android:screenOrientation="portrait" />

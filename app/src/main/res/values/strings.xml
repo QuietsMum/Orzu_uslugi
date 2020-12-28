@@ -115,4 +115,5 @@
         <item>Ташкент</item>
     </string-array>
     <string name="facebook_app_id">829528237552045</string>
+    <string name="messages">Сообщения</string>
 </resources>

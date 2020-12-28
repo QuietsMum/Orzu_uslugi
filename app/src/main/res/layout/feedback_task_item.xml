@@ -184,8 +184,30 @@
                                     android:textSize="14sp" />
 
                             </LinearLayout>
+                            <LinearLayout
+                                android:id="@+id/button_chatsugester"
+                                android:layout_width="170dp"
+                                android:layout_height="30dp"
+                                android:foreground="?android:attr/selectableItemBackground"
+                                android:visibility="invisible"
+                                android:layout_below="@+id/button_callsugester2"
+                                android:layout_marginTop="5dp"
+                                android:background="@drawable/button_background"
+                                android:padding="4dp"  >
 
-                        <LinearLayout
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:text="Написать"
+                                    android:textColor="@color/colorBackgrndFrg"
+                                    android:textSize="14sp" />
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
                             android:id="@+id/button_addsugester"
                             android:layout_width="170dp"
                             android:layout_height="30dp"

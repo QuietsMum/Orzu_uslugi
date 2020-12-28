@@ -22,4 +22,5 @@ public class my_message implements message_interface {
     public int getType() {
         return message_interface.TYPE_MY;
     }
+
 }

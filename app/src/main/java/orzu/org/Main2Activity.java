@@ -244,11 +244,16 @@ public class Main2Activity extends AppCompatActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container, new Fragment2()).commit();
             navigationView.setCheckedItem(R.id.fourth);
-        } else {
+        } else if (index == 6) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.container, new ChatsView()).commit();
+            navigationView.setCheckedItem(R.id.sixth);
+        }else {
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container, new Fragment5(), "Fragment5").commit();
             navigationView.setCheckedItem(R.id.fifth);
         }
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -340,6 +345,12 @@ public class Main2Activity extends AppCompatActivity
             onNavigationItemSelected(navigationView.getMenu().getItem(3));
             SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean("openNotification", false);
+            editor.apply();
+        }
+        if (prefs.getBoolean("openChats", false)) {
+            onNavigationItemSelected(navigationView.getMenu().getItem(6));
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("openChats", false);
             editor.apply();
         }
     }
@@ -509,6 +520,38 @@ public class Main2Activity extends AppCompatActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             fm = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container, new Fragment5(), "Fragment5").commit();
+            // Выделяем выбранный пункт меню в шторке
+            item.setChecked(true);
+            // Выводим выбранный пункт в заголовке
+            setTitle(item.getTitle());
+        }
+        else if (id == R.id.sixth) {
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, findViewById(R.id.nav_view2));
+            index = 6;
+            toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
+            toolbar.setTitleTextColor(getResources().getColor(R.color.colorPrimaryLight));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryPurpleTop));
+
+            toggle.setDrawerIndicatorEnabled(false);
+            drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_menu, getApplication().getTheme());
+            toggle.setHomeAsUpIndicator(drawable);
+            toggle.syncState();
+            toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (drawer.isDrawerVisible(GravityCompat.START)) {
+                        drawer.closeDrawer(GravityCompat.START);
+                    } else {
+                        drawer.openDrawer(GravityCompat.START);
+                    }
+                }
+            });
+
+
+            // Вставляем фрагмент, заменяя текущий фрагмент
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fm = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.container, new ChatsView(), "Fragment5").commit();
             // Выделяем выбранный пункт меню в шторке
             item.setChecked(true);
             // Выводим выбранный пункт в заголовке
