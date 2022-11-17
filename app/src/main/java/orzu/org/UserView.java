@@ -152,7 +152,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
             case R.id.share_item_his:
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "Привет, посмотри мой профиль на Orzu: https://orzu.org/profile/" + idUser);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Привет, посмотри мой профиль на Orzu: https://orzu.tj/profile/" + idUser);
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
                 return true;
@@ -164,7 +164,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
         }
     }
     public void getUserResponseView() throws IOException {
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + idUser + "&param=more";
+        String url = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + idUser + "&param=more";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
@@ -270,7 +270,7 @@ public class UserView extends AppCompatActivity implements View.OnClickListener 
         }
     }
     public void requestFeedback() {
-        String url = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=reviews&act=view&userid=" + idUser + "&sort=all";
+        String url = Util.SERVERAPI + "api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=reviews&act=view&userid=" + idUser + "&sort=all";
         OkHttpClient client = new OkHttpClient();
         final String[] name = new String[2];
         final String[] narr = new String[2];

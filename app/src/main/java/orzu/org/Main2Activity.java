@@ -1,5 +1,6 @@
 package orzu.org;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentValues;
@@ -38,12 +39,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.MaterialShapeDrawable;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
-import com.pusher.pushnotifications.PushNotificationReceivedListener;
-import com.pusher.pushnotifications.PushNotifications;
+//import com.pusher.pushnotifications.PushNotificationReceivedListener;
+//import com.pusher.pushnotifications.PushNotifications;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
@@ -74,10 +73,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-
-import io.intercom.android.sdk.Intercom;
-import io.intercom.android.sdk.UserAttributes;
-import io.intercom.android.sdk.identity.Registration;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -120,12 +115,14 @@ public class Main2Activity extends AppCompatActivity
     SharedPreferences prefs;
     private void setupBeams() {
         prefs = getSharedPreferences(" ", Context.MODE_PRIVATE);
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                    }
-                });
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if(task.isComplete()){
+                    String token = task.getResult();
+                }
+            }
+        });
         FirebaseMessaging.getInstance().subscribeToTopic("user_" + idUser)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -159,7 +156,7 @@ public class Main2Activity extends AppCompatActivity
         token = c.getString(tokenColIndex);
         c.close();
         db.close();
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_user&user_cat=" + idUser;
+        String url = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_user&user_cat=" + idUser;
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
@@ -213,17 +210,6 @@ public class Main2Activity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        PushNotifications.setOnMessageReceivedListenerForVisibleActivity(this, new PushNotificationReceivedListener() {
-            @Override
-            public void onMessageReceived(RemoteMessage remoteMessage) {
-                String messagePayload = remoteMessage.getData().get("inAppNotificationMessage");
-                if (messagePayload == null) {
-                    // Message payload was not set for this notification
-                } else {
-                    // Now update the UI based on your message payload!
-                }
-            }
-        });
         if (index == 0) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container, new Fragment3(), "fragment3").commit();
@@ -256,6 +242,7 @@ public class Main2Activity extends AppCompatActivity
 
     }
 
+    @SuppressLint("RestrictedApi")
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -301,7 +288,7 @@ public class Main2Activity extends AppCompatActivity
         Common.utoken = c.getString(tokenColIndex);
         c.close();
         requestSubsServerMain();
-        Intercom.initialize(getApplication(), "android_sdk-805f0d44d62fbc8e72058b9c8eee61c94c43c874", "p479kps8");
+//        Intercom.initialize(getApplication(), "android_sdk-805f0d44d62fbc8e72058b9c8eee61c94c43c874", "p479kps8");
         intercomBtn = findViewById(R.id.techsupp);
         intercomBtn.setOnClickListener(this);
         drawer = findViewById(R.id.drawer_layout);
@@ -575,7 +562,7 @@ public class Main2Activity extends AppCompatActivity
 
     private void getAllPartnersSorted(String catid, String city, String sort) {
         bonuses.clear();
-        String requestUrl = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=partners_list_sort" +
+        String requestUrl = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=partners_list_sort" +
                 "&catid=" + catid +
                 "&city=" + city +
                 "&sort=" + sort;
@@ -640,7 +627,7 @@ public class Main2Activity extends AppCompatActivity
         Common.utoken = c.getString(tokenColIndex);
         c.close();
         db.close();
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + idUser + "&param=more";
+        String url = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_user&user=" + idUser + "&param=more";
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
@@ -729,16 +716,16 @@ public class Main2Activity extends AppCompatActivity
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.techsupp:
-                Registration registration = Registration.create().withUserId(idUser);
-                UserAttributes userAttributes = new UserAttributes.Builder()
-                        .withName(mName)
-                        .withUserId(idUser)
-                        .build();
-                Intercom.client().updateUser(userAttributes);
-                Intercom.client().handlePushMessage();
-                Intercom.client().registerIdentifiedUser(registration);
-                Intercom.client().displayMessenger();
-                Intercom.client().setBottomPadding(20);
+//                Registration registration = Registration.create().withUserId(idUser);
+//                UserAttributes userAttributes = new UserAttributes.Builder()
+//                        .withName(mName)
+//                        .withUserId(idUser)
+//                        .build();
+//                Intercom.client().updateUser(userAttributes);
+//                Intercom.client().handlePushMessage();
+//                Intercom.client().registerIdentifiedUser(registration);
+//                Intercom.client().displayMessenger();
+//                Intercom.client().setBottomPadding(20);
                 break;
             case R.id.headerOfdrawer:
                 navigationView.setCheckedItem(R.id.menu_none);
@@ -836,7 +823,7 @@ public class Main2Activity extends AppCompatActivity
     }
 
     private void getCategories() {
-        String requestUrl = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_parent";
+        String requestUrl = Util.SERVERAPI + "api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_parent";
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -900,7 +887,7 @@ public class Main2Activity extends AppCompatActivity
 
     private void getSubCategories(String id) {
         subcategories.clear();
-        String requestUrl = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_subcat&id=" + id;
+        String requestUrl = Util.SERVERAPI + "api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_subcat&id=" + id;
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

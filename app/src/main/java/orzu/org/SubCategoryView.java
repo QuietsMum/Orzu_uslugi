@@ -106,7 +106,7 @@ public class SubCategoryView extends AppCompatActivity implements View.OnClickLi
                 orzuEndpoint[0] = null;
                 JsonReader[] jsonReader = new JsonReader[1];
                 try {
-                    orzuEndpoint[0] = new URL("https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_subcat&id=" + idIntent);
+                    orzuEndpoint[0] = new URL(Util.SERVERAPI + "api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_subcat&id=" + idIntent);
                     myConnection[0] =
                             (HttpsURLConnection) orzuEndpoint[0].openConnection();
                     if (myConnection[0].getResponseCode() == 200) {

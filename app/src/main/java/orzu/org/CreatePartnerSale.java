@@ -185,7 +185,7 @@ public class CreatePartnerSale extends AppCompatActivity implements View.OnClick
 
     private void getPartnersSales(String id,String city) {
         list.clear();
-        String requestUrl = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=sales_list_sort&catid="+id+"&city="+city+"&sort=DESC";
+        String requestUrl = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=sales_list_sort&catid="+id+"&city="+city+"&sort=DESC";
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -255,7 +255,7 @@ public class CreatePartnerSale extends AppCompatActivity implements View.OnClick
 
     private void getSubCategories(String id) {
         subcategories.clear();
-        String requestUrl = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_subcat&id=" + id;
+        String requestUrl = Util.SERVERAPI + "api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_subcat&id=" + id;
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

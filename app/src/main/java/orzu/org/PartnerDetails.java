@@ -238,7 +238,7 @@ public class PartnerDetails extends AppCompatActivity implements View.OnClickLis
 
     private void getConcurents(String catid, String city) {
         bonuses.clear();
-        String requestUrl = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=partners_list_sort" +
+        String requestUrl = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=partners_list_sort" +
                 "&catid=" + catid +
                 "&city=" + city +
                 "&sort=" + "DESC";
@@ -290,7 +290,7 @@ public class PartnerDetails extends AppCompatActivity implements View.OnClickLis
 
     private void getSubCategories(String id) {
         subcategories.clear();
-        String requestUrl = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_subcat&id=" + id;
+        String requestUrl = Util.SERVERAPI + "api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_subcat&id=" + id;
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

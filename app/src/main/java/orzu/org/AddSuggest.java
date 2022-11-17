@@ -94,7 +94,7 @@ public class AddSuggest extends AppCompatActivity implements View.OnClickListene
 
     public void sendSuggest() throws IOException {
         progress_suggest.setVisibility(View.VISIBLE);
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=task_requests" +
+        String url = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=task_requests" +
                 "&act=input" +
                 "&task_id=" + idTask +
                 "&narrative=" + editNarr.getText() +

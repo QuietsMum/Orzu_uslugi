@@ -183,12 +183,12 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             getActivity().finish();
         }
         if (!Common.allCity) {
-            Common.URL = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&city=" + prefs.getString("UserCityPref", "") + "&page=";
+            Common.URL = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&city=" + prefs.getString("UserCityPref", "") + "&page=";
             getCategories();
             getSubCategories("1");
         } else {
             Common.city1 = "";
-            Common.URL = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&requests=no&page=";
+            Common.URL = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&requests=no&page=";
             getCategories();
             getSubCategories("1");
         }
@@ -342,7 +342,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
     }
 
     private void plusBalance() {
-        String requestUrl = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=edit_bonus_plus&userid=" + idUser + "&utoken=" + tokenUser + "&useridTo=" + Common.referrer;
+        String requestUrl = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=edit_bonus_plus&userid=" + idUser + "&utoken=" + tokenUser + "&useridTo=" + Common.referrer;
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.GET, requestUrl, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -521,7 +521,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 }else{
                     catCity = Common.city;
                 }
-                Common.URL = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&city=" + catCity  + "&page=";
+                Common.URL = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&city=" + catCity  + "&page=";
                 orzuEndpoint = new URL(Common.URL + "" + count);
                 myConnectiontrack =
                         (HttpsURLConnection) orzuEndpoint.openConnection();
@@ -642,7 +642,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
     @Override
     public void onRefresh() {
         catCity = Common.city;
-        Common.URL = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&city=" + catCity + "&page=";
+        Common.URL = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&city=" + catCity + "&page=";
         adapter_category.changeColor(0);
         category_rv.scrollToPosition(0);
         subcategory_rv.scrollToPosition(0);
@@ -678,7 +678,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             orzuEndpoint[0] = null;
             JsonReader[] jsonReader = new JsonReader[1];
             try {
-                orzuEndpoint[0] = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=all&status=open&requests=no&page=0");
+                orzuEndpoint[0] = new URL(Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_task&tasks=all&status=open&requests=no&page=0");
                 myConnection[0] =
                         (HttpsURLConnection) orzuEndpoint[0].openConnection();
                 if (myConnection[0].getResponseCode() == 200) {
@@ -778,7 +778,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             HttpsURLConnection myConnection = null;
             HttpsURLConnection myConnectiontrack = null;
             try {
-                orzuEndpoint = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&citycat=" + catCity + "&requestscat=no&catid[]=" + idOfSub + "&page=" + count);
+                orzuEndpoint = new URL(Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&citycat=" + catCity + "&requestscat=no&catid[]=" + idOfSub + "&page=" + count);
                 myConnectiontrack =
                         (HttpsURLConnection) orzuEndpoint.openConnection();
                 if (myConnectiontrack.getResponseCode() == 200) {
@@ -912,7 +912,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             HttpsURLConnection myConnection = null;
             HttpsURLConnection myConnectiontrack = null;
             try {
-                orzuEndpoint = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&requestscat=no&citycat=" + catCity + "&" + filter + "page=" + count);
+                orzuEndpoint = new URL(Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&requestscat=no&citycat=" + catCity + "&" + filter + "page=" + count);
                 myConnectiontrack =
                         (HttpsURLConnection) orzuEndpoint.openConnection();
                 if (myConnectiontrack.getResponseCode() == 200) {
@@ -1069,7 +1069,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             HttpsURLConnection myConnection = null;
             HttpsURLConnection myConnectiontrack = null;
             try {
-                orzuEndpoint = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&city=" + catCity + "&page=" + count);
+                orzuEndpoint = new URL(Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&city=" + catCity + "&page=" + count);
                 myConnectiontrack =
                         (HttpsURLConnection) orzuEndpoint.openConnection();
                 if (myConnectiontrack.getResponseCode() == 200) {
@@ -1206,7 +1206,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
             orzuEndpoint[0] = null;
             JsonReader[] jsonReader = new JsonReader[1];
             try {
-                orzuEndpoint[0] = new URL("https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&search=" + edittextFind);
+                orzuEndpoint[0] = new URL(Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_task&tasks=all&search=" + edittextFind);
                 myConnection[0] =
                         (HttpsURLConnection) orzuEndpoint[0].openConnection();
                 if (myConnection[0].getResponseCode() == 200) {
@@ -1336,7 +1336,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
             }
         }));
-//        String requestUrl = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_parent";
+//        String requestUrl = Util.SERVERAPI + "api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_parent";
 //        StringRequest stringRequest = new StringRequest(Request.Method.GET, requestUrl, new Response.Listener<String>() {
 //            @Override
 //            public void onResponse(String response) {
@@ -1397,7 +1397,7 @@ public class Fragment1 extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
     private void getSubCategories(String id) {
         subcategories.clear();
-        String requestUrl = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_subcat&requests=no&id=" + id;
+        String requestUrl = Util.SERVERAPI + "api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_subcat&requests=no&id=" + id;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, requestUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

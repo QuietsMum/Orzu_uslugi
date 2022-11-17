@@ -37,7 +37,7 @@ public class BonusAdapter extends RecyclerView.Adapter<BonusAdapter.MyViewHolder
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         holder.name.setText(maps.get(position).getName());
-        Picasso.get().load("https://orzu.org/"+maps.get(position).getLogo()).into(holder.logo);
+        Picasso.get().load(Util.SERVERAPI + maps.get(position).getLogo()).into(holder.logo);
         holder.percent.setTextColor(Color.parseColor("#fe8c00"));
         holder.percent.setText(maps.get(position).getPercent());
         TextPaint paint = holder.percent.getPaint();

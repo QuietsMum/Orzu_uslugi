@@ -37,6 +37,7 @@ import orzu.org.Common;
 import orzu.org.FeedbackTask;
 import orzu.org.Main2Activity;
 import orzu.org.R;
+import orzu.org.Util;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     private List<Map<String, Object>> logos;
@@ -108,7 +109,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     }
 
     private void createChat(Object id) {
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
+        String url = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
                 "&opt=user_chats" +
                 "&act=create_chat" +
                 "&user_first=" + Common.userId +
@@ -156,7 +157,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         });
     }
     private void chooseSuggester(Object id) {
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
+        String url = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
                 "&opt=task_requests" +
                 "&act=selected" +
                 "&req_id=" + id +
@@ -197,7 +198,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         });
     }
     private void cancelSuggester(Object id) {
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
+        String url = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
                 "&opt=task_requests" +
                 "&act=cancel" +
                 "&req_id=" + id +

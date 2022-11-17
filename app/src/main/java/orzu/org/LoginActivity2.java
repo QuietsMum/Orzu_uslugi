@@ -229,7 +229,7 @@ public class LoginActivity2 extends AppCompatActivity implements View.OnClickLis
     }
 
     public void getHttpResponse() throws IOException {
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=register_user&phone="
+        String url = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=register_user&phone="
                 + mPhone
                 + "&password=" + mPassword
                 + "&name=" + mName;

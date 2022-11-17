@@ -131,7 +131,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendMess(Object message) {
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
+        String url = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
                 "&opt=user_chats" +
                 "&act=send_mess" +
                 "&chat_id=" + Common.chatId +
@@ -176,7 +176,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void messageViewed(Object id) {
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
+        String url = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS" +
                 "&opt=user_chats" +
                 "&act=change_saw" +
                 "&chat_id=" + id;
@@ -218,7 +218,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void getMessages() throws IOException {
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_chats&act=view_mess&chat_id=" + Common.chatId ;
+        String url = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_chats&act=view_mess&chat_id=" + Common.chatId ;
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()

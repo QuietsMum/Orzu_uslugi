@@ -136,7 +136,7 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
 
     public void requestCategoryList() {
 
-        String url = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_parent";
+        String url = Util.SERVERAPI + "api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_parent";
         OkHttpClient client = new OkHttpClient();
 
 
@@ -199,7 +199,7 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
 
     public void requestSubCategoryList() {
 
-        String url = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_subcat&id=" + groupId.get(por);
+        String url = Util.SERVERAPI + "api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&lang=ru&opt=view_cat&cat_id=only_subcat&id=" + groupId.get(por);
         por++;
 
         OkHttpClient client = new OkHttpClient();
@@ -305,7 +305,7 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
         tokenUser = c.getString(tokenColIndex);
         c.close();
         db.close();
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_user&user_cat=" + idUser;
+        String url = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=view_user&user_cat=" + idUser;
         subsServer = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
 
@@ -382,7 +382,7 @@ public class CategorySubscriptions extends AppCompatActivity implements View.OnC
 
         final char dm = (char) 34;
 
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param" +
+        String url = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param" +
                 "&userid=" + idUser +
                 "&utoken=" + tokenUser +
                 "&act=subscribe" + modelString;

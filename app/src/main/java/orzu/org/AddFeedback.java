@@ -116,7 +116,7 @@ public class AddFeedback extends AppCompatActivity implements View.OnClickListen
 
     public void sendFeedback() throws IOException {
 
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=reviews" +
+        String url = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=reviews" +
                 "&act=input" +
                 "&userid=" + idUser +
                 "&narrative=" + editNarr.getText() +
@@ -175,7 +175,7 @@ public class AddFeedback extends AppCompatActivity implements View.OnClickListen
 
     public void sendMinusFeedback() throws IOException {
 
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param" +
+        String url = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param" +
                 "&act=edit_bonus_feedback_minus" +
                 "&userid=" + idUser +
                 "&useridTo=" + idUserTo +
@@ -229,7 +229,7 @@ public class AddFeedback extends AppCompatActivity implements View.OnClickListen
 
     public void sendPlusFeedback() throws IOException {
 
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param" +
+        String url = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param" +
                 "&act=edit_bonus_feedback_plus" +
                 "&userid=" + idUser +
                 "&useridTo=" + idUserTo +

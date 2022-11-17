@@ -130,7 +130,7 @@ public class LastPageSale extends AppCompatActivity {
     }
 
     private void createPartner() {
-        String requestUrl = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=create_partner&" +
+        String requestUrl = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=create_partner&" +
                 "userid=" + Uid +
                 "&name=" + Partner_Name +
                 "&utoken=" + utoken +
@@ -181,7 +181,7 @@ public class LastPageSale extends AppCompatActivity {
 
     private void createSale(String id) {
         id = id.replace("\"","");
-        String requestUrl = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=create_partners_sale" +
+        String requestUrl = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_param&act=create_partners_sale" +
                 "&idPartner=" + id +
                 "&namePartner=" + Partner_Name +
                 "&utoken=" + utoken +
@@ -228,7 +228,7 @@ public class LastPageSale extends AppCompatActivity {
     }
 
     private void addSaleLogo(String id) {
-        String url = "https://orzu.org/api/avatar";
+        String url = Util.SERVERAPI + "api/avatar";
         OkHttpClient client = new OkHttpClient();
         File myFile = new File(Uri.parse(Sale_Logo).getPath());
         RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
@@ -281,7 +281,7 @@ public class LastPageSale extends AppCompatActivity {
     }
 
     public void addPartnerLogo(String id) throws IOException {
-        String url = "https://orzu.org/api/avatar";
+        String url = Util.SERVERAPI + "api/avatar";
         OkHttpClient client = new OkHttpClient();
         File myFile = new File(Uri.parse(Partner_Logo).getPath());
         RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)

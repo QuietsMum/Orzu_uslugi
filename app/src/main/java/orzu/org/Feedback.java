@@ -108,7 +108,7 @@ public class Feedback extends AppCompatActivity implements View.OnClickListener 
     }
 
     public void requestFeedback() {
-        String url = "https://orzu.org/api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=reviews&act=view&userid=" + idUser + "&sort=all";
+        String url = Util.SERVERAPI + "api?%20appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=reviews&act=view&userid=" + idUser + "&sort=all";
         OkHttpClient client = new OkHttpClient();
         String cat = "Имена";
         String nar = "Описание";

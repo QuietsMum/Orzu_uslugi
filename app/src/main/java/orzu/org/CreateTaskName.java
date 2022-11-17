@@ -134,7 +134,7 @@ public class CreateTaskName extends AppCompatActivity implements View.OnClickLis
 
     public void requestSuggest() {
 
-        String url = "https://orzu.org/tasks/taskajaxupload?find=" + editName.getText();
+        String url = Util.SERVERAPI + "tasks/taskajaxupload?find=" + editName.getText();
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()

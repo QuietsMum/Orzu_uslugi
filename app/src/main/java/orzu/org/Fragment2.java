@@ -42,7 +42,7 @@ import orzu.org.Notification.Literature;
 import orzu.org.Notification.feedbackItem;
 
 public class Fragment2 extends Fragment {
-    String url = "https://orzu.org/tasks/new/techrepair/techrepairother?token=";
+    String url = Util.SERVERAPI + "tasks/new/techrepair/techrepairother?token=";
     DBHelper dbHelper;
     ArrayList<Map<String, Object>> data;
     private List<Literature> lit = new ArrayList<>();

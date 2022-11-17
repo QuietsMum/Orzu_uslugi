@@ -175,7 +175,7 @@ public class ChatsView extends Fragment {
 
 
     private void getChats() throws IOException {
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_chats&act=view_chats&user_id=" + idUser ;
+        String url = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=user_chats&act=view_chats&user_id=" + idUser ;
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()

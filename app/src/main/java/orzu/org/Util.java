@@ -19,4 +19,5 @@ public class Util {
     public static final String TASK_PPRICE_TYPE = "task_price_type";
     public static final String TASK_ANNAT = "task_anat";
     public static final String TASK_PHOTO = "task_photo";
+    public static final String SERVERAPI = "https://orzu.tj:6666/";
 }

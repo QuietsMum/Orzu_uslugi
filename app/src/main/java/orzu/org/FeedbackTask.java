@@ -98,7 +98,7 @@ public class FeedbackTask extends AppCompatActivity implements MainItemSelect {
 
     public void requestFeedback(){
 
-        String url = "https://orzu.org/api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=task_requests&act=view&task_id=" + Common.taskId;
+        String url = Util.SERVERAPI + "api?appid=$2y$12$esyosghhXSh6LxcX17N/suiqeJGJq/VQ9QkbqvImtE4JMWxz7WqYS&opt=task_requests&act=view&task_id=" + Common.taskId;
         OkHttpClient client = new OkHttpClient();
         String cat = "ID";
         String name = "Имена";
